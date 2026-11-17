@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html data-theme="dark" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>نوادر الإبل — الإشعارات والتنبيهات</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error-container": "#93000a",
+            "info-light": "#528AA9",
+            "border-dark": "#3B504B",
+            "inverse-on-surface": "#faefe6",
+            "text-light": "#2D241B",
+            "tertiary": "#236185",
+            "on-primary-container": "#fffbff",
+            "surface-container-high": "#f1e6de",
+            "primary-fixed-dim": "#f8bb74",
+            "tertiary-container": "#417a9f",
+            "on-tertiary-fixed-variant": "#004c6d",
+            "error-dark": "#E17B75",
+            "surface-container-highest": "#ebe1d8",
+            "surface-tint": "#825517",
+            "surface-container-lowest": "#ffffff",
+            "on-background": "#201b16",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#2b1700",
+            "surface": "#fff8f4",
+            "info-dark": "#83A9D8",
+            "primary-container": "#9c6a2b",
+            "secondary-fixed-dim": "#d3c4b5",
+            "border-light": "#E4D5C0",
+            "secondary-container": "#f0e0d0",
+            "surface-dark": "#202D2D",
+            "on-error": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "muted-dark": "#AABAB3",
+            "muted-light": "#817568",
+            "warning-light": "#C88926",
+            "on-secondary-fixed-variant": "#4f453a",
+            "surface-dim": "#e3d8d0",
+            "on-surface": "#201b16",
+            "tertiary-fixed": "#c8e6ff",
+            "text-dark": "#F6EEE0",
+            "secondary": "#685d50",
+            "surface-variant": "#ebe1d8",
+            "tertiary-fixed-dim": "#95cdf5",
+            "on-secondary-container": "#6e6356",
+            "on-surface-variant": "#504539",
+            "secondary-fixed": "#f0e0d0",
+            "background-light": "#F8F3EA",
+            "inverse-primary": "#f8bb74",
+            "primary-fixed": "#ffddb9",
+            "on-secondary-fixed": "#221a11",
+            "background-dark": "#111B1C",
+            "inverse-surface": "#352f2a",
+            "on-secondary": "#ffffff",
+            "success-dark": "#53BE90",
+            "primary": "#7f5214",
+            "background": "#fff8f4",
+            "on-primary-fixed-variant": "#663e00",
+            "primary-dark": "#E4BC7B",
+            "error": "#ba1a1a",
+            "outline-variant": "#d5c4b4",
+            "error-container": "#ffdad6",
+            "surface-bright": "#fff8f4",
+            "warning-dark": "#E1AA4A",
+            "on-tertiary-container": "#fcfcff",
+            "surface-container-low": "#fdf2e9",
+            "outline": "#837567",
+            "error-light": "#C95D59",
+            "success-light": "#2F936A",
+            "surface-container": "#f7ece3",
+            "surface-light": "#FFFCF8",
+            "on-tertiary-fixed": "#001e2e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter": "1rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.25rem",
+            "space-xl": "1.5rem",
+            "margin": "1.25rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Noto Sans Arabic"],
+            "body-lg": ["Noto Sans Arabic"],
+            "headline-sm": ["Noto Sans Arabic"],
+            "headline-md": ["Noto Sans Arabic"],
+            "caption": ["Noto Sans Arabic"],
+            "label-lg": ["Noto Sans Arabic"],
+            "body-md": ["Noto Sans Arabic"],
+            "label-md": ["Noto Sans Arabic"]
+          },
+          "fontSize": {
+            "headline-lg": ["28px", { "lineHeight": "38px", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "caption": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["16px", { "lineHeight": "22px", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Noto Sans Arabic', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Hide scrollbar for category pills while maintaining scrollability */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style id="nawader-brand-final">
+    :root{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}
+    html,body{background:var(--brand-bg)!important;color:var(--brand-text)!important;max-width:100%;font-family:'Noto Sans Arabic',sans-serif!important;user-select:text!important}
+    body{margin:0!important;min-height:100dvh!important;font-size:18px;line-height:1.65}
+    *{box-sizing:border-box} img{max-width:100%} p,label,input,select,textarea{font-family:inherit;font-size:18px} h1{font-size:26px;line-height:1.6} h2{font-size:22px;line-height:1.6}
+    button,a[role=button]{min-height:48px!important;min-width:48px;white-space:normal!important;font-family:inherit;touch-action:manipulation}button:not([aria-label]){font-size:20px;font-weight:700}
+    input:not([type=checkbox]):not([type=radio]),select{min-height:56px}input[type=checkbox],input[type=radio]{width:24px;min-width:24px;height:24px;accent-color:var(--brand-gold)}
+    :focus-visible{outline:3px solid var(--brand-text)!important;outline-offset:3px} [class~="truncate"]{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+    [class~="bg-background"],[class~="bg-background-light"],[class~="bg-background-dark"]{background-color:var(--brand-bg)!important}
+    [class~="bg-surface"],[class~="bg-surface-light"],[class~="bg-surface-dark"],[class~="bg-surface-container"],[class~="bg-surface-container-low"],[class~="bg-surface-container-high"],[class~="bg-surface-container-highest"]{background-color:var(--brand-surface)!important}
+    [class~="text-text-light"],[class~="text-text-dark"],[class~="text-on-surface"],[class~="text-on-background"],[class~="text-secondary"],[class~="text-on-surface-variant"],[class~="text-primary"]{color:var(--brand-text)!important}
+    [class~="bg-primary"],[class~="bg-primary-container"]{background-color:var(--brand-gold)!important;color:#2D241B!important;font-size:20px!important;font-weight:700!important}
+    [class~="bg-primary"] span,[class~="bg-primary-container"] span{color:inherit!important}
+    [class~="border-border-light"],[class~="border-border-dark"],[class~="border-outline-variant"]{border-color:var(--brand-border)!important}
+    .simple-shell{width:100%;max-width:430px;min-height:100dvh;margin:auto;background:var(--brand-bg);padding:20px;display:flex;flex-direction:column}
+    .simple-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px}.simple-header button{width:auto;padding:0 18px}
+    .simple-content{display:flex;flex-direction:column;gap:20px;padding-top:20px;padding-bottom:30px}.simple-content h1,.simple-content p,.simple-content h2{margin:0}
+    .field{display:flex;flex-direction:column;gap:10px;font-weight:600}.field input,.field select{width:100%;padding:12px;border:2px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);color:var(--brand-text)}
+    .action{width:100%;min-height:56px;padding:12px 16px;border:2px solid var(--brand-gold);border-radius:12px;background:var(--brand-gold);color:#2D241B;font-size:20px;font-weight:700}
+    .secondary{background:var(--brand-surface);color:var(--brand-text)}.helper{font-size:16px;line-height:1.7;color:var(--brand-text)}
+    .consent{display:flex;align-items:flex-start;gap:14px;min-height:56px;padding:14px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .notice{padding:20px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .welcome{align-items:center;text-align:center;justify-content:center;gap:24px;padding-top:40px;padding-bottom:32px}.welcome-logo{width:216px;height:216px;object-fit:contain}.welcome h1{margin:0;font-size:26px}.welcome p{margin:0;max-width:320px}.welcome-actions{width:100%;display:flex;flex-direction:column;gap:16px;margin-top:32px}
+    .home-shell{width:100%;max-width:430px;margin:auto;padding-bottom:100px}.home-header{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--brand-surface)}.home-header h1{font-size:22px;flex:1;margin:0}.small-action{border:0;border-radius:10px;font-size:16px!important;padding:8px;color:var(--brand-text)}.home-content{padding:20px;display:flex;flex-direction:column;gap:20px}.home-content>h2{margin:0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.home-tools .action{font-size:18px;padding:8px}.ad-card{border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);overflow:hidden}.ad-photo{width:100%;height:180px;object-fit:cover}.ad-content{padding:16px;display:flex;flex-direction:column;gap:10px}.ad-content h2,.ad-content p{margin:0}.price{font-size:26px;font-weight:700}.offer-label{font-size:16px}.simple-bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--brand-surface);border-top:1px solid var(--brand-border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:50}.simple-bottom button{font-size:14px!important;font-weight:600;padding:6px 2px;background:none;border:0;border-radius:8px;color:var(--brand-text)}.simple-bottom [aria-current]{background:var(--brand-bg);border:1px solid var(--brand-gold)}
+    @media(min-width:600px){body{padding:0!important}} @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    </style><style id="nawader-dark-mode">html[data-theme=dark]{--brand-bg:#111B1C;--brand-surface:#202D2D;--brand-gold:#E4BC7B;--brand-text:#F6EEE0;--brand-muted:#AABAB3;--brand-border:#3B504B}html[data-theme=light]{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}html[data-theme=dark] .bg-white,html[data-theme=dark] .bg-slate-50,html[data-theme=dark] .bg-gray-50{background-color:var(--brand-surface)!important}html[data-theme=dark] .action:not(.secondary),html[data-theme=dark] [class~=bg-primary],html[data-theme=dark] [class~=bg-primary-container]{color:#111B1C!important}html[data-theme=light] .action:not(.secondary),html[data-theme=light] [class~=bg-primary],html[data-theme=light] [class~=bg-primary-container]{color:#2D241B!important}</style></head>
+<body class="bg-background-light text-text-light antialiased min-h-screen flex justify-center selection:bg-secondary-container">
+<!-- Mobile Container Constraint (360px - 430px optimal viewport) -->
+<div class="w-full max-w-md bg-background-light min-h-screen flex flex-col relative pb-24 shadow-sm border-x border-border-light">
+<!-- TOP APP BAR (from Shared Component JSON specs, adapted with contextual heading) -->
+<header class="sticky top-0 z-40 bg-surface-light border-b border-border-light px-margin py-space-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<button aria-label="الرجوع" class="w-12 h-12 flex items-center justify-center rounded-lg text-primary active:scale-95 transition-transform duration-150 hover:bg-surface-container" type="button">
+<span class="material-symbols-outlined text-3xl">arrow_forward</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary font-bold">
+          الإشعارات والتنبيهات
+        </h1>
+</div>
+<div class="flex items-center">
+<!-- Clear all or settings action -->
+<button class="flex items-center gap-1 py-2 px-3 rounded-lg text-secondary hover:bg-surface-container active:scale-95 transition-all text-body-md font-label-md" id="markAllReadBtn" title="تحديد الكل كمقروء" type="button">
+<span class="material-symbols-outlined text-xl">done_all</span>
+<span class="font-label-md text-caption">مقروء</span>
+</button>
+</div>
+</header>
+<!-- MAIN SCROLLABLE CONTENT -->
+<main class="flex-1 flex flex-col px-margin pt-space-md space-y-space-md">
+<!-- QUICK FILTER PILLS (Designed for older adults with generous 48px touch targets) -->
+<section aria-label="تصفية الإشعارات" class="w-full overflow-x-auto no-scrollbar py-1 -mx-margin px-margin flex items-center gap-space-sm">
+<button class="filter-pill active whitespace-nowrap h-12 px-5 rounded-lg border-2 border-primary bg-primary text-on-primary font-label-md text-label-md transition-all active:scale-95 flex items-center justify-center shadow-sm" type="button">
+          الكل
+        </button>
+<button class="filter-pill whitespace-nowrap h-12 px-5 rounded-lg border-2 border-border-light bg-surface-light text-secondary font-label-md text-label-md hover:bg-surface-container active:scale-95 transition-all flex items-center justify-center" type="button">
+          حالات الإعلانات
+        </button>
+<button class="filter-pill whitespace-nowrap h-12 px-5 rounded-lg border-2 border-border-light bg-surface-light text-secondary font-label-md text-label-md hover:bg-surface-container active:scale-95 transition-all flex items-center justify-center" type="button">
+          الرسائل والردود
+        </button>
+<button class="filter-pill whitespace-nowrap h-12 px-5 rounded-lg border-2 border-border-light bg-surface-light text-secondary font-label-md text-label-md hover:bg-surface-container active:scale-95 transition-all flex items-center justify-center" type="button">
+          تنبيهات النظام
+        </button>
+</section>
+<!-- CALM EXPLANATORY BANNER (Designed with high contrast & cultural dignity) -->
+<section class="bg-surface-container-low border border-border-light rounded-xl p-space-md flex items-start gap-space-md shadow-xs">
+<div class="w-10 h-10 rounded-lg bg-secondary-container flex-shrink-0 flex items-center justify-center text-primary mt-0.5">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">info</span>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed font-normal">
+          تصلك التنبيهات الهامة هنا داخل التطبيق دائماً حتى في حال عدم تفعيل إشعارات الهاتف.
+        </p>
+</section>
+<!-- NOTIFICATIONS FEED -->
+<section aria-label="قائمة التنبيهات" class="flex flex-col space-y-space-md">
+<!-- 1. Ad Approved (Unread / High Visibility) -->
+<article class="notification-card cursor-pointer bg-surface-light border-2 border-border-light hover:border-primary rounded-xl p-space-md shadow-xs transition-all active:scale-[0.98] relative flex flex-col gap-space-xs" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-start gap-3 flex-1">
+<!-- Icon Container -->
+<div class="w-12 h-12 rounded-xl bg-surface-container flex-shrink-0 flex items-center justify-center text-success-light border border-border-light">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-caption font-label-md bg-secondary-container text-primary">
+                    حالة الإعلان
+                  </span>
+<span class="w-2.5 h-2.5 rounded-full bg-primary flex-shrink-0" title="إشعار جديد"></span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-text-light font-bold">
+                  تم اعتماد نشر إعلانك
+                </h2>
+</div>
+</div>
+<!-- Time Stamp -->
+<span class="text-caption font-caption text-muted-light flex-shrink-0 whitespace-nowrap pt-1">
+              قبل ساعة
+            </span>
+</div>
+<!-- Description -->
+<div class="pr-[60px]">
+<p class="font-body-lg text-body-lg text-secondary font-medium">
+              بكرة وضحاء ساس طيب
+            </p>
+<p class="font-body-md text-body-md text-muted-light mt-1">
+              إعلانك الآن متاح لجميع المشترين في منصة نوادر الإبل. انقر للمشاهدة.
+            </p>
+</div>
+<!-- Bottom Action Bar link hint -->
+<div class="pr-[60px] pt-2 flex items-center gap-1 text-primary font-label-md text-body-md">
+<span>عرض تفاصيل الإعلان</span>
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</div>
+</article>
+<!-- 2. Ad Revision Needed (Action Required) -->
+<article class="notification-card cursor-pointer bg-surface-light border-2 border-warning-light/80 hover:border-warning-light rounded-xl p-space-md shadow-xs transition-all active:scale-[0.98] relative flex flex-col gap-space-xs" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-start gap-3 flex-1">
+<!-- Warning Icon -->
+<div class="w-12 h-12 rounded-xl bg-[#FFF5E6] flex-shrink-0 flex items-center justify-center text-warning-light border border-warning-light/30">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-caption font-label-md bg-[#FFF5E6] text-warning-light font-bold">
+                    مطلوب مراجعة
+                  </span>
+<span class="w-2.5 h-2.5 rounded-full bg-warning-light flex-shrink-0" title="إشعار غير مقروء"></span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-text-light font-bold">
+                  تحديث صور الوسم
+                </h2>
+</div>
+</div>
+<!-- Time Stamp -->
+<span class="text-caption font-caption text-muted-light flex-shrink-0 whitespace-nowrap pt-1">
+              قبل 3 ساعات
+            </span>
+</div>
+<!-- Description -->
+<div class="pr-[60px]">
+<p class="font-body-lg text-body-lg text-secondary font-medium">
+              مطلوب توضيح صور الوسم لإعلان: فحل صفر كفو
+            </p>
+<p class="font-body-md text-body-md text-muted-light mt-1">
+              يرجى إضافة صورة مقربة وواضحة لمكان الوسم لإكمال التحقق وتفعيل الإعلان.
+            </p>
+</div>
+<div class="pr-[60px] pt-2 flex items-center gap-1 text-primary font-label-md text-body-md">
+<span>تعديل صور الإعلان الآن</span>
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</div>
+</article>
+<!-- 3. Seller Reply/Inquiry -->
+<article class="notification-card cursor-pointer bg-surface-light border-2 border-border-light hover:border-primary rounded-xl p-space-md shadow-xs transition-all active:scale-[0.98] relative flex flex-col gap-space-xs" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-start gap-3 flex-1">
+<!-- Chat/Message Icon -->
+<div class="w-12 h-12 rounded-xl bg-surface-container flex-shrink-0 flex items-center justify-center text-tertiary border border-border-light">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">forum</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-caption font-label-md bg-surface-container-high text-secondary">
+                    رسائل وسوم
+                  </span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-text-light font-bold">
+                  رد جديد على استفسارك
+                </h2>
+</div>
+</div>
+<!-- Time Stamp -->
+<span class="text-caption font-caption text-muted-light flex-shrink-0 whitespace-nowrap pt-1">
+              أمس
+            </span>
+</div>
+<!-- Description -->
+<div class="pr-[60px]">
+<p class="font-body-lg text-body-lg text-secondary font-medium">
+              رد البائع أبو فهد على سؤالك بخصوص السوم
+            </p>
+<div class="bg-surface-container-lowest border border-border-light rounded-lg p-2.5 mt-2">
+<p class="font-body-md text-body-md text-on-surface-variant italic">
+                "مرحبا بك يا غالي، السوم واصل 110 آلاف والبيع قريب للصامل."
+              </p>
+</div>
+</div>
+<div class="pr-[60px] pt-2 flex items-center gap-1 text-primary font-label-md text-body-md">
+<span>فتح المحادثة والمتابعة</span>
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</div>
+</article>
+<!-- 4. Account Verification -->
+<article class="notification-card cursor-pointer bg-surface-light border-2 border-border-light hover:border-primary rounded-xl p-space-md shadow-xs transition-all active:scale-[0.98] relative flex flex-col gap-space-xs" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-start gap-3 flex-1">
+<!-- Security / Verification Icon -->
+<div class="w-12 h-12 rounded-xl bg-surface-container flex-shrink-0 flex items-center justify-center text-primary border border-border-light">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-caption font-label-md bg-secondary-container text-primary">
+                    أمان الحساب
+                  </span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-text-light font-bold">
+                  توثيق الحساب بنجاح
+                </h2>
+</div>
+</div>
+<!-- Time Stamp -->
+<span class="text-caption font-caption text-muted-light flex-shrink-0 whitespace-nowrap pt-1">
+              منذ يومين
+            </span>
+</div>
+<!-- Description -->
+<div class="pr-[60px]">
+<p class="font-body-lg text-body-lg text-secondary font-medium">
+              تم التحقق بنجاح من رقم الجوال وتأكيد الحساب
+            </p>
+<p class="font-body-md text-body-md text-muted-light mt-1">
+              تم ترقية حسابك إلى حساب موثوق بنجاح. أصبحت إعلاناتك تحظى بأولوية الظهور.
+            </p>
+</div>
+</article>
+</section>
+<!-- Empty status footer cushion -->
+<div class="py-4 text-center">
+<p class="font-caption text-caption text-muted-light">
+          تم تحميل جميع الإشعارات السابقة
+        </p>
+</div>
+</main>
+<!-- BOTTOM NAVIGATION BAR (Shared Component EXACT Blueprint & Spec) -->
+<!-- Destination count: 5, Labels: ["الرئيسية", "المفضلة", "أضف إعلان", "الرسائل", "حسابي"] -->
+<!-- Notification screen logically falls under "حسابي" tab context -->
+<nav aria-label="الشريط السفلي" class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-space-xs py-space-xs max-w-md mx-auto bg-surface border-t border-border-light shadow-md">
+<!-- الرئيسية (Inactive) -->
+<a class="flex flex-col items-center justify-center text-secondary px-space-sm py-space-xs hover:bg-surface-container-low transition-colors duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-2xl mb-0.5">home</span>
+<span class="font-label-md text-caption">الرئيسية</span>
+</a>
+<!-- المفضلة (Inactive) -->
+<a class="flex flex-col items-center justify-center text-secondary px-space-sm py-space-xs hover:bg-surface-container-low transition-colors duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-2xl mb-0.5">favorite</span>
+<span class="font-label-md text-caption">المفضلة</span>
+</a>
+<!-- أضف إعلان (Action Center - Inactive) -->
+<a class="flex flex-col items-center justify-center text-secondary px-space-sm py-space-xs hover:bg-surface-container-low transition-colors duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-2xl mb-0.5 text-primary">add_circle</span>
+<span class="font-label-md text-caption">أضف إعلان</span>
+</a>
+<!-- الرسائل (Inactive) -->
+<a class="flex flex-col items-center justify-center text-secondary px-space-sm py-space-xs hover:bg-surface-container-low transition-colors duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-2xl mb-0.5">chat</span>
+<span class="font-label-md text-caption">الرسائل</span>
+</a>
+<!-- حسابي (Active Navigation as per Semantic Shell Mandate for user alerts & account feed) -->
+<a aria-current="page" class="flex flex-col items-center justify-center text-primary bg-secondary-container rounded-lg px-space-sm py-space-xs font-bold active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined text-2xl mb-0.5" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-md text-caption font-bold">حسابي</span>
+</a>
+</nav>
+</div>
+<!-- Micro-interactions Script -->
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));const nav={'الرئيسية':'B01','المفضلة':'B09','أضف إعلان':'D01','الرسائل':'F01','حسابي':'G01','إعلاناتي':'E01','التنبيهات':'G04'};document.querySelectorAll('nav button,nav a').forEach(el=>{const t=el.innerText.trim();for(const [label,id] of Object.entries(nav))if(t.endsWith(label))el.dataset.go=id});document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();parent.postMessage({nawaderScreen:el.dataset.go},'*')}));addEventListener('message',e=>{if(e.source!==parent)return;if(['dark','light'].includes(e.data?.nawaderTheme))document.documentElement.dataset.theme=e.data.nawaderTheme});</script></body></html>

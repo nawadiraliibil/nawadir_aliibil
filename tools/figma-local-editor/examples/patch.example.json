@@ -1,0 +1,24 @@
+{
+  "schema": "codex-figma-patch",
+  "version": 1,
+  "workspaceId": "43d8ac07-e129-4ccd-8519-638af8c763de",
+  "exportId": "59acb47b-ad33-453b-948e-bb492aacb676",
+  "operations": [
+    {
+      "kind": "set",
+      "nodeId": "1:2",
+      "property": "characters",
+      "before": "القائمة",
+      "beforeBindings": { "direct": {}, "paintAliases": [], "text": [{ "start": 0, "end": 7, "boundVariables": {} }] },
+      "after": "أحدث إعلانات الإبل"
+    },
+    {
+      "kind": "set",
+      "nodeId": "1:1",
+      "property": "itemSpacing",
+      "before": 12,
+      "beforeBindings": { "direct": {}, "paintAliases": [], "text": [] },
+      "after": 20
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "visible": 74,
+  "groups": 8,
+  "hiddenDrafts": 5,
+  "ready": 74,
+  "exactHtmlMatch": [{"id":"B01","matches":true},{"id":"C01","matches":true},{"id":"D08","matches":true},{"id":"D10","matches":true},{"id":"G06","matches":true},{"id":"G10","matches":true},{"id":"H02","matches":true},{"id":"H04","matches":true}],
+  "samples": [
+    {
+      "id": "B01",
+      "htmlBytes": 65583,
+      "ibm": true,
+      "compact": true,
+      "rtl": true,
+      "hasImage": true
+    },
+    {
+      "id": "C01",
+      "htmlBytes": 34388,
+      "ibm": true,
+      "compact": true,
+      "rtl": true,
+      "hasImage": false
+    },
+    {
+      "id": "D08",
+      "htmlBytes": 29923,
+      "ibm": true,
+      "compact": true,
+      "rtl": true,
+      "hasImage": false
+    },
+    {
+      "id": "D10",
+      "htmlBytes": 30875,
+      "ibm": true,
+      "compact": true,
+      "rtl": true,
+      "hasImage": false
+    },
+    {
+      "id": "G06",
+      "htmlBytes": 32065,
+      "ibm": true,
+      "compact": true,
+      "rtl": true,
+      "hasImage": false
+    },
+    {
+      "id": "G10",
+      "htmlBytes": 30069,
+      "ibm": true,
+      "compact": true,
+      "rtl": true,
+      "hasImage": false
+    },
+    {
+      "id": "H02",
+      "htmlBytes": 30138,
+      "ibm": true,
+      "compact": true,
+      "rtl": true,
+      "hasImage": false
+    },
+    {
+      "id": "H04",
+      "htmlBytes": 29984,
+      "ibm": true,
+      "compact": true,
+      "rtl": true,
+      "hasImage": false
+    }
+  ]
+}

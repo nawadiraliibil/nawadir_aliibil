@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'">
+<style>
+  * { box-sizing: border-box; }
+  body { font: 13px/1.7 Tahoma, sans-serif; margin: 18px; color: var(--figma-color-text, #222); background: var(--figma-color-bg, #fff); }
+  h1 { font-size: 19px; margin: 0; } p { margin: 8px 0; }
+  button, input { font: inherit; } button { padding: 8px 12px; margin: 5px 0 5px 6px; cursor: pointer; border: 1px solid #888; border-radius: 6px; }
+  button:disabled { opacity: .45; cursor: default; } #apply { background: #176a48; color: white; }
+  #status { white-space: pre-wrap; padding: 10px; border: 1px solid #999; border-radius: 6px; overflow-wrap: anywhere; }
+  #work { font-size: 11px; overflow-wrap: anywhere; } #preview { overflow: auto; max-height: 350px; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; } th, td { border: 1px solid #999; padding: 7px; text-align: right; vertical-align: top; }
+  pre { direction: ltr; text-align: left; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; max-width: 200px; font-size: 11px; }
+  .error { border-right: 5px solid #c33; } .skip { border-right: 5px solid #c98c17; } .ready { border-right: 5px solid #218551; }
+</style>
+<h1>محرر نسخة العمل المحلي</h1>
+<p>افتح نسخة مستقلة من التصميم. التصدير يشمل التحديد وكل طبقاته الفرعية. لا اتصال بالشبكة.</p>
+<details><summary>هوية نسخة العمل</summary>
+  <p>عند نسخ ملف سبق تهيئته، أنشئ هوية جديدة في النسخة قبل أول تصدير. هذا يبطل ملفات تعديلات الهوية السابقة.</p>
+  <button id="identity">هوية جديدة لنسخة العمل</button>
+</details>
+<p id="work">جارٍ قراءة الهوية…</p>
+<button id="export">تصدير التحديد JSON</button>
+<button id="import">استيراد تعديلات ومعاينتها</button>
+<input id="file" type="file" accept=".json,application/json" hidden>
+<button id="apply" disabled>تطبيق</button>
+<p id="status" role="status" aria-live="polite">هيّئ النسخة مرة واحدة، ثم صدّر التحديد واترك الإضافة مفتوحة حتى استيراد التعديلات.</p>
+<div id="preview"></div>
+<script>
+  const $ = id => document.getElementById(id);
+  let ready = false;
+  function post(type, data = {}) {
+    document.querySelectorAll('button').forEach(b => { b.disabled = true; });
+    parent.postMessage({ pluginMessage: { type, ...data } }, '*');
+  }
+  function reset() { ready = false; $('apply').disabled = true; $('preview').replaceChildren(); }
+  $('identity').onclick = () => {
+    if (confirm('أنشئ هوية جديدة لهذه النسخة؟ ستبطل كل التصديرات والتعديلات السابقة. لا تضغط هذا الزر في كل جلسة.')) {
+      reset(); post('newIdentity');
+    }
+  };
+  $('export').onclick = () => { reset(); post('export'); };
+  $('import').onclick = () => { reset(); $('file').value = ''; $('file').click(); };
+  $('file').onchange = async () => {
+    const file = $('file').files[0];
+    if (!file) return;
+    if (file.size > 5000000) { $('status').textContent = 'الحد الأقصى للملف 5 MB.'; return; }
+    try { post('preview', { json: await file.text() }); }
+    catch (e) { $('status').textContent = 'تعذر قراءة الملف: ' + e.message; }
+  };
+  $('apply').onclick = () => post('apply');
+  function cell(row, value, json = false) {
+    const td = document.createElement('td');
+    const content = document.createElement(json ? 'pre' : 'span');
+    content.textContent = json ? JSON.stringify(value, null, 2) : value;
+    td.appendChild(content); row.appendChild(td);
+  }
+  onmessage = event => {
+    if (event.source !== parent) return;
+    const m = event.data.pluginMessage;
+    if (!m) return;
+    if (m.type === 'identity') {
+      $('work').textContent = m.work ? 'هوية النسخة: ' + m.work.workspaceId : 'لم تُهيأ نسخة العمل؛ افتح قسم الهوية أعلاه.';
+    } else if (m.type === 'export') {
+      const blob = new Blob([JSON.stringify(m.data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'figma-selection-' + m.data.exportId + '.json';
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 10000);
+      $('status').textContent = 'جُهز تصدير ' + m.data.nodes.length + ' عنصرًا. احفظ الملف ثم أعطه إلى Codex. انتظر معاينة التعديلات قبل التطبيق.';
+    } else if (m.type === 'preview') {
+      ready = m.ok && m.rows.some(r => r.status === 'ready');
+      const table = document.createElement('table');
+      const head = document.createElement('tr');
+      ['العنصر / الخاصية', 'القيمة الحالية', 'القيمة المقترحة', 'الارتباطات / النتيجة'].forEach(x => cell(head, x));
+      table.appendChild(head);
+      for (const r of m.rows) {
+        const tr = document.createElement('tr'); tr.className = r.status;
+        cell(tr, r.name + ' [' + r.nodeId + '] / ' + r.property);
+        cell(tr, r.before, true); cell(tr, r.after, true);
+        cell(tr, { الحالة: { ready: 'جاهز', skip: 'متجاوز', error: 'تعارض' }[r.status], السبب: r.reason, الارتباطات: r.bindings }, true);
+        table.appendChild(tr);
+      }
+      $('preview').replaceChildren(table);
+      $('status').textContent = m.ok ? (ready ? 'راجع القيم والارتباطات ثم اضغط تطبيق. العمليات المتجاوزة لا تُنفذ.' : 'كل العمليات متجاوزة؛ لم يتغير التصميم.') : 'يوجد تعارض. أُوقف تطبيق الدفعة كاملة دون تغيير أي عنصر.';
+    } else if (m.type === 'done') { reset(); $('status').textContent = m.message; }
+    else if (m.type === 'error') { ready = false; $('status').textContent = m.message; }
+    else if (m.type === 'idle') {
+      document.querySelectorAll('button').forEach(b => { b.disabled = false; }); $('apply').disabled = !ready;
+    }
+  };
+  post('init');
+</script>
+</html>

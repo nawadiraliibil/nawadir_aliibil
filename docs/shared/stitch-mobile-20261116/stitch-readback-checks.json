@@ -1,0 +1,56 @@
+[
+  {
+    "code": "A01",
+    "tests": {
+      "downloaded": true,
+      "brandCSS": true,
+      "arabic": true,
+      "actualLogoEmbedded": true
+    }
+  },
+  {
+    "code": "B01",
+    "tests": {
+      "downloaded": true,
+      "brandCSS": true,
+      "arabic": true,
+      "actualLogoEmbedded": true
+    }
+  },
+  {
+    "code": "B02",
+    "tests": {
+      "downloaded": true,
+      "brandCSS": true,
+      "arabic": true,
+      "noCompetitiveCountdown": true
+    }
+  },
+  {
+    "code": "G09",
+    "tests": {
+      "downloaded": true,
+      "brandCSS": true,
+      "arabic": true,
+      "noInstantPublishPromise": true
+    }
+  },
+  {
+    "code": "H02",
+    "tests": {
+      "downloaded": true,
+      "brandCSS": true,
+      "arabic": true,
+      "noAssumedProvider": true
+    }
+  },
+  {
+    "code": "H04",
+    "tests": {
+      "downloaded": true,
+      "brandCSS": true,
+      "arabic": true,
+      "noInventedVeterinaryCheck": true
+    }
+  }
+]

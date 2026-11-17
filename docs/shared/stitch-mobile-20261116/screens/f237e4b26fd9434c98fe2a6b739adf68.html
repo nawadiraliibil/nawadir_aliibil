@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-background-light" data-theme="light" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>نوادر الإبل - المحادثة</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts - Noto Sans Arabic -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error": "#ffffff",
+            "on-tertiary-container": "#fcfcff",
+            "border-dark": "#3B504B",
+            "surface-container-lowest": "#ffffff",
+            "surface-tint": "#825517",
+            "muted-dark": "#AABAB3",
+            "success-dark": "#53BE90",
+            "warning-light": "#C88926",
+            "outline-variant": "#d5c4b4",
+            "on-tertiary": "#ffffff",
+            "on-secondary-container": "#6e6356",
+            "on-secondary": "#ffffff",
+            "surface-container": "#f7ece3",
+            "secondary-container": "#f0e0d0",
+            "on-primary-fixed": "#2b1700",
+            "tertiary": "#236185",
+            "tertiary-fixed-dim": "#95cdf5",
+            "on-secondary-fixed": "#221a11",
+            "on-tertiary-fixed-variant": "#004c6d",
+            "on-error-container": "#93000a",
+            "surface-light": "#FFFCF8",
+            "surface": "#fff8f4",
+            "surface-container-high": "#f1e6de",
+            "tertiary-fixed": "#c8e6ff",
+            "surface-container-highest": "#ebe1d8",
+            "secondary": "#685d50",
+            "primary-dark": "#E4BC7B",
+            "error": "#ba1a1a",
+            "inverse-primary": "#f8bb74",
+            "inverse-on-surface": "#faefe6",
+            "on-primary": "#ffffff",
+            "outline": "#837567",
+            "muted-light": "#817568",
+            "on-background": "#201b16",
+            "info-dark": "#83A9D8",
+            "background-light": "#F8F3EA",
+            "info-light": "#528AA9",
+            "primary-fixed": "#ffddb9",
+            "text-light": "#2D241B",
+            "error-container": "#ffdad6",
+            "error-dark": "#E17B75",
+            "secondary-fixed-dim": "#d3c4b5",
+            "inverse-surface": "#352f2a",
+            "on-secondary-fixed-variant": "#4f453a",
+            "background-dark": "#111B1C",
+            "surface-bright": "#fff8f4",
+            "warning-dark": "#E1AA4A",
+            "tertiary-container": "#417a9f",
+            "border-light": "#E4D5C0",
+            "on-surface": "#201b16",
+            "error-light": "#C95D59",
+            "surface-dark": "#202D2D",
+            "surface-dim": "#e3d8d0",
+            "text-dark": "#F6EEE0",
+            "surface-variant": "#ebe1d8",
+            "secondary-fixed": "#f0e0d0",
+            "on-surface-variant": "#504539",
+            "background": "#fff8f4",
+            "on-primary-fixed-variant": "#663e00",
+            "primary-container": "#9c6a2b",
+            "on-primary-container": "#fffbff",
+            "primary-fixed-dim": "#f8bb74",
+            "primary": "#7f5214",
+            "on-tertiary-fixed": "#001e2e",
+            "success-light": "#2F936A",
+            "surface-container-low": "#fdf2e9"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "margin": "1.25rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1.25rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem"
+          },
+          "fontFamily": {
+            "label-lg": ["Noto Sans Arabic"],
+            "body-lg": ["Noto Sans Arabic"],
+            "caption": ["Noto Sans Arabic"],
+            "headline-sm": ["Noto Sans Arabic"],
+            "headline-md": ["Noto Sans Arabic"],
+            "body-md": ["Noto Sans Arabic"],
+            "label-md": ["Noto Sans Arabic"],
+            "headline-lg": ["Noto Sans Arabic"]
+          },
+          "fontSize": {
+            "label-lg": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+            "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}],
+            "caption": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "label-md": ["16px", {"lineHeight": "22px", "fontWeight": "600"}],
+            "headline-lg": ["28px", {"lineHeight": "38px", "fontWeight": "700"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style id="nawader-brand-final">
+    :root{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}
+    html,body{background:var(--brand-bg)!important;color:var(--brand-text)!important;max-width:100%;font-family:'Noto Sans Arabic',sans-serif!important;user-select:text!important}
+    body{margin:0!important;min-height:100dvh!important;font-size:18px;line-height:1.65}
+    *{box-sizing:border-box} img{max-width:100%} p,label,input,select,textarea{font-family:inherit;font-size:18px} h1{font-size:26px;line-height:1.6} h2{font-size:22px;line-height:1.6}
+    button,a[role=button]{min-height:48px!important;min-width:48px;white-space:normal!important;font-family:inherit;touch-action:manipulation}button:not([aria-label]){font-size:20px;font-weight:700}
+    input:not([type=checkbox]):not([type=radio]),select{min-height:56px}input[type=checkbox],input[type=radio]{width:24px;min-width:24px;height:24px;accent-color:var(--brand-gold)}
+    :focus-visible{outline:3px solid var(--brand-text)!important;outline-offset:3px} [class~="truncate"]{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+    [class~="bg-background"],[class~="bg-background-light"],[class~="bg-background-dark"]{background-color:var(--brand-bg)!important}
+    [class~="bg-surface"],[class~="bg-surface-light"],[class~="bg-surface-dark"],[class~="bg-surface-container"],[class~="bg-surface-container-low"],[class~="bg-surface-container-high"],[class~="bg-surface-container-highest"]{background-color:var(--brand-surface)!important}
+    [class~="text-text-light"],[class~="text-text-dark"],[class~="text-on-surface"],[class~="text-on-background"],[class~="text-secondary"],[class~="text-on-surface-variant"],[class~="text-primary"]{color:var(--brand-text)!important}
+    [class~="bg-primary"],[class~="bg-primary-container"]{background-color:var(--brand-gold)!important;color:#2D241B!important;font-size:20px!important;font-weight:700!important}
+    [class~="bg-primary"] span,[class~="bg-primary-container"] span{color:inherit!important}
+    [class~="border-border-light"],[class~="border-border-dark"],[class~="border-outline-variant"]{border-color:var(--brand-border)!important}
+    .simple-shell{width:100%;max-width:430px;min-height:100dvh;margin:auto;background:var(--brand-bg);padding:20px;display:flex;flex-direction:column}
+    .simple-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px}.simple-header button{width:auto;padding:0 18px}
+    .simple-content{display:flex;flex-direction:column;gap:20px;padding-top:20px;padding-bottom:30px}.simple-content h1,.simple-content p,.simple-content h2{margin:0}
+    .field{display:flex;flex-direction:column;gap:10px;font-weight:600}.field input,.field select{width:100%;padding:12px;border:2px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);color:var(--brand-text)}
+    .action{width:100%;min-height:56px;padding:12px 16px;border:2px solid var(--brand-gold);border-radius:12px;background:var(--brand-gold);color:#2D241B;font-size:20px;font-weight:700}
+    .secondary{background:var(--brand-surface);color:var(--brand-text)}.helper{font-size:16px;line-height:1.7;color:var(--brand-text)}
+    .consent{display:flex;align-items:flex-start;gap:14px;min-height:56px;padding:14px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .notice{padding:20px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .welcome{align-items:center;text-align:center;justify-content:center;gap:24px;padding-top:40px;padding-bottom:32px}.welcome-logo{width:216px;height:216px;object-fit:contain}.welcome h1{margin:0;font-size:26px}.welcome p{margin:0;max-width:320px}.welcome-actions{width:100%;display:flex;flex-direction:column;gap:16px;margin-top:32px}
+    .home-shell{width:100%;max-width:430px;margin:auto;padding-bottom:100px}.home-header{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--brand-surface)}.home-header h1{font-size:22px;flex:1;margin:0}.small-action{border:0;border-radius:10px;font-size:16px!important;padding:8px;color:var(--brand-text)}.home-content{padding:20px;display:flex;flex-direction:column;gap:20px}.home-content>h2{margin:0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.home-tools .action{font-size:18px;padding:8px}.ad-card{border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);overflow:hidden}.ad-photo{width:100%;height:180px;object-fit:cover}.ad-content{padding:16px;display:flex;flex-direction:column;gap:10px}.ad-content h2,.ad-content p{margin:0}.price{font-size:26px;font-weight:700}.offer-label{font-size:16px}.simple-bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--brand-surface);border-top:1px solid var(--brand-border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:50}.simple-bottom button{font-size:14px!important;font-weight:600;padding:6px 2px;background:none;border:0;border-radius:8px;color:var(--brand-text)}.simple-bottom [aria-current]{background:var(--brand-bg);border:1px solid var(--brand-gold)}
+    @media(min-width:600px){body{padding:0!important}} @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    </style><style id="nawader-dark-mode">html[data-theme=dark]{--brand-bg:#111B1C;--brand-surface:#202D2D;--brand-gold:#E4BC7B;--brand-text:#F6EEE0;--brand-muted:#AABAB3;--brand-border:#3B504B}html[data-theme=light]{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}html[data-theme=dark] .bg-white,html[data-theme=dark] .bg-slate-50,html[data-theme=dark] .bg-gray-50{background-color:var(--brand-surface)!important}html[data-theme=dark] .action:not(.secondary),html[data-theme=dark] [class~=bg-primary],html[data-theme=dark] [class~=bg-primary-container]{color:#111B1C!important}html[data-theme=light] .action:not(.secondary),html[data-theme=light] [class~=bg-primary],html[data-theme=light] [class~=bg-primary-container]{color:#2D241B!important}</style></head>
+<body class="h-full bg-background-light text-text-light font-body-md antialiased flex flex-col justify-between selection:bg-secondary-container">
+<!-- Main Viewport Container (Single column mobile layout 360-430px) -->
+<div class="w-full max-w-md mx-auto min-h-screen flex flex-col bg-background-light shadow-xl relative border-x border-border-light">
+<!-- Top App Bar & Contextual Listing Bar Header -->
+<header class="sticky top-0 z-30 bg-surface-light border-b border-border-light shadow-sm">
+<!-- Top Row: Back button, Seller name & Quick options trigger -->
+<div class="flex items-center justify-between px-space-md py-space-sm h-16">
+<div class="flex items-center gap-space-sm">
+<!-- Back button with arrow_forward in RTL representing backwards -->
+<button aria-label="رجوع" class="w-12 h-12 flex items-center justify-center rounded-lg text-text-light hover:bg-surface-container active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-2xl font-bold" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<h1 class="font-headline-sm text-headline-sm text-text-light leading-tight">أبو صالح الشمري</h1>
+<span class="inline-flex items-center justify-center text-success-light" title="بائع موثق">
+<span class="material-symbols-outlined text-lg" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</span>
+</div>
+<span class="font-caption text-caption text-muted-light">متصل الآن • الرياض</span>
+</div>
+</div>
+<!-- Options toggle button -->
+<button aria-label="خيارات المحادثة" class="w-12 h-12 flex items-center justify-center rounded-lg text-secondary hover:bg-surface-container active:scale-95 transition-transform border border-border-light bg-surface" id="options-toggle-btn" type="button">
+<span class="material-symbols-outlined text-2xl" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<!-- Compact Ad Context Banner -->
+<div class="px-space-md py-space-xs bg-surface border-t border-border-light flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-lg overflow-hidden border border-border-light flex-shrink-0 bg-surface-container">
+<img alt="صورة إبل توضيحية" class="w-full h-full object-cover" data-alt="A portrait shot of a majestic Wadhah female camel with creamy white coat and noble facial features in the Saudi desert under warm afternoon golden sunlight with authentic sand dunes in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsjhUibRnwBstKKnNPjibpsnByoxJ62oi_jZnhX5PWZl_WXU2xMFoFZ-p0-fEqiWhtbjenYIEl-6vUM790Cgd8mKtUzfGLjMvzrGZd-5lR4fEqYY-ZgklJWwCPBa8XakAXBcT9gunNUFpUWO0Ip0mzsbu7FTgsc6K-qDClBmSl_ddxI7K1f4LFczaSzQhDPoK0CDjenVSSgJfASJiHGyUQSrQiF4IUDhSrKL5W4Ui5D_sSy0oI2blgrn80oKt-1UMOabIHS1KzkvE"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-text-light font-bold truncate max-w-[200px]">بكرة وضحاء سلالة طياح</span>
+<span class="font-caption text-caption text-primary font-bold">140,000 ر.س</span>
+</div>
+</div>
+<a class="font-caption text-caption text-secondary bg-surface-container hover:bg-secondary-container px-space-sm py-1 rounded-lg border border-border-light transition-colors" href="#ad-details">
+          عرض الإعلان
+        </a>
+</div>
+<!-- Action Panel: 3 clearly labeled safety actions (كتم التنبيهات، إبلاغ، حظر) -->
+<div class="grid grid-cols-3 gap-2 px-space-md py-2.5 bg-surface-container-high border-t border-border-light" id="safety-options-bar">
+<button class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg bg-surface-light border border-border-light text-text-light font-label-md text-caption hover:bg-surface-container active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-lg text-secondary" data-icon="volume_off">volume_off</span>
+<span>كتم التنبيهات</span>
+</button>
+<button class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg bg-surface-light border border-border-light text-warning-light font-label-md text-caption hover:bg-surface-container active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-lg text-warning-light" data-icon="flag">flag</span>
+<span>إبلاغ</span>
+</button>
+<button class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg bg-surface-light border border-border-light text-error-light font-label-md text-caption hover:bg-error-container active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-lg text-error-light" data-icon="block">block</span>
+<span>حظر</span>
+</button>
+</div>
+</header>
+<!-- Chat Stream Canvas (Text-only message stream) -->
+<main class="flex-1 p-margin space-y-space-md overflow-y-auto">
+<!-- Date Divider -->
+<div class="flex items-center justify-center my-space-xs">
+<span class="bg-surface-container text-muted-light font-caption text-caption px-space-md py-1 rounded-full border border-border-light">
+          اليوم
+        </span>
+</div>
+<!-- Message 1: Incoming message from seller -->
+<div class="flex flex-col items-start max-w-[88%]">
+<div class="bg-surface-light text-text-light p-space-md rounded-2xl rounded-tr-none border border-border-light shadow-sm">
+<p class="font-body-md text-body-md leading-relaxed">
+            مرحباً بك، الحلال موجود في الشبوك بالرياض والمعاينة متاحة يومياً بعد العصر.
+          </p>
+</div>
+<div class="flex items-center gap-1.5 mt-1 px-1">
+<span class="font-caption text-caption text-muted-light">03:45 م</span>
+</div>
+</div>
+<!-- Message 2: Sent message from user (Delivered & Read) -->
+<div class="flex flex-col items-end self-end max-w-[88%]">
+<div class="bg-secondary-container text-text-light p-space-md rounded-2xl rounded-tl-none border border-border-light shadow-sm">
+<p class="font-body-md text-body-md leading-relaxed">
+            الله يبارك لك، هل السوم وصل حد معين؟
+          </p>
+</div>
+<div class="flex items-center gap-1.5 mt-1 px-1">
+<span class="font-caption text-caption text-muted-light">03:48 م</span>
+<span class="text-tertiary flex items-center gap-0.5" title="تمت القراءة">
+<span class="material-symbols-outlined text-base" data-icon="done_all" style="font-variation-settings: 'FILL' 1;">done_all</span>
+<span class="font-caption text-caption text-secondary">تمت القراءة</span>
+</span>
+</div>
+</div>
+<!-- Message 3: Sent message pending (قيد الإرسال) -->
+<div class="flex flex-col items-end self-end max-w-[88%]">
+<div class="bg-secondary-container text-text-light p-space-md rounded-2xl rounded-tl-none border border-border-light shadow-sm">
+<p class="font-body-md text-body-md leading-relaxed">
+            وهل يوجد فحص بيطري حديث؟
+          </p>
+</div>
+<div class="flex items-center gap-1.5 mt-1 px-1">
+<span class="font-caption text-caption text-muted-light">03:50 م</span>
+<span class="text-muted-light flex items-center gap-1" title="قيد الإرسال">
+<span class="material-symbols-outlined text-base animate-pulse" data-icon="schedule">schedule</span>
+<span class="font-caption text-caption text-muted-light">قيد الإرسال...</span>
+</span>
+</div>
+</div>
+<!-- Message 4: Failed message (تعذر الإرسال + إعادة المحاولة) -->
+<div class="flex flex-col items-end self-end max-w-[90%]">
+<div class="bg-error-container text-text-light p-space-md rounded-2xl rounded-tl-none border-2 border-error-light shadow-sm">
+<p class="font-body-md text-body-md leading-relaxed">
+            إذا ناسبك السعر أجي أعاين غداً
+          </p>
+</div>
+<!-- Status & Recovery Button Action Row -->
+<div class="flex items-center gap-3 mt-1.5 px-1 flex-wrap justify-end">
+<div class="flex items-center gap-1 text-error">
+<span class="material-symbols-outlined text-lg font-bold" data-icon="error">error</span>
+<span class="font-label-md text-caption text-error font-bold">تعذر الإرسال</span>
+</div>
+<!-- Prominent 48px touch target retry button for high accessibility -->
+<button class="h-12 px-space-md bg-surface-light border-2 border-error text-error rounded-lg flex items-center gap-1.5 font-label-md text-label-md hover:bg-error-container active:scale-95 transition-transform shadow-sm" type="button">
+<span class="material-symbols-outlined text-lg font-bold" data-icon="refresh">refresh</span>
+<span>إعادة المحاولة</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Chat Message Composer & Bottom Sticky Region -->
+<footer class="sticky bottom-0 z-20 bg-surface-light border-t border-border-light p-space-md shadow-lg">
+<form class="space-y-space-sm" id="chat-form" onsubmit="event.preventDefault();">
+<!-- Accessible Textarea Input Target -->
+<div class="relative">
+<textarea class="w-full bg-surface text-text-light placeholder:text-muted-light border-2 border-border-light rounded-xl p-space-sm font-body-md focus:border-primary focus:ring-0 focus:outline-none resize-none transition-colors" id="message-input" placeholder="اكتب رسالتك النصية هنا..." rows="2"></textarea>
+</div>
+<!-- Primary Action Button: 56px height, high contrast, gold tone per design system -->
+<button class="w-full h-14 bg-primary text-on-primary font-headline-sm text-headline-sm rounded-xl flex items-center justify-center gap-2 hover:bg-primary-container active:scale-98 transition-all shadow-md" type="submit">
+<span>إرسال</span>
+<span class="material-symbols-outlined text-2xl font-bold -scale-x-100" data-icon="send">send</span>
+</button>
+<!-- Compliance & Accessibility Helper Notice -->
+<div class="flex items-center justify-center gap-1.5 pt-1 text-center">
+<span class="material-symbols-outlined text-sm text-muted-light" data-icon="lock">lock</span>
+<p class="font-caption text-caption text-muted-light">
+            المحادثة نصية فقط للحفاظ على وضوح الاتفاق وسرعة التراسل
+          </p>
+</div>
+</form>
+</footer>
+</div>
+<!-- Interactive JavaScript for micro-interactions -->
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));const nav={'الرئيسية':'B01','المفضلة':'B09','أضف إعلان':'D01','الرسائل':'F01','حسابي':'G01','إعلاناتي':'E01','التنبيهات':'G04'};document.querySelectorAll('nav button,nav a').forEach(el=>{const t=el.innerText.trim();for(const [label,id] of Object.entries(nav))if(t.endsWith(label))el.dataset.go=id});document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();parent.postMessage({nawaderScreen:el.dataset.go},'*')}));addEventListener('message',e=>{if(e.source!==parent)return;if(['dark','light'].includes(e.data?.nawaderTheme))document.documentElement.dataset.theme=e.data.nawaderTheme});</script></body></html>

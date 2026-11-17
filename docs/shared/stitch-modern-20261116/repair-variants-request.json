@@ -1,0 +1,17 @@
+{
+  "projectId": "6310763871032341644",
+  "deviceType": "MOBILE",
+  "modelId": "GEMINI_3_5_FLASH_LITE",
+  "selectedScreenIds": [
+    "26413aafa1fa472188cf3c4ca56e02b1"
+  ],
+  "variantOptions": {
+    "variantCount": 5,
+    "creativeRange": "REFINE",
+    "aspects": [
+      "LAYOUT",
+      "TEXT_CONTENT"
+    ]
+  },
+  "prompt": "MOBILE | MOBILE-GUI-MODERN-20261116 | Scope this new modern mobile design project only.\nCreate FIVE separate compact account-flow design variants from this working account screen, one for each target below. Do not change the original screen. These replace five incomplete empty drafts; all other screens already exist.\nName the resulting variants EXACTLY:\nG06 — الإعدادات والمظهر: three small light/dark/system choices and simple settings rows.\nG07 — أرقام التواصل: separate public contact number, call/WhatsApp choices, unchecked explicit consent.\nG08 — المستخدمون المحظورون: one blocked-user list row and unblock action.\nG09 — الشروط والمساعدة: three short collapsed legal/help sections, approved legal copy placeholder only.\nG10 — إدارة الحساب: logout action and separate account-closure confirmation with unchecked acknowledgment.\nKeep essential content only. Arabic RTL IBM Plex Sans Arabic14px, labels12px, title18–20px,44px controls. Background#F8F3EA surface#FFFCF8 brown#2D241B primary CTA with creamtext, small gold#A77434 accents,1px borders12px radius, no long paragraphs or decorative boxes. LIGHT MODE. Produce exactly five new fully rendered screens with HTML and screenshot, not a collage. No payment, assumed verification provider or government/support guarantees. Final supplied-logo HTML will be integrated afterwards."
+}

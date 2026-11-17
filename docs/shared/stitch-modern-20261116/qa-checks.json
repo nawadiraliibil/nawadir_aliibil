@@ -1,0 +1,326 @@
+{
+  "viewportChecks": [
+    {
+      "id": "A04",
+      "theme": "light",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "A04",
+      "theme": "dark",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "B01",
+      "theme": "light",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "B01",
+      "theme": "dark",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "B03",
+      "theme": "light",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "B03",
+      "theme": "dark",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "C01",
+      "theme": "light",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "C01",
+      "theme": "dark",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "C02",
+      "theme": "light",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "C02",
+      "theme": "dark",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "D02",
+      "theme": "light",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "D02",
+      "theme": "dark",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "D06",
+      "theme": "light",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "D06",
+      "theme": "dark",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "D08",
+      "theme": "light",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "D08",
+      "theme": "dark",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "D10",
+      "theme": "light",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "D10",
+      "theme": "dark",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "F02",
+      "theme": "light",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "F02",
+      "theme": "dark",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "H03",
+      "theme": "light",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "H03",
+      "theme": "dark",
+      "width": 360,
+      "scroll": 360,
+      "brokenImages": 0
+    },
+    {
+      "id": "A04",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "A04",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "B01",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "B01",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "B03",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "B03",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "C01",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "C01",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "C02",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "C02",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "D02",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "D02",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "D06",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "D06",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "D08",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "D08",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "D10",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "D10",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "F02",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "F02",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "H03",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    },
+    {
+      "id": "H03",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "brokenImages": 0
+    }
+  ],
+  "interactionChecks": {
+    "lightChoices": 74,
+    "profileInitiallyBlocked": true,
+    "profileEnabledWithConsents": true,
+    "auctionLocationRoutesToVenue": true,
+    "contactBlockedWithoutChannel": true,
+    "contactEnabledWithChannelAndConsent": true,
+    "auctionPreviewPreserved": true,
+    "auctionPreviewHasNoPrice": true,
+    "ratingInitiallyBlocked": true,
+    "ratingEnabledWithScoreAndDeclaration": true,
+    "appearanceUpdatesGallery": true,
+    "galleryImageSwitches": true
+  }
+}

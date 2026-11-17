@@ -1,0 +1,30 @@
+{
+  "schema": "codex-figma-selection",
+  "version": 1,
+  "workspaceId": "43d8ac07-e129-4ccd-8519-638af8c763de",
+  "exportId": "59acb47b-ad33-453b-948e-bb492aacb676",
+  "fileKey": null,
+  "pageId": "0:1",
+  "exportedAt": "2026-11-16T07:18:00.000Z",
+  "selection": ["1:1"],
+  "nodes": [
+    {
+      "id": "1:1", "name": "قائمة الإعلانات", "type": "FRAME", "parentId": "0:1",
+      "children": ["1:2"], "path": [{ "id": "0:1", "type": "PAGE", "name": "الجوال" }],
+      "properties": { "layoutMode": "VERTICAL", "itemSpacing": 12 },
+      "boundVariables": {}, "textRuns": null,
+      "propertyBindings": { "itemSpacing": { "direct": {}, "paintAliases": [], "text": [] } },
+      "mainComponent": null, "componentKey": null
+    },
+    {
+      "id": "1:2", "name": "عنوان القائمة", "type": "TEXT", "parentId": "1:1", "children": [],
+      "path": [{ "id": "1:1", "type": "FRAME", "name": "قائمة الإعلانات" }, { "id": "0:1", "type": "PAGE", "name": "الجوال" }],
+      "properties": { "characters": "القائمة", "textAlignHorizontal": "RIGHT", "fontName": { "family": "Noto Sans Arabic", "style": "Regular" } },
+      "boundVariables": {},
+      "textRuns": [{ "start": 0, "end": 7, "characters": "القائمة", "fontName": { "family": "Noto Sans Arabic", "style": "Regular" }, "boundVariables": {} }],
+      "propertyBindings": { "characters": { "direct": {}, "paintAliases": [], "text": [{ "start": 0, "end": 7, "boundVariables": {} }] } },
+      "mainComponent": null, "componentKey": null
+    }
+  ],
+  "variables": []
+}

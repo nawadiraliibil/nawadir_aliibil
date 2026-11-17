@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html data-theme="dark" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>نوادر الإبل - الوصف والحالة الصحية</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-background": "#201b16",
+            "on-primary": "#ffffff",
+            "on-surface-variant": "#504539",
+            "background-light": "#F8F3EA",
+            "surface-bright": "#fff8f4",
+            "primary-fixed": "#ffddb9",
+            "muted-light": "#817568",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed": "#2b1700",
+            "error": "#ba1a1a",
+            "success-light": "#2F936A",
+            "surface-container-high": "#f1e6de",
+            "on-primary-container": "#fffbff",
+            "surface-variant": "#ebe1d8",
+            "on-surface": "#201b16",
+            "error-dark": "#E17B75",
+            "primary": "#7f5214",
+            "inverse-on-surface": "#faefe6",
+            "tertiary": "#236185",
+            "primary-container": "#9c6a2b",
+            "surface-dark": "#202D2D",
+            "on-secondary-fixed-variant": "#4f453a",
+            "muted-dark": "#AABAB3",
+            "secondary": "#685d50",
+            "tertiary-fixed": "#c8e6ff",
+            "surface-tint": "#825517",
+            "on-secondary-fixed": "#221a11",
+            "surface-container": "#f7ece3",
+            "tertiary-fixed-dim": "#95cdf5",
+            "error-container": "#ffdad6",
+            "error-light": "#C95D59",
+            "text-dark": "#F6EEE0",
+            "on-error": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "border-light": "#E4D5C0",
+            "background": "#fff8f4",
+            "info-dark": "#83A9D8",
+            "outline-variant": "#d5c4b4",
+            "secondary-container": "#f0e0d0",
+            "surface-container-low": "#fdf2e9",
+            "primary-dark": "#E4BC7B",
+            "surface-light": "#FFFCF8",
+            "secondary-fixed-dim": "#d3c4b5",
+            "border-dark": "#3B504B",
+            "on-tertiary-fixed": "#001e2e",
+            "on-tertiary-fixed-variant": "#004c6d",
+            "warning-light": "#C88926",
+            "success-dark": "#53BE90",
+            "on-secondary-container": "#6e6356",
+            "outline": "#837567",
+            "inverse-surface": "#352f2a",
+            "on-primary-fixed-variant": "#663e00",
+            "info-light": "#528AA9",
+            "on-tertiary-container": "#fcfcff",
+            "on-error-container": "#93000a",
+            "text-light": "#2D241B",
+            "inverse-primary": "#f8bb74",
+            "primary-fixed-dim": "#f8bb74",
+            "surface-dim": "#e3d8d0",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#f0e0d0",
+            "surface-container-highest": "#ebe1d8",
+            "tertiary-container": "#417a9f",
+            "warning-dark": "#E1AA4A",
+            "surface": "#fff8f4",
+            "background-dark": "#111B1C"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "margin": "1.25rem",
+            "space-xl": "1.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.25rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "body-md": ["Noto Sans Arabic"],
+            "body-lg": ["Noto Sans Arabic"],
+            "headline-md": ["Noto Sans Arabic"],
+            "headline-sm": ["Noto Sans Arabic"],
+            "label-lg": ["Noto Sans Arabic"],
+            "label-md": ["Noto Sans Arabic"],
+            "headline-lg": ["Noto Sans Arabic"],
+            "caption": ["Noto Sans Arabic"]
+          },
+          "fontSize": {
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "label-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "label-md": ["16px", { "lineHeight": "22px", "fontWeight": "600" }],
+            "headline-lg": ["28px", { "lineHeight": "38px", "fontWeight": "700" }],
+            "caption": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Safe Area Inset Support */
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom, 1rem);
+    }
+    /* Senior-focused focus ring */
+    textarea:focus, input:focus, button:focus {
+      outline: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style id="nawader-brand-final">
+    :root{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}
+    html,body{background:var(--brand-bg)!important;color:var(--brand-text)!important;max-width:100%;font-family:'Noto Sans Arabic',sans-serif!important;user-select:text!important}
+    body{margin:0!important;min-height:100dvh!important;font-size:18px;line-height:1.65}
+    *{box-sizing:border-box} img{max-width:100%} p,label,input,select,textarea{font-family:inherit;font-size:18px} h1{font-size:26px;line-height:1.6} h2{font-size:22px;line-height:1.6}
+    button,a[role=button]{min-height:48px!important;min-width:48px;white-space:normal!important;font-family:inherit;touch-action:manipulation}button:not([aria-label]){font-size:20px;font-weight:700}
+    input:not([type=checkbox]):not([type=radio]),select{min-height:56px}input[type=checkbox],input[type=radio]{width:24px;min-width:24px;height:24px;accent-color:var(--brand-gold)}
+    :focus-visible{outline:3px solid var(--brand-text)!important;outline-offset:3px} [class~="truncate"]{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+    [class~="bg-background"],[class~="bg-background-light"],[class~="bg-background-dark"]{background-color:var(--brand-bg)!important}
+    [class~="bg-surface"],[class~="bg-surface-light"],[class~="bg-surface-dark"],[class~="bg-surface-container"],[class~="bg-surface-container-low"],[class~="bg-surface-container-high"],[class~="bg-surface-container-highest"]{background-color:var(--brand-surface)!important}
+    [class~="text-text-light"],[class~="text-text-dark"],[class~="text-on-surface"],[class~="text-on-background"],[class~="text-secondary"],[class~="text-on-surface-variant"],[class~="text-primary"]{color:var(--brand-text)!important}
+    [class~="bg-primary"],[class~="bg-primary-container"]{background-color:var(--brand-gold)!important;color:#2D241B!important;font-size:20px!important;font-weight:700!important}
+    [class~="bg-primary"] span,[class~="bg-primary-container"] span{color:inherit!important}
+    [class~="border-border-light"],[class~="border-border-dark"],[class~="border-outline-variant"]{border-color:var(--brand-border)!important}
+    .simple-shell{width:100%;max-width:430px;min-height:100dvh;margin:auto;background:var(--brand-bg);padding:20px;display:flex;flex-direction:column}
+    .simple-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px}.simple-header button{width:auto;padding:0 18px}
+    .simple-content{display:flex;flex-direction:column;gap:20px;padding-top:20px;padding-bottom:30px}.simple-content h1,.simple-content p,.simple-content h2{margin:0}
+    .field{display:flex;flex-direction:column;gap:10px;font-weight:600}.field input,.field select{width:100%;padding:12px;border:2px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);color:var(--brand-text)}
+    .action{width:100%;min-height:56px;padding:12px 16px;border:2px solid var(--brand-gold);border-radius:12px;background:var(--brand-gold);color:#2D241B;font-size:20px;font-weight:700}
+    .secondary{background:var(--brand-surface);color:var(--brand-text)}.helper{font-size:16px;line-height:1.7;color:var(--brand-text)}
+    .consent{display:flex;align-items:flex-start;gap:14px;min-height:56px;padding:14px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .notice{padding:20px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .welcome{align-items:center;text-align:center;justify-content:center;gap:24px;padding-top:40px;padding-bottom:32px}.welcome-logo{width:216px;height:216px;object-fit:contain}.welcome h1{margin:0;font-size:26px}.welcome p{margin:0;max-width:320px}.welcome-actions{width:100%;display:flex;flex-direction:column;gap:16px;margin-top:32px}
+    .home-shell{width:100%;max-width:430px;margin:auto;padding-bottom:100px}.home-header{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--brand-surface)}.home-header h1{font-size:22px;flex:1;margin:0}.small-action{border:0;border-radius:10px;font-size:16px!important;padding:8px;color:var(--brand-text)}.home-content{padding:20px;display:flex;flex-direction:column;gap:20px}.home-content>h2{margin:0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.home-tools .action{font-size:18px;padding:8px}.ad-card{border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);overflow:hidden}.ad-photo{width:100%;height:180px;object-fit:cover}.ad-content{padding:16px;display:flex;flex-direction:column;gap:10px}.ad-content h2,.ad-content p{margin:0}.price{font-size:26px;font-weight:700}.offer-label{font-size:16px}.simple-bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--brand-surface);border-top:1px solid var(--brand-border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:50}.simple-bottom button{font-size:14px!important;font-weight:600;padding:6px 2px;background:none;border:0;border-radius:8px;color:var(--brand-text)}.simple-bottom [aria-current]{background:var(--brand-bg);border:1px solid var(--brand-gold)}
+    @media(min-width:600px){body{padding:0!important}} @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    </style><style id="nawader-dark-mode">html[data-theme=dark]{--brand-bg:#111B1C;--brand-surface:#202D2D;--brand-gold:#E4BC7B;--brand-text:#F6EEE0;--brand-muted:#AABAB3;--brand-border:#3B504B}html[data-theme=light]{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}html[data-theme=dark] .bg-white,html[data-theme=dark] .bg-slate-50,html[data-theme=dark] .bg-gray-50{background-color:var(--brand-surface)!important}html[data-theme=dark] .action:not(.secondary),html[data-theme=dark] [class~=bg-primary],html[data-theme=dark] [class~=bg-primary-container]{color:#111B1C!important}html[data-theme=light] .action:not(.secondary),html[data-theme=light] [class~=bg-primary],html[data-theme=light] [class~=bg-primary-container]{color:#2D241B!important}</style></head>
+<body class="bg-background-light text-on-surface font-body-md antialiased min-h-screen flex flex-col justify-between selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Mobile Shell Container (Max-W 430px tailored for Saudi elder ergonomics) -->
+<div class="w-full max-w-md mx-auto bg-surface-light min-h-screen shadow-sm flex flex-col justify-between border-x border-border-light relative">
+<!-- Top App Bar & Linear Wizard Progress -->
+<header class="sticky top-0 z-30 bg-surface border-b border-border-light">
+<div class="flex items-center justify-between px-margin py-space-sm h-16">
+<!-- Back Navigation Button (Generous touch target min 48px) -->
+<button aria-label="الرجوع للخطوة السابقة" class="w-12 h-12 flex items-center justify-center rounded-xl bg-surface-container text-primary hover:bg-surface-variant active:scale-95 transition-transform duration-150 border border-border-light" type="button">
+<span class="material-symbols-outlined text-[28px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<!-- Title -->
+<div class="text-center">
+<h1 class="font-headline-sm text-headline-sm text-text-light font-bold">الوصف والحالة الصحية</h1>
+</div>
+<!-- Save Draft Button -->
+<button class="h-11 px-space-sm flex items-center justify-center rounded-xl text-primary hover:bg-surface-container active:scale-95 transition-transform duration-150 border border-transparent hover:border-border-light" type="button">
+<span class="font-label-md text-label-md text-primary font-bold">حفظ مسودة</span>
+</button>
+</div>
+<!-- Step Indicator (Accessible high-contrast badge & progress track) -->
+<div class="px-margin pt-space-xs pb-space-sm bg-surface-container-low border-t border-border-light">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary text-on-primary font-bold text-caption">3</span>
+<span class="font-label-md text-label-md text-text-light font-bold">الخطوة ٣ من ٧</span>
+</div>
+<span class="font-caption text-caption text-secondary font-medium">الوصف والعيوب</span>
+</div>
+<!-- Progress Bar (High Contrast) -->
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="42" class="w-full h-3 bg-secondary-container rounded-full overflow-hidden p-[2px] border border-border-light" role="progressbar">
+<div class="h-full bg-primary rounded-full transition-all duration-300" style="width: 42.8%;"></div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas (Accessible Single-Column) -->
+<main class="flex-1 px-margin py-space-md space-y-space-lg overflow-y-auto">
+<!-- Dignified Ethical Reminder (Hadith/Islamic Trust Banner) -->
+<section aria-label="تنبيه الأمانة والصدق" class="bg-surface-container rounded-xl p-space-md border-2 border-border-light flex items-start gap-space-sm" role="note">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary flex items-center justify-center flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[24px]" data-icon="verified_user">verified_user</span>
+</div>
+<div class="space-y-1">
+<h2 class="font-label-lg text-label-lg text-text-light font-bold leading-tight">أمانة البيع وصدق الوصف</h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            قال رسول الله ﷺ: «البَيِّعَانِ بالخِيَارِ ما لَمْ يَتَفَرَّقَا، فإنْ صَدَقَا وبَيَّنَا بُورِكَ لهما في بَيْعِهما». بيّن ساس الناقة وطباعها وعذاريبها بوضوح يبارك الله لك.
+          </p>
+</div>
+</section>
+<!-- Field 1: Detailed Camel Description & Lineage -->
+<section class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-headline-sm text-headline-sm text-text-light font-bold flex items-center gap-space-xs" for="camel-description">
+<span>١. وصف الإبل وساسها وميزاتها</span>
+<span aria-hidden="true" class="text-error font-bold">*</span>
+</label>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-normal">
+          اكتب بوضوح ساس المطية (الأب والأم)، الطبوع والهدوء، الإنجازات أو المشاركات، ورقم الشريحة إن وجد.
+        </p>
+<div class="relative">
+<textarea aria-required="true" class="w-full p-space-md rounded-xl bg-surface-container-lowest border-2 border-border-light text-text-light font-body-lg text-body-lg placeholder:text-muted-light focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all shadow-sm leading-relaxed" id="camel-description" placeholder="مثال: ناقة وضحاء مزيونة، ساسها على بعير ابن فلان، هادية وطبوعها سمحة وسالمة من الشقاق، سيمة واضحة وتصلح للمقنى..." rows="5"></textarea>
+</div>
+<!-- Supportive Micro-chips for Quick Prompting -->
+<div aria-label="كلمات مساعدة مقترحة للوصف" class="flex flex-wrap gap-2 pt-1">
+<span class="font-caption text-caption text-secondary py-1 font-medium">عبارات شائعة:</span>
+<button class="h-9 px-space-sm bg-surface-container hover:bg-surface-variant rounded-lg border border-border-light font-label-md text-label-md text-text-light active:scale-95 transition-transform" onclick="insertPrompt('هدية وطبوعها سمحة، ')" type="button">
+            + هادية وطبوعها سمحة
+          </button>
+<button class="h-9 px-space-sm bg-surface-container hover:bg-surface-variant rounded-lg border border-border-light font-label-md text-label-md text-text-light active:scale-95 transition-transform" onclick="insertPrompt('ساس طيب ومعروف، ')" type="button">
+            + ساس طيب ومعروف
+          </button>
+<button class="h-9 px-space-sm bg-surface-container hover:bg-surface-variant rounded-lg border border-border-light font-label-md text-label-md text-text-light active:scale-95 transition-transform" onclick="insertPrompt('سليمة القوائم والمشي، ')" type="button">
+            + سليمة القوائم والمشي
+          </button>
+</div>
+</section>
+<!-- Field 2: Health Status & Defects (Mandatory for Transaction Integrity) -->
+<section class="space-y-space-xs pt-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-headline-sm text-headline-sm text-text-light font-bold flex items-center gap-space-xs" for="camel-health">
+<span>٢. الحالة الصحية والعيوب المعروفة</span>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded font-caption text-caption font-bold">إلزامي للسلامة</span>
+</label>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-normal">
+          اذكر أي عيب ظاهر أو باطن (مثل: عرج، ديد، عمى، جروح قديمة، لقاح، أمراض باطنية) لإبراء الذمة أمام الله والمشتري.
+        </p>
+<div class="relative">
+<textarea aria-required="true" class="w-full p-space-md rounded-xl bg-surface-container-lowest border-2 border-border-light text-text-light font-body-lg text-body-lg placeholder:text-muted-light focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all shadow-sm leading-relaxed" id="camel-health" placeholder="اكتب العيوب أو العذاريب هنا بالتفصيل (أو فعّل الإقرار بالأسفل إذا كانت سليمة تماماً)..." rows="3"></textarea>
+</div>
+</section>
+<!-- Field 3: Prominent Checkbox Acknowledgment (Explicit, High Contrast, Large Touch Target) -->
+<section class="bg-surface-container-high border-2 border-border-light rounded-xl p-space-md transition-colors hover:border-primary-container">
+<label class="flex items-start gap-space-md cursor-pointer select-none">
+<!-- Large Accessible Custom Checkbox (Min 36px) -->
+<div class="relative flex items-center justify-center flex-shrink-0 mt-1">
+<input class="w-8 h-8 rounded-lg border-2 border-outline text-primary focus:ring-primary focus:ring-offset-2 focus:ring-2 cursor-pointer transition-all bg-surface-container-lowest" id="no-defects-checkbox" onchange="toggleHealthField(this)" type="checkbox"/>
+</div>
+<div class="space-y-1">
+<span class="font-headline-sm text-headline-sm text-text-light font-bold block leading-snug">
+              أقر بأنه لا توجد عيوب صحية أو عذاريب معروفة أعلم بها في هذه الإبل
+            </span>
+<span class="font-body-md text-body-md text-on-surface-variant block leading-relaxed">
+              بتحديد هذا المربع، تؤكد خلو الإبل من الأمراض والعيوب الظاهرة والباطنة بحسب علمك ومعاينتك.
+            </span>
+</div>
+</label>
+</section>
+<!-- Trust & Advice Bullet Card -->
+<section class="bg-surface-container-low rounded-xl p-space-md border border-border-light space-y-space-sm">
+<h3 class="font-label-lg text-label-lg text-text-light font-bold flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[24px]" data-icon="help_center">help_center</span>
+<span>إرشادات لكتابة إعلان ناجح</span>
+</h3>
+<ul class="space-y-2 text-on-surface-variant font-body-md text-body-md">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-success-light text-[20px] flex-shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<span>الوضوح في سن المطية (حقة، لقية، جذعة، ثنية، فاطر).</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-success-light text-[20px] flex-shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<span>ذكر إن كانت لقحة وتحديد موعد الضراب واللقاح إن وجد.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-success-light text-[20px] flex-shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<span>الإعلان المكتمل بالصدق يرفع تقييمك كبائع موثوق في المنصة.</span>
+</li>
+</ul>
+</section>
+</main>
+<!-- Sticky Bottom Action Footer (56px Primary Touch Target for older adults) -->
+<!-- Note: BottomNavBar is intentionally suppressed per the 'Destination Rule' since this is an active multi-step linear task -->
+<footer class="sticky bottom-0 z-30 bg-surface border-t border-border-light p-margin pb-safe space-y-space-sm bg-opacity-95 backdrop-blur-sm">
+<!-- Primary 56px Action Button -->
+<button class="w-full h-14 bg-primary text-on-primary rounded-xl font-label-lg text-label-lg font-bold flex items-center justify-center gap-space-sm shadow-md hover:bg-primary-container active:scale-[0.98] transition-all duration-150 border border-primary-container" onclick="validateAndContinue()" type="button">
+<span>المتابعة لتحديد الموقع</span>
+<span class="material-symbols-outlined text-[24px] transform rotate-180" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<!-- Secondary Action (Draft / Save for Later) -->
+<div class="flex items-center justify-between px-space-xs">
+<button class="w-full py-2 font-label-md text-label-md text-secondary hover:text-text-light font-semibold text-center transition-colors" type="button">
+          حفظ التعديلات والخروج
+        </button>
+</div>
+</footer>
+</div>
+<!-- Inline Interaction Logic (Accessibility & Quick fill) -->
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));const nav={'الرئيسية':'B01','المفضلة':'B09','أضف إعلان':'D01','الرسائل':'F01','حسابي':'G01','إعلاناتي':'E01','التنبيهات':'G04'};document.querySelectorAll('nav button,nav a').forEach(el=>{const t=el.innerText.trim();for(const [label,id] of Object.entries(nav))if(t.endsWith(label))el.dataset.go=id});document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();parent.postMessage({nawaderScreen:el.dataset.go},'*')}));addEventListener('message',e=>{if(e.source!==parent)return;if(['dark','light'].includes(e.data?.nawaderTheme))document.documentElement.dataset.theme=e.data.nawaderTheme});</script></body></html>

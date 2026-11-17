@@ -1,0 +1,21 @@
+# Nawader Al Ebel — Modern Essentials
+Task MOBILE-GUI-MODERN-20261116. Side MOBILE. Scope only this NEW Stitch project and docs/shared/stitch-modern-20261116. Redesign the previous 74 mobile screen definitions. No admin, web, backend or previous-project edits. Source SRS 4.1-draft sections 3–8; request explicitly asks for a modern, smaller typography, essentials-only redesign.
+## Visual direction
+Contemporary editorial marketplace, refined and compact. Arabic RTL. IBM Plex Sans Arabic or Noto Sans Arabic. Body 14–15px, labels 12–13px, metadata 11–12px, screen titles 20px, section titles16px, price22px, button14px medium/semibold. No massive headings, oversized logo panels, thick gold outlines, large explanatory boxes, generic trust banners, decorative motifs, gradients, heavy shadows or marketing copy. Content first, one primary CTA per screen. Essential microcopy only, 1 short line max; secondary information in expandable details or bottom sheets. Controls remain comfortable44–48px high. Border1px, radius12–16px, spacing8/12/16/24px. Header52px, bottom nav64px with five compact icons + short labels: الرئيسية، المفضلة، أضف إعلان، الرسائل، حسابي. Bottom nav only main destinations.
+## Palette — exact existing guide
+Light background#F8F3EA surface#FFFCF8 gold#A77434 text#2D241B muted#817568 border#E4D5C0. Primary CTA: dark brown #2D241B with cream#FFFCF8 text, gold accent only in small badges, active markers, tiny icons.
+Dark background#111B1C surface#202D2D gold#E4BC7B text#F6EEE0 muted#AABAB3 border#3B504B. Primary CTA gold#E4BC7B with #111B1C text.
+Success#2F936A/#53BE90 warning#C88926/#E1AA4A error#C95D59/#E17B75 info#528AA9/#83A9D8; statuses always labeled.
+For small secondary text, the implemented light theme uses supplemental #76695C for clearer reading; the guide's original muted #817568 remains documented above. Main brand colors and logos are preserved.
+## Branding and layout
+Authentic supplied camel logo only; image slot in small header, bitmap embedded in refinement. Emblem28–32px. Welcome logo max96px, no new drawn logo/emoji substitute. Image-led two-column home card grid (photo128px, short title, price, city; no description or contact buttons on results). Detail page one clear image, price or auction venue/time, compact key facts; extra description and policies expandable.
+## Product rules retained
+Guest browse. Phone/OTP are LTR within RTL; no invented code length/provider. Consents initially unchecked, required publish/action consents explicit even in minimal design.
+One camel per ad. Fixed positive SAR price OR in-person auction with future Saudi date/time, venue and map point with publication consent; no electronic bids/payments/checkout/countdown/winners. Never show auction as0SAR.
+Publishing draft then admin review; no instant publishing. Submitted revision hides public ad only upon sending it for review. Draft/review/rejected/published/hidden/archived states. Bump>=24h, no expiry countdown.
+Phone for login private, public contact phone separate and explicitly consented. At least call or WhatsApp consented channel for publishing. Private text chat and public questions separate, block/read-only/report available. Phone confirmation distinct from optional trusted identity or business verification; no assumed provider, government accreditation, guarantees or SLA. Policies show layout placeholders pending approved copy, never invented legal commitments or support numbers.
+Search filters include region/city dependency, breed/sex/offer/age months/price; price range excludes auction. Manual map center/list fallback. Favorites unavailable entries reveal no hidden ad content.
+Ratings require active confirmed phone, reciprocal chat and declaration of dealing, no verified-purchase label. Replies/appeals don't edit others' stars or auto-hide rating. Private reports and verification documents.
+Keep loading/empty/offline/error, upload retry and permission fallback states short and useful. All samples fictional. Never portray prototype behavior as real backend success.
+## Output
+Create every explicitly listed screen as its own MOBILE screen with the exact ID prefix, light mode for native generation. Dark mode is retained as an adaptive theme in code and local previews. No collages. Keep each design concise, usually one viewport, with scrolling only for required fields/content.

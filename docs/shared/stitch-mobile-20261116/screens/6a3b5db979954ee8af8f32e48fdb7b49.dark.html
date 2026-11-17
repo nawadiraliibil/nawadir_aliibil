@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-background-light" data-theme="dark" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ترتيب النتائج - نوادر الإبل</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Arabic Google Font: Noto Sans Arabic -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error-container": "#93000a",
+            "primary-container": "#9c6a2b",
+            "surface-light": "#FFFCF8",
+            "text-dark": "#F6EEE0",
+            "tertiary": "#236185",
+            "on-secondary-fixed": "#221a11",
+            "muted-light": "#817568",
+            "outline": "#837567",
+            "primary-fixed-dim": "#f8bb74",
+            "secondary-fixed": "#f0e0d0",
+            "inverse-on-surface": "#faefe6",
+            "on-tertiary-fixed-variant": "#004c6d",
+            "surface": "#fff8f4",
+            "success-light": "#2F936A",
+            "primary-fixed": "#ffddb9",
+            "on-secondary-container": "#6e6356",
+            "background-light": "#F8F3EA",
+            "on-primary": "#ffffff",
+            "background-dark": "#111B1C",
+            "on-error": "#ffffff",
+            "border-dark": "#3B504B",
+            "tertiary-container": "#417a9f",
+            "on-secondary-fixed-variant": "#4f453a",
+            "primary-dark": "#E4BC7B",
+            "muted-dark": "#AABAB3",
+            "surface-bright": "#fff8f4",
+            "error-light": "#C95D59",
+            "tertiary-fixed": "#c8e6ff",
+            "surface-container-highest": "#ebe1d8",
+            "error-container": "#ffdad6",
+            "surface-container-low": "#fdf2e9",
+            "on-tertiary": "#ffffff",
+            "error-dark": "#E17B75",
+            "secondary-container": "#f0e0d0",
+            "success-dark": "#53BE90",
+            "on-primary-container": "#fffbff",
+            "on-tertiary-container": "#fcfcff",
+            "text-light": "#2D241B",
+            "inverse-surface": "#352f2a",
+            "error": "#ba1a1a",
+            "info-dark": "#83A9D8",
+            "outline-variant": "#d5c4b4",
+            "on-primary-fixed": "#2b1700",
+            "info-light": "#528AA9",
+            "surface-container-high": "#f1e6de",
+            "secondary-fixed-dim": "#d3c4b5",
+            "warning-light": "#C88926",
+            "secondary": "#685d50",
+            "warning-dark": "#E1AA4A",
+            "primary": "#7f5214",
+            "tertiary-fixed-dim": "#95cdf5",
+            "surface-tint": "#825517",
+            "on-surface-variant": "#504539",
+            "on-surface": "#201b16",
+            "on-background": "#201b16",
+            "surface-container": "#f7ece3",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed": "#001e2e",
+            "inverse-primary": "#f8bb74",
+            "surface-variant": "#ebe1d8",
+            "background": "#fff8f4",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#e3d8d0",
+            "on-primary-fixed-variant": "#663e00",
+            "border-light": "#E4D5C0",
+            "surface-dark": "#202D2D"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "margin": "1.25rem",
+            "space-xl": "1.5rem",
+            "space-lg": "1.25rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-lg": ["Noto Sans Arabic"],
+            "headline-sm": ["Noto Sans Arabic"],
+            "body-lg": ["Noto Sans Arabic"],
+            "headline-md": ["Noto Sans Arabic"],
+            "caption": ["Noto Sans Arabic"],
+            "label-md": ["Noto Sans Arabic"],
+            "body-md": ["Noto Sans Arabic"],
+            "headline-lg": ["Noto Sans Arabic"]
+          },
+          "fontSize": {
+            "label-lg": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+            "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+            "caption": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "label-md": ["16px", {"lineHeight": "22px", "fontWeight": "600"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-lg": ["28px", {"lineHeight": "38px", "fontWeight": "700"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Noto Sans Arabic', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style id="nawader-brand-final">
+    :root{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}
+    html,body{background:var(--brand-bg)!important;color:var(--brand-text)!important;max-width:100%;font-family:'Noto Sans Arabic',sans-serif!important;user-select:text!important}
+    body{margin:0!important;min-height:100dvh!important;font-size:18px;line-height:1.65}
+    *{box-sizing:border-box} img{max-width:100%} p,label,input,select,textarea{font-family:inherit;font-size:18px} h1{font-size:26px;line-height:1.6} h2{font-size:22px;line-height:1.6}
+    button,a[role=button]{min-height:48px!important;min-width:48px;white-space:normal!important;font-family:inherit;touch-action:manipulation}button:not([aria-label]){font-size:20px;font-weight:700}
+    input:not([type=checkbox]):not([type=radio]),select{min-height:56px}input[type=checkbox],input[type=radio]{width:24px;min-width:24px;height:24px;accent-color:var(--brand-gold)}
+    :focus-visible{outline:3px solid var(--brand-text)!important;outline-offset:3px} [class~="truncate"]{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+    [class~="bg-background"],[class~="bg-background-light"],[class~="bg-background-dark"]{background-color:var(--brand-bg)!important}
+    [class~="bg-surface"],[class~="bg-surface-light"],[class~="bg-surface-dark"],[class~="bg-surface-container"],[class~="bg-surface-container-low"],[class~="bg-surface-container-high"],[class~="bg-surface-container-highest"]{background-color:var(--brand-surface)!important}
+    [class~="text-text-light"],[class~="text-text-dark"],[class~="text-on-surface"],[class~="text-on-background"],[class~="text-secondary"],[class~="text-on-surface-variant"],[class~="text-primary"]{color:var(--brand-text)!important}
+    [class~="bg-primary"],[class~="bg-primary-container"]{background-color:var(--brand-gold)!important;color:#2D241B!important;font-size:20px!important;font-weight:700!important}
+    [class~="bg-primary"] span,[class~="bg-primary-container"] span{color:inherit!important}
+    [class~="border-border-light"],[class~="border-border-dark"],[class~="border-outline-variant"]{border-color:var(--brand-border)!important}
+    .simple-shell{width:100%;max-width:430px;min-height:100dvh;margin:auto;background:var(--brand-bg);padding:20px;display:flex;flex-direction:column}
+    .simple-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px}.simple-header button{width:auto;padding:0 18px}
+    .simple-content{display:flex;flex-direction:column;gap:20px;padding-top:20px;padding-bottom:30px}.simple-content h1,.simple-content p,.simple-content h2{margin:0}
+    .field{display:flex;flex-direction:column;gap:10px;font-weight:600}.field input,.field select{width:100%;padding:12px;border:2px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);color:var(--brand-text)}
+    .action{width:100%;min-height:56px;padding:12px 16px;border:2px solid var(--brand-gold);border-radius:12px;background:var(--brand-gold);color:#2D241B;font-size:20px;font-weight:700}
+    .secondary{background:var(--brand-surface);color:var(--brand-text)}.helper{font-size:16px;line-height:1.7;color:var(--brand-text)}
+    .consent{display:flex;align-items:flex-start;gap:14px;min-height:56px;padding:14px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .notice{padding:20px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .welcome{align-items:center;text-align:center;justify-content:center;gap:24px;padding-top:40px;padding-bottom:32px}.welcome-logo{width:216px;height:216px;object-fit:contain}.welcome h1{margin:0;font-size:26px}.welcome p{margin:0;max-width:320px}.welcome-actions{width:100%;display:flex;flex-direction:column;gap:16px;margin-top:32px}
+    .home-shell{width:100%;max-width:430px;margin:auto;padding-bottom:100px}.home-header{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--brand-surface)}.home-header h1{font-size:22px;flex:1;margin:0}.small-action{border:0;border-radius:10px;font-size:16px!important;padding:8px;color:var(--brand-text)}.home-content{padding:20px;display:flex;flex-direction:column;gap:20px}.home-content>h2{margin:0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.home-tools .action{font-size:18px;padding:8px}.ad-card{border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);overflow:hidden}.ad-photo{width:100%;height:180px;object-fit:cover}.ad-content{padding:16px;display:flex;flex-direction:column;gap:10px}.ad-content h2,.ad-content p{margin:0}.price{font-size:26px;font-weight:700}.offer-label{font-size:16px}.simple-bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--brand-surface);border-top:1px solid var(--brand-border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:50}.simple-bottom button{font-size:14px!important;font-weight:600;padding:6px 2px;background:none;border:0;border-radius:8px;color:var(--brand-text)}.simple-bottom [aria-current]{background:var(--brand-bg);border:1px solid var(--brand-gold)}
+    @media(min-width:600px){body{padding:0!important}} @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    </style><style id="nawader-dark-mode">html[data-theme=dark]{--brand-bg:#111B1C;--brand-surface:#202D2D;--brand-gold:#E4BC7B;--brand-text:#F6EEE0;--brand-muted:#AABAB3;--brand-border:#3B504B}html[data-theme=light]{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}html[data-theme=dark] .bg-white,html[data-theme=dark] .bg-slate-50,html[data-theme=dark] .bg-gray-50{background-color:var(--brand-surface)!important}html[data-theme=dark] .action:not(.secondary),html[data-theme=dark] [class~=bg-primary],html[data-theme=dark] [class~=bg-primary-container]{color:#111B1C!important}html[data-theme=light] .action:not(.secondary),html[data-theme=light] [class~=bg-primary],html[data-theme=light] [class~=bg-primary-container]{color:#2D241B!important}</style></head>
+<body class="bg-background-light text-text-light flex justify-center min-h-screen">
+<!-- Mobile Viewport Shell (Max width constraint for realistic mobile view) -->
+<div class="w-full max-w-md bg-surface-light min-h-screen flex flex-col justify-between shadow-sm relative overflow-hidden">
+<!-- Top Bar / Focused Modal Header (Suppressed bottom nav per Destination/Task rule) -->
+<header class="w-full bg-surface-light px-margin py-space-md border-b border-border-light flex items-center justify-between sticky top-0 z-20">
+<div class="flex items-center gap-space-sm">
+<button aria-label="إغلاق نافذة الترتيب" class="w-12 h-12 flex items-center justify-center rounded-xl bg-surface-container-low text-on-surface hover:bg-surface-container transition-transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary" onclick="window.history.length &gt; 1 ? window.history.back() : null" type="button">
+<span class="material-symbols-outlined text-[28px]">close</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm text-on-surface font-bold">
+          ترتيب النتائج
+        </h1>
+</div>
+<!-- Reset / Default action trigger -->
+<button class="font-label-md text-label-md text-primary hover:text-primary-container p-space-xs rounded-lg active:scale-95 transition-all" id="reset-btn" type="button">
+        استعادة الافتراضي
+      </button>
+</header>
+<!-- Scrollable Options Area -->
+<main class="flex-1 px-margin py-space-lg overflow-y-auto space-y-space-md">
+<p class="font-body-md text-body-md text-secondary">
+        حدد طريقة العرض المناسبة لتصفح إعلانات الإبل بسلاسة:
+      </p>
+<!-- Radio Form Group -->
+<form aria-label="خيارات ترتيب نتائج الإعلانات" class="space-y-space-sm" id="sort-form" role="radiogroup">
+<!-- Option 1: الأحدث ظهوراً (Default Checked) -->
+<label class="group relative flex items-start gap-space-md p-space-md bg-surface border-2 border-primary rounded-xl cursor-pointer transition-all active:scale-[0.99] select-none hover:bg-surface-container-low" for="sort-latest-updated">
+<div class="min-w-[48px] min-h-[48px] flex items-center justify-center -mr-space-xs">
+<input checked="" class="w-7 h-7 text-primary border-2 border-outline focus:ring-primary focus:ring-offset-2 accent-primary cursor-pointer" id="sort-latest-updated" name="sort_option" type="radio" value="latest_updated"/>
+</div>
+<div class="flex flex-col justify-center min-h-[48px]">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">
+              الأحدث ظهوراً
+            </span>
+<span class="font-body-md text-body-md text-secondary mt-0.5">
+              المحدّث مؤخراً / إعلانات تم تحديثها من المُلّاك
+            </span>
+</div>
+</label>
+<!-- Option 2: تاريخ النشر الأصلي -->
+<label class="group relative flex items-start gap-space-md p-space-md bg-surface border-2 border-border-light rounded-xl cursor-pointer transition-all active:scale-[0.99] select-none hover:border-outline hover:bg-surface-container-low" for="sort-date-original">
+<div class="min-w-[48px] min-h-[48px] flex items-center justify-center -mr-space-xs">
+<input class="w-7 h-7 text-primary border-2 border-outline focus:ring-primary focus:ring-offset-2 accent-primary cursor-pointer" id="sort-date-original" name="sort_option" type="radio" value="date_original"/>
+</div>
+<div class="flex flex-col justify-center min-h-[48px]">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">
+              تاريخ النشر الأصلي
+            </span>
+<span class="font-body-md text-body-md text-secondary mt-0.5">
+              من الأحدث للأقدم حسب تاريخ إضافة الإعلان أول مرة
+            </span>
+</div>
+</label>
+<!-- Option 3: السعر من الأقل إلى الأعلى -->
+<label class="group relative flex items-start gap-space-md p-space-md bg-surface border-2 border-border-light rounded-xl cursor-pointer transition-all active:scale-[0.99] select-none hover:border-outline hover:bg-surface-container-low" for="sort-price-asc">
+<div class="min-w-[48px] min-h-[48px] flex items-center justify-center -mr-space-xs">
+<input class="w-7 h-7 text-primary border-2 border-outline focus:ring-primary focus:ring-offset-2 accent-primary cursor-pointer" id="sort-price-asc" name="sort_option" type="radio" value="price_asc"/>
+</div>
+<div class="flex flex-col justify-center min-h-[48px]">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">
+              السعر: من الأقل إلى الأعلى
+            </span>
+<span class="font-body-md text-body-md text-secondary mt-0.5">
+              مناسب للبحث عن أفضل الصفقات المحددة بالريال السعودي
+            </span>
+</div>
+</label>
+<!-- Option 4: السعر من الأعلى إلى الأقل -->
+<label class="group relative flex items-start gap-space-md p-space-md bg-surface border-2 border-border-light rounded-xl cursor-pointer transition-all active:scale-[0.99] select-none hover:border-outline hover:bg-surface-container-low" for="sort-price-desc">
+<div class="min-w-[48px] min-h-[48px] flex items-center justify-center -mr-space-xs">
+<input class="w-7 h-7 text-primary border-2 border-outline focus:ring-primary focus:ring-offset-2 accent-primary cursor-pointer" id="sort-price-desc" name="sort_option" type="radio" value="price_desc"/>
+</div>
+<div class="flex flex-col justify-center min-h-[48px]">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">
+              السعر: من الأعلى إلى الأقل
+            </span>
+<span class="font-body-md text-body-md text-secondary mt-0.5">
+              عرض نوادر السلالات والفئات الممتازة أولاً
+            </span>
+</div>
+</label>
+<!-- Option 5: الأقرب لموقعي -->
+<label class="group relative flex items-start gap-space-md p-space-md bg-surface border-2 border-border-light rounded-xl cursor-pointer transition-all active:scale-[0.99] select-none hover:border-outline hover:bg-surface-container-low" for="sort-location-near">
+<div class="min-w-[48px] min-h-[48px] flex items-center justify-center -mr-space-xs">
+<input class="w-7 h-7 text-primary border-2 border-outline focus:ring-primary focus:ring-offset-2 accent-primary cursor-pointer" id="sort-location-near" name="sort_option" type="radio" value="location_near"/>
+</div>
+<div class="flex flex-col justify-center min-h-[48px]">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">
+              الأقرب لموقعي
+            </span>
+<span class="font-body-md text-body-md text-secondary mt-0.5">
+              ترتيب الحلال والمزاين حسب المسافة بالكيلومتر
+            </span>
+</div>
+</label>
+</form>
+<!-- Clarification Notice Card -->
+<div class="mt-space-lg p-space-md bg-surface-container-low border border-border-light rounded-xl flex items-start gap-space-sm" role="note">
+<span class="material-symbols-outlined text-primary text-[24px] shrink-0 mt-0.5">
+          info
+        </span>
+<p class="font-body-md text-body-md text-on-surface-variant font-medium leading-relaxed">
+          ملاحظة: ترتيب السعر يستبعد إعلانات المزادات الحضورية والإعلانات التي لا تحتوي على حد سعر ثابت.
+        </p>
+</div>
+</main>
+<!-- Sticky Bottom Fixed Action Button Container (Above phone navigation area) -->
+<footer class="w-full bg-surface-light border-t border-border-light p-margin z-20">
+<button class="w-full h-14 bg-[#A77434] hover:bg-[#8F6129] active:bg-[#785121] text-white rounded-xl font-label-lg text-label-lg font-bold flex items-center justify-center gap-space-sm shadow-sm transition-transform active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-primary/20" id="submit-sort" type="button">
+<span class="material-symbols-outlined text-[26px]">done</span>
+<span>تطبيق الترتيب</span>
+</button>
+</footer>
+</div>
+<!-- Interactive State Management Script -->
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));const nav={'الرئيسية':'B01','المفضلة':'B09','أضف إعلان':'D01','الرسائل':'F01','حسابي':'G01','إعلاناتي':'E01','التنبيهات':'G04'};document.querySelectorAll('nav button,nav a').forEach(el=>{const t=el.innerText.trim();for(const [label,id] of Object.entries(nav))if(t.endsWith(label))el.dataset.go=id});document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();parent.postMessage({nawaderScreen:el.dataset.go},'*')}));addEventListener('message',e=>{if(e.source!==parent)return;if(['dark','light'].includes(e.data?.nawaderTheme))document.documentElement.dataset.theme=e.data.nawaderTheme});</script></body></html>

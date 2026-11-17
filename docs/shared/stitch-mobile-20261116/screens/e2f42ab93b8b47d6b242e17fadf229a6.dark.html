@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="h-full" data-theme="dark" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>نوادر الإبل — إدارة أرقام وموافقات التواصل</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error-container": "#93000a",
+            "info-light": "#528AA9",
+            "border-dark": "#3B504B",
+            "inverse-on-surface": "#faefe6",
+            "text-light": "#2D241B",
+            "tertiary": "#236185",
+            "on-primary-container": "#fffbff",
+            "surface-container-high": "#f1e6de",
+            "primary-fixed-dim": "#f8bb74",
+            "tertiary-container": "#417a9f",
+            "on-tertiary-fixed-variant": "#004c6d",
+            "error-dark": "#E17B75",
+            "surface-container-highest": "#ebe1d8",
+            "surface-tint": "#825517",
+            "surface-container-lowest": "#ffffff",
+            "on-background": "#201b16",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#2b1700",
+            "surface": "#fff8f4",
+            "info-dark": "#83A9D8",
+            "primary-container": "#9c6a2b",
+            "secondary-fixed-dim": "#d3c4b5",
+            "border-light": "#E4D5C0",
+            "secondary-container": "#f0e0d0",
+            "surface-dark": "#202D2D",
+            "on-error": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "muted-dark": "#AABAB3",
+            "muted-light": "#817568",
+            "warning-light": "#C88926",
+            "on-secondary-fixed-variant": "#4f453a",
+            "surface-dim": "#e3d8d0",
+            "on-surface": "#201b16",
+            "tertiary-fixed": "#c8e6ff",
+            "text-dark": "#F6EEE0",
+            "secondary": "#685d50",
+            "surface-variant": "#ebe1d8",
+            "tertiary-fixed-dim": "#95cdf5",
+            "on-secondary-container": "#6e6356",
+            "on-surface-variant": "#504539",
+            "secondary-fixed": "#f0e0d0",
+            "background-light": "#F8F3EA",
+            "inverse-primary": "#f8bb74",
+            "primary-fixed": "#ffddb9",
+            "on-secondary-fixed": "#221a11",
+            "background-dark": "#111B1C",
+            "inverse-surface": "#352f2a",
+            "on-secondary": "#ffffff",
+            "success-dark": "#53BE90",
+            "primary": "#7f5214",
+            "background": "#fff8f4",
+            "on-primary-fixed-variant": "#663e00",
+            "primary-dark": "#E4BC7B",
+            "error": "#ba1a1a",
+            "outline-variant": "#d5c4b4",
+            "error-container": "#ffdad6",
+            "surface-bright": "#fff8f4",
+            "warning-dark": "#E1AA4A",
+            "on-tertiary-container": "#fcfcff",
+            "surface-container-low": "#fdf2e9",
+            "outline": "#837567",
+            "error-light": "#C95D59",
+            "success-light": "#2F936A",
+            "surface-container": "#f7ece3",
+            "surface-light": "#FFFCF8",
+            "on-tertiary-fixed": "#001e2e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter": "1rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.25rem",
+            "space-xl": "1.5rem",
+            "margin": "1.25rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Noto Sans Arabic"],
+            "body-lg": ["Noto Sans Arabic"],
+            "headline-sm": ["Noto Sans Arabic"],
+            "headline-md": ["Noto Sans Arabic"],
+            "caption": ["Noto Sans Arabic"],
+            "label-lg": ["Noto Sans Arabic"],
+            "body-md": ["Noto Sans Arabic"],
+            "label-md": ["Noto Sans Arabic"]
+          },
+          "fontSize": {
+            "headline-lg": ["28px", {"lineHeight": "38px", "fontWeight": "700"}],
+            "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}],
+            "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+            "caption": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "label-lg": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "label-md": ["16px", {"lineHeight": "22px", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style id="nawader-brand-final">
+    :root{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}
+    html,body{background:var(--brand-bg)!important;color:var(--brand-text)!important;max-width:100%;font-family:'Noto Sans Arabic',sans-serif!important;user-select:text!important}
+    body{margin:0!important;min-height:100dvh!important;font-size:18px;line-height:1.65}
+    *{box-sizing:border-box} img{max-width:100%} p,label,input,select,textarea{font-family:inherit;font-size:18px} h1{font-size:26px;line-height:1.6} h2{font-size:22px;line-height:1.6}
+    button,a[role=button]{min-height:48px!important;min-width:48px;white-space:normal!important;font-family:inherit;touch-action:manipulation}button:not([aria-label]){font-size:20px;font-weight:700}
+    input:not([type=checkbox]):not([type=radio]),select{min-height:56px}input[type=checkbox],input[type=radio]{width:24px;min-width:24px;height:24px;accent-color:var(--brand-gold)}
+    :focus-visible{outline:3px solid var(--brand-text)!important;outline-offset:3px} [class~="truncate"]{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+    [class~="bg-background"],[class~="bg-background-light"],[class~="bg-background-dark"]{background-color:var(--brand-bg)!important}
+    [class~="bg-surface"],[class~="bg-surface-light"],[class~="bg-surface-dark"],[class~="bg-surface-container"],[class~="bg-surface-container-low"],[class~="bg-surface-container-high"],[class~="bg-surface-container-highest"]{background-color:var(--brand-surface)!important}
+    [class~="text-text-light"],[class~="text-text-dark"],[class~="text-on-surface"],[class~="text-on-background"],[class~="text-secondary"],[class~="text-on-surface-variant"],[class~="text-primary"]{color:var(--brand-text)!important}
+    [class~="bg-primary"],[class~="bg-primary-container"]{background-color:var(--brand-gold)!important;color:#2D241B!important;font-size:20px!important;font-weight:700!important}
+    [class~="bg-primary"] span,[class~="bg-primary-container"] span{color:inherit!important}
+    [class~="border-border-light"],[class~="border-border-dark"],[class~="border-outline-variant"]{border-color:var(--brand-border)!important}
+    .simple-shell{width:100%;max-width:430px;min-height:100dvh;margin:auto;background:var(--brand-bg);padding:20px;display:flex;flex-direction:column}
+    .simple-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px}.simple-header button{width:auto;padding:0 18px}
+    .simple-content{display:flex;flex-direction:column;gap:20px;padding-top:20px;padding-bottom:30px}.simple-content h1,.simple-content p,.simple-content h2{margin:0}
+    .field{display:flex;flex-direction:column;gap:10px;font-weight:600}.field input,.field select{width:100%;padding:12px;border:2px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);color:var(--brand-text)}
+    .action{width:100%;min-height:56px;padding:12px 16px;border:2px solid var(--brand-gold);border-radius:12px;background:var(--brand-gold);color:#2D241B;font-size:20px;font-weight:700}
+    .secondary{background:var(--brand-surface);color:var(--brand-text)}.helper{font-size:16px;line-height:1.7;color:var(--brand-text)}
+    .consent{display:flex;align-items:flex-start;gap:14px;min-height:56px;padding:14px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .notice{padding:20px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .welcome{align-items:center;text-align:center;justify-content:center;gap:24px;padding-top:40px;padding-bottom:32px}.welcome-logo{width:216px;height:216px;object-fit:contain}.welcome h1{margin:0;font-size:26px}.welcome p{margin:0;max-width:320px}.welcome-actions{width:100%;display:flex;flex-direction:column;gap:16px;margin-top:32px}
+    .home-shell{width:100%;max-width:430px;margin:auto;padding-bottom:100px}.home-header{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--brand-surface)}.home-header h1{font-size:22px;flex:1;margin:0}.small-action{border:0;border-radius:10px;font-size:16px!important;padding:8px;color:var(--brand-text)}.home-content{padding:20px;display:flex;flex-direction:column;gap:20px}.home-content>h2{margin:0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.home-tools .action{font-size:18px;padding:8px}.ad-card{border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);overflow:hidden}.ad-photo{width:100%;height:180px;object-fit:cover}.ad-content{padding:16px;display:flex;flex-direction:column;gap:10px}.ad-content h2,.ad-content p{margin:0}.price{font-size:26px;font-weight:700}.offer-label{font-size:16px}.simple-bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--brand-surface);border-top:1px solid var(--brand-border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:50}.simple-bottom button{font-size:14px!important;font-weight:600;padding:6px 2px;background:none;border:0;border-radius:8px;color:var(--brand-text)}.simple-bottom [aria-current]{background:var(--brand-bg);border:1px solid var(--brand-gold)}
+    @media(min-width:600px){body{padding:0!important}} @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    </style><style id="nawader-dark-mode">html[data-theme=dark]{--brand-bg:#111B1C;--brand-surface:#202D2D;--brand-gold:#E4BC7B;--brand-text:#F6EEE0;--brand-muted:#AABAB3;--brand-border:#3B504B}html[data-theme=light]{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}html[data-theme=dark] .bg-white,html[data-theme=dark] .bg-slate-50,html[data-theme=dark] .bg-gray-50{background-color:var(--brand-surface)!important}html[data-theme=dark] .action:not(.secondary),html[data-theme=dark] [class~=bg-primary],html[data-theme=dark] [class~=bg-primary-container]{color:#111B1C!important}html[data-theme=light] .action:not(.secondary),html[data-theme=light] [class~=bg-primary],html[data-theme=light] [class~=bg-primary-container]{color:#2D241B!important}</style></head>
+<body class="bg-background-light text-text-light font-body-md text-body-md antialiased min-h-screen flex flex-col justify-between selection:bg-secondary-container">
+<!-- Mobile Container Wrapper: 430px Max Centered -->
+<div class="w-full max-w-md mx-auto min-h-screen flex flex-col bg-background-light shadow-xl relative pb-28">
+<!-- Top App Bar (Task-focused secondary screen with back arrow) -->
+<header class="sticky top-0 z-30 bg-surface-light border-b border-border-light px-margin py-space-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<button aria-label="الرجوع" class="w-12 h-12 flex items-center justify-center rounded-lg border border-border-light bg-surface hover:bg-surface-container active:scale-95 transition-transform text-primary" type="button">
+<span class="material-symbols-outlined text-2xl">arrow_forward</span>
+</button>
+<div>
+<span class="text-caption font-caption text-muted-light block">G07 — إدارة الخصوصية</span>
+<h1 class="text-headline-sm font-headline-sm text-text-light font-bold">أرقام وموافقات التواصل</h1>
+</div>
+</div>
+<button aria-label="سجل الموافقات والحوكمة" class="w-10 h-10 flex items-center justify-center rounded-lg text-secondary hover:bg-surface-container active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-2xl" data-weight="fill">verified_user</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-margin py-space-md space-y-space-lg">
+<!-- Regulatory Warning Banner -->
+<section class="rounded-xl p-space-md bg-surface-container-low border-2 border-warning-light relative overflow-hidden" role="alert">
+<div class="flex items-start gap-space-sm">
+<div class="w-10 h-10 min-w-[40px] rounded-lg bg-warning-light/10 text-warning-light flex items-center justify-center mt-0.5">
+<span class="material-symbols-outlined text-2xl font-bold" data-weight="fill">gavel</span>
+</div>
+<div class="space-y-1">
+<h2 class="text-label-lg font-label-lg text-primary font-bold flex items-center gap-1">
+              تنبيه نظامي هام للمعلن
+            </h2>
+<p class="text-body-md font-body-md text-text-light leading-relaxed">
+              سحب موافقة النشر أو حذف آخر قناة تواصل معتمدة سيؤدي تلقائياً لإيقاف ظهور إعلاناتك النشطة مؤقتاً لحين إضافة وسيلة تواصل بديلة مصرحة، حرصاً على جدية التعامل وموثوقية السوق.
+            </p>
+</div>
+</div>
+</section>
+<!-- Section: Registered Communication Channels -->
+<section class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-sm font-headline-sm text-text-light font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">contacts</span>
+            قنوات التواصل المسجلة للإعلانات
+          </h2>
+<span class="text-caption font-caption bg-surface-container px-2 py-0.5 rounded text-secondary font-bold">قناتان نشطتان</span>
+</div>
+<!-- Channel Card 1: Direct Voice Call -->
+<article class="bg-surface-light border-2 border-border-light rounded-xl p-space-md transition-all hover:border-primary/40 space-y-space-sm shadow-sm">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl" data-weight="fill">phone_enabled</span>
+</div>
+<div>
+<span class="text-caption font-caption text-muted-light block">رقم الاتصال الهاتفي المباشر</span>
+<span class="text-headline-sm font-headline-sm font-bold text-text-light tracking-wide inline-block" dir="ltr">050 123 4567</span>
+</div>
+</div>
+<button class="px-space-sm py-1.5 rounded-lg border border-border-light text-secondary hover:bg-surface-container active:scale-95 text-label-md font-label-md transition-transform flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-lg">edit</span>
+              تعديل
+            </button>
+</div>
+<div class="pt-space-xs border-t border-border-light flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-success-light inline-block"></span>
+<span class="text-body-md font-body-md text-text-light font-semibold">
+                حالة الموافقة: <span class="text-primary font-bold">مصرح بالنشر في 4 إعلانات</span>
+</span>
+</div>
+<!-- Custom Accessible Switch -->
+<label class="relative inline-flex items-center cursor-pointer select-none">
+<input class="sr-only peer" id="toggle-call" type="checkbox"/>
+<div class="w-12 h-7 bg-surface-dim peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-border-light after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</article>
+<!-- Channel Card 2: WhatsApp Number -->
+<article class="bg-surface-light border-2 border-border-light rounded-xl p-space-md transition-all hover:border-primary/40 space-y-space-sm shadow-sm">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-success-light">
+<span class="material-symbols-outlined text-2xl" data-weight="fill">chat</span>
+</div>
+<div>
+<span class="text-caption font-caption text-muted-light block">مراسلات تطبيق الواتساب</span>
+<span class="text-headline-sm font-headline-sm font-bold text-text-light tracking-wide inline-block" dir="ltr">050 123 4567</span>
+</div>
+</div>
+<button class="px-space-sm py-1.5 rounded-lg border border-border-light text-secondary hover:bg-surface-container active:scale-95 text-label-md font-label-md transition-transform flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-lg">edit</span>
+              تعديل
+            </button>
+</div>
+<div class="pt-space-xs border-t border-border-light flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-success-light inline-block"></span>
+<span class="text-body-md font-body-md text-text-light font-semibold">
+                حالة الموافقة: <span class="text-success-light font-bold">مفعل ومصرح بالنشر</span>
+</span>
+</div>
+<!-- Custom Accessible Switch -->
+<label class="relative inline-flex items-center cursor-pointer select-none">
+<input class="sr-only peer" id="toggle-whatsapp" type="checkbox"/>
+<div class="w-12 h-7 bg-surface-dim peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-border-light after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</article>
+</section>
+<!-- Section: Add New Communication Channel -->
+<section class="space-y-space-sm pt-space-xs">
+<h2 class="text-headline-sm font-headline-sm text-text-light font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">add_call</span>
+          إضافة وسيلة تواصل جديدة
+        </h2>
+<div class="bg-surface-light border-2 border-border-light rounded-xl p-space-md space-y-space-md shadow-sm">
+<!-- Input Field: Phone Number with LTR enforcement -->
+<div>
+<label class="block text-label-lg font-label-lg text-text-light mb-2 font-bold" for="new_phone_input">
+              رقم الجوال الإضافي
+            </label>
+<div class="relative flex items-center rounded-lg border-2 border-border-light bg-surface-container-lowest focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+<div class="px-space-md py-3 text-secondary font-bold text-body-lg border-l border-border-light bg-surface-container/50 select-none">
+                966+
+              </div>
+<input class="w-full h-14 bg-transparent px-space-md text-headline-sm font-headline-sm text-text-light outline-none border-none placeholder:text-muted-light/60 font-semibold" dir="ltr" id="new_phone_input" inputmode="numeric" placeholder="05X XXX XXXX" type="tel"/>
+<div class="px-space-sm text-muted-light">
+<span class="material-symbols-outlined text-2xl">smartphone</span>
+</div>
+</div>
+<p class="text-caption font-caption text-muted-light mt-1.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-base">info</span>
+              سيتم إرسال رمز تحقق نصي (OTP) لتأكيد ملكية الرقم قبل النشر.
+            </p>
+</div>
+<!-- Consents / Regulatory Checkboxes (Initially Unchecked as required) -->
+<div class="space-y-3 pt-space-xs border-t border-border-light">
+<span class="text-label-md font-label-md text-primary font-bold block">
+              إقرارات الموافقة النظامية المطلوبة:
+            </span>
+<!-- Checkbox 1 -->
+<label class="flex items-start gap-space-sm p-3 rounded-lg border border-border-light bg-surface-container-lowest/60 hover:bg-surface-container/30 cursor-pointer transition-colors group">
+<input class="w-6 h-6 mt-0.5 rounded border-2 border-outline text-primary focus:ring-primary/30 accent-primary cursor-pointer shrink-0" id="consent_call" name="consent_call" type="checkbox"/>
+<span class="text-body-md font-body-md text-text-light leading-snug group-hover:text-primary transition-colors">
+                أوافق صراحة على إظهار هذا الرقم في إعلانات الحلال لتمكين المشترين من الاتصال بي مباشرة.
+              </span>
+</label>
+<!-- Checkbox 2 -->
+<label class="flex items-start gap-space-sm p-3 rounded-lg border border-border-light bg-surface-container-lowest/60 hover:bg-surface-container/30 cursor-pointer transition-colors group">
+<input class="w-6 h-6 mt-0.5 rounded border-2 border-outline text-primary focus:ring-primary/30 accent-primary cursor-pointer shrink-0" id="consent_whatsapp" name="consent_whatsapp" type="checkbox"/>
+<span class="text-body-md font-body-md text-text-light leading-snug group-hover:text-primary transition-colors">
+                أوافق على استقبال مراسلات الواتساب على هذا الرقم من أطراف الصفقات المهتمين.
+              </span>
+</label>
+</div>
+</div>
+</section>
+<!-- Trust & Privacy Footnote -->
+<div class="rounded-lg bg-surface-container/50 p-space-sm flex items-center gap-2 border border-border-light/60">
+<span class="material-symbols-outlined text-primary text-xl" data-weight="fill">shield</span>
+<span class="text-caption font-caption text-secondary">
+          جميع بيانات التواصل تخضع لحوكمة الهيئة العامة لتنظيم الإعلام ولوائح التجارة الإلكترونية السعودية.
+        </span>
+</div>
+</main>
+<!-- Sticky Bottom Primary Action Container -->
+<div class="fixed bottom-0 left-0 right-0 z-40 bg-surface-light border-t border-border-light py-space-sm px-margin shadow-[0_-4px_16px_rgba(45,36,27,0.06)]">
+<div class="max-w-md mx-auto">
+<button class="w-full h-14 bg-primary text-on-primary rounded-xl font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md hover:bg-primary-container" id="submit_button" type="button">
+<span class="material-symbols-outlined text-2xl">check_circle</span>
+          حفظ وتحديث قنوات التواصل
+        </button>
+</div>
+</div>
+</div>
+<!-- Lightweight Micro-interaction Script -->
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));const nav={'الرئيسية':'B01','المفضلة':'B09','أضف إعلان':'D01','الرسائل':'F01','حسابي':'G01','إعلاناتي':'E01','التنبيهات':'G04'};document.querySelectorAll('nav button,nav a').forEach(el=>{const t=el.innerText.trim();for(const [label,id] of Object.entries(nav))if(t.endsWith(label))el.dataset.go=id});document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();parent.postMessage({nawaderScreen:el.dataset.go},'*')}));addEventListener('message',e=>{if(e.source!==parent)return;if(['dark','light'].includes(e.data?.nawaderTheme))document.documentElement.dataset.theme=e.data.nawaderTheme});</script></body></html>

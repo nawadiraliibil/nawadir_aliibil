@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-background-light" data-theme="dark" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>تصفية الإعلانات - نوادر الإبل</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error-container": "#93000a",
+            "primary-container": "#9c6a2b",
+            "surface-light": "#FFFCF8",
+            "text-dark": "#F6EEE0",
+            "tertiary": "#236185",
+            "on-secondary-fixed": "#221a11",
+            "muted-light": "#817568",
+            "outline": "#837567",
+            "primary-fixed-dim": "#f8bb74",
+            "secondary-fixed": "#f0e0d0",
+            "inverse-on-surface": "#faefe6",
+            "on-tertiary-fixed-variant": "#004c6d",
+            "surface": "#fff8f4",
+            "success-light": "#2F936A",
+            "primary-fixed": "#ffddb9",
+            "on-secondary-container": "#6e6356",
+            "background-light": "#F8F3EA",
+            "on-primary": "#ffffff",
+            "background-dark": "#111B1C",
+            "on-error": "#ffffff",
+            "border-dark": "#3B504B",
+            "tertiary-container": "#417a9f",
+            "on-secondary-fixed-variant": "#4f453a",
+            "primary-dark": "#E4BC7B",
+            "muted-dark": "#AABAB3",
+            "surface-bright": "#fff8f4",
+            "error-light": "#C95D59",
+            "tertiary-fixed": "#c8e6ff",
+            "surface-container-highest": "#ebe1d8",
+            "error-container": "#ffdad6",
+            "surface-container-low": "#fdf2e9",
+            "on-tertiary": "#ffffff",
+            "error-dark": "#E17B75",
+            "secondary-container": "#f0e0d0",
+            "success-dark": "#53BE90",
+            "on-primary-container": "#fffbff",
+            "on-tertiary-container": "#fcfcff",
+            "text-light": "#2D241B",
+            "inverse-surface": "#352f2a",
+            "error": "#ba1a1a",
+            "info-dark": "#83A9D8",
+            "outline-variant": "#d5c4b4",
+            "on-primary-fixed": "#2b1700",
+            "info-light": "#528AA9",
+            "surface-container-high": "#f1e6de",
+            "secondary-fixed-dim": "#d3c4b5",
+            "warning-light": "#C88926",
+            "secondary": "#685d50",
+            "warning-dark": "#E1AA4A",
+            "primary": "#7f5214",
+            "tertiary-fixed-dim": "#95cdf5",
+            "surface-tint": "#825517",
+            "on-surface-variant": "#504539",
+            "on-surface": "#201b16",
+            "on-background": "#201b16",
+            "surface-container": "#f7ece3",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed": "#001e2e",
+            "inverse-primary": "#f8bb74",
+            "surface-variant": "#ebe1d8",
+            "background": "#fff8f4",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#e3d8d0",
+            "on-primary-fixed-variant": "#663e00",
+            "border-light": "#E4D5C0",
+            "surface-dark": "#202D2D"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "margin": "1.25rem",
+            "space-xl": "1.5rem",
+            "space-lg": "1.25rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-lg": ["Noto Sans Arabic"],
+            "headline-sm": ["Noto Sans Arabic"],
+            "body-lg": ["Noto Sans Arabic"],
+            "headline-md": ["Noto Sans Arabic"],
+            "caption": ["Noto Sans Arabic"],
+            "label-md": ["Noto Sans Arabic"],
+            "body-md": ["Noto Sans Arabic"],
+            "headline-lg": ["Noto Sans Arabic"]
+          },
+          "fontSize": {
+            "label-lg": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+            "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+            "caption": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "label-md": ["16px", {"lineHeight": "22px", "fontWeight": "600"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-lg": ["28px", {"lineHeight": "38px", "fontWeight": "700"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Smooth custom scrolling */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E4D5C0;
+      border-radius: 4px;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style id="nawader-brand-final">
+    :root{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}
+    html,body{background:var(--brand-bg)!important;color:var(--brand-text)!important;max-width:100%;font-family:'Noto Sans Arabic',sans-serif!important;user-select:text!important}
+    body{margin:0!important;min-height:100dvh!important;font-size:18px;line-height:1.65}
+    *{box-sizing:border-box} img{max-width:100%} p,label,input,select,textarea{font-family:inherit;font-size:18px} h1{font-size:26px;line-height:1.6} h2{font-size:22px;line-height:1.6}
+    button,a[role=button]{min-height:48px!important;min-width:48px;white-space:normal!important;font-family:inherit;touch-action:manipulation}button:not([aria-label]){font-size:20px;font-weight:700}
+    input:not([type=checkbox]):not([type=radio]),select{min-height:56px}input[type=checkbox],input[type=radio]{width:24px;min-width:24px;height:24px;accent-color:var(--brand-gold)}
+    :focus-visible{outline:3px solid var(--brand-text)!important;outline-offset:3px} [class~="truncate"]{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+    [class~="bg-background"],[class~="bg-background-light"],[class~="bg-background-dark"]{background-color:var(--brand-bg)!important}
+    [class~="bg-surface"],[class~="bg-surface-light"],[class~="bg-surface-dark"],[class~="bg-surface-container"],[class~="bg-surface-container-low"],[class~="bg-surface-container-high"],[class~="bg-surface-container-highest"]{background-color:var(--brand-surface)!important}
+    [class~="text-text-light"],[class~="text-text-dark"],[class~="text-on-surface"],[class~="text-on-background"],[class~="text-secondary"],[class~="text-on-surface-variant"],[class~="text-primary"]{color:var(--brand-text)!important}
+    [class~="bg-primary"],[class~="bg-primary-container"]{background-color:var(--brand-gold)!important;color:#2D241B!important;font-size:20px!important;font-weight:700!important}
+    [class~="bg-primary"] span,[class~="bg-primary-container"] span{color:inherit!important}
+    [class~="border-border-light"],[class~="border-border-dark"],[class~="border-outline-variant"]{border-color:var(--brand-border)!important}
+    .simple-shell{width:100%;max-width:430px;min-height:100dvh;margin:auto;background:var(--brand-bg);padding:20px;display:flex;flex-direction:column}
+    .simple-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px}.simple-header button{width:auto;padding:0 18px}
+    .simple-content{display:flex;flex-direction:column;gap:20px;padding-top:20px;padding-bottom:30px}.simple-content h1,.simple-content p,.simple-content h2{margin:0}
+    .field{display:flex;flex-direction:column;gap:10px;font-weight:600}.field input,.field select{width:100%;padding:12px;border:2px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);color:var(--brand-text)}
+    .action{width:100%;min-height:56px;padding:12px 16px;border:2px solid var(--brand-gold);border-radius:12px;background:var(--brand-gold);color:#2D241B;font-size:20px;font-weight:700}
+    .secondary{background:var(--brand-surface);color:var(--brand-text)}.helper{font-size:16px;line-height:1.7;color:var(--brand-text)}
+    .consent{display:flex;align-items:flex-start;gap:14px;min-height:56px;padding:14px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .notice{padding:20px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .welcome{align-items:center;text-align:center;justify-content:center;gap:24px;padding-top:40px;padding-bottom:32px}.welcome-logo{width:216px;height:216px;object-fit:contain}.welcome h1{margin:0;font-size:26px}.welcome p{margin:0;max-width:320px}.welcome-actions{width:100%;display:flex;flex-direction:column;gap:16px;margin-top:32px}
+    .home-shell{width:100%;max-width:430px;margin:auto;padding-bottom:100px}.home-header{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--brand-surface)}.home-header h1{font-size:22px;flex:1;margin:0}.small-action{border:0;border-radius:10px;font-size:16px!important;padding:8px;color:var(--brand-text)}.home-content{padding:20px;display:flex;flex-direction:column;gap:20px}.home-content>h2{margin:0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.home-tools .action{font-size:18px;padding:8px}.ad-card{border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);overflow:hidden}.ad-photo{width:100%;height:180px;object-fit:cover}.ad-content{padding:16px;display:flex;flex-direction:column;gap:10px}.ad-content h2,.ad-content p{margin:0}.price{font-size:26px;font-weight:700}.offer-label{font-size:16px}.simple-bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--brand-surface);border-top:1px solid var(--brand-border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:50}.simple-bottom button{font-size:14px!important;font-weight:600;padding:6px 2px;background:none;border:0;border-radius:8px;color:var(--brand-text)}.simple-bottom [aria-current]{background:var(--brand-bg);border:1px solid var(--brand-gold)}
+    @media(min-width:600px){body{padding:0!important}} @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    </style><style id="nawader-dark-mode">html[data-theme=dark]{--brand-bg:#111B1C;--brand-surface:#202D2D;--brand-gold:#E4BC7B;--brand-text:#F6EEE0;--brand-muted:#AABAB3;--brand-border:#3B504B}html[data-theme=light]{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}html[data-theme=dark] .bg-white,html[data-theme=dark] .bg-slate-50,html[data-theme=dark] .bg-gray-50{background-color:var(--brand-surface)!important}html[data-theme=dark] .action:not(.secondary),html[data-theme=dark] [class~=bg-primary],html[data-theme=dark] [class~=bg-primary-container]{color:#111B1C!important}html[data-theme=light] .action:not(.secondary),html[data-theme=light] [class~=bg-primary],html[data-theme=light] [class~=bg-primary-container]{color:#2D241B!important}</style></head>
+<body class="h-full bg-background-light text-on-surface antialiased font-body-md text-body-md select-none">
+<!-- Mobile Shell Wrapper (Centered Max-w-md for Ergonomics) -->
+<div class="min-h-full max-w-md mx-auto bg-surface-light flex flex-col shadow-sm relative">
+<!-- Top App Bar (Custom Sub-screen Linear Navigation Header) -->
+<!-- Rule note: BottomNavBar suppressed because this is a focused task/filter subscreen -->
+<header class="sticky top-0 z-40 bg-surface border-b border-border-light px-margin py-space-sm flex items-center justify-between min-h-[56px]">
+<div class="flex items-center gap-space-sm">
+<button aria-label="إغلاق التصفية" class="w-12 h-12 flex items-center justify-center rounded-xl bg-surface-container active:scale-95 transition-transform text-on-surface hover:bg-surface-container-high border border-border-light" type="button">
+<span class="material-symbols-outlined text-2xl" data-icon="close">close</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm text-on-surface font-bold pr-1">تصفية الإعلانات</h1>
+</div>
+<button class="px-space-md py-space-sm text-primary font-label-md text-label-md rounded-xl hover:bg-surface-container active:scale-95 transition-all font-bold" type="button">
+        إعادة ضبط
+      </button>
+</header>
+<!-- Main Filter Canvas -->
+<main class="flex-1 px-margin pt-space-lg pb-32 space-y-space-xl overflow-y-auto">
+<!-- SECTION 1: Region & City (المنطقة والمدينة) -->
+<section class="bg-surface rounded-xl p-space-md border border-border-light space-y-space-md">
+<div class="flex items-center gap-space-sm border-b border-border-light pb-space-xs">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="location_on">location_on</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">المنطقة والمدينة</h2>
+</div>
+<!-- Region Dropdown/Picker -->
+<div class="space-y-space-xs">
+<label class="block font-label-md text-label-md text-on-surface font-semibold">المنطقة</label>
+<div class="relative">
+<select class="w-full h-14 bg-surface-container-lowest border-2 border-border-light rounded-xl pr-space-md pl-12 font-body-lg text-body-lg text-on-surface focus:border-primary focus:ring-0 appearance-none transition-colors">
+<option selected="" value="riyadh">منطقة الرياض</option>
+<option value="makkah">منطقة مكة المكرمة</option>
+<option value="qassim">منطقة القصيم</option>
+<option value="eastern">المنطقة الشرقية</option>
+<option value="madinah">منطقة المدينة المنورة</option>
+<option value="hail">منطقة حائل</option>
+</select>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-secondary text-2xl" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- City Dropdown/Picker -->
+<div class="space-y-space-xs">
+<label class="block font-label-md text-label-md text-on-surface font-semibold">المدينة</label>
+<div class="relative">
+<select class="w-full h-14 bg-surface-container-lowest border-2 border-border-light rounded-xl pr-space-md pl-12 font-body-lg text-body-lg text-on-surface focus:border-primary focus:ring-0 appearance-none transition-colors">
+<option selected="" value="riyadh_city">الرياض</option>
+<option value="kharj">الخرج</option>
+<option value="diriyah">الدرعية</option>
+<option value="dawadmi">الدوادمي</option>
+<option value="majmaah">المجمعة</option>
+<option value="wadi_dawasir">وادي الدواسر</option>
+</select>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-secondary text-2xl" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Notice Alert for Senior Accessibility -->
+<div class="flex items-start gap-space-xs bg-surface-container p-space-sm rounded-lg border border-border-light text-on-secondary-container">
+<span class="material-symbols-outlined text-warning-light text-xl mt-0.5 shrink-0" data-icon="info">info</span>
+<p class="font-caption text-caption">ملاحظة: اختيار منطقة جديدة يقوم بتحديث قائمة المدن المتاحة تلقائياً.</p>
+</div>
+</section>
+<!-- SECTION 2: Breed & Color (لون وسلالة الإبل) -->
+<section class="bg-surface rounded-xl p-space-md border border-border-light space-y-space-md">
+<div class="flex items-center justify-between border-b border-border-light pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="palette">palette</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">لون وسلالة الإبل</h2>
+</div>
+<span class="font-caption text-caption text-muted-light">اختر لوناً أو أكثر</span>
+</div>
+<!-- 2-Column Touch Grid (56px targets) -->
+<div class="grid grid-cols-2 gap-space-sm">
+<!-- Item: وضح (Selected) -->
+<label class="h-14 flex items-center justify-between px-space-md bg-secondary-container border-2 border-primary rounded-xl cursor-pointer active:scale-98 transition-all">
+<div class="flex items-center gap-space-sm">
+<span class="w-4 h-4 rounded-full bg-white border border-outline-variant shadow-inner"></span>
+<span class="font-label-lg text-label-lg font-bold text-primary">وضح</span>
+</div>
+<span class="material-symbols-outlined text-primary font-bold text-xl" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<input class="hidden" type="checkbox"/>
+</label>
+<!-- Item: مجاهيم (Selected) -->
+<label class="h-14 flex items-center justify-between px-space-md bg-secondary-container border-2 border-primary rounded-xl cursor-pointer active:scale-98 transition-all">
+<div class="flex items-center gap-space-sm">
+<span class="w-4 h-4 rounded-full bg-[#1b1713] border border-outline-variant"></span>
+<span class="font-label-lg text-label-lg font-bold text-primary">مجاهيم</span>
+</div>
+<span class="material-symbols-outlined text-primary font-bold text-xl" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<input class="hidden" type="checkbox"/>
+</label>
+<!-- Item: صفر -->
+<label class="h-14 flex items-center justify-between px-space-md bg-surface-container-lowest border-2 border-border-light rounded-xl cursor-pointer active:scale-98 transition-all hover:border-outline">
+<div class="flex items-center gap-space-sm">
+<span class="w-4 h-4 rounded-full bg-[#c99a5b] border border-outline-variant"></span>
+<span class="font-label-lg text-label-lg font-semibold text-on-surface">صفر</span>
+</div>
+<span class="material-symbols-outlined text-muted-light text-xl" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<input class="hidden" type="checkbox"/>
+</label>
+<!-- Item: شعل -->
+<label class="h-14 flex items-center justify-between px-space-md bg-surface-container-lowest border-2 border-border-light rounded-xl cursor-pointer active:scale-98 transition-all hover:border-outline">
+<div class="flex items-center gap-space-sm">
+<span class="w-4 h-4 rounded-full bg-[#d8b078] border border-outline-variant"></span>
+<span class="font-label-lg text-label-lg font-semibold text-on-surface">شعل</span>
+</div>
+<span class="material-symbols-outlined text-muted-light text-xl" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<input class="hidden" type="checkbox"/>
+</label>
+<!-- Item: حمر -->
+<label class="h-14 flex items-center justify-between px-space-md bg-surface-container-lowest border-2 border-border-light rounded-xl cursor-pointer active:scale-98 transition-all hover:border-outline">
+<div class="flex items-center gap-space-sm">
+<span class="w-4 h-4 rounded-full bg-[#8c462b] border border-outline-variant"></span>
+<span class="font-label-lg text-label-lg font-semibold text-on-surface">حمر</span>
+</div>
+<span class="material-symbols-outlined text-muted-light text-xl" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<input class="hidden" type="checkbox"/>
+</label>
+<!-- Item: شقح -->
+<label class="h-14 flex items-center justify-between px-space-md bg-surface-container-lowest border-2 border-border-light rounded-xl cursor-pointer active:scale-98 transition-all hover:border-outline">
+<div class="flex items-center gap-space-sm">
+<span class="w-4 h-4 rounded-full bg-[#e8ded0] border border-outline-variant"></span>
+<span class="font-label-lg text-label-lg font-semibold text-on-surface">شقح</span>
+</div>
+<span class="material-symbols-outlined text-muted-light text-xl" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<input class="hidden" type="checkbox"/>
+</label>
+</div>
+</section>
+<!-- SECTION 3: Gender (الجنس) -->
+<section class="bg-surface rounded-xl p-space-md border border-border-light space-y-space-md">
+<div class="flex items-center gap-space-sm border-b border-border-light pb-space-xs">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="category">category</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">الجنس</h2>
+</div>
+<!-- 3 Segmented Generous Button Options -->
+<div class="grid grid-cols-3 gap-space-xs">
+<button class="h-14 rounded-xl border-2 border-primary bg-secondary-container text-primary font-label-md text-label-md font-bold flex flex-col items-center justify-center transition-all shadow-sm" type="button">
+<span>الكل</span>
+</button>
+<button class="h-14 rounded-xl border-2 border-border-light bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md font-semibold flex flex-col items-center justify-center transition-all" type="button">
+<span>قعود / جمل</span>
+<span class="font-caption text-caption text-secondary">(ذكر)</span>
+</button>
+<button class="h-14 rounded-xl border-2 border-border-light bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md font-semibold flex flex-col items-center justify-center transition-all" type="button">
+<span>بكرة / ناقة</span>
+<span class="font-caption text-caption text-secondary">(أنثى)</span>
+</button>
+</div>
+</section>
+<!-- SECTION 4: Listing Type (نوع العرض) -->
+<section class="bg-surface rounded-xl p-space-md border border-border-light space-y-space-md">
+<div class="flex items-center gap-space-sm border-b border-border-light pb-space-xs">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="sell">sell</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">نوع العرض</h2>
+</div>
+<div class="grid grid-cols-3 gap-space-xs">
+<button class="h-14 rounded-xl border-2 border-border-light bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md font-semibold flex items-center justify-center" type="button">
+<span>الكل</span>
+</button>
+<button class="h-14 rounded-xl border-2 border-primary bg-secondary-container text-primary font-label-md text-label-md font-bold flex items-center justify-center" type="button">
+<span>سعر محدد</span>
+</button>
+<button class="h-14 rounded-xl border-2 border-border-light bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md font-semibold flex items-center justify-center" type="button">
+<span>مزاد حضوري</span>
+</button>
+</div>
+</section>
+<!-- SECTION 5: Price Range (نطاق السعر بالريال السعودي) -->
+<section class="bg-surface rounded-xl p-space-md border border-border-light space-y-space-md">
+<div class="flex items-center justify-between border-b border-border-light pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="payments">payments</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">نطاق السعر (ر.س)</h2>
+</div>
+<span class="font-label-md text-label-md font-bold text-primary">بالريال</span>
+</div>
+<!-- From - To Inputs with LTR Numeral Encasement for Clarity -->
+<div class="grid grid-cols-2 gap-space-md">
+<div class="space-y-space-xs">
+<span class="block font-label-md text-label-md text-secondary font-semibold">من</span>
+<div class="relative flex items-center">
+<input class="w-full h-14 bg-surface-container-lowest border-2 border-border-light rounded-xl pr-4 pl-12 font-headline-sm text-headline-sm text-on-surface text-right font-bold focus:border-primary focus:ring-0" dir="ltr" inputmode="numeric" type="text" value="10,000"/>
+<span class="absolute left-3 text-secondary font-caption text-caption pointer-events-none">ر.س</span>
+</div>
+</div>
+<div class="space-y-space-xs">
+<span class="block font-label-md text-label-md text-secondary font-semibold">إلى</span>
+<div class="relative flex items-center">
+<input class="w-full h-14 bg-surface-container-lowest border-2 border-border-light rounded-xl pr-4 pl-12 font-headline-sm text-headline-sm text-on-surface text-right font-bold focus:border-primary focus:ring-0" dir="ltr" inputmode="numeric" type="text" value="150,000"/>
+<span class="absolute left-3 text-secondary font-caption text-caption pointer-events-none">ر.س</span>
+</div>
+</div>
+</div>
+<!-- Clear Note -->
+<div class="flex items-center gap-space-xs p-space-sm bg-surface-container rounded-lg border border-border-light text-on-secondary-container">
+<span class="material-symbols-outlined text-info-light text-xl shrink-0" data-icon="campaign">campaign</span>
+<p class="font-caption text-caption">المزادات الحضورية لا تشمل فلتر السعر نظراً لتحديد القيمة بالميدان.</p>
+</div>
+</section>
+<!-- SECTION 6: Age / Stage (السن بالشهور / الفئة) -->
+<section class="bg-surface rounded-xl p-space-md border border-border-light space-y-space-md">
+<div class="flex items-center gap-space-sm border-b border-border-light pb-space-xs">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="hourglass_top">hourglass_top</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">السن والفئة</h2>
+</div>
+<!-- 3-Column Pill Grid for Traditional Camel Ages -->
+<div class="grid grid-cols-3 gap-space-xs">
+<!-- 1. حوار -->
+<button class="h-14 rounded-xl border-2 border-border-light bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md font-semibold flex items-center justify-center active:scale-95 transition-transform" type="button">
+            حوار
+          </button>
+<!-- 2. مفرود (Selected) -->
+<button class="h-14 rounded-xl border-2 border-primary bg-secondary-container text-primary font-label-md text-label-md font-bold flex items-center justify-center active:scale-95 transition-transform" type="button">
+            مفرود
+          </button>
+<!-- 3. حق (Selected) -->
+<button class="h-14 rounded-xl border-2 border-primary bg-secondary-container text-primary font-label-md text-label-md font-bold flex items-center justify-center active:scale-95 transition-transform" type="button">
+            حق
+          </button>
+<!-- 4. لقى -->
+<button class="h-14 rounded-xl border-2 border-border-light bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md font-semibold flex items-center justify-center active:scale-95 transition-transform" type="button">
+            لقى
+          </button>
+<!-- 5. جذع -->
+<button class="h-14 rounded-xl border-2 border-border-light bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md font-semibold flex items-center justify-center active:scale-95 transition-transform" type="button">
+            جذع
+          </button>
+<!-- 6. ثني -->
+<button class="h-14 rounded-xl border-2 border-border-light bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md font-semibold flex items-center justify-center active:scale-95 transition-transform" type="button">
+            ثني
+          </button>
+<!-- 7. رباع -->
+<button class="h-14 rounded-xl border-2 border-border-light bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md font-semibold flex items-center justify-center active:scale-95 transition-transform" type="button">
+            رباع
+          </button>
+<!-- 8. سدس -->
+<button class="h-14 rounded-xl border-2 border-border-light bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md font-semibold flex items-center justify-center active:scale-95 transition-transform" type="button">
+            سدس
+          </button>
+<!-- 9. فحل -->
+<button class="h-14 rounded-xl border-2 border-border-light bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-md text-label-md font-semibold flex items-center justify-center active:scale-95 transition-transform" type="button">
+            فحل
+          </button>
+</div>
+</section>
+</main>
+<!-- STICKY ACTION BAR (High Dignity, Safe Touch Area, Big Primary Action) -->
+<div class="fixed bottom-0 left-0 right-0 z-50 bg-surface border-t border-border-light shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
+<div class="max-w-md mx-auto px-margin py-space-md flex items-center gap-space-sm">
+<!-- Secondary Clear Action -->
+<button class="h-14 px-space-md rounded-xl border-2 border-border-light bg-surface-container hover:bg-surface-container-high text-on-surface font-label-lg text-label-lg font-bold flex items-center justify-center active:scale-95 transition-all" type="button">
+          مسح الكل
+        </button>
+<!-- Huge 56px Primary Action Button (#A77434 Tone with legible text) -->
+<button class="flex-1 h-14 bg-[#A77434] hover:bg-[#96652a] active:bg-[#855721] text-text-light font-headline-sm text-headline-sm font-bold rounded-xl flex items-center justify-between px-space-lg shadow-md active:scale-98 transition-all" type="button">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-2xl font-bold" data-icon="filter_list">filter_list</span>
+<span>عرض النتائج</span>
+</span>
+<span class="bg-[#8b5e26]/30 px-space-sm py-0.5 rounded-lg text-text-light font-extrabold text-body-lg">
+            24 إعلان
+          </span>
+</button>
+</div>
+</div>
+</div>
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));const nav={'الرئيسية':'B01','المفضلة':'B09','أضف إعلان':'D01','الرسائل':'F01','حسابي':'G01','إعلاناتي':'E01','التنبيهات':'G04'};document.querySelectorAll('nav button,nav a').forEach(el=>{const t=el.innerText.trim();for(const [label,id] of Object.entries(nav))if(t.endsWith(label))el.dataset.go=id});document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();parent.postMessage({nawaderScreen:el.dataset.go},'*')}));addEventListener('message',e=>{if(e.source!==parent)return;if(['dark','light'].includes(e.data?.nawaderTheme))document.documentElement.dataset.theme=e.data.nawaderTheme});</script></body></html>

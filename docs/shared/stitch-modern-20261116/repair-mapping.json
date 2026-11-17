@@ -1,0 +1,92 @@
+[
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/6310763871032341644/files/db434582d41c44e5a875af193607d5bd:download",
+      "mimeType": "text/html",
+      "name": "projects/6310763871032341644/files/db434582d41c44e5a875af193607d5bd"
+    },
+    "name": "projects/6310763871032341644/screens/6ac5bf6d7ee84a428390c33c76bfdee6",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/6310763871032341644/files/eb64aa721faa4bd8a534bdf68e2029f4:download",
+      "mimeType": "png",
+      "name": "projects/6310763871032341644/files/eb64aa721faa4bd8a534bdf68e2029f4"
+    },
+    "title": "G06 — الإعدادات والمظهر",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/6310763871032341644/files/08b90a8df3ac4bf9bec44515726d968f:download",
+      "mimeType": "text/html",
+      "name": "projects/6310763871032341644/files/08b90a8df3ac4bf9bec44515726d968f"
+    },
+    "name": "projects/6310763871032341644/screens/8d022c740ddb494d8764116eeb902726",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/6310763871032341644/files/d406265c4a194035a7b0729a44e692b9:download",
+      "mimeType": "png",
+      "name": "projects/6310763871032341644/files/d406265c4a194035a7b0729a44e692b9"
+    },
+    "title": "G08 — المستخدمون المحظورون",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/6310763871032341644/files/3e166d6f27254b699820230686f946ad:download",
+      "mimeType": "text/html",
+      "name": "projects/6310763871032341644/files/3e166d6f27254b699820230686f946ad"
+    },
+    "name": "projects/6310763871032341644/screens/1b712756d560442e8dd6317d8cb15069",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/6310763871032341644/files/dbcf4bcbf157403d8c4b741ff6282df2:download",
+      "mimeType": "png",
+      "name": "projects/6310763871032341644/files/dbcf4bcbf157403d8c4b741ff6282df2"
+    },
+    "title": "G07 — أرقام التواصل",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/6310763871032341644/files/dacd5a7c7b444e1795121cb939d62e7b:download",
+      "mimeType": "text/html",
+      "name": "projects/6310763871032341644/files/dacd5a7c7b444e1795121cb939d62e7b"
+    },
+    "name": "projects/6310763871032341644/screens/60151c3dbd1747f6b7252fa059c53599",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/6310763871032341644/files/af76994d9c5849ceba4221d24e2a694d:download",
+      "mimeType": "png",
+      "name": "projects/6310763871032341644/files/af76994d9c5849ceba4221d24e2a694d"
+    },
+    "title": "G09 — الشروط والمساعدة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/6310763871032341644/files/8ed993dfec394dca90dccf797f38ba5b:download",
+      "mimeType": "text/html",
+      "name": "projects/6310763871032341644/files/8ed993dfec394dca90dccf797f38ba5b"
+    },
+    "name": "projects/6310763871032341644/screens/6d59a137814e46bea151567739272352",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/6310763871032341644/files/f65854a5f9194c66ad1b690126716899:download",
+      "mimeType": "png",
+      "name": "projects/6310763871032341644/files/f65854a5f9194c66ad1b690126716899"
+    },
+    "title": "G10 — إدارة الحساب",
+    "width": "780"
+  }
+]

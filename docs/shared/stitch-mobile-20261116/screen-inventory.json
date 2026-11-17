@@ -1,0 +1,1424 @@
+[
+  {
+    "deviceType": "MOBILE",
+    "height": "2372",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/9999633495290257994:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/9999633495290257994"
+    },
+    "name": "projects/7529577228117709751/screens/8e90ac79981f46f2b9fcba4f270b4309",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/9999633495290258856:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/9999633495290258856"
+    },
+    "title": "B08 — لا توجد نتائج",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2138",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17454074877541178687:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/17454074877541178687"
+    },
+    "name": "projects/7529577228117709751/screens/dbc360ef0f6f489f90dddeec81055713",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17454074877541178193:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/17454074877541178193"
+    },
+    "title": "H05 — التحميل وإعادة المحاولة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7354532666300528684:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/7354532666300528684"
+    },
+    "name": "projects/7529577228117709751/screens/102067633b3e40f9a66a0557b7f71d3a",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7354532666300528258:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/7354532666300528258"
+    },
+    "title": "D11 — تم إرسال الإعلان للمراجعة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "3116",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/5318239541709692341:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/5318239541709692341"
+    },
+    "name": "projects/7529577228117709751/screens/d42b28d801f446c489fbb321811594e4",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/5318239541709691779:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/5318239541709691779"
+    },
+    "title": "E09 — مؤرشف أو مخفي إداريًا",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2656",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14157341524214011404:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/14157341524214011404"
+    },
+    "name": "projects/7529577228117709751/screens/e2f42ab93b8b47d6b242e17fadf229a6",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14157341524214013586:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/14157341524214013586"
+    },
+    "title": "G07 — إدارة أرقام وموافقات التواصل",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/5159637765815927253:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/5159637765815927253"
+    },
+    "name": "projects/7529577228117709751/screens/2cd2a4e7b3a2407a83de29004cca7450",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/5159637765815927887:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/5159637765815927887"
+    },
+    "title": "A02 — رقم الجوال (داكن)",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "3654",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7557748979321623582:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/7557748979321623582"
+    },
+    "name": "projects/7529577228117709751/screens/40f3dbd29114413ab627218600bddd73",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7557748979321624812:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/7557748979321624812"
+    },
+    "title": "G09 — الشروط والخصوصية والمساعدة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2655816369974847944:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/2655816369974847944"
+    },
+    "name": "projects/7529577228117709751/screens/b3720865fadf40928bcce0dd7b45e08f",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2655816369974845666:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/2655816369974845666"
+    },
+    "title": "H07 — قائمة فارغة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17003150481140693662:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/17003150481140693662"
+    },
+    "name": "projects/7529577228117709751/screens/df0545753bd94a43adbc55c4bf8ab627",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17003150481140694940:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/17003150481140694940"
+    },
+    "title": "G08 — المستخدمون المحظورون",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2072",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2983521570243856327:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/2983521570243856327"
+    },
+    "name": "projects/7529577228117709751/screens/9ba1b627009445e888e35a8ee626ccc7",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2983521570243856641:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/2983521570243856641"
+    },
+    "title": "D05 — السعر المطلوب",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "3572",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/4911918119820976519:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/4911918119820976519"
+    },
+    "name": "projects/7529577228117709751/screens/2578cf868bae4ff39d8e6002a0b32e5b",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/4911918119820978917:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/4911918119820978917"
+    },
+    "title": "B02 — نتائج البحث",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2064",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14695044341504216487:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/14695044341504216487"
+    },
+    "name": "projects/7529577228117709751/screens/567bccbb85ac46369a1c915ab4218b3a",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14695044341504216513:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/14695044341504216513"
+    },
+    "title": "E06 — تجديد الظهور غير متاح بعد",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16212631775950608380:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/16212631775950608380"
+    },
+    "name": "projects/7529577228117709751/screens/346210ea6418408a9664dac94f3bfe62",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16212631775950608418:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/16212631775950608418"
+    },
+    "title": "A03 — رمز التحقق (فاتح)",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2650",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/8317678962345098979:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/8317678962345098979"
+    },
+    "name": "projects/7529577228117709751/screens/656bbd678f054d68880ae2a58a3cc7de",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/8317678962345098601:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/8317678962345098601"
+    },
+    "title": "G10 — تسجيل الخروج وإغلاق الحساب",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2512",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/15764399105753056988:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/15764399105753056988"
+    },
+    "name": "projects/7529577228117709751/screens/19862b8cdd4a4002ae8eb4530b21d89f",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/15764399105753058982:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/15764399105753058982"
+    },
+    "title": "F01 — الرسائل",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2806",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/10273649010200664209:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/10273649010200664209"
+    },
+    "name": "projects/7529577228117709751/screens/29458d49633f4161b61bac0dd76ccc8b",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/10273649010200663495:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/10273649010200663495"
+    },
+    "title": "E04 — إعلان مرفوض",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2174",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16795820801682942997:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/16795820801682942997"
+    },
+    "name": "projects/7529577228117709751/screens/8e3830b24d7b4a7aadc1c53bca793e0e",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16795820801682940835:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/16795820801682940835"
+    },
+    "title": "A04 — إكمال الحساب (فاتح)",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "4300",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2543703182126737072:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/2543703182126737072"
+    },
+    "name": "projects/7529577228117709751/screens/63be4852f5bb488581a9497b439a5744",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2543703182126735530:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/2543703182126735530"
+    },
+    "title": "C06 — ملف المعلن",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2980",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14163961827799000949:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/14163961827799000949"
+    },
+    "name": "projects/7529577228117709751/screens/b2d432c92dea4ecda72be0e5cefe5bd2",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14163961827799001043:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/14163961827799001043"
+    },
+    "title": "G05 — إعدادات الإشعارات",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1792",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/11797474815343193238:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/11797474815343193238"
+    },
+    "name": "projects/7529577228117709751/screens/2b35ea685a9245e2b644f0a92bfb6841",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/11797474815343193976:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/11797474815343193976"
+    },
+    "title": "C09 — الإعلان غير متاح",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2800",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7188275550863626576:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/7188275550863626576"
+    },
+    "name": "projects/7529577228117709751/screens/c83e96f877fe4329b773ca75248bd773",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7188275550863627918:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/7188275550863627918"
+    },
+    "title": "D02 — بيانات الإبل",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2292",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/3172459596517963938:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/3172459596517963938"
+    },
+    "name": "projects/7529577228117709751/screens/5989b671ada54988ab7c6e4e545da8ca",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/3172459596517962392:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/3172459596517962392"
+    },
+    "title": "F05 — تقييمات المعلن",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1876",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/6428641925027447328:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/6428641925027447328"
+    },
+    "name": "projects/7529577228117709751/screens/b44c50921f4948028bdb4b16d878d067",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/6428641925027450834:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/6428641925027450834"
+    },
+    "title": "F03 — محادثة للقراءة فقط",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/1906160385571134233:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/1906160385571134233"
+    },
+    "name": "projects/7529577228117709751/screens/d0ef3744907744caac8771df9c2f425c",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/1906160385571132811:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/1906160385571132811"
+    },
+    "title": "B03 — تصفية الإعلانات",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2372",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17617978922031166688:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/17617978922031166688"
+    },
+    "name": "projects/7529577228117709751/screens/27f9262a8953425ebc1778c336461803",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17617978922031167450:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/17617978922031167450"
+    },
+    "title": "C08 — إضافة سؤال أو تعديله",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1862",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14134696267685819634:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/14134696267685819634"
+    },
+    "name": "projects/7529577228117709751/screens/3116e05848374f32b71433b87113cdbf",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14134696267685820732:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/14134696267685820732"
+    },
+    "title": "A05 — تعذر التحقق (فاتح)",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "4140",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/8055687669990698972:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/8055687669990698972"
+    },
+    "name": "projects/7529577228117709751/screens/28c21ad8b75d4559860c37e98ae167b2",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/8055687669990697290:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/8055687669990697290"
+    },
+    "title": "C01 — تفاصيل إعلان بسعر محدد",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2356",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/10560175904951702737:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/10560175904951702737"
+    },
+    "name": "projects/7529577228117709751/screens/6ef58fce8a1046a5ad8f474f0a19eb21",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/10560175904951703679:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/10560175904951703679"
+    },
+    "title": "F06 — إضافة أو تعديل تقييم",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2244",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16814627586023307105:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/16814627586023307105"
+    },
+    "name": "projects/7529577228117709751/screens/b393084bcd824c76bc30e3a13615433b",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16814627586023308159:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/16814627586023308159"
+    },
+    "title": "H10 — تأكيد النجاح أو فشل الحفظ",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1954",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/12751726893131853681:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/12751726893131853681"
+    },
+    "name": "projects/7529577228117709751/screens/02b86378111b46cdb18ff87202459ed7",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/12751726893131850843:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/12751726893131850843"
+    },
+    "title": "F08 — رد المعلن واعتراض على تقييم",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "3466",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/6769646436629315527:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/6769646436629315527"
+    },
+    "name": "projects/7529577228117709751/screens/ce8979df1f8b4ffbb705921c9f44130b",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/6769646436629311505:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/6769646436629311505"
+    },
+    "title": "G01 — حسابي",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17398244807678732598:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/17398244807678732598"
+    },
+    "name": "projects/7529577228117709751/screens/6be92d29375d4e649d1ec71e41679bf3",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17398244807678732968:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/17398244807678732968"
+    },
+    "title": "A05 — تعذر التحقق (داكن)",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2638",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/3052975467279430325:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/3052975467279430325"
+    },
+    "name": "projects/7529577228117709751/screens/b06fcb6bea8140ba9afc171122ccb00f",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/3052975467279430851:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/3052975467279430851"
+    },
+    "title": "E08 — إيقاف الإعلان وأرشفته",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "4568",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2806921918645350166:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/2806921918645350166"
+    },
+    "name": "projects/7529577228117709751/screens/a99bedc035804855831c8589da404a36",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2806921918645350060:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/2806921918645350060"
+    },
+    "title": "E01 — إعلاناتي",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2024",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7862172546669987835:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/7862172546669987835"
+    },
+    "name": "projects/7529577228117709751/screens/6a3b5db979954ee8af8f32e48fdb7b49",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7862172546669989569:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/7862172546669989569"
+    },
+    "title": "B04 — ترتيب النتائج",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2134",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17438327758187419373:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/17438327758187419373"
+    },
+    "name": "projects/7529577228117709751/screens/e680d5f9e94d4b988b9fd7d7f73a1753",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17438327758187417911:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/17438327758187417911"
+    },
+    "title": "C05 — خيارات التواصل والمشاركة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "3006",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14065391675657730901:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/14065391675657730901"
+    },
+    "name": "projects/7529577228117709751/screens/8be5943c0c6841ec93df806cc7f7c5cb",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14065391675657728363:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/14065391675657728363"
+    },
+    "title": "H01 — توثيق الحساب",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "4206",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/1089512214723353598:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/1089512214723353598"
+    },
+    "name": "projects/7529577228117709751/screens/475d2606523545449d734422a54a53f5",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/1089512214723351056:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/1089512214723351056"
+    },
+    "title": "D09 — معاينة إعلان بسعر محدد",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2644",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7943182503062832418:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/7943182503062832418"
+    },
+    "name": "projects/7529577228117709751/screens/85deebb3a681413cba027e5ee3fae35b",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7943182503062834796:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/7943182503062834796"
+    },
+    "title": "C03 — مضى موعد المزاد",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2416",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7210013487474334666:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/7210013487474334666"
+    },
+    "name": "projects/7529577228117709751/screens/2ee10dea3ec54f4db04010b10000ad31",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7210013487474333512:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/7210013487474333512"
+    },
+    "title": "D04 — موقع الإعلان",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2040",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/5053804020324923205:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/5053804020324923205"
+    },
+    "name": "projects/7529577228117709751/screens/d0d15706c68049ceb2c239c0cd4d2cdf",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/5053804020324924907:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/5053804020324924907"
+    },
+    "title": "E02 — مسودة محفوظة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1994",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/753414608210812708:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/753414608210812708"
+    },
+    "name": "projects/7529577228117709751/screens/c690fc1575324f369145ffaab58d376f",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/753414608210812818:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/753414608210812818"
+    },
+    "title": "B07 — تحديد مركز البحث",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/12817263958151363450:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/12817263958151363450"
+    },
+    "name": "projects/7529577228117709751/screens/2f0aed5a322241698187c69b492d853a",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/12817263958151361376:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/12817263958151361376"
+    },
+    "title": "A02 — رقم الجوال (فاتح)",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/13864350069990673505:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/13864350069990673505"
+    },
+    "name": "projects/7529577228117709751/screens/4a9dbfec8a00496a93ffef556ad1b1b7",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/13864350069990672079:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/13864350069990672079"
+    },
+    "title": "C04 — صور وفيديو الإعلان",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/10008789495962337754:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/10008789495962337754"
+    },
+    "name": "projects/7529577228117709751/screens/f237e4b26fd9434c98fe2a6b739adf68",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/10008789495962339816:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/10008789495962339816"
+    },
+    "title": "F02 — المحادثة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/10795301491067112275:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/10795301491067112275"
+    },
+    "name": "projects/7529577228117709751/screens/9562fb40d19b4ab3b559b325c77cf2aa",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/10795301491067110701:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/10795301491067110701"
+    },
+    "title": "D12 — مغادرة وحفظ المسودة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/5318239541709690979:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/5318239541709690979"
+    },
+    "name": "projects/7529577228117709751/screens/79d2b44efd2d49c6a57ae9a11c910eb8",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/5318239541709690417:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/5318239541709690417"
+    },
+    "title": "A01 — مرحبًا بك (داكن)",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "3004",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17284273627812446116:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/17284273627812446116"
+    },
+    "name": "projects/7529577228117709751/screens/7229824c1c3843ba9d06a3693a7f7f79",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17284273627812442158:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/17284273627812442158"
+    },
+    "title": "G06 — الإعدادات والمظهر",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/3070247927485324395:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/3070247927485324395"
+    },
+    "name": "projects/7529577228117709751/screens/e8bab35379854e0caa224cb09f60b80b",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/3070247927485321633:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/3070247927485321633"
+    },
+    "title": "A03 — رمز التحقق (داكن)",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/6995117512742073499:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/6995117512742073499"
+    },
+    "name": "projects/7529577228117709751/screens/a19ac428bc17402c9785838265d34324",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/6995117512742072693:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/6995117512742072693"
+    },
+    "title": "B06 — الخريطة والقريب",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "3366",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2428626191205064163:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/2428626191205064163"
+    },
+    "name": "projects/7529577228117709751/screens/4ebb12bbb8ab44959d44834e3f5b3f71",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2428626191205064117:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/2428626191205064117"
+    },
+    "title": "B09 — المفضلة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "3024",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/5282766464049053295:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/5282766464049053295"
+    },
+    "name": "projects/7529577228117709751/screens/6716f583aac6412790c9963927282962",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/5282766464049053177:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/5282766464049053177"
+    },
+    "title": "B05 — اختيار المنطقة والمدينة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "4642",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/12278409498527130126:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/12278409498527130126"
+    },
+    "name": "projects/7529577228117709751/screens/6f0e4c5e20d34a98b9f04197f5be954c",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/12278409498527132040:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/12278409498527132040"
+    },
+    "title": "B01 — الرئيسية",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2514",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2370286557579157040:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/2370286557579157040"
+    },
+    "name": "projects/7529577228117709751/screens/e8821b4d3b394e4ab7e3fa70f1457ac6",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2370286557579155778:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/2370286557579155778"
+    },
+    "title": "E05 — إعلان منشور",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "4240",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16814627586023306074:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/16814627586023306074"
+    },
+    "name": "projects/7529577228117709751/screens/84559b9df87140ffa64af804c7ead4b5",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16814627586023307128:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/16814627586023307128"
+    },
+    "title": "D07 — صور الإعلان والفيديو",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2718",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7926183996035892679:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/7926183996035892679"
+    },
+    "name": "projects/7529577228117709751/screens/93f545263295474c9a1719107679461e",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/7926183996035894889:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/7926183996035894889"
+    },
+    "title": "H06 — أنت غير متصل",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "3284",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/6684401948995351907:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/6684401948995351907"
+    },
+    "name": "projects/7529577228117709751/screens/128cb8e8f3c54af2a97f93fe8cfa82cb",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/6684401948995353357:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/6684401948995353357"
+    },
+    "title": "D03 — الوصف والحالة الصحية",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2312",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/6413594841242158627:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/6413594841242158627"
+    },
+    "name": "projects/7529577228117709751/screens/8408c02ccbd94513be7e8b7597f2f531",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/6413594841242158533:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/6413594841242158533"
+    },
+    "title": "G02 — تعديل الملف الشخصي",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2260",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/4530790657779374350:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/4530790657779374350"
+    },
+    "name": "projects/7529577228117709751/screens/bab8765493ea4f1a94c012f344086280",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/4530790657779373964:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/4530790657779373964"
+    },
+    "title": "F09 — الإبلاغ عن محتوى",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2182",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16593060012330410962:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/16593060012330410962"
+    },
+    "name": "projects/7529577228117709751/screens/f9e56788f6dd44eeb676b35618755197",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16593060012330410740:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/16593060012330410740"
+    },
+    "title": "D08 — رقم التواصل والموافقة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2602",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/5012004387738100311:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/5012004387738100311"
+    },
+    "name": "projects/7529577228117709751/screens/f2c0e4349259441090de4fffc6bd7216",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/5012004387738103193:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/5012004387738103193"
+    },
+    "title": "F10 — بلاغاتي وتفاصيل البلاغ",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2498",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/4807619706104379778:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/4807619706104379778"
+    },
+    "name": "projects/7529577228117709751/screens/409d49619afe46d2834c9c8f2fec9fe8",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/4807619706104381252:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/4807619706104381252"
+    },
+    "title": "H02 — توثيق الهوية",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2786",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/11565726131561014804:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/11565726131561014804"
+    },
+    "name": "projects/7529577228117709751/screens/9d9fba3431cd401c8cc6d257996d2ec6",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/11565726131561013858:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/11565726131561013858"
+    },
+    "title": "H09 — صلاحيات الصور والموقع والتنبيهات",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1956",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/8502229814765283650:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/8502229814765283650"
+    },
+    "name": "projects/7529577228117709751/screens/067dc791766d4431a3ec64d06af797c0",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/8502229814765282640:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/8502229814765282640"
+    },
+    "title": "E03 — إعلان قيد المراجعة",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14372570341890640646:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/14372570341890640646"
+    },
+    "name": "projects/7529577228117709751/screens/89be3943f2e541e5a83aaf5e8896cf4d",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14372570341890640396:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/14372570341890640396"
+    },
+    "title": "A01 — مرحبًا بك (فاتح)",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2772",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14401995967594167566:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/14401995967594167566"
+    },
+    "name": "projects/7529577228117709751/screens/a75d5022e2664e55a819e09296b75764",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/14401995967594167124:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/14401995967594167124"
+    },
+    "title": "F04 — حظر المستخدم",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2924",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17072873646071886481:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/17072873646071886481"
+    },
+    "name": "projects/7529577228117709751/screens/2068f84a949c41fa9c841bb58a46f101",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17072873646071889623:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/17072873646071889623"
+    },
+    "title": "C07 — أسئلة الإعلان",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1848",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/11693765734383947787:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/11693765734383947787"
+    },
+    "name": "projects/7529577228117709751/screens/9211f593d0fb45629efb096e04cd3be9",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/11693765734383951105:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/11693765734383951105"
+    },
+    "title": "D01 — نوع العرض",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "3430",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17101791311481123409:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/17101791311481123409"
+    },
+    "name": "projects/7529577228117709751/screens/b06a6099bd56432d950a6404c1a4485e",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17101791311481124099:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/17101791311481124099"
+    },
+    "title": "H04 — حالة طلب التوثيق",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2334",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/12488587344050709088:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/12488587344050709088"
+    },
+    "name": "projects/7529577228117709751/screens/669d10ba710c4280b90027a0e58e3ec6",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/12488587344050710778:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/12488587344050710778"
+    },
+    "title": "F07 — التقييم غير متاح الآن",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2740",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16836237145575660803:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/16836237145575660803"
+    },
+    "name": "projects/7529577228117709751/screens/cef634a83983450dae53cb887d4eb81f",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16836237145575657485:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/16836237145575657485"
+    },
+    "title": "H03 — توثيق النشاط",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2906",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2407423213725418236:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/2407423213725418236"
+    },
+    "name": "projects/7529577228117709751/screens/4e4aa91344ca4cdebe4edd6a26c3601c",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/2407423213725418110:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/2407423213725418110"
+    },
+    "title": "G04 — الإشعارات",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2294",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/11327037835142800545:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/11327037835142800545"
+    },
+    "name": "projects/7529577228117709751/screens/90d92adbe71c4089aa0519bcd2d02125",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/11327037835142802347:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/11327037835142802347"
+    },
+    "title": "H08 — الحساب موقوف",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "1768",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/12602160412219235846:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/12602160412219235846"
+    },
+    "name": "projects/7529577228117709751/screens/9d62b42960aa4e64a9d4e97094518f70",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/12602160412219234624:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/12602160412219234624"
+    },
+    "title": "A04 — إكمال الحساب (داكن)",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "4256",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/367004246724541651:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/367004246724541651"
+    },
+    "name": "projects/7529577228117709751/screens/ebf04268494b48ad9aef64926abe5638",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/367004246724539617:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/367004246724539617"
+    },
+    "title": "D10 — معاينة إعلان مزاد حضوري",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "3390",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17195648473886561544:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/17195648473886561544"
+    },
+    "name": "projects/7529577228117709751/screens/cc462e4d436f4add8042494a5b3322c9",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/17195648473886563546:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/17195648473886563546"
+    },
+    "title": "D06 — موعد ومكان المزاد",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "4874",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/8762332401111194126:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/8762332401111194126"
+    },
+    "name": "projects/7529577228117709751/screens/2e77cafc464c4158aebb7e54d64fab4c",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/8762332401111194912:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/8762332401111194912"
+    },
+    "title": "C02 — تفاصيل مزاد حضوري",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "3420",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/9137698029033918808:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/9137698029033918808"
+    },
+    "name": "projects/7529577228117709751/screens/d6ba6d06b47a48cf82d20617abcf8c46",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/9137698029033922434:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/9137698029033922434"
+    },
+    "title": "G03 — المتابعات والبحث المحفوظ",
+    "width": "780"
+  },
+  {
+    "deviceType": "MOBILE",
+    "height": "2520",
+    "htmlCode": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16729133885422110708:download",
+      "mimeType": "text/html",
+      "name": "projects/7529577228117709751/files/16729133885422110708"
+    },
+    "name": "projects/7529577228117709751/screens/08ebb075e39e4c7b91c01bc77e575796",
+    "screenType": "DESIGN",
+    "screenshot": {
+      "downloadUrl": "https://stitch.googleapis.com/v1/projects/7529577228117709751/files/16729133885422109222:download",
+      "mimeType": "image/png",
+      "name": "projects/7529577228117709751/files/16729133885422109222"
+    },
+    "title": "E07 — تعديل إعلان منشور",
+    "width": "780"
+  }
+]

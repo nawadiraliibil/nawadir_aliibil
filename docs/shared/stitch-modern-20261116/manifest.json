@@ -1,0 +1,890 @@
+[
+  {
+    "id": "A01",
+    "title": "مرحبًا بك",
+    "theme": "light",
+    "file": "A01-light.html"
+  },
+  {
+    "id": "A01",
+    "title": "مرحبًا بك",
+    "theme": "dark",
+    "file": "A01-dark.html"
+  },
+  {
+    "id": "A02",
+    "title": "رقم الجوال",
+    "theme": "light",
+    "file": "A02-light.html"
+  },
+  {
+    "id": "A02",
+    "title": "رقم الجوال",
+    "theme": "dark",
+    "file": "A02-dark.html"
+  },
+  {
+    "id": "A03",
+    "title": "رمز التحقق",
+    "theme": "light",
+    "file": "A03-light.html"
+  },
+  {
+    "id": "A03",
+    "title": "رمز التحقق",
+    "theme": "dark",
+    "file": "A03-dark.html"
+  },
+  {
+    "id": "A04",
+    "title": "إكمال الحساب",
+    "theme": "light",
+    "file": "A04-light.html"
+  },
+  {
+    "id": "A04",
+    "title": "إكمال الحساب",
+    "theme": "dark",
+    "file": "A04-dark.html"
+  },
+  {
+    "id": "A05",
+    "title": "تعذر التحقق",
+    "theme": "light",
+    "file": "A05-light.html"
+  },
+  {
+    "id": "A05",
+    "title": "تعذر التحقق",
+    "theme": "dark",
+    "file": "A05-dark.html"
+  },
+  {
+    "id": "B01",
+    "title": "الرئيسية",
+    "theme": "light",
+    "file": "B01-light.html"
+  },
+  {
+    "id": "B01",
+    "title": "الرئيسية",
+    "theme": "dark",
+    "file": "B01-dark.html"
+  },
+  {
+    "id": "B02",
+    "title": "نتائج البحث",
+    "theme": "light",
+    "file": "B02-light.html"
+  },
+  {
+    "id": "B02",
+    "title": "نتائج البحث",
+    "theme": "dark",
+    "file": "B02-dark.html"
+  },
+  {
+    "id": "B03",
+    "title": "تصفية الإعلانات",
+    "theme": "light",
+    "file": "B03-light.html"
+  },
+  {
+    "id": "B03",
+    "title": "تصفية الإعلانات",
+    "theme": "dark",
+    "file": "B03-dark.html"
+  },
+  {
+    "id": "B04",
+    "title": "ترتيب النتائج",
+    "theme": "light",
+    "file": "B04-light.html"
+  },
+  {
+    "id": "B04",
+    "title": "ترتيب النتائج",
+    "theme": "dark",
+    "file": "B04-dark.html"
+  },
+  {
+    "id": "B05",
+    "title": "اختيار المنطقة والمدينة",
+    "theme": "light",
+    "file": "B05-light.html"
+  },
+  {
+    "id": "B05",
+    "title": "اختيار المنطقة والمدينة",
+    "theme": "dark",
+    "file": "B05-dark.html"
+  },
+  {
+    "id": "B06",
+    "title": "الخريطة والقريب",
+    "theme": "light",
+    "file": "B06-light.html"
+  },
+  {
+    "id": "B06",
+    "title": "الخريطة والقريب",
+    "theme": "dark",
+    "file": "B06-dark.html"
+  },
+  {
+    "id": "B07",
+    "title": "تحديد مركز البحث",
+    "theme": "light",
+    "file": "B07-light.html"
+  },
+  {
+    "id": "B07",
+    "title": "تحديد مركز البحث",
+    "theme": "dark",
+    "file": "B07-dark.html"
+  },
+  {
+    "id": "B08",
+    "title": "لا توجد نتائج",
+    "theme": "light",
+    "file": "B08-light.html"
+  },
+  {
+    "id": "B08",
+    "title": "لا توجد نتائج",
+    "theme": "dark",
+    "file": "B08-dark.html"
+  },
+  {
+    "id": "B09",
+    "title": "المفضلة",
+    "theme": "light",
+    "file": "B09-light.html"
+  },
+  {
+    "id": "B09",
+    "title": "المفضلة",
+    "theme": "dark",
+    "file": "B09-dark.html"
+  },
+  {
+    "id": "C01",
+    "title": "تفاصيل إعلان بسعر محدد",
+    "theme": "light",
+    "file": "C01-light.html"
+  },
+  {
+    "id": "C01",
+    "title": "تفاصيل إعلان بسعر محدد",
+    "theme": "dark",
+    "file": "C01-dark.html"
+  },
+  {
+    "id": "C02",
+    "title": "تفاصيل مزاد حضوري",
+    "theme": "light",
+    "file": "C02-light.html"
+  },
+  {
+    "id": "C02",
+    "title": "تفاصيل مزاد حضوري",
+    "theme": "dark",
+    "file": "C02-dark.html"
+  },
+  {
+    "id": "C03",
+    "title": "مضى موعد المزاد",
+    "theme": "light",
+    "file": "C03-light.html"
+  },
+  {
+    "id": "C03",
+    "title": "مضى موعد المزاد",
+    "theme": "dark",
+    "file": "C03-dark.html"
+  },
+  {
+    "id": "C04",
+    "title": "صور وفيديو الإعلان",
+    "theme": "light",
+    "file": "C04-light.html"
+  },
+  {
+    "id": "C04",
+    "title": "صور وفيديو الإعلان",
+    "theme": "dark",
+    "file": "C04-dark.html"
+  },
+  {
+    "id": "C05",
+    "title": "خيارات التواصل والمشاركة",
+    "theme": "light",
+    "file": "C05-light.html"
+  },
+  {
+    "id": "C05",
+    "title": "خيارات التواصل والمشاركة",
+    "theme": "dark",
+    "file": "C05-dark.html"
+  },
+  {
+    "id": "C06",
+    "title": "ملف المعلن",
+    "theme": "light",
+    "file": "C06-light.html"
+  },
+  {
+    "id": "C06",
+    "title": "ملف المعلن",
+    "theme": "dark",
+    "file": "C06-dark.html"
+  },
+  {
+    "id": "C07",
+    "title": "أسئلة الإعلان",
+    "theme": "light",
+    "file": "C07-light.html"
+  },
+  {
+    "id": "C07",
+    "title": "أسئلة الإعلان",
+    "theme": "dark",
+    "file": "C07-dark.html"
+  },
+  {
+    "id": "C08",
+    "title": "إضافة سؤال أو تعديله",
+    "theme": "light",
+    "file": "C08-light.html"
+  },
+  {
+    "id": "C08",
+    "title": "إضافة سؤال أو تعديله",
+    "theme": "dark",
+    "file": "C08-dark.html"
+  },
+  {
+    "id": "C09",
+    "title": "الإعلان غير متاح",
+    "theme": "light",
+    "file": "C09-light.html"
+  },
+  {
+    "id": "C09",
+    "title": "الإعلان غير متاح",
+    "theme": "dark",
+    "file": "C09-dark.html"
+  },
+  {
+    "id": "D01",
+    "title": "أضف إعلان — نوع العرض",
+    "theme": "light",
+    "file": "D01-light.html"
+  },
+  {
+    "id": "D01",
+    "title": "أضف إعلان — نوع العرض",
+    "theme": "dark",
+    "file": "D01-dark.html"
+  },
+  {
+    "id": "D02",
+    "title": "بيانات الإبل",
+    "theme": "light",
+    "file": "D02-light.html"
+  },
+  {
+    "id": "D02",
+    "title": "بيانات الإبل",
+    "theme": "dark",
+    "file": "D02-dark.html"
+  },
+  {
+    "id": "D03",
+    "title": "الوصف والحالة الصحية",
+    "theme": "light",
+    "file": "D03-light.html"
+  },
+  {
+    "id": "D03",
+    "title": "الوصف والحالة الصحية",
+    "theme": "dark",
+    "file": "D03-dark.html"
+  },
+  {
+    "id": "D04",
+    "title": "موقع الإعلان",
+    "theme": "light",
+    "file": "D04-light.html"
+  },
+  {
+    "id": "D04",
+    "title": "موقع الإعلان",
+    "theme": "dark",
+    "file": "D04-dark.html"
+  },
+  {
+    "id": "D05",
+    "title": "السعر المطلوب",
+    "theme": "light",
+    "file": "D05-light.html"
+  },
+  {
+    "id": "D05",
+    "title": "السعر المطلوب",
+    "theme": "dark",
+    "file": "D05-dark.html"
+  },
+  {
+    "id": "D06",
+    "title": "موعد ومكان المزاد",
+    "theme": "light",
+    "file": "D06-light.html"
+  },
+  {
+    "id": "D06",
+    "title": "موعد ومكان المزاد",
+    "theme": "dark",
+    "file": "D06-dark.html"
+  },
+  {
+    "id": "D07",
+    "title": "صور الإعلان والفيديو",
+    "theme": "light",
+    "file": "D07-light.html"
+  },
+  {
+    "id": "D07",
+    "title": "صور الإعلان والفيديو",
+    "theme": "dark",
+    "file": "D07-dark.html"
+  },
+  {
+    "id": "D08",
+    "title": "رقم التواصل والموافقة",
+    "theme": "light",
+    "file": "D08-light.html"
+  },
+  {
+    "id": "D08",
+    "title": "رقم التواصل والموافقة",
+    "theme": "dark",
+    "file": "D08-dark.html"
+  },
+  {
+    "id": "D09",
+    "title": "معاينة إعلان بسعر محدد",
+    "theme": "light",
+    "file": "D09-light.html"
+  },
+  {
+    "id": "D09",
+    "title": "معاينة إعلان بسعر محدد",
+    "theme": "dark",
+    "file": "D09-dark.html"
+  },
+  {
+    "id": "D10",
+    "title": "معاينة إعلان مزاد حضوري",
+    "theme": "light",
+    "file": "D10-light.html"
+  },
+  {
+    "id": "D10",
+    "title": "معاينة إعلان مزاد حضوري",
+    "theme": "dark",
+    "file": "D10-dark.html"
+  },
+  {
+    "id": "D11",
+    "title": "تم إرسال الإعلان للمراجعة",
+    "theme": "light",
+    "file": "D11-light.html"
+  },
+  {
+    "id": "D11",
+    "title": "تم إرسال الإعلان للمراجعة",
+    "theme": "dark",
+    "file": "D11-dark.html"
+  },
+  {
+    "id": "D12",
+    "title": "مغادرة وحفظ المسودة",
+    "theme": "light",
+    "file": "D12-light.html"
+  },
+  {
+    "id": "D12",
+    "title": "مغادرة وحفظ المسودة",
+    "theme": "dark",
+    "file": "D12-dark.html"
+  },
+  {
+    "id": "E01",
+    "title": "إعلاناتي",
+    "theme": "light",
+    "file": "E01-light.html"
+  },
+  {
+    "id": "E01",
+    "title": "إعلاناتي",
+    "theme": "dark",
+    "file": "E01-dark.html"
+  },
+  {
+    "id": "E02",
+    "title": "مسودة محفوظة",
+    "theme": "light",
+    "file": "E02-light.html"
+  },
+  {
+    "id": "E02",
+    "title": "مسودة محفوظة",
+    "theme": "dark",
+    "file": "E02-dark.html"
+  },
+  {
+    "id": "E03",
+    "title": "إعلان قيد المراجعة",
+    "theme": "light",
+    "file": "E03-light.html"
+  },
+  {
+    "id": "E03",
+    "title": "إعلان قيد المراجعة",
+    "theme": "dark",
+    "file": "E03-dark.html"
+  },
+  {
+    "id": "E04",
+    "title": "إعلان مرفوض",
+    "theme": "light",
+    "file": "E04-light.html"
+  },
+  {
+    "id": "E04",
+    "title": "إعلان مرفوض",
+    "theme": "dark",
+    "file": "E04-dark.html"
+  },
+  {
+    "id": "E05",
+    "title": "إعلان منشور",
+    "theme": "light",
+    "file": "E05-light.html"
+  },
+  {
+    "id": "E05",
+    "title": "إعلان منشور",
+    "theme": "dark",
+    "file": "E05-dark.html"
+  },
+  {
+    "id": "E06",
+    "title": "تجديد الظهور غير متاح بعد",
+    "theme": "light",
+    "file": "E06-light.html"
+  },
+  {
+    "id": "E06",
+    "title": "تجديد الظهور غير متاح بعد",
+    "theme": "dark",
+    "file": "E06-dark.html"
+  },
+  {
+    "id": "E07",
+    "title": "تعديل إعلان منشور",
+    "theme": "light",
+    "file": "E07-light.html"
+  },
+  {
+    "id": "E07",
+    "title": "تعديل إعلان منشور",
+    "theme": "dark",
+    "file": "E07-dark.html"
+  },
+  {
+    "id": "E08",
+    "title": "إيقاف الإعلان وأرشفته",
+    "theme": "light",
+    "file": "E08-light.html"
+  },
+  {
+    "id": "E08",
+    "title": "إيقاف الإعلان وأرشفته",
+    "theme": "dark",
+    "file": "E08-dark.html"
+  },
+  {
+    "id": "E09",
+    "title": "مؤرشف أو مخفي إداريًا",
+    "theme": "light",
+    "file": "E09-light.html"
+  },
+  {
+    "id": "E09",
+    "title": "مؤرشف أو مخفي إداريًا",
+    "theme": "dark",
+    "file": "E09-dark.html"
+  },
+  {
+    "id": "F01",
+    "title": "الرسائل",
+    "theme": "light",
+    "file": "F01-light.html"
+  },
+  {
+    "id": "F01",
+    "title": "الرسائل",
+    "theme": "dark",
+    "file": "F01-dark.html"
+  },
+  {
+    "id": "F02",
+    "title": "المحادثة",
+    "theme": "light",
+    "file": "F02-light.html"
+  },
+  {
+    "id": "F02",
+    "title": "المحادثة",
+    "theme": "dark",
+    "file": "F02-dark.html"
+  },
+  {
+    "id": "F03",
+    "title": "محادثة للقراءة فقط",
+    "theme": "light",
+    "file": "F03-light.html"
+  },
+  {
+    "id": "F03",
+    "title": "محادثة للقراءة فقط",
+    "theme": "dark",
+    "file": "F03-dark.html"
+  },
+  {
+    "id": "F04",
+    "title": "حظر المستخدم",
+    "theme": "light",
+    "file": "F04-light.html"
+  },
+  {
+    "id": "F04",
+    "title": "حظر المستخدم",
+    "theme": "dark",
+    "file": "F04-dark.html"
+  },
+  {
+    "id": "F05",
+    "title": "تقييمات المعلن",
+    "theme": "light",
+    "file": "F05-light.html"
+  },
+  {
+    "id": "F05",
+    "title": "تقييمات المعلن",
+    "theme": "dark",
+    "file": "F05-dark.html"
+  },
+  {
+    "id": "F06",
+    "title": "إضافة أو تعديل تقييم",
+    "theme": "light",
+    "file": "F06-light.html"
+  },
+  {
+    "id": "F06",
+    "title": "إضافة أو تعديل تقييم",
+    "theme": "dark",
+    "file": "F06-dark.html"
+  },
+  {
+    "id": "F07",
+    "title": "التقييم غير متاح الآن",
+    "theme": "light",
+    "file": "F07-light.html"
+  },
+  {
+    "id": "F07",
+    "title": "التقييم غير متاح الآن",
+    "theme": "dark",
+    "file": "F07-dark.html"
+  },
+  {
+    "id": "F08",
+    "title": "رد المعلن واعتراض على تقييم",
+    "theme": "light",
+    "file": "F08-light.html"
+  },
+  {
+    "id": "F08",
+    "title": "رد المعلن واعتراض على تقييم",
+    "theme": "dark",
+    "file": "F08-dark.html"
+  },
+  {
+    "id": "F09",
+    "title": "الإبلاغ عن محتوى",
+    "theme": "light",
+    "file": "F09-light.html"
+  },
+  {
+    "id": "F09",
+    "title": "الإبلاغ عن محتوى",
+    "theme": "dark",
+    "file": "F09-dark.html"
+  },
+  {
+    "id": "F10",
+    "title": "بلاغاتي وتفاصيل البلاغ",
+    "theme": "light",
+    "file": "F10-light.html"
+  },
+  {
+    "id": "F10",
+    "title": "بلاغاتي وتفاصيل البلاغ",
+    "theme": "dark",
+    "file": "F10-dark.html"
+  },
+  {
+    "id": "G01",
+    "title": "حسابي",
+    "theme": "light",
+    "file": "G01-light.html"
+  },
+  {
+    "id": "G01",
+    "title": "حسابي",
+    "theme": "dark",
+    "file": "G01-dark.html"
+  },
+  {
+    "id": "G02",
+    "title": "تعديل الملف الشخصي",
+    "theme": "light",
+    "file": "G02-light.html"
+  },
+  {
+    "id": "G02",
+    "title": "تعديل الملف الشخصي",
+    "theme": "dark",
+    "file": "G02-dark.html"
+  },
+  {
+    "id": "G03",
+    "title": "المتابعات والبحث المحفوظ",
+    "theme": "light",
+    "file": "G03-light.html"
+  },
+  {
+    "id": "G03",
+    "title": "المتابعات والبحث المحفوظ",
+    "theme": "dark",
+    "file": "G03-dark.html"
+  },
+  {
+    "id": "G04",
+    "title": "الإشعارات",
+    "theme": "light",
+    "file": "G04-light.html"
+  },
+  {
+    "id": "G04",
+    "title": "الإشعارات",
+    "theme": "dark",
+    "file": "G04-dark.html"
+  },
+  {
+    "id": "G05",
+    "title": "إعدادات الإشعارات",
+    "theme": "light",
+    "file": "G05-light.html"
+  },
+  {
+    "id": "G05",
+    "title": "إعدادات الإشعارات",
+    "theme": "dark",
+    "file": "G05-dark.html"
+  },
+  {
+    "id": "G06",
+    "title": "الإعدادات والمظهر",
+    "theme": "light",
+    "file": "G06-light.html"
+  },
+  {
+    "id": "G06",
+    "title": "الإعدادات والمظهر",
+    "theme": "dark",
+    "file": "G06-dark.html"
+  },
+  {
+    "id": "G07",
+    "title": "إدارة أرقام وموافقات التواصل",
+    "theme": "light",
+    "file": "G07-light.html"
+  },
+  {
+    "id": "G07",
+    "title": "إدارة أرقام وموافقات التواصل",
+    "theme": "dark",
+    "file": "G07-dark.html"
+  },
+  {
+    "id": "G08",
+    "title": "المستخدمون المحظورون",
+    "theme": "light",
+    "file": "G08-light.html"
+  },
+  {
+    "id": "G08",
+    "title": "المستخدمون المحظورون",
+    "theme": "dark",
+    "file": "G08-dark.html"
+  },
+  {
+    "id": "G09",
+    "title": "الشروط والخصوصية والمساعدة",
+    "theme": "light",
+    "file": "G09-light.html"
+  },
+  {
+    "id": "G09",
+    "title": "الشروط والخصوصية والمساعدة",
+    "theme": "dark",
+    "file": "G09-dark.html"
+  },
+  {
+    "id": "G10",
+    "title": "تسجيل الخروج وإغلاق الحساب",
+    "theme": "light",
+    "file": "G10-light.html"
+  },
+  {
+    "id": "G10",
+    "title": "تسجيل الخروج وإغلاق الحساب",
+    "theme": "dark",
+    "file": "G10-dark.html"
+  },
+  {
+    "id": "H01",
+    "title": "توثيق الحساب",
+    "theme": "light",
+    "file": "H01-light.html"
+  },
+  {
+    "id": "H01",
+    "title": "توثيق الحساب",
+    "theme": "dark",
+    "file": "H01-dark.html"
+  },
+  {
+    "id": "H02",
+    "title": "توثيق الهوية",
+    "theme": "light",
+    "file": "H02-light.html"
+  },
+  {
+    "id": "H02",
+    "title": "توثيق الهوية",
+    "theme": "dark",
+    "file": "H02-dark.html"
+  },
+  {
+    "id": "H03",
+    "title": "توثيق النشاط",
+    "theme": "light",
+    "file": "H03-light.html"
+  },
+  {
+    "id": "H03",
+    "title": "توثيق النشاط",
+    "theme": "dark",
+    "file": "H03-dark.html"
+  },
+  {
+    "id": "H04",
+    "title": "حالة طلب التوثيق",
+    "theme": "light",
+    "file": "H04-light.html"
+  },
+  {
+    "id": "H04",
+    "title": "حالة طلب التوثيق",
+    "theme": "dark",
+    "file": "H04-dark.html"
+  },
+  {
+    "id": "H05",
+    "title": "التحميل وإعادة المحاولة",
+    "theme": "light",
+    "file": "H05-light.html"
+  },
+  {
+    "id": "H05",
+    "title": "التحميل وإعادة المحاولة",
+    "theme": "dark",
+    "file": "H05-dark.html"
+  },
+  {
+    "id": "H06",
+    "title": "أنت غير متصل",
+    "theme": "light",
+    "file": "H06-light.html"
+  },
+  {
+    "id": "H06",
+    "title": "أنت غير متصل",
+    "theme": "dark",
+    "file": "H06-dark.html"
+  },
+  {
+    "id": "H07",
+    "title": "قائمة فارغة",
+    "theme": "light",
+    "file": "H07-light.html"
+  },
+  {
+    "id": "H07",
+    "title": "قائمة فارغة",
+    "theme": "dark",
+    "file": "H07-dark.html"
+  },
+  {
+    "id": "H08",
+    "title": "الحساب موقوف",
+    "theme": "light",
+    "file": "H08-light.html"
+  },
+  {
+    "id": "H08",
+    "title": "الحساب موقوف",
+    "theme": "dark",
+    "file": "H08-dark.html"
+  },
+  {
+    "id": "H09",
+    "title": "صلاحيات الصور والموقع والتنبيهات",
+    "theme": "light",
+    "file": "H09-light.html"
+  },
+  {
+    "id": "H09",
+    "title": "صلاحيات الصور والموقع والتنبيهات",
+    "theme": "dark",
+    "file": "H09-dark.html"
+  },
+  {
+    "id": "H10",
+    "title": "تأكيد النجاح أو فشل الحفظ",
+    "theme": "light",
+    "file": "H10-light.html"
+  },
+  {
+    "id": "H10",
+    "title": "تأكيد النجاح أو فشل الحفظ",
+    "theme": "dark",
+    "file": "H10-dark.html"
+  }
+]

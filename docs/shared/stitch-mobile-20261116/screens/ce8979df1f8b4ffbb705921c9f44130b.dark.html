@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html data-theme="dark" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>نوادر الإبل - حسابي</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error-container": "#93000a",
+            "info-light": "#528AA9",
+            "border-dark": "#3B504B",
+            "inverse-on-surface": "#faefe6",
+            "text-light": "#2D241B",
+            "tertiary": "#236185",
+            "on-primary-container": "#fffbff",
+            "surface-container-high": "#f1e6de",
+            "primary-fixed-dim": "#f8bb74",
+            "tertiary-container": "#417a9f",
+            "on-tertiary-fixed-variant": "#004c6d",
+            "error-dark": "#E17B75",
+            "surface-container-highest": "#ebe1d8",
+            "surface-tint": "#825517",
+            "surface-container-lowest": "#ffffff",
+            "on-background": "#201b16",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#2b1700",
+            "surface": "#fff8f4",
+            "info-dark": "#83A9D8",
+            "primary-container": "#9c6a2b",
+            "secondary-fixed-dim": "#d3c4b5",
+            "border-light": "#E4D5C0",
+            "secondary-container": "#f0e0d0",
+            "surface-dark": "#202D2D",
+            "on-error": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "muted-dark": "#AABAB3",
+            "muted-light": "#817568",
+            "warning-light": "#C88926",
+            "on-secondary-fixed-variant": "#4f453a",
+            "surface-dim": "#e3d8d0",
+            "on-surface": "#201b16",
+            "tertiary-fixed": "#c8e6ff",
+            "text-dark": "#F6EEE0",
+            "secondary": "#685d50",
+            "surface-variant": "#ebe1d8",
+            "tertiary-fixed-dim": "#95cdf5",
+            "on-secondary-container": "#6e6356",
+            "on-surface-variant": "#504539",
+            "secondary-fixed": "#f0e0d0",
+            "background-light": "#F8F3EA",
+            "inverse-primary": "#f8bb74",
+            "primary-fixed": "#ffddb9",
+            "on-secondary-fixed": "#221a11",
+            "background-dark": "#111B1C",
+            "inverse-surface": "#352f2a",
+            "on-secondary": "#ffffff",
+            "success-dark": "#53BE90",
+            "primary": "#7f5214",
+            "background": "#fff8f4",
+            "on-primary-fixed-variant": "#663e00",
+            "primary-dark": "#E4BC7B",
+            "error": "#ba1a1a",
+            "outline-variant": "#d5c4b4",
+            "error-container": "#ffdad6",
+            "surface-bright": "#fff8f4",
+            "warning-dark": "#E1AA4A",
+            "on-tertiary-container": "#fcfcff",
+            "surface-container-low": "#fdf2e9",
+            "outline": "#837567",
+            "error-light": "#C95D59",
+            "success-light": "#2F936A",
+            "surface-container": "#f7ece3",
+            "surface-light": "#FFFCF8",
+            "on-tertiary-fixed": "#001e2e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter": "1rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.25rem",
+            "space-xl": "1.5rem",
+            "margin": "1.25rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Noto Sans Arabic"],
+            "body-lg": ["Noto Sans Arabic"],
+            "headline-sm": ["Noto Sans Arabic"],
+            "headline-md": ["Noto Sans Arabic"],
+            "caption": ["Noto Sans Arabic"],
+            "label-lg": ["Noto Sans Arabic"],
+            "body-md": ["Noto Sans Arabic"],
+            "label-md": ["Noto Sans Arabic"]
+          },
+          "fontSize": {
+            "headline-lg": ["28px", { "lineHeight": "38px", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "caption": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["16px", { "lineHeight": "22px", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style id="nawader-brand-final">
+    :root{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}
+    html,body{background:var(--brand-bg)!important;color:var(--brand-text)!important;max-width:100%;font-family:'Noto Sans Arabic',sans-serif!important;user-select:text!important}
+    body{margin:0!important;min-height:100dvh!important;font-size:18px;line-height:1.65}
+    *{box-sizing:border-box} img{max-width:100%} p,label,input,select,textarea{font-family:inherit;font-size:18px} h1{font-size:26px;line-height:1.6} h2{font-size:22px;line-height:1.6}
+    button,a[role=button]{min-height:48px!important;min-width:48px;white-space:normal!important;font-family:inherit;touch-action:manipulation}button:not([aria-label]){font-size:20px;font-weight:700}
+    input:not([type=checkbox]):not([type=radio]),select{min-height:56px}input[type=checkbox],input[type=radio]{width:24px;min-width:24px;height:24px;accent-color:var(--brand-gold)}
+    :focus-visible{outline:3px solid var(--brand-text)!important;outline-offset:3px} [class~="truncate"]{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+    [class~="bg-background"],[class~="bg-background-light"],[class~="bg-background-dark"]{background-color:var(--brand-bg)!important}
+    [class~="bg-surface"],[class~="bg-surface-light"],[class~="bg-surface-dark"],[class~="bg-surface-container"],[class~="bg-surface-container-low"],[class~="bg-surface-container-high"],[class~="bg-surface-container-highest"]{background-color:var(--brand-surface)!important}
+    [class~="text-text-light"],[class~="text-text-dark"],[class~="text-on-surface"],[class~="text-on-background"],[class~="text-secondary"],[class~="text-on-surface-variant"],[class~="text-primary"]{color:var(--brand-text)!important}
+    [class~="bg-primary"],[class~="bg-primary-container"]{background-color:var(--brand-gold)!important;color:#2D241B!important;font-size:20px!important;font-weight:700!important}
+    [class~="bg-primary"] span,[class~="bg-primary-container"] span{color:inherit!important}
+    [class~="border-border-light"],[class~="border-border-dark"],[class~="border-outline-variant"]{border-color:var(--brand-border)!important}
+    .simple-shell{width:100%;max-width:430px;min-height:100dvh;margin:auto;background:var(--brand-bg);padding:20px;display:flex;flex-direction:column}
+    .simple-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px}.simple-header button{width:auto;padding:0 18px}
+    .simple-content{display:flex;flex-direction:column;gap:20px;padding-top:20px;padding-bottom:30px}.simple-content h1,.simple-content p,.simple-content h2{margin:0}
+    .field{display:flex;flex-direction:column;gap:10px;font-weight:600}.field input,.field select{width:100%;padding:12px;border:2px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);color:var(--brand-text)}
+    .action{width:100%;min-height:56px;padding:12px 16px;border:2px solid var(--brand-gold);border-radius:12px;background:var(--brand-gold);color:#2D241B;font-size:20px;font-weight:700}
+    .secondary{background:var(--brand-surface);color:var(--brand-text)}.helper{font-size:16px;line-height:1.7;color:var(--brand-text)}
+    .consent{display:flex;align-items:flex-start;gap:14px;min-height:56px;padding:14px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .notice{padding:20px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .welcome{align-items:center;text-align:center;justify-content:center;gap:24px;padding-top:40px;padding-bottom:32px}.welcome-logo{width:216px;height:216px;object-fit:contain}.welcome h1{margin:0;font-size:26px}.welcome p{margin:0;max-width:320px}.welcome-actions{width:100%;display:flex;flex-direction:column;gap:16px;margin-top:32px}
+    .home-shell{width:100%;max-width:430px;margin:auto;padding-bottom:100px}.home-header{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--brand-surface)}.home-header h1{font-size:22px;flex:1;margin:0}.small-action{border:0;border-radius:10px;font-size:16px!important;padding:8px;color:var(--brand-text)}.home-content{padding:20px;display:flex;flex-direction:column;gap:20px}.home-content>h2{margin:0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.home-tools .action{font-size:18px;padding:8px}.ad-card{border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);overflow:hidden}.ad-photo{width:100%;height:180px;object-fit:cover}.ad-content{padding:16px;display:flex;flex-direction:column;gap:10px}.ad-content h2,.ad-content p{margin:0}.price{font-size:26px;font-weight:700}.offer-label{font-size:16px}.simple-bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--brand-surface);border-top:1px solid var(--brand-border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:50}.simple-bottom button{font-size:14px!important;font-weight:600;padding:6px 2px;background:none;border:0;border-radius:8px;color:var(--brand-text)}.simple-bottom [aria-current]{background:var(--brand-bg);border:1px solid var(--brand-gold)}
+    @media(min-width:600px){body{padding:0!important}} @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    </style><style id="nawader-dark-mode">html[data-theme=dark]{--brand-bg:#111B1C;--brand-surface:#202D2D;--brand-gold:#E4BC7B;--brand-text:#F6EEE0;--brand-muted:#AABAB3;--brand-border:#3B504B}html[data-theme=light]{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}html[data-theme=dark] .bg-white,html[data-theme=dark] .bg-slate-50,html[data-theme=dark] .bg-gray-50{background-color:var(--brand-surface)!important}html[data-theme=dark] .action:not(.secondary),html[data-theme=dark] [class~=bg-primary],html[data-theme=dark] [class~=bg-primary-container]{color:#111B1C!important}html[data-theme=light] .action:not(.secondary),html[data-theme=light] [class~=bg-primary],html[data-theme=light] [class~=bg-primary-container]{color:#2D241B!important}</style></head>
+<body class="bg-background-light text-text-light font-body-md antialiased min-h-screen pb-32">
+<!-- Mobile Viewport Container (Single column layout) -->
+<div class="w-full max-w-md mx-auto min-h-screen flex flex-col bg-background-light">
+<!-- Top App Bar -->
+<header class="bg-surface-light border-b border-border-light sticky top-0 z-40">
+<div class="w-full max-w-md mx-auto flex justify-between items-center px-margin py-space-sm h-16">
+<button aria-label="رجوع" class="p-space-xs text-primary rounded-lg active:scale-95 transition-transform duration-150 flex items-center justify-center min-w-[48px] min-h-[48px]" type="button">
+<span class="material-symbols-outlined text-3xl" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary font-bold">
+          حسابي
+        </h1>
+<button aria-label="الإشعارات والتنبيهات" class="relative p-space-xs text-primary rounded-lg active:scale-95 transition-transform duration-150 flex items-center justify-center min-w-[48px] min-h-[48px]" type="button">
+<span class="material-symbols-outlined text-3xl" data-icon="notifications">notifications</span>
+<span class="absolute top-2 left-2 w-3 h-3 bg-error rounded-full ring-2 ring-surface-light"></span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 px-margin py-space-lg flex flex-col gap-space-lg">
+<!-- Profile Header / Welcome Card -->
+<section class="bg-surface-light border-2 border-border-light rounded-xl p-space-lg flex flex-col gap-space-md shadow-sm">
+<div class="flex items-center gap-space-md">
+<div class="relative w-20 h-20 rounded-full border-2 border-primary-container p-1 bg-surface-container-low shrink-0 flex items-center justify-center overflow-hidden">
+<img alt="صورة المستخدم الشخصية" class="w-full h-full object-cover rounded-full" data-alt="A dignified close-up portrait of an elderly Saudi camel owner wearing a traditional pristine white ghutra and brown embroidered bisht, smiling with calm wisdom against a warm golden desert sunset background, highly detailed realistic lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqRkYClUxzbUmqMVa2c1bmdcPgs1lSyYHptLh3w-eUi-1S4u9cS2rQqwrELuiicOGjUrXnJf6vWt7JQqqqIDMsmRqeTtcqCBGCUkK4sdmapB2VwYz7-pzkNrowWjVQHzkcAOpeoggeRDyY_Izei_yehrpK5e0jyugH0zT0pwmV0qnnHxtn_R1AHo4n4b1FYxvdmaBqgHnSrxeh_0BCDnThnS4s_aX4a5s93HnxN7tEBx37jGOOBvsqXXMThfPGdYy9EkPYqp3Bpl8"/>
+<span class="absolute bottom-0 right-0 bg-success-light text-on-primary rounded-full p-0.5 flex items-center justify-center ring-2 ring-surface-light">
+<span class="material-symbols-outlined text-lg" data-icon="verified" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified</span>
+</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1 mb-1">
+<h2 class="font-headline-sm text-headline-sm text-text-light font-bold truncate">سعود بن فهد الدوسري</h2>
+</div>
+<!-- Phone Number (LTR isolated) -->
+<div class="flex items-center gap-1.5 text-muted-light font-body-md mb-2">
+<span class="material-symbols-outlined text-xl" data-icon="call">call</span>
+<span class="font-bold tracking-wider text-text-light font-headline-sm text-lg" dir="ltr">050 ••• •321</span>
+</div>
+<!-- Badges -->
+<div class="flex flex-wrap gap-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-surface-container rounded-lg border border-border-light text-caption font-bold text-success-light">
+<span class="material-symbols-outlined text-base" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>هاتف مؤكد</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-surface-container rounded-lg border border-border-light text-caption font-bold text-primary">
+<span class="material-symbols-outlined text-base" data-icon="verified_user" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span>هوية موثقة عبر نفاذ</span>
+</span>
+</div>
+</div>
+</div>
+<!-- Edit Profile Primary Button -->
+<a class="w-full h-14 bg-surface-container border-2 border-border-light hover:bg-surface-container-high text-primary font-headline-sm text-headline-sm flex items-center justify-center gap-2 rounded-xl active:scale-95 transition-transform duration-150" href="#edit-profile">
+<span class="material-symbols-outlined text-2xl" data-icon="edit_note">edit_note</span>
+<span>تعديل بيانات الملف الشخصي</span>
+</a>
+</section>
+<!-- Section Title -->
+<div class="flex items-center justify-between pt-space-xs">
+<h3 class="font-headline-sm text-headline-sm text-text-light font-bold">الخدمات وإدارة الحساب</h3>
+<span class="text-caption text-muted-light font-bold">محدد وميسّر</span>
+</div>
+<!-- Settings Menu List (Cards) -->
+<nav aria-label="قائمة عناصر الحساب" class="flex flex-col gap-3">
+<!-- 1. إعلاناتي -->
+<a class="group bg-surface-light border-2 border-border-light hover:border-primary-container p-space-md rounded-xl flex items-center justify-between min-h-[64px] active:scale-[0.98] transition-all duration-150" href="#my-ads">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 border border-border-light">
+<span class="material-symbols-outlined text-3xl" data-icon="inventory_2">inventory_2</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-text-light font-bold">إعلاناتي</p>
+<p class="text-caption text-muted-light">متابعة الحلال المعروض وحالات الإعلانات</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 bg-secondary-container text-primary font-label-md text-label-md rounded-lg font-bold border border-border-light">
+              6 إعلانات
+            </span>
+<span class="material-symbols-outlined text-2xl text-muted-light rotate-180" data-icon="arrow_back_ios">arrow_back_ios</span>
+</div>
+</a>
+<!-- 2. المتابعات وعمليات البحث المحفوظة -->
+<a class="group bg-surface-light border-2 border-border-light hover:border-primary-container p-space-md rounded-xl flex items-center justify-between min-h-[64px] active:scale-[0.98] transition-all duration-150" href="#saved-searches">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 border border-border-light">
+<span class="material-symbols-outlined text-3xl" data-icon="bookmark">bookmark</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-text-light font-bold">المتابعات والبحث المحفوظ</p>
+<p class="text-caption text-muted-light">تنبيهات السلالات ومربّي الإبل المفضلين</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-2xl text-muted-light rotate-180" data-icon="arrow_back_ios">arrow_back_ios</span>
+</a>
+<!-- 3. الإشعارات والتنبيهات -->
+<a class="group bg-surface-light border-2 border-border-light hover:border-primary-container p-space-md rounded-xl flex items-center justify-between min-h-[64px] active:scale-[0.98] transition-all duration-150" href="#notifications">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 border border-border-light">
+<span class="material-symbols-outlined text-3xl" data-icon="notifications_active">notifications_active</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-text-light font-bold">الإشعارات والتنبيهات</p>
+<p class="text-caption text-muted-light">رسائل الإدارة وحالات المزادات والردود</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-primary rounded-full"></span>
+<span class="material-symbols-outlined text-2xl text-muted-light rotate-180" data-icon="arrow_back_ios">arrow_back_ios</span>
+</div>
+</a>
+<!-- 4. إدارة أرقام وموافقات التواصل -->
+<a class="group bg-surface-light border-2 border-border-light hover:border-primary-container p-space-md rounded-xl flex items-center justify-between min-h-[64px] active:scale-[0.98] transition-all duration-150" href="#contact-settings">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 border border-border-light">
+<span class="material-symbols-outlined text-3xl" data-icon="contact_phone">contact_phone</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-text-light font-bold">أرقام وموافقات التواصل</p>
+<p class="text-caption text-muted-light">أرقام الاتصال والواتساب وموافقات النشر</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-2xl text-muted-light rotate-180" data-icon="arrow_back_ios">arrow_back_ios</span>
+</a>
+<!-- 5. توثيق الهوية والنشاط التجاري -->
+<a class="group bg-surface-light border-2 border-border-light hover:border-primary-container p-space-md rounded-xl flex items-center justify-between min-h-[64px] active:scale-[0.98] transition-all duration-150" href="#verification">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 border border-border-light">
+<span class="material-symbols-outlined text-3xl" data-icon="id_card">id_card</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-text-light font-bold">توثيق الهوية والتجارة</p>
+<p class="text-caption text-muted-light">التحقق عبر منصة نفاذ الرسمية ومزاولة المهنة</p>
+</div>
+</div>
+<div class="flex items-center gap-1.5 text-success-light">
+<span class="text-caption font-bold">مكتمل</span>
+<span class="material-symbols-outlined text-2xl text-muted-light rotate-180" data-icon="arrow_back_ios">arrow_back_ios</span>
+</div>
+</a>
+<!-- 6. البلاغات والشكاوى المسجلة -->
+<a class="group bg-surface-light border-2 border-border-light hover:border-primary-container p-space-md rounded-xl flex items-center justify-between min-h-[64px] active:scale-[0.98] transition-all duration-150" href="#reports">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 border border-border-light">
+<span class="material-symbols-outlined text-3xl" data-icon="report_problem">report_problem</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-text-light font-bold">البلاغات والشكاوى المسجلة</p>
+<p class="text-caption text-muted-light">متابعة حالة الشكاوى والتواصل مع المشرفين</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-2xl text-muted-light rotate-180" data-icon="arrow_back_ios">arrow_back_ios</span>
+</a>
+<!-- 7. قائمة المستخدمين المحظورين -->
+<a class="group bg-surface-light border-2 border-border-light hover:border-primary-container p-space-md rounded-xl flex items-center justify-between min-h-[64px] active:scale-[0.98] transition-all duration-150" href="#blocked-users">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 border border-border-light">
+<span class="material-symbols-outlined text-3xl" data-icon="block">block</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-text-light font-bold">المستخدمون المحظورون</p>
+<p class="text-caption text-muted-light">إدارة الحظر ومنع التواصل</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-2xl text-muted-light rotate-180" data-icon="arrow_back_ios">arrow_back_ios</span>
+</a>
+<!-- 8. الإعدادات والمظهر -->
+<a class="group bg-surface-light border-2 border-border-light hover:border-primary-container p-space-md rounded-xl flex items-center justify-between min-h-[64px] active:scale-[0.98] transition-all duration-150" href="#display-settings">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 border border-border-light">
+<span class="material-symbols-outlined text-3xl" data-icon="tune">tune</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-text-light font-bold">الإعدادات وحجم الخط</p>
+<p class="text-caption text-muted-light">الوضع الليلي والنهاري وتكبير الخط للقراءة</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-2xl text-muted-light rotate-180" data-icon="arrow_back_ios">arrow_back_ios</span>
+</a>
+<!-- 9. الشروط وسياسة الخصوصية والمساعدة -->
+<a class="group bg-surface-light border-2 border-border-light hover:border-primary-container p-space-md rounded-xl flex items-center justify-between min-h-[64px] active:scale-[0.98] transition-all duration-150" href="#terms-help">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0 border border-border-light">
+<span class="material-symbols-outlined text-3xl" data-icon="help_center">help_center</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-text-light font-bold">الشروط والمساعدة والأسئلة</p>
+<p class="text-caption text-muted-light">سياسة الاستخدام المعتمدة ورقم الدعم المباشر</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-2xl text-muted-light rotate-180" data-icon="arrow_back_ios">arrow_back_ios</span>
+</a>
+</nav>
+<!-- Logout Action Button -->
+<section class="mt-4 mb-4">
+<button class="w-full min-h-[56px] bg-surface-light border-2 border-error-light hover:bg-error-container text-error font-headline-sm text-headline-sm flex items-center justify-center gap-3 rounded-xl active:scale-95 transition-transform duration-150" type="button">
+<span class="material-symbols-outlined text-2xl text-error" data-icon="logout">logout</span>
+<span class="font-bold">تسجيل الخروج وإغلاق الحساب</span>
+</button>
+<p class="text-center text-caption text-muted-light mt-2">
+          رقم النسخة 2.4.1 — منصة نوادر الإبل السعودية
+        </p>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Docked bottom) -->
+<!-- Destination 5: 'حسابي' is active based on Intent Fallback Hierarchy -->
+<nav aria-label="الشريط السفلي للملاحة" class="fixed bottom-0 left-0 w-full z-50 bg-surface-light border-t border-border-light">
+<div class="max-w-md mx-auto flex justify-around items-center px-space-xs py-space-xs">
+<!-- الرئيسية -->
+<a class="flex flex-col items-center justify-center text-secondary px-space-sm py-space-xs hover:bg-surface-container-low rounded-lg active:scale-95 transition-transform duration-150 min-h-[52px]" href="#home">
+<span class="material-symbols-outlined text-2xl" data-icon="home">home</span>
+<span class="font-label-md text-label-md">الرئيسية</span>
+</a>
+<!-- المفضلة -->
+<a class="flex flex-col items-center justify-center text-secondary px-space-sm py-space-xs hover:bg-surface-container-low rounded-lg active:scale-95 transition-transform duration-150 min-h-[52px]" href="#favorites">
+<span class="material-symbols-outlined text-2xl" data-icon="favorite">favorite</span>
+<span class="font-label-md text-label-md">المفضلة</span>
+</a>
+<!-- أضف إعلان -->
+<a class="flex flex-col items-center justify-center text-secondary px-space-sm py-space-xs hover:bg-surface-container-low rounded-lg active:scale-95 transition-transform duration-150 min-h-[52px]" href="#add-listing">
+<span class="material-symbols-outlined text-2xl" data-icon="add_circle">add_circle</span>
+<span class="font-label-md text-label-md">أضف إعلان</span>
+</a>
+<!-- الرسائل -->
+<a class="flex flex-col items-center justify-center text-secondary px-space-sm py-space-xs hover:bg-surface-container-low rounded-lg active:scale-95 transition-transform duration-150 min-h-[52px]" href="#messages">
+<span class="material-symbols-outlined text-2xl" data-icon="chat">chat</span>
+<span class="font-label-md text-label-md">الرسائل</span>
+</a>
+<!-- حسابي (ACTIVE TAB) -->
+<a class="flex flex-col items-center justify-center text-primary bg-secondary-container rounded-lg px-space-sm py-space-xs font-bold active:scale-95 transition-transform duration-150 min-h-[52px]" href="#profile">
+<span class="material-symbols-outlined text-2xl" data-icon="person" data-weight="fill" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-md text-label-md">حسابي</span>
+</a>
+</div>
+</nav>
+</div>
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));const nav={'الرئيسية':'B01','المفضلة':'B09','أضف إعلان':'D01','الرسائل':'F01','حسابي':'G01','إعلاناتي':'E01','التنبيهات':'G04'};document.querySelectorAll('nav button,nav a').forEach(el=>{const t=el.innerText.trim();for(const [label,id] of Object.entries(nav))if(t.endsWith(label))el.dataset.go=id});document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();parent.postMessage({nawaderScreen:el.dataset.go},'*')}));addEventListener('message',e=>{if(e.source!==parent)return;if(['dark','light'].includes(e.data?.nawaderTheme))document.documentElement.dataset.theme=e.data.nawaderTheme});</script></body></html>

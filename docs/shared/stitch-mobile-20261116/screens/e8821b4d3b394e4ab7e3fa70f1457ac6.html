@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html data-theme="light" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>نوادر الإبل — إدارة الإعلان المنشور</title>
+<!-- Google Fonts for Arabic -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-light": "#FFFCF8",
+            "background-light": "#F8F3EA",
+            "on-secondary": "#ffffff",
+            "tertiary-container": "#417a9f",
+            "border-dark": "#3B504B",
+            "on-background": "#201b16",
+            "muted-light": "#817568",
+            "tertiary-fixed-dim": "#95cdf5",
+            "on-secondary-container": "#6e6356",
+            "on-surface": "#201b16",
+            "tertiary-fixed": "#c8e6ff",
+            "inverse-on-surface": "#faefe6",
+            "warning-dark": "#E1AA4A",
+            "on-tertiary": "#ffffff",
+            "on-primary-container": "#fffbff",
+            "success-dark": "#53BE90",
+            "on-tertiary-fixed-variant": "#004c6d",
+            "info-dark": "#83A9D8",
+            "text-light": "#2D241B",
+            "secondary-container": "#f0e0d0",
+            "surface-container": "#f7ece3",
+            "surface-container-highest": "#ebe1d8",
+            "secondary-fixed-dim": "#d3c4b5",
+            "on-secondary-fixed-variant": "#4f453a",
+            "on-primary": "#ffffff",
+            "outline": "#837567",
+            "surface-dim": "#e3d8d0",
+            "surface-bright": "#fff8f4",
+            "warning-light": "#C88926",
+            "background-dark": "#111B1C",
+            "on-primary-fixed": "#2b1700",
+            "inverse-primary": "#f8bb74",
+            "secondary": "#685d50",
+            "surface": "#fff8f4",
+            "background": "#fff8f4",
+            "primary-fixed": "#ffddb9",
+            "outline-variant": "#d5c4b4",
+            "border-light": "#E4D5C0",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed": "#001e2e",
+            "inverse-surface": "#352f2a",
+            "text-dark": "#F6EEE0",
+            "error-container": "#ffdad6",
+            "error": "#ba1a1a",
+            "primary-fixed-dim": "#f8bb74",
+            "surface-variant": "#ebe1d8",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-primary-fixed-variant": "#663e00",
+            "primary-dark": "#E4BC7B",
+            "on-secondary-fixed": "#221a11",
+            "error-dark": "#E17B75",
+            "surface-container-high": "#f1e6de",
+            "surface-container-low": "#fdf2e9",
+            "tertiary": "#236185",
+            "surface-tint": "#825517",
+            "primary-container": "#9c6a2b",
+            "on-tertiary-container": "#fcfcff",
+            "secondary-fixed": "#f0e0d0",
+            "surface-dark": "#202D2D",
+            "error-light": "#C95D59",
+            "muted-dark": "#AABAB3",
+            "info-light": "#528AA9",
+            "success-light": "#2F936A",
+            "primary": "#7f5214",
+            "on-surface-variant": "#504539"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin": "1.25rem",
+            "gutter": "1rem",
+            "space-lg": "1.25rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "body-md": ["Noto Sans Arabic"],
+            "caption": ["Noto Sans Arabic"],
+            "label-md": ["Noto Sans Arabic"],
+            "body-lg": ["Noto Sans Arabic"],
+            "headline-sm": ["Noto Sans Arabic"],
+            "headline-md": ["Noto Sans Arabic"],
+            "label-lg": ["Noto Sans Arabic"],
+            "headline-lg": ["Noto Sans Arabic"]
+          },
+          "fontSize": {
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "caption": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["16px", { "lineHeight": "22px", "fontWeight": "600" }],
+            "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "label-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["28px", { "lineHeight": "38px", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Noto Sans Arabic', sans-serif;
+      background-color: #F8F3EA;
+      color: #2D241B;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style id="nawader-brand-final">
+    :root{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}
+    html,body{background:var(--brand-bg)!important;color:var(--brand-text)!important;max-width:100%;font-family:'Noto Sans Arabic',sans-serif!important;user-select:text!important}
+    body{margin:0!important;min-height:100dvh!important;font-size:18px;line-height:1.65}
+    *{box-sizing:border-box} img{max-width:100%} p,label,input,select,textarea{font-family:inherit;font-size:18px} h1{font-size:26px;line-height:1.6} h2{font-size:22px;line-height:1.6}
+    button,a[role=button]{min-height:48px!important;min-width:48px;white-space:normal!important;font-family:inherit;touch-action:manipulation}button:not([aria-label]){font-size:20px;font-weight:700}
+    input:not([type=checkbox]):not([type=radio]),select{min-height:56px}input[type=checkbox],input[type=radio]{width:24px;min-width:24px;height:24px;accent-color:var(--brand-gold)}
+    :focus-visible{outline:3px solid var(--brand-text)!important;outline-offset:3px} [class~="truncate"]{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+    [class~="bg-background"],[class~="bg-background-light"],[class~="bg-background-dark"]{background-color:var(--brand-bg)!important}
+    [class~="bg-surface"],[class~="bg-surface-light"],[class~="bg-surface-dark"],[class~="bg-surface-container"],[class~="bg-surface-container-low"],[class~="bg-surface-container-high"],[class~="bg-surface-container-highest"]{background-color:var(--brand-surface)!important}
+    [class~="text-text-light"],[class~="text-text-dark"],[class~="text-on-surface"],[class~="text-on-background"],[class~="text-secondary"],[class~="text-on-surface-variant"],[class~="text-primary"]{color:var(--brand-text)!important}
+    [class~="bg-primary"],[class~="bg-primary-container"]{background-color:var(--brand-gold)!important;color:#2D241B!important;font-size:20px!important;font-weight:700!important}
+    [class~="bg-primary"] span,[class~="bg-primary-container"] span{color:inherit!important}
+    [class~="border-border-light"],[class~="border-border-dark"],[class~="border-outline-variant"]{border-color:var(--brand-border)!important}
+    .simple-shell{width:100%;max-width:430px;min-height:100dvh;margin:auto;background:var(--brand-bg);padding:20px;display:flex;flex-direction:column}
+    .simple-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px}.simple-header button{width:auto;padding:0 18px}
+    .simple-content{display:flex;flex-direction:column;gap:20px;padding-top:20px;padding-bottom:30px}.simple-content h1,.simple-content p,.simple-content h2{margin:0}
+    .field{display:flex;flex-direction:column;gap:10px;font-weight:600}.field input,.field select{width:100%;padding:12px;border:2px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);color:var(--brand-text)}
+    .action{width:100%;min-height:56px;padding:12px 16px;border:2px solid var(--brand-gold);border-radius:12px;background:var(--brand-gold);color:#2D241B;font-size:20px;font-weight:700}
+    .secondary{background:var(--brand-surface);color:var(--brand-text)}.helper{font-size:16px;line-height:1.7;color:var(--brand-text)}
+    .consent{display:flex;align-items:flex-start;gap:14px;min-height:56px;padding:14px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .notice{padding:20px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .welcome{align-items:center;text-align:center;justify-content:center;gap:24px;padding-top:40px;padding-bottom:32px}.welcome-logo{width:216px;height:216px;object-fit:contain}.welcome h1{margin:0;font-size:26px}.welcome p{margin:0;max-width:320px}.welcome-actions{width:100%;display:flex;flex-direction:column;gap:16px;margin-top:32px}
+    .home-shell{width:100%;max-width:430px;margin:auto;padding-bottom:100px}.home-header{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--brand-surface)}.home-header h1{font-size:22px;flex:1;margin:0}.small-action{border:0;border-radius:10px;font-size:16px!important;padding:8px;color:var(--brand-text)}.home-content{padding:20px;display:flex;flex-direction:column;gap:20px}.home-content>h2{margin:0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.home-tools .action{font-size:18px;padding:8px}.ad-card{border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);overflow:hidden}.ad-photo{width:100%;height:180px;object-fit:cover}.ad-content{padding:16px;display:flex;flex-direction:column;gap:10px}.ad-content h2,.ad-content p{margin:0}.price{font-size:26px;font-weight:700}.offer-label{font-size:16px}.simple-bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--brand-surface);border-top:1px solid var(--brand-border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:50}.simple-bottom button{font-size:14px!important;font-weight:600;padding:6px 2px;background:none;border:0;border-radius:8px;color:var(--brand-text)}.simple-bottom [aria-current]{background:var(--brand-bg);border:1px solid var(--brand-gold)}
+    @media(min-width:600px){body{padding:0!important}} @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    </style><style id="nawader-dark-mode">html[data-theme=dark]{--brand-bg:#111B1C;--brand-surface:#202D2D;--brand-gold:#E4BC7B;--brand-text:#F6EEE0;--brand-muted:#AABAB3;--brand-border:#3B504B}html[data-theme=light]{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}html[data-theme=dark] .bg-white,html[data-theme=dark] .bg-slate-50,html[data-theme=dark] .bg-gray-50{background-color:var(--brand-surface)!important}html[data-theme=dark] .action:not(.secondary),html[data-theme=dark] [class~=bg-primary],html[data-theme=dark] [class~=bg-primary-container]{color:#111B1C!important}html[data-theme=light] .action:not(.secondary),html[data-theme=light] [class~=bg-primary],html[data-theme=light] [class~=bg-primary-container]{color:#2D241B!important}</style></head>
+<body class="bg-background-light min-h-screen text-text-light flex justify-center selection:bg-secondary-container">
+<!-- Mobile Viewport Shell (360px - 430px) -->
+<div class="w-full max-w-md bg-background-light min-h-screen flex flex-col pb-12 shadow-sm border-x border-border-light">
+<!-- Top Navigation Bar (Shared Component: TopAppBar with action task focus) -->
+<header class="sticky top-0 z-30 bg-surface-light border-b border-border-light px-margin py-space-sm flex items-center justify-between shadow-none">
+<div class="flex items-center gap-space-sm">
+<button aria-label="الرجوع للقائمة السابقة" class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-container hover:bg-surface-variant active:scale-95 transition-transform text-primary border border-border-light" type="button">
+<span class="material-symbols-outlined text-[28px]">arrow_forward</span>
+</button>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-text-light font-bold">إدارة الإعلان المنشور</span>
+<span class="font-caption text-caption text-secondary">رقم الإعلان: #83921</span>
+</div>
+</div>
+<button aria-label="مشاركة الإعلان" class="w-12 h-12 flex items-center justify-center rounded-lg hover:bg-surface-container active:scale-95 transition-transform text-secondary border border-transparent hover:border-border-light" type="button">
+<span class="material-symbols-outlined text-[24px]">share</span>
+</button>
+</header>
+<!-- Main Content Container -->
+<main class="flex-1 px-margin py-space-lg space-y-space-md">
+<!-- Status Banner Card: Active & Verified -->
+<section class="bg-surface-light border-2 border-success-light rounded-xl p-space-md flex items-center gap-space-md shadow-none">
+<div class="w-14 h-14 rounded-full bg-success-light/10 text-success-light flex items-center justify-center shrink-0 border border-success-light/30">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-text-light font-bold">منشور ونشط في السوق</span>
+</div>
+<span class="font-body-md text-body-md text-success-light font-semibold mt-0.5">متاح للمشترين الآن</span>
+<span class="font-caption text-caption text-secondary mt-1">آخر فحص للنشر: منذ ساعتين</span>
+</div>
+</section>
+<!-- Camel Listing Summary Card -->
+<section class="bg-surface-light border border-border-light rounded-xl overflow-hidden p-space-md space-y-space-md">
+<div class="flex gap-space-md">
+<!-- Camel Thumbnail with Fallback and Specific Alt -->
+<div class="w-28 h-28 rounded-lg overflow-hidden shrink-0 border border-border-light bg-surface-container relative">
+<img alt="صورة إبل توضيحية" class="w-full h-full object-cover" data-alt="A dignified prize-winning Saudi purebred black Majaheem female camel standing proudly in an authentic Najd desert enclosure under the golden morning light. The composition reflects deep desert tranquility with warm earthy tones, rich deep black camel coat highlights, and soft desert dust textures. Highly realistic photography emphasizing the strength and traditional heritage value of authentic Saudi livestock." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHB59zr-lCyvzKP3Nb_HmrqwgFAENfyTksr16S7gKbJbIDpWjg8-eDCnlXYSJ-q43c3uGVSf3f3Lf8A0MGS0NX-6nuuqQMRmsGcjZaWNeRnapRBqMhmGxQ3Ozj5iS0VKuhHKFibWZ9BeiH33D7TGi1RsvTePZ_GAl6WaskwqJwIBCIwBRQQPO_TvBS50arEAIc2PcnE-HXEQjqE6wKJYzKec0GcEAve0UuWfa8JCN3eYxI3uCTZymBmU2duWUW4aW5goyGBUUOmYY"/>
+<div class="absolute bottom-1 right-1 bg-surface-light/90 text-primary px-1.5 py-0.5 rounded text-[11px] font-bold border border-border-light">
+              مجهم
+            </div>
+</div>
+<!-- Basic Listing Details -->
+<div class="flex flex-col justify-center flex-1">
+<div class="inline-flex items-center gap-1 text-primary mb-1">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span class="font-caption text-caption font-semibold">إعلان منشور</span>
+</div>
+<h1 class="font-headline-sm text-headline-sm text-text-light font-bold line-clamp-1">ناقة مجهم كفو مدني</h1>
+<!-- Pricing -->
+<div class="mt-1 flex items-baseline gap-1">
+<span class="font-headline-md text-headline-md text-primary font-bold">120,000</span>
+<span class="font-label-md text-label-md text-secondary font-bold">ريال سعودي</span>
+</div>
+<!-- Location -->
+<div class="flex items-center gap-1 text-secondary mt-1">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-md text-body-md text-secondary">الرياض — وادي لبن</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Performance Metrics Bento Grid (High Visibility for Older Adults) -->
+<section class="space-y-space-xs">
+<h2 class="font-label-lg text-label-lg text-text-light font-bold px-1">مؤشرات تفاعل المشترين</h2>
+<div class="grid grid-cols-3 gap-space-sm">
+<!-- Views Metric -->
+<div class="bg-surface-light border border-border-light rounded-xl p-space-sm flex flex-col items-center justify-center text-center py- space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container text-primary flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[24px]">visibility</span>
+</div>
+<span class="font-headline-md text-headline-md text-text-light font-bold">342</span>
+<span class="font-caption text-caption text-secondary font-medium">مشاهدة</span>
+</div>
+<!-- Contacts Metric -->
+<div class="bg-surface-light border border-border-light rounded-xl p-space-sm flex flex-col items-center justify-center text-center py- space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container text-success-light flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[24px]">call</span>
+</div>
+<span class="font-headline-md text-headline-md text-text-light font-bold">18</span>
+<span class="font-caption text-caption text-secondary font-medium">اتصال ومحادثة</span>
+</div>
+<!-- Favorites Metric -->
+<div class="bg-surface-light border border-border-light rounded-xl p-space-sm flex flex-col items-center justify-center text-center py- space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container text-warning-light flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<span class="font-headline-md text-headline-md text-text-light font-bold">9</span>
+<span class="font-caption text-caption text-secondary font-medium">في المفضلة</span>
+</div>
+</div>
+</section>
+<!-- Bump Feature Section (تجديد الظهور المجاني) -->
+<section class="bg-surface-container-low border-2 border-primary/40 rounded-xl p-space-md space-y-space-md relative overflow-hidden">
+<div class="flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-primary-fixed text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[24px]">bolt</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-primary font-bold">مؤهل لتجديد الظهور الآن!</span>
+<span class="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full border border-primary/20">مجاناً</span>
+</div>
+<p class="font-body-lg text-body-lg text-text-light mt-1">
+              مرور أكثر من 24 ساعة على آخر رفع. تجديد الظهور يرفع إعلانك إلى أول قائمة نتائج البحث مجاناً بدون أي رسوم.
+            </p>
+</div>
+</div>
+<!-- 56px Bump Primary Action Button -->
+<button class="w-full h-14 bg-primary hover:bg-primary-container active:scale-[0.98] transition-all text-on-primary font-headline-sm text-headline-sm rounded-lg flex items-center justify-center gap-space-sm font-bold shadow-sm" id="bumpButton" onclick="handleBump()" type="button">
+<span class="material-symbols-outlined text-[28px]" id="bumpIcon">publish</span>
+<span id="bumpText">تحديث وظهور في المقدمة الآن</span>
+</button>
+</section>
+<!-- Core Management Actions (Accessible Touch targets: 48px - 56px) -->
+<section class="space-y-space-sm pt-space-xs">
+<h2 class="font-label-lg text-label-lg text-text-light font-bold px-1">خيارات الإعلان</h2>
+<!-- Action 1: View as buyer -->
+<a class="w-full h-14 bg-surface-light border border-border-light hover:bg-surface-container active:scale-[0.99] transition-transform rounded-lg px-space-md flex items-center justify-between text-text-light font-headline-sm text-headline-sm" href="#preview">
+<div class="flex items-center gap-space-md">
+<span class="material-symbols-outlined text-primary text-[26px]">open_in_new</span>
+<span class="font-body-lg text-body-lg font-bold">عرض الإعلان كما يظهر للمشترين</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-[24px]">chevron_left</span>
+</a>
+<!-- Action 2: Edit Listing -->
+<button class="w-full h-14 bg-surface-light border border-border-light hover:bg-surface-container active:scale-[0.99] transition-transform rounded-lg px-space-md flex items-center justify-between text-text-light font-headline-sm text-headline-sm" type="button">
+<div class="flex items-center gap-space-md">
+<span class="material-symbols-outlined text-secondary text-[26px]">edit_note</span>
+<span class="font-body-lg text-body-lg font-bold">تعديل بيانات وسعر الإعلان</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-[24px]">chevron_left</span>
+</button>
+<!-- Action 3: Archive / Stop Listing -->
+<button class="w-full h-14 bg-surface-light border border-border-light hover:bg-error-container/20 active:scale-[0.99] transition-transform rounded-lg px-space-md flex items-center justify-between text-error font-headline-sm text-headline-sm" onclick="confirmArchive()" type="button">
+<div class="flex items-center gap-space-md">
+<span class="material-symbols-outlined text-error text-[26px]">archive</span>
+<span class="font-body-lg text-body-lg font-bold">إيقاف الإعلان ونقله للأرشيف</span>
+</div>
+<span class="material-symbols-outlined text-error/60 text-[24px]">chevron_left</span>
+</button>
+</section>
+<!-- Trust & Policy Note for Senior Users (Cultural Reassurance) -->
+<div class="bg-surface-container p-space-md rounded-xl border border-border-light flex items-start gap-space-sm text-secondary">
+<span class="material-symbols-outlined text-[24px] text-primary shrink-0 mt-0.5">verified_user</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-text-light font-bold">نظام بيع مباشر وموثوق</span>
+<p class="font-caption text-caption text-secondary mt-0.5 leading-relaxed">
+            إعلانك متاح لجميع المهتمين في المملكة والخليج. لا يتم فرض رسوم خفية أو اقتطاعات تلقائية من حسابك أبداً.
+          </p>
+</div>
+</div>
+</main>
+</div>
+<!-- Notification Toast Simulation -->
+<div class="fixed bottom-6 z-50 left-1/2 transform -translate-x-1/2 bg-surface-dark text-text-dark px-space-lg py-space-md rounded-xl border border-border-dark shadow-lg flex items-center gap-space-sm opacity-0 pointer-events-none transition-all duration-300 w-11/12 max-w-sm" id="toast">
+<span class="material-symbols-outlined text-success-light text-[24px]">check_circle</span>
+<span class="font-body-md text-body-md font-semibold" id="toastMessage">تم تحديث الإعلان وظهوره في المقدمة بنجاح!</span>
+</div>
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));const nav={'الرئيسية':'B01','المفضلة':'B09','أضف إعلان':'D01','الرسائل':'F01','حسابي':'G01','إعلاناتي':'E01','التنبيهات':'G04'};document.querySelectorAll('nav button,nav a').forEach(el=>{const t=el.innerText.trim();for(const [label,id] of Object.entries(nav))if(t.endsWith(label))el.dataset.go=id});document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();parent.postMessage({nawaderScreen:el.dataset.go},'*')}));addEventListener('message',e=>{if(e.source!==parent)return;if(['dark','light'].includes(e.data?.nawaderTheme))document.documentElement.dataset.theme=e.data.nawaderTheme});</script></body></html>

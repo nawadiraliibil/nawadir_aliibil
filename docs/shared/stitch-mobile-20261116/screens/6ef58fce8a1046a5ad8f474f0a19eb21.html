@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html data-theme="light" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>نوادر الإبل - إضافة تقييم للمعلن</title>
+<!-- Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error": "#ffffff",
+            "on-tertiary-container": "#fcfcff",
+            "border-dark": "#3B504B",
+            "surface-container-lowest": "#ffffff",
+            "surface-tint": "#825517",
+            "muted-dark": "#AABAB3",
+            "success-dark": "#53BE90",
+            "warning-light": "#C88926",
+            "outline-variant": "#d5c4b4",
+            "on-tertiary": "#ffffff",
+            "on-secondary-container": "#6e6356",
+            "on-secondary": "#ffffff",
+            "surface-container": "#f7ece3",
+            "secondary-container": "#f0e0d0",
+            "on-primary-fixed": "#2b1700",
+            "tertiary": "#236185",
+            "tertiary-fixed-dim": "#95cdf5",
+            "on-secondary-fixed": "#221a11",
+            "on-tertiary-fixed-variant": "#004c6d",
+            "on-error-container": "#93000a",
+            "surface-light": "#FFFCF8",
+            "surface": "#fff8f4",
+            "surface-container-high": "#f1e6de",
+            "tertiary-fixed": "#c8e6ff",
+            "surface-container-highest": "#ebe1d8",
+            "secondary": "#685d50",
+            "primary-dark": "#E4BC7B",
+            "error": "#ba1a1a",
+            "inverse-primary": "#f8bb74",
+            "inverse-on-surface": "#faefe6",
+            "on-primary": "#ffffff",
+            "outline": "#837567",
+            "muted-light": "#817568",
+            "on-background": "#201b16",
+            "info-dark": "#83A9D8",
+            "background-light": "#F8F3EA",
+            "info-light": "#528AA9",
+            "primary-fixed": "#ffddb9",
+            "text-light": "#2D241B",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#d3c4b5",
+            "inverse-surface": "#352f2a",
+            "on-secondary-fixed-variant": "#4f453a",
+            "background-dark": "#111B1C",
+            "surface-bright": "#fff8f4",
+            "warning-dark": "#E1AA4A",
+            "tertiary-container": "#417a9f",
+            "border-light": "#E4D5C0",
+            "on-surface": "#201b16",
+            "error-light": "#C95D59",
+            "surface-dark": "#202D2D",
+            "surface-dim": "#e3d8d0",
+            "text-dark": "#F6EEE0",
+            "surface-variant": "#ebe1d8",
+            "secondary-fixed": "#f0e0d0",
+            "on-surface-variant": "#504539",
+            "background": "#fff8f4",
+            "on-primary-fixed-variant": "#663e00",
+            "primary-container": "#9c6a2b",
+            "on-primary-container": "#fffbff",
+            "primary-fixed-dim": "#f8bb74",
+            "primary": "#7f5214",
+            "on-tertiary-fixed": "#001e2e",
+            "success-light": "#2F936A",
+            "surface-container-low": "#fdf2e9"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "margin": "1.25rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1.25rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem"
+          },
+          "fontFamily": {
+            "label-lg": ["Noto Sans Arabic"],
+            "body-lg": ["Noto Sans Arabic"],
+            "caption": ["Noto Sans Arabic"],
+            "headline-sm": ["Noto Sans Arabic"],
+            "headline-md": ["Noto Sans Arabic"],
+            "body-md": ["Noto Sans Arabic"],
+            "label-md": ["Noto Sans Arabic"],
+            "headline-lg": ["Noto Sans Arabic"]
+          },
+          "fontSize": {
+            "label-lg": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+            "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}],
+            "caption": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "label-md": ["16px", {"lineHeight": "22px", "fontWeight": "600"}],
+            "headline-lg": ["28px", {"lineHeight": "38px", "fontWeight": "700"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Noto Sans Arabic', sans-serif;
+      background-color: #F8F3EA;
+      color: #2D241B;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style id="nawader-brand-final">
+    :root{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}
+    html,body{background:var(--brand-bg)!important;color:var(--brand-text)!important;max-width:100%;font-family:'Noto Sans Arabic',sans-serif!important;user-select:text!important}
+    body{margin:0!important;min-height:100dvh!important;font-size:18px;line-height:1.65}
+    *{box-sizing:border-box} img{max-width:100%} p,label,input,select,textarea{font-family:inherit;font-size:18px} h1{font-size:26px;line-height:1.6} h2{font-size:22px;line-height:1.6}
+    button,a[role=button]{min-height:48px!important;min-width:48px;white-space:normal!important;font-family:inherit;touch-action:manipulation}button:not([aria-label]){font-size:20px;font-weight:700}
+    input:not([type=checkbox]):not([type=radio]),select{min-height:56px}input[type=checkbox],input[type=radio]{width:24px;min-width:24px;height:24px;accent-color:var(--brand-gold)}
+    :focus-visible{outline:3px solid var(--brand-text)!important;outline-offset:3px} [class~="truncate"]{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+    [class~="bg-background"],[class~="bg-background-light"],[class~="bg-background-dark"]{background-color:var(--brand-bg)!important}
+    [class~="bg-surface"],[class~="bg-surface-light"],[class~="bg-surface-dark"],[class~="bg-surface-container"],[class~="bg-surface-container-low"],[class~="bg-surface-container-high"],[class~="bg-surface-container-highest"]{background-color:var(--brand-surface)!important}
+    [class~="text-text-light"],[class~="text-text-dark"],[class~="text-on-surface"],[class~="text-on-background"],[class~="text-secondary"],[class~="text-on-surface-variant"],[class~="text-primary"]{color:var(--brand-text)!important}
+    [class~="bg-primary"],[class~="bg-primary-container"]{background-color:var(--brand-gold)!important;color:#2D241B!important;font-size:20px!important;font-weight:700!important}
+    [class~="bg-primary"] span,[class~="bg-primary-container"] span{color:inherit!important}
+    [class~="border-border-light"],[class~="border-border-dark"],[class~="border-outline-variant"]{border-color:var(--brand-border)!important}
+    .simple-shell{width:100%;max-width:430px;min-height:100dvh;margin:auto;background:var(--brand-bg);padding:20px;display:flex;flex-direction:column}
+    .simple-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:24px}.simple-header button{width:auto;padding:0 18px}
+    .simple-content{display:flex;flex-direction:column;gap:20px;padding-top:20px;padding-bottom:30px}.simple-content h1,.simple-content p,.simple-content h2{margin:0}
+    .field{display:flex;flex-direction:column;gap:10px;font-weight:600}.field input,.field select{width:100%;padding:12px;border:2px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);color:var(--brand-text)}
+    .action{width:100%;min-height:56px;padding:12px 16px;border:2px solid var(--brand-gold);border-radius:12px;background:var(--brand-gold);color:#2D241B;font-size:20px;font-weight:700}
+    .secondary{background:var(--brand-surface);color:var(--brand-text)}.helper{font-size:16px;line-height:1.7;color:var(--brand-text)}
+    .consent{display:flex;align-items:flex-start;gap:14px;min-height:56px;padding:14px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .notice{padding:20px;border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface)}
+    .welcome{align-items:center;text-align:center;justify-content:center;gap:24px;padding-top:40px;padding-bottom:32px}.welcome-logo{width:216px;height:216px;object-fit:contain}.welcome h1{margin:0;font-size:26px}.welcome p{margin:0;max-width:320px}.welcome-actions{width:100%;display:flex;flex-direction:column;gap:16px;margin-top:32px}
+    .home-shell{width:100%;max-width:430px;margin:auto;padding-bottom:100px}.home-header{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--brand-surface)}.home-header h1{font-size:22px;flex:1;margin:0}.small-action{border:0;border-radius:10px;font-size:16px!important;padding:8px;color:var(--brand-text)}.home-content{padding:20px;display:flex;flex-direction:column;gap:20px}.home-content>h2{margin:0}.home-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.home-tools .action{font-size:18px;padding:8px}.ad-card{border:1px solid var(--brand-border);border-radius:12px;background:var(--brand-surface);overflow:hidden}.ad-photo{width:100%;height:180px;object-fit:cover}.ad-content{padding:16px;display:flex;flex-direction:column;gap:10px}.ad-content h2,.ad-content p{margin:0}.price{font-size:26px;font-weight:700}.offer-label{font-size:16px}.simple-bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--brand-surface);border-top:1px solid var(--brand-border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:50}.simple-bottom button{font-size:14px!important;font-weight:600;padding:6px 2px;background:none;border:0;border-radius:8px;color:var(--brand-text)}.simple-bottom [aria-current]{background:var(--brand-bg);border:1px solid var(--brand-gold)}
+    @media(min-width:600px){body{padding:0!important}} @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    </style><style id="nawader-dark-mode">html[data-theme=dark]{--brand-bg:#111B1C;--brand-surface:#202D2D;--brand-gold:#E4BC7B;--brand-text:#F6EEE0;--brand-muted:#AABAB3;--brand-border:#3B504B}html[data-theme=light]{--brand-bg:#F8F3EA;--brand-surface:#FFFCF8;--brand-gold:#A77434;--brand-text:#2D241B;--brand-muted:#2D241B;--brand-border:#E4D5C0}html[data-theme=dark] .bg-white,html[data-theme=dark] .bg-slate-50,html[data-theme=dark] .bg-gray-50{background-color:var(--brand-surface)!important}html[data-theme=dark] .action:not(.secondary),html[data-theme=dark] [class~=bg-primary],html[data-theme=dark] [class~=bg-primary-container]{color:#111B1C!important}html[data-theme=light] .action:not(.secondary),html[data-theme=light] [class~=bg-primary],html[data-theme=light] [class~=bg-primary-container]{color:#2D241B!important}</style></head>
+<body class="bg-background-light text-text-light antialiased min-h-screen flex justify-center selection:bg-secondary-container">
+<!-- Mobile Viewport Container -->
+<main class="w-full max-w-md min-h-screen bg-background-light flex flex-col relative pb-32">
+<!-- TopAppBar (Task-Focused: Sub-page with Back Navigation) -->
+<header class="w-full bg-surface-light border-b border-border-light sticky top-0 z-40 px-margin py-space-sm shadow-none">
+<div class="flex items-center justify-between min-h-[52px]">
+<!-- Right Action: Back Chevron (RTL forward arrow) -->
+<button aria-label="الرجوع للصفحة السابقة" class="w-12 h-12 flex items-center justify-center rounded-xl text-text-light hover:bg-surface-container active:scale-95 transition-transform duration-150" type="button">
+<span class="material-symbols-outlined text-[28px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<!-- Title -->
+<h1 class="font-headline-sm text-headline-sm text-text-light font-bold text-center tracking-tight">
+          إضافة تقييم للمعلن
+        </h1>
+<!-- Balanced spacing dummy / Info action -->
+<button aria-label="تعليمات التقييم" class="w-12 h-12 flex items-center justify-center rounded-xl text-muted-light hover:bg-surface-container active:scale-95 transition-transform duration-150" type="button">
+<span class="material-symbols-outlined text-[24px]" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<div class="px-margin pt-space-lg flex-1 flex flex-col gap-space-lg">
+<!-- Advertiser Summary Card -->
+<section aria-labelledby="advertiser-title" class="bg-surface-light border border-border-light rounded-xl p-space-md shadow-none">
+<div class="flex items-start gap-space-md">
+<!-- Camel Thumbnail / Advertiser Avatar -->
+<div class="relative w-16 h-16 rounded-lg overflow-hidden border border-border-light flex-shrink-0 bg-surface-container">
+<img alt="صورة إبل توضيحية" class="w-full h-full object-cover" data-alt="A portrait photograph of a prized white Wadhah camel standing with dignity under the warm morning desert sun of Saudi Arabia. The composition showcases high textural details of the camel's head and traditional braided leather halter against soft beige sand dunes. The lighting is bright and natural with a warm golden hue aligned with the marketplace aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgKI6WDKenKLy0I2gAmQpsNIl5suNCRK_ikbLq7O2lmhNIwT6456R96KYzaJ7SKEXr5-FzBxpgKwT8ZL2uViSiubbAjNrjsq8ZHaVHe7K8kYOUxOVWjMpG6vj3kzMzVK_sVVfQFgGGWzwbwvE0MuJrcgrTuAAAAGDopECsEmqqIP4wqM3ay0yr4AfOIAINc4kLKV41C4_vzNIegGeSgS9FpPAJzl8UBBGItUyIdM0RHr7U8NNIt03PHwT2maEkR63Jt5ibn1GtSfY"/>
+</div>
+<!-- Advertiser Details -->
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-headline-sm text-headline-sm text-text-light font-bold truncate" id="advertiser-title">
+                المعلن: أبو فهد الدوسري
+              </h2>
+<span class="inline-flex items-center gap-0.5 text-success-light" title="معلن موثق برقم الهوية">
+<span class="material-symbols-outlined text-[20px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-caption font-caption font-bold">موثق</span>
+</span>
+</div>
+<p class="font-body-md text-body-md text-muted-light mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="sell">sell</span>
+<span class="text-text-light font-medium">الإعلان: ناقة وضحاء سلالة صوغان</span>
+</p>
+<p class="font-caption text-caption text-secondary mt-0.5">
+              رقم الإعلان: <span class="font-mono">#92841</span> • منطقة الرياض
+            </p>
+</div>
+</div>
+</section>
+<!-- Rating Selector Section -->
+<section aria-labelledby="rating-label" class="bg-surface-light border border-border-light rounded-xl p-space-md">
+<div class="text-center mb-space-sm">
+<span class="font-label-lg text-label-lg text-text-light block font-bold" id="rating-label">
+            حدد تقييمك الإجمالي
+          </span>
+<p class="font-caption text-caption text-muted-light mt-0.5">
+            اضغط على النجمة المناسبة لتقييم مصداقية وحسن تعامل المعلن
+          </p>
+</div>
+<!-- Star Buttons Row (Min 48px touch targets) -->
+<div aria-label="درجة التقييم من 1 إلى 5 نجوم" class="flex justify-center items-center gap-1.5 sm:gap-2 my-space-md" role="radiogroup">
+<!-- 1 Star -->
+<button aria-checked="false" class="star-btn w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-xl border border-border-light bg-surface-container-low text-primary active:scale-90 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary" data-rating="1" role="radio" type="button">
+<span class="material-symbols-outlined text-[32px] sm:text-[36px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<!-- 2 Stars -->
+<button aria-checked="false" class="star-btn w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-xl border border-border-light bg-surface-container-low text-primary active:scale-90 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary" data-rating="2" role="radio" type="button">
+<span class="material-symbols-outlined text-[32px] sm:text-[36px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<!-- 3 Stars -->
+<button aria-checked="false" class="star-btn w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-xl border border-border-light bg-surface-container-low text-primary active:scale-90 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary" data-rating="3" role="radio" type="button">
+<span class="material-symbols-outlined text-[32px] sm:text-[36px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<!-- 4 Stars -->
+<button aria-checked="false" class="star-btn w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-xl border border-border-light bg-surface-container-low text-primary active:scale-90 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary" data-rating="4" role="radio" type="button">
+<span class="material-symbols-outlined text-[32px] sm:text-[36px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<!-- 5 Stars (Active Selected Default) -->
+<button aria-checked="true" class="star-btn w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-xl border-2 border-primary bg-secondary-container text-primary shadow-sm active:scale-90 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary" data-rating="5" role="radio" type="button">
+<span class="material-symbols-outlined text-[34px] sm:text-[38px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+</div>
+<!-- Rating Word Badge -->
+<div class="bg-surface-container border border-border-light rounded-lg py-2.5 px-space-md text-center transition-colors" id="rating-text-container">
+<p class="font-label-lg text-label-lg font-bold text-primary" id="rating-title">
+            ★★★★★ ممتاز وأنصح بالتعامل معه
+          </p>
+</div>
+</section>
+<!-- Review Text Field -->
+<section class="bg-surface-light border border-border-light rounded-xl p-space-md flex flex-col">
+<label class="font-label-lg text-label-lg text-text-light font-bold mb-space-xs block" for="review-content">
+          اكتب تجربتك وملاحظاتك بوضوح وبكل أمانة
+        </label>
+<div class="relative mt-1">
+<textarea class="w-full min-h-[140px] rounded-lg border-2 border-border-light bg-surface-container-lowest p-space-md font-body-lg text-body-lg text-text-light placeholder:text-muted-light placeholder:font-body-md focus:border-primary focus:ring-0 transition-colors resize-none leading-relaxed" dir="rtl" id="review-content" placeholder="اذكر تفاصيل تعاملك مع راعي الحلال، دقة الوصف، والمصداقية في المواعيد..." rows="5"></textarea>
+</div>
+<!-- Helper Note -->
+<div class="flex items-start gap-2 mt-space-sm pt-space-xs text-muted-light">
+<span class="material-symbols-outlined text-[20px] text-tertiary flex-shrink-0 mt-0.5" data-icon="info">info</span>
+<p class="font-caption text-caption text-secondary leading-snug">
+            التقييم يهدف لمساعدة مجتمع أهل الإبل وتوثيق سمعة المعلنين دون تجريح.
+          </p>
+</div>
+</section>
+<!-- Compulsory Legal & Verification Checkbox (INITIALLY UNCHECKED) -->
+<section class="bg-surface-light border-2 border-border-light rounded-xl p-space-md">
+<label class="flex items-start gap-space-md cursor-pointer select-none group">
+<!-- Min 48px touch container for senior accessibility -->
+<div class="w-12 h-12 flex items-center justify-center flex-shrink-0 -mt-2 -mr-2">
+<input class="w-6 h-6 rounded border-2 border-outline text-primary focus:ring-primary focus:ring-offset-0 focus:ring-2 cursor-pointer transition-colors" id="legal-checkbox" type="checkbox"/>
+</div>
+<span class="font-label-md text-label-md text-text-light font-bold pt-1 leading-snug">
+            أقر بأنني تواصلت أو تعاملت مع هذا المعلن بشكل مباشر، ومعلوماتي مدخلة بصدق.
+          </span>
+</label>
+<!-- Contextual Note Below Checkbox -->
+<div class="mr-10 mt-1 pt-1 border-t border-border-light/60">
+<p class="font-caption text-caption text-muted-light leading-relaxed">
+            يتطلب التقييم وجود محادثة سابقة متبادلة مع المعلن ورقم جوال مؤكد بحسابك. لا يشترط إثبات شراء إلزامي.
+          </p>
+</div>
+</section>
+</div>
+<!-- Sticky Action Button Footer -->
+<div class="fixed bottom-0 left-0 right-0 z-50 bg-surface-light/95 backdrop-blur-md border-t border-border-light px-margin py-space-md shadow-md max-w-md mx-auto">
+<button class="w-full h-14 min-h-[56px] rounded-xl bg-primary text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100" disabled="" id="submit-review-btn" type="button">
+<span class="material-symbols-outlined text-[24px]" data-icon="send">send</span>
+<span>نشر التقييم واعتماده</span>
+</button>
+</div>
+</main>
+<!-- Interactive Rating and Validation Script -->
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));const nav={'الرئيسية':'B01','المفضلة':'B09','أضف إعلان':'D01','الرسائل':'F01','حسابي':'G01','إعلاناتي':'E01','التنبيهات':'G04'};document.querySelectorAll('nav button,nav a').forEach(el=>{const t=el.innerText.trim();for(const [label,id] of Object.entries(nav))if(t.endsWith(label))el.dataset.go=id});document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();parent.postMessage({nawaderScreen:el.dataset.go},'*')}));addEventListener('message',e=>{if(e.source!==parent)return;if(['dark','light'].includes(e.data?.nawaderTheme))document.documentElement.dataset.theme=e.data.nawaderTheme});</script></body></html>

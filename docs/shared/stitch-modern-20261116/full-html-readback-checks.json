@@ -1,0 +1,303 @@
+{
+  "normalization": "CRLF to LF and outer whitespace; Unicode length and FNV-1a content comparison",
+  "total": 74,
+  "matched": 74,
+  "screens": [
+    {
+      "id": "A01",
+      "match": true
+    },
+    {
+      "id": "A02",
+      "match": true
+    },
+    {
+      "id": "A03",
+      "match": true
+    },
+    {
+      "id": "A04",
+      "match": true
+    },
+    {
+      "id": "A05",
+      "match": true
+    },
+    {
+      "id": "B01",
+      "match": true
+    },
+    {
+      "id": "B02",
+      "match": true
+    },
+    {
+      "id": "B03",
+      "match": true
+    },
+    {
+      "id": "B04",
+      "match": true
+    },
+    {
+      "id": "B05",
+      "match": true
+    },
+    {
+      "id": "B06",
+      "match": true
+    },
+    {
+      "id": "B07",
+      "match": true
+    },
+    {
+      "id": "B08",
+      "match": true
+    },
+    {
+      "id": "B09",
+      "match": true
+    },
+    {
+      "id": "C01",
+      "match": true
+    },
+    {
+      "id": "C02",
+      "match": true
+    },
+    {
+      "id": "C03",
+      "match": true
+    },
+    {
+      "id": "C04",
+      "match": true
+    },
+    {
+      "id": "C05",
+      "match": true
+    },
+    {
+      "id": "C06",
+      "match": true
+    },
+    {
+      "id": "C07",
+      "match": true
+    },
+    {
+      "id": "C08",
+      "match": true
+    },
+    {
+      "id": "C09",
+      "match": true
+    },
+    {
+      "id": "D01",
+      "match": true
+    },
+    {
+      "id": "D02",
+      "match": true
+    },
+    {
+      "id": "D03",
+      "match": true
+    },
+    {
+      "id": "D04",
+      "match": true
+    },
+    {
+      "id": "D05",
+      "match": true
+    },
+    {
+      "id": "D06",
+      "match": true
+    },
+    {
+      "id": "D07",
+      "match": true
+    },
+    {
+      "id": "D08",
+      "match": true
+    },
+    {
+      "id": "D09",
+      "match": true
+    },
+    {
+      "id": "D10",
+      "match": true
+    },
+    {
+      "id": "D11",
+      "match": true
+    },
+    {
+      "id": "D12",
+      "match": true
+    },
+    {
+      "id": "E01",
+      "match": true
+    },
+    {
+      "id": "E02",
+      "match": true
+    },
+    {
+      "id": "E03",
+      "match": true
+    },
+    {
+      "id": "E04",
+      "match": true
+    },
+    {
+      "id": "E05",
+      "match": true
+    },
+    {
+      "id": "E06",
+      "match": true
+    },
+    {
+      "id": "E07",
+      "match": true
+    },
+    {
+      "id": "E08",
+      "match": true
+    },
+    {
+      "id": "E09",
+      "match": true
+    },
+    {
+      "id": "F01",
+      "match": true
+    },
+    {
+      "id": "F02",
+      "match": true
+    },
+    {
+      "id": "F03",
+      "match": true
+    },
+    {
+      "id": "F04",
+      "match": true
+    },
+    {
+      "id": "F05",
+      "match": true
+    },
+    {
+      "id": "F06",
+      "match": true
+    },
+    {
+      "id": "F07",
+      "match": true
+    },
+    {
+      "id": "F08",
+      "match": true
+    },
+    {
+      "id": "F09",
+      "match": true
+    },
+    {
+      "id": "F10",
+      "match": true
+    },
+    {
+      "id": "G01",
+      "match": true
+    },
+    {
+      "id": "G02",
+      "match": true
+    },
+    {
+      "id": "G03",
+      "match": true
+    },
+    {
+      "id": "G04",
+      "match": true
+    },
+    {
+      "id": "G05",
+      "match": true
+    },
+    {
+      "id": "G06",
+      "match": true
+    },
+    {
+      "id": "G07",
+      "match": true
+    },
+    {
+      "id": "G08",
+      "match": true
+    },
+    {
+      "id": "G09",
+      "match": true
+    },
+    {
+      "id": "G10",
+      "match": true
+    },
+    {
+      "id": "H01",
+      "match": true
+    },
+    {
+      "id": "H02",
+      "match": true
+    },
+    {
+      "id": "H03",
+      "match": true
+    },
+    {
+      "id": "H04",
+      "match": true
+    },
+    {
+      "id": "H05",
+      "match": true
+    },
+    {
+      "id": "H06",
+      "match": true
+    },
+    {
+      "id": "H07",
+      "match": true
+    },
+    {
+      "id": "H08",
+      "match": true
+    },
+    {
+      "id": "H09",
+      "match": true
+    },
+    {
+      "id": "H10",
+      "match": true
+    }
+  ]
+}
