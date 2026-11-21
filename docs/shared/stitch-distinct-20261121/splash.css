@@ -1,0 +1,21 @@
+/* MOBILE-SPLASH-20261121 — شاشة البداية والانتقال إلى الرئيسية. تعمل مع الوضعين عبر متغيرات الألوان. */
+html[data-theme=light]{--sp-d1:#F5F1EA;--sp-d2:#EEE6D9;--sp-l1:#E3D8C6;--sp-l2:#D9CCB6}
+html[data-theme=dark]{--sp-d1:#18282A;--sp-d2:#213432;--sp-l1:#2E443F;--sp-l2:#385149}
+html.sp-active,html.sp-active body{overflow:hidden}
+html.sp-active .app{opacity:0}
+html.sp-active .brand-lockup img{visibility:hidden}
+#splash{position:fixed;inset:0;z-index:1000;overflow:hidden;color:var(--text)}
+#splash .sp-veil{position:absolute;inset:0;background:var(--bg)}
+#splash .sp-stage{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;padding:30px 20px calc(30px + 2vh)}
+#splash .sp-emblem{display:block;width:clamp(132px,min(32vw,35vh),224px);height:auto;overflow:visible;transform-origin:0 0;will-change:transform}
+#splash .sp-status{display:flex;align-items:center;gap:11px;margin:9px 0 0;color:var(--muted);font-size:14px;line-height:1.8}
+#splash .sp-status::before,#splash .sp-status::after{content:"";width:22px;height:1px;background:var(--line)}
+#splash .sp-dunes{position:absolute;inset:auto 0 0;width:100%;height:clamp(36px,13vh,125px);pointer-events:none}
+#splash .sp-d1{fill:var(--sp-d1)}#splash .sp-d2{fill:var(--sp-d2)}
+#splash .sp-dl1{stroke:var(--sp-l1)}#splash .sp-dl2{stroke:var(--sp-l2)}
+#splash .sp-leg-fill{fill:var(--bg)}
+/* المشي يظهر فقط عند تفعيل الحركة؛ وإلا يبقى الشعار ثابتًا. أثناء الانتقال يظهران معًا لتبديل ناعم. */
+#splash #walking{display:none}
+#splash.animated #walking{display:inline}
+#splash.animated #still{display:none}
+#splash.fly #walking,#splash.fly #still{display:inline}

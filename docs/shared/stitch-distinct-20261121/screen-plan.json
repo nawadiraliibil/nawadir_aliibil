@@ -1,0 +1,425 @@
+[
+  {
+    "group": "A — البداية والدخول",
+    "requirements": "AD-FR-001–004",
+    "screens": [
+      {
+        "id": "A00",
+        "title": "شاشة البداية",
+        "brief": "Splash: animated walking emblem for 1s, then the emblem shrinks and lands on the home header logo (MOBILE-SPLASH-20261121)."
+      },
+      {
+        "id": "A01",
+        "title": "مرحبًا بك",
+        "brief": "Full supplied logo, two big buttons تصفح الإعلانات and دخول برقم الجوال, no forced tutorial."
+      },
+      {
+        "id": "A02",
+        "title": "رقم الجوال",
+        "brief": "Phone +966 LTR, إرسال رمز التحقق, why phone needed, guest path."
+      },
+      {
+        "id": "A03",
+        "title": "رمز التحقق",
+        "brief": "Single accessible OTP field, masked phone, change number and settings-sourced resend; error inline."
+      },
+      {
+        "id": "A04",
+        "title": "إكمال الحساب",
+        "brief": "Display name, region searchable selector, independent unchecked terms/privacy consent, explicit continue."
+      },
+      {
+        "id": "A05",
+        "title": "تعذر التحقق",
+        "brief": "Wrong/expired code, rate limit readable waiting time from settings, preserved number, retry/change number."
+      }
+    ]
+  },
+  {
+    "group": "B — الاستكشاف والبحث",
+    "requirements": "AD-FR-011–013, 022, 025, 028",
+    "screens": [
+      {
+        "id": "B01",
+        "title": "الرئيسية",
+        "brief": "Actual emblem reserved header, notifications, big search, simple type filters الكل/سعر محدد/مزاد حضوري, single column camel photo cards with price or venue/date; bottom tabs."
+      },
+      {
+        "id": "B02",
+        "title": "نتائج البحث",
+        "brief": "Title search, result count, active filters removable, separate large تصفية and ترتيب, متابعة هذا البحث."
+      },
+      {
+        "id": "B03",
+        "title": "تصفية الإعلانات",
+        "brief": "Region then searchable city, breed, sex, offer type, months age and SAR min/max; price excludes auctions; reset and عرض النتائج."
+      },
+      {
+        "id": "B04",
+        "title": "ترتيب النتائج",
+        "brief": "Radio choices newest visibility, newest original publish, price low/high; one apply."
+      },
+      {
+        "id": "B05",
+        "title": "اختيار المنطقة والمدينة",
+        "brief": "Searchable region then city, city cleared on region change, large list rows."
+      },
+      {
+        "id": "B06",
+        "title": "الخريطة والقريب",
+        "brief": "Approximate priced pins and distinct auction venue pins, map/list toggle, radius and chosen center, map demo label."
+      },
+      {
+        "id": "B07",
+        "title": "تحديد مركز البحث",
+        "brief": "Location denied friendly explanation, استخدام موقعي or manual center and radius, continue without permission."
+      },
+      {
+        "id": "B08",
+        "title": "لا توجد نتائج",
+        "brief": "Clear active filters, تعديل البحث and مسح المرشحات, no dead end."
+      },
+      {
+        "id": "B09",
+        "title": "المفضلة",
+        "brief": "Saved ad cards plus private unavailable row reveals no hidden media/text, guest login prompt via action."
+      }
+    ]
+  },
+  {
+    "group": "C — الإعلان والمعلن",
+    "requirements": "AD-FR-013–015, 023–025, 029, 032",
+    "screens": [
+      {
+        "id": "C01",
+        "title": "تفاصيل إعلان بسعر محدد",
+        "brief": "Camel photo gallery, 48,000 ريال, breed sex age health region, advertiser and badges specific, save share, contact choices call WhatsApp private message visible labels; info from advertiser."
+      },
+      {
+        "id": "C02",
+        "title": "تفاصيل مزاد حضوري",
+        "brief": "Venue point map, future Saudi date/time, المزايدة حضورية خارج التطبيق, directions/contact; absolutely no price bid checkout countdown."
+      },
+      {
+        "id": "C03",
+        "title": "مضى موعد المزاد",
+        "brief": "Past auction date message, no winner result, owner archive/edit future time reviewed, link remains accessible while published."
+      },
+      {
+        "id": "C04",
+        "title": "صور وفيديو الإعلان",
+        "brief": "Fullscreen image with index zoom/back and manual play video, no autoplay."
+      },
+      {
+        "id": "C05",
+        "title": "خيارات التواصل والمشاركة",
+        "brief": "Separate phone/WhatsApp/chat labeled actions, only consented public number, share public ad link, guest chat login required."
+      },
+      {
+        "id": "C06",
+        "title": "ملف المعلن",
+        "brief": "Display name region join date, phone/identity/business distinctly labeled, follow and rating summary, published ads."
+      },
+      {
+        "id": "C07",
+        "title": "أسئلة الإعلان",
+        "brief": "Public text questions, seller replies, add question, own edit/delete, report menu, close questions by owner."
+      },
+      {
+        "id": "C08",
+        "title": "إضافة سؤال أو تعديله",
+        "brief": "Clear public visibility notice, text input, submit/cancel, preserves text on error."
+      },
+      {
+        "id": "C09",
+        "title": "الإعلان غير متاح",
+        "brief": "No previous ad media/title/private reason; العودة للرئيسية and bottom tabs."
+      }
+    ]
+  },
+  {
+    "group": "D — نشر إعلان",
+    "requirements": "AD-FR-005–010, 014, 025, 028",
+    "screens": [
+      {
+        "id": "D01",
+        "title": "أضف إعلان — نوع العرض",
+        "brief": "Two large radio cards سعر محدد/مزاد حضوري, one camel only, clear progress and حفظ مسودة."
+      },
+      {
+        "id": "D02",
+        "title": "بيانات الإبل",
+        "brief": "Title, breed/other explanation, male/female, positive age months and approximate checkbox, color optional, inline errors."
+      },
+      {
+        "id": "D03",
+        "title": "الوصف والحالة الصحية",
+        "brief": "Description and required health/known defects, لا توجد عيوب معروفة option user entered, plain helpers."
+      },
+      {
+        "id": "D04",
+        "title": "موقع الإعلان",
+        "brief": "Region then searchable city; fixed price map point optional approximate with unchecked publish consent; no GPS requirement."
+      },
+      {
+        "id": "D05",
+        "title": "السعر المطلوب",
+        "brief": "Positive SAR amount max 2 decimals, no auction fields, LTR number keyboard, next/save."
+      },
+      {
+        "id": "D06",
+        "title": "موعد ومكان المزاد",
+        "brief": "Future date and time بتوقيت السعودية, venue name and map required, explicit unchecked publish precise venue consent, no auction price."
+      },
+      {
+        "id": "D07",
+        "title": "صور الإعلان والفيديو",
+        "brief": "3–10 photos default configurable, choose cover, reorder via labeled move controls, add camera/gallery, upload progress failure retry, optional video 60s 100MB."
+      },
+      {
+        "id": "D08",
+        "title": "رقم التواصل والموافقة",
+        "brief": "Separate contact phone NOT login prefill, call and/or WhatsApp toggle, independent unchecked publish number consent, explain at least one channel."
+      },
+      {
+        "id": "D09",
+        "title": "معاينة إعلان بسعر محدد",
+        "brief": "Preview actual fixed price branch with photo and attributes, modify sections, unchecked ownership/accuracy declaration then إرسال للمراجعة."
+      },
+      {
+        "id": "D10",
+        "title": "معاينة إعلان مزاد حضوري",
+        "brief": "Separate auction branch preview venue/date/time/point only, no price; unchecked declaration and إرسال للمراجعة."
+      },
+      {
+        "id": "D11",
+        "title": "تم إرسال الإعلان للمراجعة",
+        "brief": "Server-confirmed submitted state, غير ظاهر للآخرين حتى الموافقة, إعلاناتي and home."
+      },
+      {
+        "id": "D12",
+        "title": "مغادرة وحفظ المسودة",
+        "brief": "Bottom sheet save draft/discard/cancel, actual saved confirmation distinct from saving/failure."
+      }
+    ]
+  },
+  {
+    "group": "E — إدارة الإعلانات",
+    "requirements": "AD-FR-005, 008–010, 030",
+    "screens": [
+      {
+        "id": "E01",
+        "title": "إعلاناتي",
+        "brief": "Large status filters and count; draft/review/rejected/published/hidden/archived cards, clear edit/resume actions."
+      },
+      {
+        "id": "E02",
+        "title": "مسودة محفوظة",
+        "brief": "Last saved confirmation, resume/edit/delete draft confirmation."
+      },
+      {
+        "id": "E03",
+        "title": "إعلان قيد المراجعة",
+        "brief": "Pending cannot edit reviewed version, submission time, clear next step."
+      },
+      {
+        "id": "E04",
+        "title": "إعلان مرفوض",
+        "brief": "Owner-only rejection reason, صحح الإعلان, no misleading published state."
+      },
+      {
+        "id": "E05",
+        "title": "إعلان منشور",
+        "brief": "View/edit/bump/archive; bump eligible after 24h; last visibility time, no expiration countdown."
+      },
+      {
+        "id": "E06",
+        "title": "تجديد الظهور غير متاح بعد",
+        "brief": "Readable next eligible server time, 24h rule, content edit still available, no auto-renew fee."
+      },
+      {
+        "id": "E07",
+        "title": "تعديل إعلان منشور",
+        "brief": "Draft current public version remains until submit; warning upon إرسال التعديل للمراجعة hides public ad until approved."
+      },
+      {
+        "id": "E08",
+        "title": "إيقاف الإعلان وأرشفته",
+        "brief": "Confirmation no sale recorded, archive consequences, cancel safe default."
+      },
+      {
+        "id": "E09",
+        "title": "مؤرشف أو مخفي إداريًا",
+        "brief": "Distinct cards archived can start draft/review; hidden only admin review, no instant republish."
+      }
+    ]
+  },
+  {
+    "group": "F — التواصل والتقييم والبلاغ",
+    "requirements": "AD-FR-015, 029, 031–033",
+    "screens": [
+      {
+        "id": "F01",
+        "title": "الرسائل",
+        "brief": "Private conversations list, ad context only visible resources, unread text counts, sample anonymous people."
+      },
+      {
+        "id": "F02",
+        "title": "المحادثة",
+        "brief": "Text-only exchange, pending/sent/read, failed message retry, mute/report/block labels; no audio or image attachment."
+      },
+      {
+        "id": "F03",
+        "title": "محادثة للقراءة فقط",
+        "brief": "Blocked/suspended/hidden resource notice, composer disabled with clear reason, hidden ad title/media removed, prior own conversation retained."
+      },
+      {
+        "id": "F04",
+        "title": "حظر المستخدم",
+        "brief": "Confirmation bidirectional no new messages/questions, prior conversation remains; existing ratings unaffected, cancel default."
+      },
+      {
+        "id": "F05",
+        "title": "تقييمات المعلن",
+        "brief": "Average and text 1–5 ratings, seller reply, write/edit if eligible, not verified purchase; report/appeal."
+      },
+      {
+        "id": "F06",
+        "title": "إضافة أو تعديل تقييم",
+        "brief": "1–5 stars with words, text, unchecked تعاملت مع هذا المعلن, requires reciprocal chat + active confirmed phone, no purchase proof."
+      },
+      {
+        "id": "F07",
+        "title": "التقييم غير متاح الآن",
+        "brief": "Plain eligibility unmet reason, start conversation where applicable, self/duplicate prevention."
+      },
+      {
+        "id": "F08",
+        "title": "رد المعلن واعتراض على تقييم",
+        "brief": "Separate reply text and appeal reason flows; appeal does not auto-hide rating."
+      },
+      {
+        "id": "F09",
+        "title": "الإبلاغ عن محتوى",
+        "brief": "Context ad/account/message/question/rating, reason radio + description, reporter private, submit no real personal data."
+      },
+      {
+        "id": "F10",
+        "title": "بلاغاتي وتفاصيل البلاغ",
+        "brief": "Private reference and open/review/closed timeline, appropriate user response, no internal notes, confirmed submission."
+      }
+    ]
+  },
+  {
+    "group": "G — الحساب والمتابعة والتنبيهات",
+    "requirements": "AD-FR-003–004, 016, 026–027, 033",
+    "screens": [
+      {
+        "id": "G01",
+        "title": "حسابي",
+        "brief": "Large labeled rows profile/my ads/follows/notifications/verification/reports/blocked/settings/help/logout, no admin."
+      },
+      {
+        "id": "G02",
+        "title": "تعديل الملف الشخصي",
+        "brief": "Display name region, login phone private/confirmed label only no identity badge, save confirmation."
+      },
+      {
+        "id": "G03",
+        "title": "المتابعات والبحث المحفوظ",
+        "brief": "Tabs saved searches and followed sellers, readable filter summary, stop follow confirmation."
+      },
+      {
+        "id": "G04",
+        "title": "الإشعارات",
+        "brief": "Ad moderation/report/follow/chat/reply/rating/verification events; private push content excluded, in-app works without permission."
+      },
+      {
+        "id": "G05",
+        "title": "إعدادات الإشعارات",
+        "brief": "Per category push toggles, conversation mute, permission denied system settings action; important in-app events retained."
+      },
+      {
+        "id": "G06",
+        "title": "الإعدادات والمظهر",
+        "brief": "Light/dark/system choices actual theme control, text-size guidance, privacy/contact/help rows."
+      },
+      {
+        "id": "G07",
+        "title": "إدارة أرقام وموافقات التواصل",
+        "brief": "Per ad consent withdraw warning: removing final channel stops ad until valid channel; unchecked new consent."
+      },
+      {
+        "id": "G08",
+        "title": "المستخدمون المحظورون",
+        "brief": "Large unblock action and confirmation, no rating deletion implication."
+      },
+      {
+        "id": "G09",
+        "title": "الشروط والخصوصية والمساعدة",
+        "brief": "Readable section list and policy reader sample placeholder explicitly pending approved legal copy, simple help FAQ no fabricated support phone."
+      },
+      {
+        "id": "G10",
+        "title": "تسجيل الخروج وإغلاق الحساب",
+        "brief": "Separate logout confirmation and destructive closure with all ads hidden/sessions invalidated, retention per policy no invented immediate erase promise."
+      }
+    ]
+  },
+  {
+    "group": "H — التوثيق والحالات العامة",
+    "requirements": "AD-FR-034, AD-NFR-001, 005, 009",
+    "screens": [
+      {
+        "id": "H01",
+        "title": "توثيق الحساب",
+        "brief": "Distinct identity via trusted provider and business via private documents, optional service, no phone=identity."
+      },
+      {
+        "id": "H02",
+        "title": "توثيق الهوية",
+        "brief": "Consent and provider handoff, waiting/failed/provider unavailable recoverable, no client success badge."
+      },
+      {
+        "id": "H03",
+        "title": "توثيق النشاط",
+        "brief": "Private document picker progress/retry, no public document exposure, draft/submit and explicit consent."
+      },
+      {
+        "id": "H04",
+        "title": "حالة طلب التوثيق",
+        "brief": "Submitted/checking/approved/rejected/expired/cancelled readable timeline; reasons and resubmit where allowed, type-specific badge only trusted approval."
+      },
+      {
+        "id": "H05",
+        "title": "التحميل وإعادة المحاولة",
+        "brief": "Skeleton with readable loading, network error retry and retain inputs; no false success."
+      },
+      {
+        "id": "H06",
+        "title": "أنت غير متصل",
+        "brief": "Offline saved draft local notice, reconnect/retry, no submitted success, preserved inputs."
+      },
+      {
+        "id": "H07",
+        "title": "قائمة فارغة",
+        "brief": "No favorites/messages/ads empty variants with useful relevant CTA, simple illustrations."
+      },
+      {
+        "id": "H08",
+        "title": "الحساب موقوف",
+        "brief": "Clear access limitation, account owner appropriate reason, support/help, no publish/bump, no private info leaked."
+      },
+      {
+        "id": "H09",
+        "title": "صلاحيات الصور والموقع والتنبيهات",
+        "brief": "Just in time permission rationale, denied fallback including manual location/gallery/settings, no forced all-permissions gate."
+      },
+      {
+        "id": "H10",
+        "title": "تأكيد النجاح أو فشل الحفظ",
+        "brief": "Distinct saving/success/failure inline status, server confirmation required, retry no duplicate submit."
+      }
+    ]
+  }
+]

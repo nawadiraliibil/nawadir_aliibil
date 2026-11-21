@@ -46,5 +46,27 @@
     primary.forEach(el=>{el.disabled=!valid;el.setAttribute('aria-disabled',String(!valid));});
   }
   [...required,...channels].forEach(el=>{el.addEventListener('input',validate);el.addEventListener('change',validate);});validate();
+  // MOBILE-GUI-NOTES-20261118: تبويبات، قائمة النقاط الثلاث، تبديل شكل الإعلانات، وخانات الرمز.
+  document.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>{
+    const bar=el.parentElement,panels=[];let n=bar.nextElementSibling;
+    while(n&&n.classList.contains('tab-panel')){panels.push(n);n=n.nextElementSibling;}
+    bar.querySelectorAll('[data-tab]').forEach(t=>{const on=t===el;t.classList.toggle('active',on);t.setAttribute('aria-selected',String(on));});
+    panels.forEach(p=>{p.hidden=p.dataset.panel!==el.dataset.tab;});
+  }));
+  document.querySelectorAll('[data-menu]').forEach(el=>{
+    const menu=document.getElementById(el.dataset.menu);if(!menu)return;
+    el.addEventListener('click',e=>{e.stopPropagation();menu.hidden=!menu.hidden;el.setAttribute('aria-expanded',String(!menu.hidden));});
+    document.addEventListener('click',e=>{if(!menu.hidden&&!menu.contains(e.target)){menu.hidden=true;el.setAttribute('aria-expanded','false');}});
+  });
+  document.querySelectorAll('[data-view]').forEach(el=>el.addEventListener('click',()=>{
+    el.parentElement.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b===el));
+    document.querySelectorAll('.ad-grid').forEach(g=>g.classList.toggle('list',el.dataset.view==='list'));
+  }));
+  const otp=[...document.querySelectorAll('.otp input')];
+  otp.forEach((el,i)=>{
+    el.addEventListener('input',()=>{el.value=el.value.replace(/\D/g,'').slice(-1);if(el.value&&otp[i+1])otp[i+1].focus();});
+    el.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!el.value&&otp[i-1])otp[i-1].focus();});
+    el.addEventListener('paste',e=>{const d=(e.clipboardData.getData('text')||'').replace(/\D/g,'').slice(0,6);if(!d)return;e.preventDefault();otp.forEach((o,k)=>{o.value=d[k]||'';});otp[Math.min(d.length,5)].focus();validate();});
+  });
   document.querySelectorAll('form').forEach(form=>form.addEventListener('submit',e=>e.preventDefault()));
 })();

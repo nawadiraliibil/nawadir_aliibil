@@ -1,17 +1,5 @@
 [
   {
-    "id": "A01",
-    "title": "مرحبًا بك",
-    "theme": "light",
-    "file": "A01-light.html"
-  },
-  {
-    "id": "A01",
-    "title": "مرحبًا بك",
-    "theme": "dark",
-    "file": "A01-dark.html"
-  },
-  {
     "id": "A02",
     "title": "رقم الجوال",
     "theme": "light",
@@ -97,13 +85,13 @@
   },
   {
     "id": "B04",
-    "title": "ترتيب النتائج",
+    "title": "ترتيب حسب",
     "theme": "light",
     "file": "B04-light.html"
   },
   {
     "id": "B04",
-    "title": "ترتيب النتائج",
+    "title": "ترتيب حسب",
     "theme": "dark",
     "file": "B04-dark.html"
   },
@@ -118,30 +106,6 @@
     "title": "اختيار المنطقة والمدينة",
     "theme": "dark",
     "file": "B05-dark.html"
-  },
-  {
-    "id": "B06",
-    "title": "الخريطة والقريب",
-    "theme": "light",
-    "file": "B06-light.html"
-  },
-  {
-    "id": "B06",
-    "title": "الخريطة والقريب",
-    "theme": "dark",
-    "file": "B06-dark.html"
-  },
-  {
-    "id": "B07",
-    "title": "تحديد مركز البحث",
-    "theme": "light",
-    "file": "B07-light.html"
-  },
-  {
-    "id": "B07",
-    "title": "تحديد مركز البحث",
-    "theme": "dark",
-    "file": "B07-dark.html"
   },
   {
     "id": "B08",
@@ -192,18 +156,6 @@
     "file": "C02-dark.html"
   },
   {
-    "id": "C03",
-    "title": "مضى موعد المزاد",
-    "theme": "light",
-    "file": "C03-light.html"
-  },
-  {
-    "id": "C03",
-    "title": "مضى موعد المزاد",
-    "theme": "dark",
-    "file": "C03-dark.html"
-  },
-  {
     "id": "C04",
     "title": "صور وفيديو الإعلان",
     "theme": "light",
@@ -214,18 +166,6 @@
     "title": "صور وفيديو الإعلان",
     "theme": "dark",
     "file": "C04-dark.html"
-  },
-  {
-    "id": "C05",
-    "title": "خيارات التواصل والمشاركة",
-    "theme": "light",
-    "file": "C05-light.html"
-  },
-  {
-    "id": "C05",
-    "title": "خيارات التواصل والمشاركة",
-    "theme": "dark",
-    "file": "C05-dark.html"
   },
   {
     "id": "C06",
@@ -361,13 +301,13 @@
   },
   {
     "id": "D08",
-    "title": "رقم التواصل والموافقة",
+    "title": "رقم التواصل",
     "theme": "light",
     "file": "D08-light.html"
   },
   {
     "id": "D08",
-    "title": "رقم التواصل والموافقة",
+    "title": "رقم التواصل",
     "theme": "dark",
     "file": "D08-dark.html"
   },
@@ -432,18 +372,6 @@
     "file": "E01-dark.html"
   },
   {
-    "id": "E02",
-    "title": "مسودة محفوظة",
-    "theme": "light",
-    "file": "E02-light.html"
-  },
-  {
-    "id": "E02",
-    "title": "مسودة محفوظة",
-    "theme": "dark",
-    "file": "E02-dark.html"
-  },
-  {
     "id": "E03",
     "title": "إعلان قيد المراجعة",
     "theme": "light",
@@ -493,13 +421,13 @@
   },
   {
     "id": "E07",
-    "title": "تعديل إعلان منشور",
+    "title": "تعديل الإعلان",
     "theme": "light",
     "file": "E07-light.html"
   },
   {
     "id": "E07",
-    "title": "تعديل إعلان منشور",
+    "title": "تعديل الإعلان",
     "theme": "dark",
     "file": "E07-dark.html"
   },
@@ -517,13 +445,13 @@
   },
   {
     "id": "E09",
-    "title": "مؤرشف أو مخفي إداريًا",
+    "title": "إعلاناتي — مؤرشف",
     "theme": "light",
     "file": "E09-light.html"
   },
   {
     "id": "E09",
-    "title": "مؤرشف أو مخفي إداريًا",
+    "title": "إعلاناتي — مؤرشف",
     "theme": "dark",
     "file": "E09-dark.html"
   },
@@ -550,18 +478,6 @@
     "title": "المحادثة",
     "theme": "dark",
     "file": "F02-dark.html"
-  },
-  {
-    "id": "F03",
-    "title": "محادثة للقراءة فقط",
-    "theme": "light",
-    "file": "F03-light.html"
-  },
-  {
-    "id": "F03",
-    "title": "محادثة للقراءة فقط",
-    "theme": "dark",
-    "file": "F03-dark.html"
   },
   {
     "id": "F04",
@@ -636,18 +552,6 @@
     "file": "F09-dark.html"
   },
   {
-    "id": "F10",
-    "title": "بلاغاتي وتفاصيل البلاغ",
-    "theme": "light",
-    "file": "F10-light.html"
-  },
-  {
-    "id": "F10",
-    "title": "بلاغاتي وتفاصيل البلاغ",
-    "theme": "dark",
-    "file": "F10-dark.html"
-  },
-  {
     "id": "G01",
     "title": "حسابي",
     "theme": "light",
@@ -709,27 +613,15 @@
   },
   {
     "id": "G06",
-    "title": "الإعدادات والمظهر",
+    "title": "الإعدادات",
     "theme": "light",
     "file": "G06-light.html"
   },
   {
     "id": "G06",
-    "title": "الإعدادات والمظهر",
+    "title": "الإعدادات",
     "theme": "dark",
     "file": "G06-dark.html"
-  },
-  {
-    "id": "G07",
-    "title": "إدارة أرقام وموافقات التواصل",
-    "theme": "light",
-    "file": "G07-light.html"
-  },
-  {
-    "id": "G07",
-    "title": "إدارة أرقام وموافقات التواصل",
-    "theme": "dark",
-    "file": "G07-dark.html"
   },
   {
     "id": "G08",
@@ -745,75 +637,27 @@
   },
   {
     "id": "G09",
-    "title": "الشروط والخصوصية والمساعدة",
+    "title": "الشروط والمساعدة",
     "theme": "light",
     "file": "G09-light.html"
   },
   {
     "id": "G09",
-    "title": "الشروط والخصوصية والمساعدة",
+    "title": "الشروط والمساعدة",
     "theme": "dark",
     "file": "G09-dark.html"
   },
   {
     "id": "G10",
-    "title": "تسجيل الخروج وإغلاق الحساب",
+    "title": "تسجيل الخروج",
     "theme": "light",
     "file": "G10-light.html"
   },
   {
     "id": "G10",
-    "title": "تسجيل الخروج وإغلاق الحساب",
+    "title": "تسجيل الخروج",
     "theme": "dark",
     "file": "G10-dark.html"
-  },
-  {
-    "id": "H01",
-    "title": "توثيق الحساب",
-    "theme": "light",
-    "file": "H01-light.html"
-  },
-  {
-    "id": "H01",
-    "title": "توثيق الحساب",
-    "theme": "dark",
-    "file": "H01-dark.html"
-  },
-  {
-    "id": "H02",
-    "title": "توثيق الهوية",
-    "theme": "light",
-    "file": "H02-light.html"
-  },
-  {
-    "id": "H02",
-    "title": "توثيق الهوية",
-    "theme": "dark",
-    "file": "H02-dark.html"
-  },
-  {
-    "id": "H03",
-    "title": "توثيق النشاط",
-    "theme": "light",
-    "file": "H03-light.html"
-  },
-  {
-    "id": "H03",
-    "title": "توثيق النشاط",
-    "theme": "dark",
-    "file": "H03-dark.html"
-  },
-  {
-    "id": "H04",
-    "title": "حالة طلب التوثيق",
-    "theme": "light",
-    "file": "H04-light.html"
-  },
-  {
-    "id": "H04",
-    "title": "حالة طلب التوثيق",
-    "theme": "dark",
-    "file": "H04-dark.html"
   },
   {
     "id": "H05",
@@ -865,13 +709,13 @@
   },
   {
     "id": "H09",
-    "title": "صلاحيات الصور والموقع والتنبيهات",
+    "title": "صلاحيات الصور والتنبيهات",
     "theme": "light",
     "file": "H09-light.html"
   },
   {
     "id": "H09",
-    "title": "صلاحيات الصور والموقع والتنبيهات",
+    "title": "صلاحيات الصور والتنبيهات",
     "theme": "dark",
     "file": "H09-dark.html"
   },
