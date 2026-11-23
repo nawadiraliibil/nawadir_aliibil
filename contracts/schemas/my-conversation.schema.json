@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/my-conversation.schema.json",
+  "title": "صف من my_conversations",
+  "description": "listing_available=false: الإعلان لم يعد منشورًا وعنوانه وغلافه فارغان. writable=false: للقراءة فقط.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "conversation_id",
+    "listing_id",
+    "my_role",
+    "other_user_id",
+    "other_display_name",
+    "listing_available",
+    "listing_title",
+    "cover_bucket",
+    "cover_path",
+    "writable",
+    "muted",
+    "last_message_at",
+    "last_message_body",
+    "last_message_sender_id",
+    "unread_count",
+    "created_at"
+  ],
+  "properties": {
+    "conversation_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "listing_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "my_role": {
+      "enum": [
+        "BUYER",
+        "SELLER"
+      ]
+    },
+    "other_user_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "other_display_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "listing_available": {
+      "type": "boolean"
+    },
+    "listing_title": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "cover_bucket": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "cover_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "writable": {
+      "type": "boolean"
+    },
+    "muted": {
+      "type": "boolean"
+    },
+    "last_message_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "last_message_body": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "last_message_sender_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "unread_count": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

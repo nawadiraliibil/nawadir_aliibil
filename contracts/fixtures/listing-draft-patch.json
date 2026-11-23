@@ -1,0 +1,17 @@
+{
+  "title": "ناقة مجاهيم للبيع",
+  "description": "ناقة مجاهيم عمرها أربع سنوات، هادئة الطباع ومعتادة على الحلب.",
+  "breed_id": 1,
+  "sex": "FEMALE",
+  "age_months": 48,
+  "color": "سوداء",
+  "region_id": 1,
+  "city_id": 1,
+  "health_notes": "لا توجد عيوب معروفة",
+  "owner_declaration": true,
+  "offer_type": "FIXED_PRICE",
+  "price": 25000,
+  "contact_phone": "0500000009",
+  "contact_call_enabled": true,
+  "contact_whatsapp_enabled": true
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/message.schema.json",
+  "title": "صف من messages",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "conversation_id",
+    "sender_id",
+    "body",
+    "request_id",
+    "created_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "conversation_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "sender_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "body": {
+      "type": "string"
+    },
+    "request_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

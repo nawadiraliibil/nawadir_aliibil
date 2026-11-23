@@ -1,0 +1,6 @@
+{
+  "code": "P0001",
+  "details": "{\"fields\": [\"p_price_max\", \"p_price_min\"]}",
+  "hint": null,
+  "message": "VALIDATION_FAILED"
+}

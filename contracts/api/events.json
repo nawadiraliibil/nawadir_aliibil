@@ -1,0 +1,137 @@
+{
+  "note": "قيم نصية مغلقة ليست enums في قاعدة البيانات. تغييرها يتبع قواعد التغيير في README.",
+  "notification_events": {
+    "LISTING_STATUS": [
+      "listing.approved",
+      "listing.rejected",
+      "listing.hidden",
+      "listing.unhidden"
+    ],
+    "ACCOUNT": [
+      "account.suspended",
+      "account.reactivated"
+    ],
+    "MESSAGES": [
+      "message.received"
+    ],
+    "COMMENTS": [
+      "comment.created",
+      "comment.replied"
+    ],
+    "FOLLOWS": [
+      "follow.new_listing"
+    ],
+    "REPORTS": [
+      "report.closed"
+    ],
+    "RATINGS": [
+      "rating.received",
+      "rating.replied",
+      "rating.appeal_decided"
+    ]
+  },
+  "notification_payload": {
+    "listing.*": [
+      "listing_id",
+      "title",
+      "decision",
+      "reason_code",
+      "reason_label_ar",
+      "reason_text"
+    ],
+    "account.suspended": [
+      "reason_code",
+      "reason_label_ar",
+      "reason_text"
+    ],
+    "account.reactivated": [],
+    "message.received": [
+      "conversation_id",
+      "listing_id"
+    ],
+    "comment.*": [
+      "listing_id",
+      "comment_id"
+    ],
+    "follow.new_listing": [
+      "listing_id",
+      "title",
+      "source"
+    ],
+    "report.closed": [
+      "report_id",
+      "ref",
+      "response_text"
+    ],
+    "rating.received": [
+      "rating_id",
+      "score"
+    ],
+    "rating.replied": [
+      "rating_id",
+      "seller_id"
+    ],
+    "rating.appeal_decided": [
+      "rating_id",
+      "decision"
+    ]
+  },
+  "staff_capabilities": [
+    "listings.review",
+    "listings.hide",
+    "accounts.manage",
+    "reports.handle",
+    "evidence.read",
+    "comments.moderate",
+    "ratings.moderate",
+    "lookups.manage",
+    "settings.manage",
+    "staff.manage",
+    "audit.read",
+    "stats.read"
+  ],
+  "admin_only_capabilities": [
+    "staff.manage",
+    "audit.read",
+    "stats.read"
+  ],
+  "moderation_actions": [
+    "LISTING_REJECT",
+    "LISTING_HIDE",
+    "ACCOUNT_SUSPEND",
+    "COMMENT_HIDE",
+    "RATING_HIDE"
+  ],
+  "lookup_kinds": [
+    "region",
+    "city",
+    "breed",
+    "moderation_reason"
+  ],
+  "audit_actions": [
+    "staff.bootstrap_admin",
+    "staff.role_granted",
+    "staff.role_revoked",
+    "listing.approved",
+    "listing.rejected",
+    "listing.hidden",
+    "listing.unhidden",
+    "account.suspended",
+    "account.reactivated",
+    "lookup.upserted",
+    "lookup.activated",
+    "lookup.deactivated",
+    "lookup.reordered",
+    "settings.published",
+    "settings.rolled_back",
+    "comment.hidden",
+    "comment.unhidden",
+    "report.assigned",
+    "report.status_changed",
+    "report.closed",
+    "report.evidence_read",
+    "rating.hidden",
+    "rating.unhidden",
+    "rating.appeal_decided"
+  ]
+}

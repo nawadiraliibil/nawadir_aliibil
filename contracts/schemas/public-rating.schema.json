@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/public-rating.schema.json",
+  "title": "صف من public_ratings",
+  "description": "التقييمات الظاهرة فقط؛ المخفي لا يظهر ولا يدخل في المتوسط.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "rating_id",
+    "seller_id",
+    "rater_id",
+    "rater_display_name",
+    "score",
+    "body",
+    "reply_body",
+    "reply_at",
+    "edited_at",
+    "created_at"
+  ],
+  "properties": {
+    "rating_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "seller_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "rater_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "rater_display_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "score": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "body": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reply_body": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reply_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "edited_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

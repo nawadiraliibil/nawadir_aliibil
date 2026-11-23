@@ -1,0 +1,18 @@
+{
+  "role": "ADMIN",
+  "user_id": "95002fec-541b-4085-b6db-671b43ea977f",
+  "capabilities": [
+    "listings.review",
+    "listings.hide",
+    "accounts.manage",
+    "reports.handle",
+    "evidence.read",
+    "comments.moderate",
+    "ratings.moderate",
+    "lookups.manage",
+    "settings.manage",
+    "staff.manage",
+    "audit.read",
+    "stats.read"
+  ]
+}

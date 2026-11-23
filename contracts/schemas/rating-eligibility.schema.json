@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/rating-eligibility.schema.json",
+  "title": "رد get_rating_eligibility",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "eligible"
+  ],
+  "properties": {
+    "eligible": {
+      "type": "boolean"
+    },
+    "reason": {
+      "enum": [
+        "SELF",
+        "ALREADY_RATED",
+        "BLOCKED",
+        "NO_CONVERSATION",
+        "NO_EXCHANGE"
+      ]
+    },
+    "rating_id": {
+      "type": "string",
+      "format": "uuid"
+    }
+  }
+}

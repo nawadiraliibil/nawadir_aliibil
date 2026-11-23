@@ -1,0 +1,718 @@
+# دوال الخلفية المتاحة عبر PostgREST (‎/rest/v1/rpc/<name>).
+# مولد من القاعدة المحلية بالسكربت contracts/tools/build_rpc.mjs؛ لا يعدل يدويًا.
+#
+# access:
+#   anon                 الزائر والمستخدم
+#   user                 مستخدم مسجل بحساب هاتف
+#   staff                أي موظف فعال بجلسة aal2
+#   staff:<capability>   موظف يملك القدرة (المدير يملك كل القدرات)
+#   service              دور الخادم فقط؛ لا يستدعيها العميل
+# الأخطاء: الرمز في message والتفاصيل JSON في details بحالة SQL ‏P0001؛
+# انظر api/errors.json. الرد jsonb ما لم يذكر غير ذلك.
+
+version: "1.0.0"
+functions:
+  accept_policies:
+    description: "تسجيل موافقة صاحب الجلسة على نصوص سارية. تكرار الطلب لا يغير تاريخ الموافقة."
+    access: "user"
+    arguments: "p_document_ids integer[]"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, VALIDATION_FAILED]
+    idempotency: "تكرار الموافقة على النص نفسه لا يغير تاريخها."
+    requirement: "AD-FR-003"
+    since: "0.1.0"
+  add_favorite:
+    description: "يحفظ إعلانًا منشورًا في مفضلة صاحب الجلسة. التكرار آمن."
+    access: "user"
+    arguments: "p_listing_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND]
+    idempotency: "التكرار لا ينشئ صفًا ولا يغير تاريخ الحفظ."
+    requirement: "AD-FR-022"
+    since: "0.2.0"
+  add_listing_media:
+    description: "تسجيل ملف وسائط بانتظار الرفع في مسودة. يعيد bucket والمسار للرفع عبر واجهة التخزين."
+    access: "user"
+    arguments: "p_listing_id uuid, p_kind media_kind, p_mime_type text, p_size_bytes bigint"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED, VIDEO_DISABLED, MEDIA_LIMIT_REACHED]
+    note: "بعد الرفع إلى المسار المعاد يستدعي العميل دالة Edge ‏media-finalize."
+    requirement: "AD-FR-007"
+    since: "0.1.0"
+  admin_approve_listing_version:
+    description: "اعتماد النسخة قيد المراجعة ونشر الإعلان. القدرة: listings.review."
+    access: "staff:listings.review"
+    arguments: "p_listing_id uuid, p_version_id uuid, p_content_hash text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, VERSION_CHANGED, AUCTION_TIME_PASSED]
+    requirement: "AD-FR-008، AD-FR-009"
+    since: "0.1.0"
+  admin_assign_report:
+    description: "يسند بلاغًا إلى مسؤول ويجعله قيد المراجعة. القدرة: reports.handle."
+    access: "staff:reports.handle"
+    arguments: "p_report_id uuid, p_assignee uuid DEFAULT NULL::uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
+    requirement: "AD-FR-019"
+    since: "0.3.0"
+  admin_close_report:
+    description: "يغلق بلاغًا بسبب وردّ للمبلغ وملاحظة داخلية، ويُشعر المبلغ. القدرة: reports.handle."
+    access: "staff:reports.handle"
+    arguments: "p_report_id uuid, p_close_reason text, p_response_text text DEFAULT NULL::text, p_internal_note text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, REASON_REQUIRED, VALIDATION_FAILED]
+    requirement: "AD-FR-019"
+    since: "0.3.0"
+  admin_decide_rating_appeal:
+    description: "قرار الإدارة في اعتراض على تقييم: القبول يخفيه بسبب، والرفض يبقيه. القدرة: ratings.moderate."
+    access: "staff:ratings.moderate"
+    arguments: "p_appeal_id uuid, p_decision text, p_reason_code text DEFAULT NULL::text, p_note text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, REASON_REQUIRED, VALIDATION_FAILED]
+    note: "p_decision: ACCEPTED يخفي التقييم بسبب إلزامي (RATING_HIDE)، REJECTED يبقيه."
+    requirement: "AD-FR-036"
+    since: "1.0.0"
+  admin_get_account:
+    description: "تفاصيل حساب مستخدم مع هاتف الدخول وعدد إعلاناته بحسب الحالة. القدرة: accounts.manage."
+    access: "staff:accounts.manage"
+    arguments: "p_user_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND]
+    requirement: "AD-FR-018"
+    since: "0.1.0"
+  admin_get_listing_review:
+    description: "تفاصيل إعلان للمراجعة مع بصمة النسخة. القدرة: listings.review أو listings.hide."
+    access: "staff:listings.review|listings.hide"
+    arguments: "p_listing_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND]
+    requirement: "AD-FR-008، AD-FR-018"
+    since: "0.1.0"
+  admin_get_report_evidence:
+    description: "الرسالة أو الرد المبلّغ عنه وسياق محدود، بتسجيل الاطلاع. القدرة: evidence.read."
+    access: "staff:evidence.read"
+    arguments: "p_report_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE]
+    note: "تسجل كل قراءة ناجحة في report_evidence_access وسجل الإجراءات."
+    requirement: "AD-FR-036"
+    since: "0.3.0"
+  admin_get_settings:
+    description: "الإصدار المنشور ومسودة التعديل. القدرة: settings.manage."
+    access: "staff:settings.manage"
+    arguments: ""
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED]
+    requirement: "AD-FR-037"
+    since: "0.1.0"
+  admin_grant_role:
+    description: "منح دور لحساب موظف أو تعديله. القدرة: staff.manage."
+    access: "staff:staff.manage"
+    arguments: "p_user_id uuid, p_role staff_role, p_capabilities text[] DEFAULT ARRAY[]::text[]"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, CANNOT_MODIFY_SELF, VALIDATION_FAILED, LAST_ADMIN]
+    requirement: "AD-FR-021"
+    since: "0.1.0"
+  admin_hide_comment:
+    description: "إخفاء رد مخالف بسبب إلزامي. القدرة: comments.moderate."
+    access: "staff:comments.moderate"
+    arguments: "p_comment_id uuid, p_reason_code text, p_reason_text text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, REASON_REQUIRED, VALIDATION_FAILED]
+    requirement: "AD-FR-032، AD-FR-036"
+    since: "0.3.0"
+  admin_hide_listing:
+    description: "إخفاء إعلان منشور بسبب إلزامي. يسري على القراءة والوسائط من الطلب التالي. القدرة: listings.hide."
+    access: "staff:listings.hide"
+    arguments: "p_listing_id uuid, p_reason_code text, p_reason_text text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, REASON_REQUIRED, VALIDATION_FAILED, NOT_FOUND, INVALID_STATE]
+    requirement: "AD-FR-018"
+    since: "0.1.0"
+  admin_hide_rating:
+    description: "إخفاء تقييم مخالف بسبب إلزامي؛ يخرج من العرض والمتوسط. القدرة: ratings.moderate."
+    access: "staff:ratings.moderate"
+    arguments: "p_rating_id uuid, p_reason_code text, p_reason_text text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, REASON_REQUIRED, VALIDATION_FAILED]
+    requirement: "AD-FR-036"
+    since: "1.0.0"
+  admin_publish_settings:
+    description: "نشر مسودة الإعدادات بإصدار جديد. ذري مع حدود التخزين. القدرة: settings.manage."
+    access: "staff:settings.manage"
+    arguments: "p_note text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, INVALID_STATE, VALIDATION_FAILED, BELOW_HARD_MINIMUM]
+    requirement: "AD-FR-037"
+    since: "0.1.0"
+  admin_reactivate_account:
+    description: "إعادة تفعيل حساب معلق دون إعادة نشر إعلاناته. القدرة: accounts.manage."
+    access: "staff:accounts.manage"
+    arguments: "p_user_id uuid, p_note text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
+    requirement: "AD-FR-018"
+    since: "0.1.0"
+  admin_reject_listing_version:
+    description: "رفض النسخة قيد المراجعة بسبب إلزامي. القدرة: listings.review."
+    access: "staff:listings.review"
+    arguments: "p_listing_id uuid, p_version_id uuid, p_content_hash text, p_reason_code text, p_reason_text text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, REASON_REQUIRED, VALIDATION_FAILED, NOT_FOUND, INVALID_STATE, VERSION_CHANGED]
+    requirement: "AD-FR-008، AD-FR-018"
+    since: "0.1.0"
+  admin_reorder_lookup:
+    description: "ترتيب قيم قائمة بحسب تسلسل المعرفات المرسلة. القدرة: lookups.manage."
+    access: "staff:lookups.manage"
+    arguments: "p_kind text, p_ids text[]"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, VALIDATION_FAILED, NOT_FOUND]
+    requirement: "AD-FR-037"
+    since: "0.1.0"
+  admin_review_queue:
+    description: "قائمة الإعلانات قيد المراجعة، الأقدم أولًا. القدرة: listings.review."
+    access: "staff:listings.review"
+    arguments: "p_limit integer DEFAULT 50, p_after_changed_at timestamp with time zone DEFAULT NULL::timestamp with time zone, p_after_id uuid DEFAULT NULL::uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED]
+    requirement: "AD-FR-008"
+    since: "0.1.0"
+  admin_revoke_role:
+    description: "سحب دور موظف. يسري في استدعائه التالي. القدرة: staff.manage."
+    access: "staff:staff.manage"
+    arguments: "p_user_id uuid, p_reason text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, CANNOT_MODIFY_SELF, INVALID_STATE, LAST_ADMIN]
+    requirement: "AD-FR-021"
+    since: "0.1.0"
+  admin_rollback_settings:
+    description: "التراجع: نشر إصدار جديد بمحتوى إصدار سابق. القدرة: settings.manage."
+    access: "staff:settings.manage"
+    arguments: "p_version integer, p_note text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED, BELOW_HARD_MINIMUM]
+    requirement: "AD-FR-037"
+    since: "0.1.0"
+  admin_set_lookup_active:
+    description: "تعطيل قيمة قائمة أو تفعيلها دون حذف. القدرة: lookups.manage."
+    access: "staff:lookups.manage"
+    arguments: "p_kind text, p_id text, p_is_active boolean"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, VALIDATION_FAILED, NOT_FOUND]
+    requirement: "AD-FR-037"
+    since: "0.1.0"
+  admin_set_report_status:
+    description: "يغير حالة بلاغ بين مفتوح وقيد المراجعة. القدرة: reports.handle."
+    access: "staff:reports.handle"
+    arguments: "p_report_id uuid, p_status text, p_note text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
+    requirement: "AD-FR-019"
+    since: "0.3.0"
+  admin_stats:
+    description: "تقارير تجميعية للفترة (الافتراضي آخر 30 يومًا، وحتى 366). أعداد فقط. القدرة: stats.read."
+    access: "staff:stats.read"
+    arguments: "p_from timestamp with time zone DEFAULT NULL::timestamp with time zone, p_to timestamp with time zone DEFAULT NULL::timestamp with time zone"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, VALIDATION_FAILED]
+    note: "أعداد تجميعية فقط للفترة (الافتراضي آخر 30 يومًا، وحتى 366)."
+    requirement: "AD-FR-020"
+    since: "1.0.0"
+  admin_suspend_account:
+    description: "تعليق حساب بسبب إلزامي وإخفاء إعلاناته المنشورة. القدرة: accounts.manage."
+    access: "staff:accounts.manage"
+    arguments: "p_user_id uuid, p_reason_code text, p_reason_text text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, REASON_REQUIRED, VALIDATION_FAILED, NOT_FOUND, INVALID_STATE]
+    requirement: "AD-FR-018"
+    since: "0.1.0"
+  admin_unhide_comment:
+    description: "إعادة إظهار رد أُخفي إداريًا. القدرة: comments.moderate."
+    access: "staff:comments.moderate"
+    arguments: "p_comment_id uuid, p_note text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
+    requirement: "AD-FR-032"
+    since: "0.3.0"
+  admin_unhide_listing:
+    description: "إعادة إظهار إعلان مخفي بقرار إداري. القدرة: listings.hide."
+    access: "staff:listings.hide"
+    arguments: "p_listing_id uuid, p_note text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
+    requirement: "AD-FR-018"
+    since: "0.1.0"
+  admin_unhide_rating:
+    description: "إعادة إظهار تقييم أُخفي. القدرة: ratings.moderate."
+    access: "staff:ratings.moderate"
+    arguments: "p_rating_id uuid, p_note text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
+    requirement: "AD-FR-036"
+    since: "1.0.0"
+  admin_update_settings_draft:
+    description: "حفظ مسودة الإعدادات بعد التحقق منها، أو إلغاؤها بـnull. لا يغير المنشور. القدرة: settings.manage."
+    access: "staff:settings.manage"
+    arguments: "p_content jsonb"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, VALIDATION_FAILED, BELOW_HARD_MINIMUM]
+    requirement: "AD-FR-037"
+    since: "0.1.0"
+  admin_upsert_breed:
+    description: "إضافة سلالة أو تعديلها. القدرة: lookups.manage."
+    access: "staff:lookups.manage"
+    arguments: "p_id integer, p_name_ar text, p_requires_note boolean DEFAULT false, p_sort_order integer DEFAULT NULL::integer"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, VALIDATION_FAILED, NOT_FOUND]
+    requirement: "AD-FR-037"
+    since: "0.1.0"
+  admin_upsert_city:
+    description: "إضافة مدينة تابعة لمنطقة أو تعديلها. القدرة: lookups.manage."
+    access: "staff:lookups.manage"
+    arguments: "p_id integer, p_region_id integer, p_name_ar text, p_sort_order integer DEFAULT NULL::integer"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, VALIDATION_FAILED, NOT_FOUND, INVALID_STATE]
+    requirement: "AD-FR-037"
+    since: "0.1.0"
+  admin_upsert_moderation_reason:
+    description: "إضافة سبب إشراف أو تعديله. القدرة: lookups.manage."
+    access: "staff:lookups.manage"
+    arguments: "p_code text, p_label_ar text, p_applies_to text[], p_requires_note boolean DEFAULT false, p_sort_order integer DEFAULT NULL::integer"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, VALIDATION_FAILED]
+    requirement: "AD-FR-037"
+    since: "0.1.0"
+  admin_upsert_region:
+    description: "إضافة منطقة (p_id فارغ) أو تعديلها. القدرة: lookups.manage."
+    access: "staff:lookups.manage"
+    arguments: "p_id integer, p_name_ar text, p_sort_order integer DEFAULT NULL::integer"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, VALIDATION_FAILED, NOT_FOUND]
+    requirement: "AD-FR-037"
+    since: "0.1.0"
+  admin_whoami:
+    description: "دور الموظف صاحب الجلسة وقدراته. لإظهار القوائم في اللوحة فقط؛ الصلاحية تفحص في كل دالة."
+    access: "staff"
+    arguments: ""
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED]
+    requirement: "AD-FR-017"
+    since: "0.1.0"
+  appeal_rating:
+    description: "يعترض المعلن على تقييم مرة واحدة. لا يخفيه؛ تقرر الإدارة."
+    access: "user"
+    arguments: "p_rating_id uuid, p_reason text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
+    idempotency: "اعتراض واحد لكل تقييم؛ التكرار يعيد القائم (created=false)."
+    note: "الاعتراض لا يخفي التقييم تلقائيًا."
+    requirement: "AD-FR-029"
+    since: "1.0.0"
+  archive_listing:
+    description: "أرشفة إعلان منشور. يختفي عن العامة ويبقى لصاحبه."
+    access: "user"
+    arguments: "p_listing_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE]
+    requirement: "AD-FR-010"
+    since: "0.1.0"
+  arrange_listing_media:
+    description: "ترتيب وسائط المسودة واختيار صورة الغلاف."
+    access: "user"
+    arguments: "p_listing_id uuid, p_media_ids uuid[], p_cover_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
+    requirement: "AD-FR-007"
+    since: "0.1.0"
+  block_user:
+    description: "يحظر مستخدمًا: لا رسائل جديدة في الاتجاهين ولا ردود على إعلانات الطرف الآخر. التكرار آمن."
+    access: "user"
+    arguments: "p_user_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, VALIDATION_FAILED]
+    idempotency: "التكرار آمن."
+    requirement: "AD-FR-033"
+    since: "0.3.0"
+  bump_listing:
+    description: "تجديد ظهور إعلان منشور بعد مرور المهلة. لا يغير محتواه ولا تاريخ نشره الأول."
+    access: "user"
+    arguments: "p_listing_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE, AUCTION_TIME_PASSED, BUMP_TOO_EARLY]
+    requirement: "AD-FR-030"
+    since: "0.1.0"
+  claim_push_batch:
+    description: "للمرسل (service_role): يطالب بدفعة من طابور الدفع ويحسم المتخطى. لا يستدعيها العميل."
+    access: "service"
+    arguments: "p_limit integer DEFAULT 50"
+    returns: "jsonb"
+    errors: []
+    note: "لمرسل الدفع push-dispatch فقط."
+    requirement: "AD-FR-016"
+    since: "0.3.0"
+  complete_push:
+    description: "للمرسل (service_role): يسجل نتيجة الإرسال ويعطل الرموز غير الصالحة."
+    access: "service"
+    arguments: "p_outbox_id bigint, p_status text, p_error text DEFAULT NULL::text, p_invalid_tokens text[] DEFAULT NULL::text[]"
+    returns: "void"
+    errors: []
+    note: "لمرسل الدفع push-dispatch فقط."
+    requirement: "AD-FR-016"
+    since: "0.3.0"
+  create_listing_draft:
+    description: "إنشاء مسودة إعلان. إعادة الطلب بالمعرف نفسه تعيد المسودة نفسها."
+    access: "user"
+    arguments: "p_request_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, VALIDATION_FAILED, DRAFT_LIMIT_REACHED]
+    idempotency: "p_request_id: الطلب المكرر يعيد المسودة نفسها."
+    requirement: "AD-FR-005، AD-NFR-005"
+    since: "0.1.0"
+  delete_comment:
+    description: "يحذف الكاتب ردّه حذفًا منطقيًا. التكرار آمن."
+    access: "user"
+    arguments: "p_comment_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, NOT_FOUND]
+    idempotency: "التكرار آمن."
+    requirement: "AD-FR-032"
+    since: "0.3.0"
+  delete_listing:
+    description: "حذف مسودة أو إعلان مرفوض. ما أرسل للمراجعة يومًا يحذف منطقيًا ويبقى سجله."
+    access: "user"
+    arguments: "p_listing_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE]
+    requirement: "AD-FR-005"
+    since: "0.1.0"
+  delete_saved_search:
+    description: "يلغي متابعة بحث محفوظ. الإلغاء المتكرر آمن."
+    access: "user"
+    arguments: "p_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN]
+    idempotency: "التكرار آمن."
+    requirement: "AD-FR-026"
+    since: "0.3.0"
+  discard_listing_edit:
+    description: "حذف مسودة تعديل إعلان منشور دون المساس بالمنشور."
+    access: "user"
+    arguments: "p_listing_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE]
+    requirement: "AD-FR-009"
+    since: "0.1.0"
+  edit_comment:
+    description: "يحرر الكاتب نص ردّه المرئي. لا يحرر أحد نص غيره."
+    access: "user"
+    arguments: "p_comment_id uuid, p_body text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
+    requirement: "AD-FR-032"
+    since: "0.3.0"
+  edit_rating:
+    description: "يعدّل المقيّم تقييمه الظاهر مع حفظ الصيغة السابقة في السجل."
+    access: "user"
+    arguments: "p_rating_id uuid, p_score integer, p_body text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
+    note: "تحفظ الصيغة السابقة في سجل التعديلات."
+    requirement: "AD-FR-029"
+    since: "1.0.0"
+  finalize_listing_media:
+    description: "تثبيت نتيجة فحص ملف مرفوع. لدور الخادم فقط."
+    access: "service"
+    arguments: "p_media_id uuid, p_mime_type text, p_size_bytes bigint, p_width integer DEFAULT NULL::integer, p_height integer DEFAULT NULL::integer, p_duration_seconds numeric DEFAULT NULL::numeric, p_failure_reason text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [NOT_FOUND, VERSION_IMMUTABLE]
+    idempotency: "وسيط ليس بانتظار الرفع يعاد بحالته دون تغيير."
+    note: "لا يستدعيها العميل؛ تستدعيها دالة Edge ‏media-finalize."
+    requirement: "AD-FR-007"
+    since: "0.1.0"
+  follow_seller:
+    description: "يتابع معلنًا لتنبيه أول نشر معتمد لإعلاناته. التكرار آمن."
+    access: "user"
+    arguments: "p_user_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, VALIDATION_FAILED, FOLLOW_LIMIT_REACHED]
+    idempotency: "التكرار آمن."
+    requirement: "AD-FR-026"
+    since: "0.3.0"
+  get_current_policies:
+    description: "النصوص السارية للشروط والخصوصية. متاحة للزائر والمستخدم."
+    access: "anon"
+    arguments: ""
+    returns: "jsonb"
+    errors: []
+    requirement: "AD-FR-003"
+    since: "0.1.0"
+  get_listing:
+    description: "تفاصيل إعلان منشور ووسائطه وحالة المفضلة؛ غير المنشور NOT_FOUND."
+    access: "anon"
+    arguments: "p_listing_id uuid"
+    returns: "jsonb"
+    errors: [NOT_FOUND]
+    note: "الرد وفق schemas/listing-detail. غير المنشور NOT_FOUND بالرد نفسه لكل الأسباب."
+    requirement: "AD-FR-011، AD-FR-013"
+    since: "0.2.0"
+  get_my_account:
+    description: "ملف المستخدم صاحب الجلسة، والنصوص التي تنتظر موافقته، وأهليته للنشر."
+    access: "user"
+    arguments: ""
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN]
+    requirement: "AD-FR-003"
+    since: "0.1.0"
+  get_published_settings:
+    description: "الإصدار المنشور من الإعدادات مع القوائم الفعالة. متاح للزائر والمستخدم."
+    access: "anon"
+    arguments: ""
+    returns: "jsonb"
+    errors: []
+    requirement: "AD-FR-037"
+    since: "0.1.0"
+  get_rating_eligibility:
+    description: "هل يحق لصاحب الجلسة تقييم هذا المعلن؟ eligible وreason عند عدمه."
+    access: "user"
+    arguments: "p_seller_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN]
+    note: "reason عند عدم الأهلية: SELF | ALREADY_RATED | BLOCKED | NO_CONVERSATION | NO_EXCHANGE."
+    requirement: "AD-FR-029"
+    since: "1.0.0"
+  get_report_status:
+    description: "حالة بلاغ المبلغ ورد الإدارة عند الإغلاق، دون ملاحظات داخلية."
+    access: "user"
+    arguments: "p_report_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, NOT_FOUND]
+    requirement: "AD-FR-015"
+    since: "0.3.0"
+  has_staff_capability:
+    description: "هل صاحب الجلسة موظف فعال بمستوى aal2 ويملك القدرة المذكورة."
+    access: "user"
+    arguments: "p_capability text"
+    returns: "boolean"
+    errors: []
+    note: "تعيد false لغير الموظف ولجلسة دون aal2. للعرض فقط؛ الصلاحية تفحص في كل دالة."
+    requirement: "AD-FR-017"
+    since: "0.1.0"
+  mark_conversation_read:
+    description: "يعلّم المحادثة مقروءة لصاحب الجلسة."
+    access: "user"
+    arguments: "p_conversation_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, NOT_FOUND]
+    requirement: "AD-FR-031"
+    since: "0.3.0"
+  mark_notifications_read:
+    description: "تعليم إشعارات صاحب الجلسة كمقروءة ويعيد عددها. دون معرفات: كل غير المقروء."
+    access: "user"
+    arguments: "p_ids uuid[] DEFAULT NULL::uuid[]"
+    returns: "integer"
+    errors: [AUTH_REQUIRED, FORBIDDEN]
+    idempotency: "تعليم المقروء مرة أخرى يعيد 0."
+    requirement: "AD-FR-016"
+    since: "0.1.0"
+  post_comment:
+    description: "ينشر ردًا على إعلان منشور، أو ردّ المعلن على رد. التكرار بمعرف الطلب آمن."
+    access: "user"
+    arguments: "p_listing_id uuid, p_body text, p_request_id uuid, p_parent_id uuid DEFAULT NULL::uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, VALIDATION_FAILED, COMMENTS_CLOSED, RATE_LIMITED]
+    idempotency: "p_request_id: إعادة الطلب تعيد الرد الأول. الرد الرئيسي لغير المعلن؛ رد المعلن بـp_parent_id."
+    requirement: "AD-FR-032"
+    since: "0.3.0"
+  register_device_token:
+    description: "يسجل رمز دفع الجهاز لصاحب الجلسة. التكرار آمن، وانتقال الجهاز لمستخدم آخر ينقل ملكيته."
+    access: "user"
+    arguments: "p_token text, p_platform text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, VALIDATION_FAILED]
+    idempotency: "الرمز نفسه يعاد تفعيله وتنتقل ملكيته لصاحب الجلسة."
+    requirement: "AD-FR-016، AD-FR-027"
+    since: "0.3.0"
+  remove_favorite:
+    description: "يزيل إعلانًا من مفضلة صاحب الجلسة. الإزالة المتكررة آمنة."
+    access: "user"
+    arguments: "p_listing_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN]
+    idempotency: "الإزالة المتكررة تعيد removed=false."
+    requirement: "AD-FR-022"
+    since: "0.2.0"
+  remove_listing_media:
+    description: "حذف ملف وسائط من المسودة. delete_object يبين هل يحذف الملف من التخزين."
+    access: "user"
+    arguments: "p_media_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE]
+    requirement: "AD-FR-007"
+    since: "0.1.0"
+  reply_to_rating:
+    description: "يرد المعلن على تقييم ظاهر. الرد لا يغير الدرجة."
+    access: "user"
+    arguments: "p_rating_id uuid, p_body text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
+    note: "الرد لا يغير الدرجة؛ استبداله يعدل الرد نفسه."
+    requirement: "AD-FR-029"
+    since: "1.0.0"
+  resolve_listing_ref:
+    description: "يترجم المعرّف العام القصير في رابط المشاركة إلى معرف إعلان منشور؛ غير المنشور NOT_FOUND."
+    access: "anon"
+    arguments: "p_ref text"
+    returns: "uuid"
+    errors: [NOT_FOUND]
+    note: "يترجم public_ref في رابط المشاركة إلى معرف إعلان منشور؛ المخفي NOT_FOUND فيتوقف الرابط."
+    requirement: "AD-FR-023"
+    since: "0.2.0"
+  save_listing_draft:
+    description: "حفظ جزئي لحقول المسودة. المفتاح الغائب لا يتغير، وnull يمسح القيمة."
+    access: "user"
+    arguments: "p_listing_id uuid, p_patch jsonb"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
+    note: "p_patch وفق contracts/schemas/listing-draft-patch.schema.json."
+    requirement: "AD-FR-005، AD-FR-006، AD-FR-014، AD-FR-025"
+    since: "0.1.0"
+  save_search:
+    description: "يحفظ بحثًا بمرشحاته للمتابعة وتنبيه أول نشر مطابق. المكرر يعيد المحفوظ."
+    access: "user"
+    arguments: "p_filters jsonb, p_name text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, VALIDATION_FAILED, FOLLOW_LIMIT_REACHED]
+    idempotency: "المرشحات نفسها تعيد المحفوظ (created=false)."
+    requirement: "AD-FR-026"
+    since: "0.3.0"
+  search_listings:
+    description: "تصفح الإعلانات المنشورة وبحثها بمرشحات مجتمعة وفرز ومؤشر keyset. المزاد الماضي خارج النتائج."
+    access: "anon"
+    arguments: "p_query text DEFAULT NULL::text, p_region_id integer DEFAULT NULL::integer, p_city_id integer DEFAULT NULL::integer, p_breed_id integer DEFAULT NULL::integer, p_sex text DEFAULT NULL::text, p_offer_type text DEFAULT NULL::text, p_age_min integer DEFAULT NULL::integer, p_age_max integer DEFAULT NULL::integer, p_price_min numeric DEFAULT NULL::numeric, p_price_max numeric DEFAULT NULL::numeric, p_owner_id uuid DEFAULT NULL::uuid, p_sort text DEFAULT 'NEWEST_VISIBLE'::text, p_limit integer DEFAULT 20, p_cursor jsonb DEFAULT NULL::jsonb"
+    returns: "jsonb"
+    errors: [VALIDATION_FAILED]
+    note: "الرد {items, next_cursor} وفق schemas/search-result. المزاد الماضي خارج النتائج؛ نطاق السعر يستبعد المزاد؛ الفرز بالسعر يضع المزاد أخيرًا. next_cursor يمرر كما هو مع المرشحات والفرز نفسها."
+    requirement: "AD-FR-011، AD-FR-012، AD-FR-024"
+    since: "0.2.0"
+  send_message:
+    description: "يرسل رسالة نصية في محادثة يشارك فيها المستخدم. التكرار بمعرف الطلب آمن."
+    access: "user"
+    arguments: "p_conversation_id uuid, p_body text, p_request_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, VALIDATION_FAILED, CONVERSATION_READ_ONLY, RATE_LIMITED]
+    idempotency: "p_request_id: إعادة الطلب تعيد الرسالة الأولى دون تكرار."
+    requirement: "AD-FR-031، AD-NFR-005"
+    since: "0.3.0"
+  set_comments_closed:
+    description: "يغلق المعلن الردود الجديدة على إعلانه أو يعيد فتحها. لا يحذف ما نُشر."
+    access: "user"
+    arguments: "p_listing_id uuid, p_closed boolean"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, VALIDATION_FAILED]
+    requirement: "AD-FR-032"
+    since: "0.3.0"
+  set_conversation_muted:
+    description: "يكتم تنبيهات محادثة لصاحب الجلسة أو يلغي الكتم."
+    access: "user"
+    arguments: "p_conversation_id uuid, p_muted boolean"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, NOT_FOUND, VALIDATION_FAILED]
+    requirement: "AD-FR-027"
+    since: "0.3.0"
+  set_notification_preference:
+    description: "يفعل الدفع لفئة إشعارات أو يوقفه. مركز الإشعارات داخل التطبيق لا يتأثر."
+    access: "user"
+    arguments: "p_category text, p_push_enabled boolean"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, VALIDATION_FAILED]
+    requirement: "AD-FR-027"
+    since: "0.3.0"
+  start_conversation:
+    description: "يبدأ محادثة حول إعلان منشور أو يعيد الموجودة. لا محادثة مع النفس."
+    access: "user"
+    arguments: "p_listing_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, CANNOT_MESSAGE_SELF, RATE_LIMITED]
+    idempotency: "محادثة واحدة لكل إعلان وطرفين؛ التكرار يعيد الموجودة (created=false)."
+    requirement: "AD-FR-031"
+    since: "0.3.0"
+  start_listing_edit:
+    description: "بدء تعديل إعلان منشور أو مرفوض أو مؤرشف بنسخة مسودة جديدة."
+    access: "user"
+    arguments: "p_listing_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, INVALID_STATE]
+    idempotency: "الاستدعاء مع وجود مسودة يعيدها دون إنشاء أخرى."
+    requirement: "AD-FR-009، AD-FR-010"
+    since: "0.1.0"
+  storage_object_is_public:
+    description: "هل ملف التخزين وسيط جاهز في النسخة المعتمدة لإعلان منشور. تستخدمها سياسات التخزين."
+    access: "anon"
+    arguments: "p_bucket text, p_name text"
+    returns: "boolean"
+    errors: []
+    note: "تستخدمها سياسات التخزين؛ لا حاجة للعميل إلى استدعائها."
+    requirement: "AD-NFR-002"
+    since: "0.1.0"
+  submit_listing:
+    description: "إرسال المسودة للمراجعة. إعادة الطلب بالمعرف نفسه لا تنشئ إرسالًا ثانيًا."
+    access: "user"
+    arguments: "p_listing_id uuid, p_request_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, PROFILE_INCOMPLETE, POLICIES_NOT_ACCEPTED, INVALID_STATE, MEDIA_NOT_READY, VALIDATION_FAILED, RATE_LIMITED]
+    idempotency: "p_request_id: الطلب المكرر لا ينشئ إرسالًا ثانيًا ويعيد الحالة الحالية."
+    requirement: "AD-FR-003، AD-FR-008، AD-FR-009، AD-NFR-005"
+    since: "0.1.0"
+  submit_rating:
+    description: "يقيّم معلنًا بدرجة 1 إلى 5 ونص اختياري وإقرار بتجربة تعامل، بعد تبادل رسائل. تقييم واحد لكل معلن."
+    access: "user"
+    arguments: "p_seller_id uuid, p_score integer, p_body text, p_declaration boolean, p_request_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, VALIDATION_FAILED, RATING_NOT_ELIGIBLE, RATING_EXISTS]
+    idempotency: "p_request_id: إعادة الطلب تعيد التقييم الأول. تقييم واحد لكل معلن."
+    requirement: "AD-FR-029، AD-NFR-005"
+    since: "1.0.0"
+  submit_report:
+    description: "يرسل بلاغًا عن إعلان أو حساب أو رسالة أو رد. التكرار بمعرف الطلب آمن؛ لا بلاغ عما لا يحق للمبلغ رؤيته."
+    access: "user"
+    arguments: "p_target_type text, p_target_id uuid, p_reason text, p_description text, p_request_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, NOT_FOUND, VALIDATION_FAILED, RATE_LIMITED]
+    idempotency: "p_request_id: إعادة الطلب تعيد البلاغ الأول؛ بلاغ مفتوح للهدف نفسه يعاد (duplicate=true)."
+    requirement: "AD-FR-015"
+    since: "0.3.0"
+  unblock_user:
+    description: "يلغي حظر مستخدم. لا يغير تقييمًا قائمًا. التكرار آمن."
+    access: "user"
+    arguments: "p_user_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN]
+    idempotency: "التكرار آمن."
+    requirement: "AD-FR-033"
+    since: "0.3.0"
+  unfollow_seller:
+    description: "يلغي متابعة معلن. الإلغاء المتكرر آمن."
+    access: "user"
+    arguments: "p_user_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN]
+    idempotency: "التكرار آمن."
+    requirement: "AD-FR-026"
+    since: "0.3.0"
+  unregister_device_token:
+    description: "يوقف الدفع إلى جهاز صاحب الجلسة. التكرار آمن."
+    access: "user"
+    arguments: "p_token text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN]
+    idempotency: "التكرار آمن."
+    requirement: "AD-FR-027"
+    since: "0.3.0"
+  update_my_profile:
+    description: "حفظ اسم العرض والمنطقة لصاحب الجلسة."
+    access: "user"
+    arguments: "p_display_name text, p_region_id integer"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, VALIDATION_FAILED]
+    requirement: "AD-FR-003، AD-FR-004"
+    since: "0.1.0"

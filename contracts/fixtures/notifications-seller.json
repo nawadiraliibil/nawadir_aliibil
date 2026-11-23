@@ -1,0 +1,51 @@
+[
+  {
+    "id": "0e8e03e9-fa48-4dd4-9f94-27f284db68e8",
+    "recipient_id": "ba24f799-5ca6-4002-a95c-9a7e92d37eee",
+    "category": "COMMENTS",
+    "event": "comment.created",
+    "resource_type": "listing",
+    "resource_id": "a833d8e3-ee17-4332-af0d-8155d21e1e55",
+    "payload": {
+      "comment_id": "097b129a-85ce-4587-b792-d01b1f3ea4bc",
+      "listing_id": "a833d8e3-ee17-4332-af0d-8155d21e1e55"
+    },
+    "dedupe_key": "comment:097b129a-85ce-4587-b792-d01b1f3ea4bc",
+    "read_at": null,
+    "created_at": "2026-11-23T03:25:05.255772+00:00"
+  },
+  {
+    "id": "a7f1922c-03ce-4f77-98ce-52b1df06a2a1",
+    "recipient_id": "ba24f799-5ca6-4002-a95c-9a7e92d37eee",
+    "category": "MESSAGES",
+    "event": "message.received",
+    "resource_type": "conversation",
+    "resource_id": "c475b72e-c742-48d5-b283-12fd3cd78af6",
+    "payload": {
+      "listing_id": "a833d8e3-ee17-4332-af0d-8155d21e1e55",
+      "conversation_id": "c475b72e-c742-48d5-b283-12fd3cd78af6"
+    },
+    "dedupe_key": "message:c475b72e-c742-48d5-b283-12fd3cd78af6:0",
+    "read_at": null,
+    "created_at": "2026-11-23T03:25:05.211057+00:00"
+  },
+  {
+    "id": "f33d53d1-c148-41a1-8485-7778d991eab9",
+    "recipient_id": "ba24f799-5ca6-4002-a95c-9a7e92d37eee",
+    "category": "LISTING_STATUS",
+    "event": "listing.approved",
+    "resource_type": "listing",
+    "resource_id": "a833d8e3-ee17-4332-af0d-8155d21e1e55",
+    "payload": {
+      "title": "ناقة مجاهيم للبيع",
+      "decision": "APPROVED",
+      "listing_id": "a833d8e3-ee17-4332-af0d-8155d21e1e55",
+      "reason_code": null,
+      "reason_text": null,
+      "reason_label_ar": null
+    },
+    "dedupe_key": "review:1",
+    "read_at": null,
+    "created_at": "2026-11-23T03:25:04.947491+00:00"
+  }
+]

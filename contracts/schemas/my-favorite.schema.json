@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/my-favorite.schema.json",
+  "title": "صف من my_favorites",
+  "description": "available=false: الإعلان لم يعد منشورًا؛ بقية الأعمدة فارغة.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "listing_id",
+    "saved_at",
+    "available",
+    "owner_id",
+    "owner_display_name",
+    "title",
+    "offer_type",
+    "price",
+    "auction_starts_at",
+    "auction_passed",
+    "breed_id",
+    "breed_name_ar",
+    "breed_note",
+    "sex",
+    "age_months",
+    "region_id",
+    "region_name_ar",
+    "city_id",
+    "city_name_ar",
+    "cover_bucket",
+    "cover_path",
+    "public_ref"
+  ],
+  "properties": {
+    "listing_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "saved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "available": {
+      "type": "boolean"
+    },
+    "owner_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "owner_display_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "title": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "offer_type": {
+      "anyOf": [
+        {
+          "enum": [
+            "FIXED_PRICE",
+            "IN_PERSON_AUCTION"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "price": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_starts_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_passed": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "breed_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "breed_name_ar": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "breed_note": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sex": {
+      "anyOf": [
+        {
+          "enum": [
+            "MALE",
+            "FEMALE"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "age_months": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "region_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "region_name_ar": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "city_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "city_name_ar": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "cover_bucket": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "cover_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "public_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

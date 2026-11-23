@@ -1,0 +1,13 @@
+{
+  "listing_status": ["DRAFT", "UNDER_REVIEW", "REJECTED", "PUBLISHED", "HIDDEN", "ARCHIVED"],
+  "listing_version_status": ["DRAFT", "SUBMITTED", "APPROVED", "REJECTED"],
+  "offer_type": ["FIXED_PRICE", "IN_PERSON_AUCTION"],
+  "animal_sex": ["MALE", "FEMALE"],
+  "media_kind": ["IMAGE", "VIDEO"],
+  "media_status": ["PENDING", "READY", "FAILED"],
+  "account_status": ["ACTIVE", "SUSPENDED"],
+  "staff_role": ["MODERATOR", "ADMIN"],
+  "notification_category": ["LISTING_STATUS", "ACCOUNT", "REPORTS", "FOLLOWS", "MESSAGES", "COMMENTS", "RATINGS"],
+  "policy_kind": ["TERMS", "PRIVACY"],
+  "review_decision": ["APPROVED", "REJECTED", "HIDDEN", "UNHIDDEN"]
+}

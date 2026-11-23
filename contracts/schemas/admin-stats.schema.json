@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/admin-stats.schema.json",
+  "title": "رد admin_stats",
+  "description": "أعداد تجميعية فقط.",
+  "type": "object",
+  "required": [
+    "period",
+    "generated_at",
+    "accounts",
+    "listings",
+    "reports",
+    "interaction",
+    "follows",
+    "ratings"
+  ],
+  "properties": {
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "to": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "accounts": {
+      "type": "object"
+    },
+    "listings": {
+      "type": "object"
+    },
+    "reports": {
+      "type": "object"
+    },
+    "interaction": {
+      "type": "object"
+    },
+    "follows": {
+      "type": "object"
+    },
+    "ratings": {
+      "type": "object"
+    }
+  }
+}

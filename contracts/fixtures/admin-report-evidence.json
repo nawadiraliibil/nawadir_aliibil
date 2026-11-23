@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "id": "957da3c7-c113-45ba-bdda-bd2d766b574c",
+      "body": "السلام عليكم، هل الناقة ما زالت متاحة؟",
+      "sender_id": "9168c4e2-d38f-4e2a-89ca-ea0bf91b6410",
+      "created_at": "2026-11-23T03:25:05.21387+00:00",
+      "is_reported": false
+    },
+    {
+      "id": "835706da-3eb0-4817-b895-079da2c8c9dd",
+      "body": "وعليكم السلام، نعم متاحة.",
+      "sender_id": "ba24f799-5ca6-4002-a95c-9a7e92d37eee",
+      "created_at": "2026-11-23T03:25:05.238994+00:00",
+      "is_reported": true
+    }
+  ],
+  "report_id": "32244522-24e7-47a2-b25c-f771e34624e0",
+  "target_type": "MESSAGE"
+}

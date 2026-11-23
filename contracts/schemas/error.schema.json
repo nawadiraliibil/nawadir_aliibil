@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/error.schema.json",
+  "title": "خطأ دالة",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "code",
+    "message",
+    "details",
+    "hint"
+  ],
+  "properties": {
+    "code": {
+      "const": "P0001"
+    },
+    "message": {
+      "enum": [
+        "VALIDATION_FAILED",
+        "BELOW_HARD_MINIMUM",
+        "APPEND_ONLY",
+        "INTERNAL_ERROR",
+        "AUTH_REQUIRED",
+        "FORBIDDEN",
+        "ACCOUNT_SUSPENDED",
+        "PROFILE_INCOMPLETE",
+        "POLICIES_NOT_ACCEPTED",
+        "MFA_REQUIRED",
+        "INVALID_STATE",
+        "CANNOT_MODIFY_SELF",
+        "LAST_ADMIN",
+        "VERSION_IMMUTABLE",
+        "NOT_FOUND",
+        "DRAFT_LIMIT_REACHED",
+        "MEDIA_LIMIT_REACHED",
+        "MEDIA_NOT_READY",
+        "VIDEO_DISABLED",
+        "RATE_LIMITED",
+        "BUMP_TOO_EARLY",
+        "AUCTION_TIME_PASSED",
+        "VERSION_CHANGED",
+        "REASON_REQUIRED",
+        "MEDIA_NOT_UPLOADED",
+        "MEDIA_PROCESSING_FAILED",
+        "METHOD_NOT_ALLOWED",
+        "CANNOT_MESSAGE_SELF",
+        "CONVERSATION_READ_ONLY",
+        "COMMENTS_CLOSED",
+        "FOLLOW_LIMIT_REACHED",
+        "RATING_NOT_ELIGIBLE",
+        "RATING_EXISTS"
+      ]
+    },
+    "details": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "نص JSON لكائن التفاصيل"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "hint": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

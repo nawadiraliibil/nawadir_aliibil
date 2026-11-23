@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/listing-detail.schema.json",
+  "title": "رد get_listing",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "listing",
+    "media",
+    "is_favorite"
+  ],
+  "properties": {
+    "listing": {
+      "$ref": "https://nawadiraliibil.example/contracts/schemas/public-listing-details.schema.json"
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "media_id",
+          "kind",
+          "bucket",
+          "object_path",
+          "mime_type",
+          "width",
+          "height",
+          "duration_seconds",
+          "sort_order",
+          "is_cover"
+        ],
+        "properties": {
+          "media_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "enum": [
+              "IMAGE",
+              "VIDEO"
+            ]
+          },
+          "bucket": {
+            "type": "string"
+          },
+          "object_path": {
+            "type": "string"
+          },
+          "mime_type": {
+            "type": "string"
+          },
+          "width": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "height": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "duration_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sort_order": {
+            "type": "integer"
+          },
+          "is_cover": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "is_favorite": {
+      "type": "boolean"
+    }
+  }
+}

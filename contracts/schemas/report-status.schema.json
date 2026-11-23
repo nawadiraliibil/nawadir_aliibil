@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/report-status.schema.json",
+  "title": "رد get_report_status",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_id",
+    "ref",
+    "status",
+    "target_type",
+    "created_at",
+    "closed_at",
+    "response_text"
+  ],
+  "properties": {
+    "report_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "ref": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "OPEN",
+        "IN_REVIEW",
+        "CLOSED"
+      ]
+    },
+    "target_type": {
+      "enum": [
+        "LISTING",
+        "ACCOUNT",
+        "MESSAGE",
+        "COMMENT"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "closed_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "response_text": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

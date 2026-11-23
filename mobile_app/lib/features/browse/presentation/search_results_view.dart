@@ -1,0 +1,183 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../app/router/routes.dart';
+import '../../../core/errors/app_error.dart';
+import '../../../core/errors/error_messages.dart';
+import '../../../core/widgets/empty_state.dart';
+import '../application/browse_providers.dart';
+import '../data/listing_card.dart';
+import 'listing_card_tile.dart';
+
+/// قائمة نتائج بحث على دفعات: تحميل أول، حالة فراغ وخطأ، وجلب الدفعة التالية
+/// قرب نهاية القائمة. تُستعمل في الرئيسية وملف المعلن.
+class SearchResultsView extends ConsumerStatefulWidget {
+  const SearchResultsView({
+    super.key,
+    required this.filters,
+    this.header,
+    this.emptyTitle = 'لا توجد إعلانات مطابقة',
+    this.emptyMessage = 'جرّب تغيير البحث أو إزالة بعض المرشحات.',
+    this.onClearFilters,
+  });
+
+  final SearchFilters filters;
+
+  /// يظهر أعلى القائمة ويتحرك معها.
+  final Widget? header;
+  final String emptyTitle;
+  final String emptyMessage;
+
+  /// يظهر زر «مسح المرشحات» في حالة الفراغ حين يُمرر.
+  final VoidCallback? onClearFilters;
+
+  @override
+  ConsumerState<SearchResultsView> createState() => _SearchResultsViewState();
+}
+
+class _SearchResultsViewState extends ConsumerState<SearchResultsView> {
+  final _scroll = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scroll.addListener(_maybeLoadMore);
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  void _maybeLoadMore() {
+    if (!_scroll.hasClients) return;
+    final p = _scroll.position;
+    if (p.pixels >= p.maxScrollExtent - 400) {
+      ref.read(searchResultsProvider(widget.filters).notifier).loadMore();
+    }
+  }
+
+  Future<void> _refresh() async {
+    ref.invalidate(searchResultsProvider(widget.filters));
+    await ref.read(searchResultsProvider(widget.filters).future);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = searchResultsProvider(widget.filters);
+    final results = ref.watch(provider);
+
+    return results.when(
+      loading: () => CustomScrollView(
+        slivers: [
+          if (widget.header != null) SliverToBoxAdapter(child: widget.header),
+          const SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(child: CircularProgressIndicator()),
+          ),
+        ],
+      ),
+      error: (e, _) => CustomScrollView(
+        slivers: [
+          if (widget.header != null) SliverToBoxAdapter(child: widget.header),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: EmptyState(
+              icon: Icons.cloud_off_outlined,
+              title: 'تعذّر تحميل الإعلانات',
+              message: errorMessage(AppError.from(e)),
+              actionLabel: 'إعادة المحاولة',
+              onAction: () => ref.invalidate(provider),
+            ),
+          ),
+        ],
+      ),
+      data: (data) {
+        // قد تكون الدفعة الأولى أقصر من الشاشة فلا يحدث تمرير يجلب التالية.
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted &&
+              _scroll.hasClients &&
+              _scroll.position.maxScrollExtent <= 0) {
+            _maybeLoadMore();
+          }
+        });
+        return RefreshIndicator(
+          onRefresh: _refresh,
+          child: CustomScrollView(
+            controller: _scroll,
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              if (widget.header != null)
+                SliverToBoxAdapter(child: widget.header),
+              if (data.items.isEmpty)
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: EmptyState(
+                    icon: Icons.search_off_outlined,
+                    title: widget.emptyTitle,
+                    message: widget.emptyMessage,
+                    actionLabel: widget.onClearFilters == null
+                        ? null
+                        : 'مسح المرشحات',
+                    onAction: widget.onClearFilters,
+                  ),
+                )
+              else
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+                  sliver: SliverList.separated(
+                    itemCount: data.items.length + 1,
+                    separatorBuilder: (_, _) => const SizedBox(height: 12),
+                    itemBuilder: (context, i) {
+                      if (i == data.items.length) {
+                        return _Footer(
+                          results: data,
+                          onRetry: () =>
+                              ref.read(provider.notifier).loadMore(retry: true),
+                        );
+                      }
+                      final card = data.items[i];
+                      return ListingCardTile(
+                        card: card,
+                        onTap: () =>
+                            context.push(Routes.listing(card.listingId)),
+                      );
+                    },
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _Footer extends StatelessWidget {
+  const _Footer({required this.results, required this.onRetry});
+
+  final SearchResults results;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    if (results.loadingMore) {
+      return const Padding(
+        padding: EdgeInsets.all(16),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+    final error = results.loadMoreError;
+    if (error != null) {
+      return Column(
+        children: [
+          Text(errorMessage(error), textAlign: TextAlign.center),
+          TextButton(onPressed: onRetry, child: const Text('إعادة المحاولة')),
+        ],
+      );
+    }
+    return const SizedBox.shrink();
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/listing-draft-patch.schema.json",
+  "title": "p_patch في save_listing_draft",
+  "description": "المفتاح الغائب لا يتغير، وnull يمسح القيمة. الحدود العليا للنصوص من الإعدادات المنشورة.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "title": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "breed_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "breed_note": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 80
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sex": {
+      "anyOf": [
+        {
+          "enum": [
+            "MALE",
+            "FEMALE"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "age_months": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "color": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 60
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "region_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "city_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "health_notes": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 2000
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "owner_declaration": {
+      "type": "boolean"
+    },
+    "offer_type": {
+      "anyOf": [
+        {
+          "enum": [
+            "FIXED_PRICE",
+            "IN_PERSON_AUCTION"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "price": {
+      "anyOf": [
+        {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "multipleOf": 0.01
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_region_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_city_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_venue": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 300
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_starts_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 بمنطقة زمنية؛ يحفظ UTC"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "contact_phone": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "05XXXXXXXX أو ‎+9665XXXXXXXX"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "contact_call_enabled": {
+      "type": "boolean"
+    },
+    "contact_whatsapp_enabled": {
+      "type": "boolean"
+    }
+  }
+}

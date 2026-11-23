@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/notification.schema.json",
+  "title": "صف من notifications",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "recipient_id",
+    "category",
+    "event",
+    "resource_type",
+    "resource_id",
+    "payload",
+    "dedupe_key",
+    "read_at",
+    "created_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "recipient_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "category": {
+      "enum": [
+        "LISTING_STATUS",
+        "ACCOUNT",
+        "REPORTS",
+        "FOLLOWS",
+        "MESSAGES",
+        "COMMENTS",
+        "RATINGS"
+      ]
+    },
+    "event": {
+      "enum": [
+        "listing.approved",
+        "listing.rejected",
+        "listing.hidden",
+        "listing.unhidden",
+        "account.suspended",
+        "account.reactivated",
+        "message.received",
+        "comment.created",
+        "comment.replied",
+        "follow.new_listing",
+        "report.closed",
+        "rating.received",
+        "rating.replied",
+        "rating.appeal_decided"
+      ]
+    },
+    "resource_type": {
+      "enum": [
+        "listing",
+        "account",
+        "conversation",
+        "report",
+        "rating"
+      ]
+    },
+    "resource_id": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "dedupe_key": {
+      "type": "string"
+    },
+    "read_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

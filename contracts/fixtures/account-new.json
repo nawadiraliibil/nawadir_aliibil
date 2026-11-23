@@ -1,0 +1,23 @@
+{
+  "id": "ba24f799-5ca6-4002-a95c-9a7e92d37eee",
+  "status": "ACTIVE",
+  "region_id": null,
+  "created_at": "2026-11-23T03:25:03.404363+00:00",
+  "can_publish": false,
+  "display_name": null,
+  "pending_policies": [
+    {
+      "id": 1,
+      "kind": "TERMS",
+      "title": "شروط الاستخدام (نص مؤقت)",
+      "version": 1
+    },
+    {
+      "id": 2,
+      "kind": "PRIVACY",
+      "title": "سياسة الخصوصية (نص مؤقت)",
+      "version": 1
+    }
+  ],
+  "profile_complete": false
+}

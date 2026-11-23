@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+      "sex": "FEMALE",
+      "price": 25000,
+      "title": "ناقة مجاهيم للبيع",
+      "city_id": 1,
+      "breed_id": 1,
+      "owner_id": "ba24f799-5ca6-4002-a95c-9a7e92d37eee",
+      "region_id": 1,
+      "age_months": 48,
+      "breed_note": null,
+      "cover_path": "ba24f799-5ca6-4002-a95c-9a7e92d37eee/a833d8e3-ee17-4332-af0d-8155d21e1e55/79fd3d96-4422-4c51-a036-a11d0b276391.jpg",
+      "listing_id": "a833d8e3-ee17-4332-af0d-8155d21e1e55",
+      "offer_type": "FIXED_PRICE",
+      "public_ref": "dzymbgq8",
+      "city_name_ar": "الرياض",
+      "cover_bucket": "listing-images",
+      "breed_name_ar": "المجاهيم",
+      "auction_passed": false,
+      "region_name_ar": "الرياض",
+      "auction_starts_at": null,
+      "first_published_at": "2026-11-23T03:25:04.947491+00:00",
+      "owner_display_name": "معلن تجريبي",
+      "visibility_updated_at": "2026-11-23T03:25:04.947491+00:00"
+    }
+  ],
+  "next_cursor": null
+}

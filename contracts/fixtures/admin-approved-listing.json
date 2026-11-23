@@ -1,0 +1,16 @@
+{
+  "id": "a833d8e3-ee17-4332-af0d-8155d21e1e55",
+  "status": "PUBLISHED",
+  "owner_id": "ba24f799-5ca6-4002-a95c-9a7e92d37eee",
+  "created_at": "2026-11-23T03:25:03.527236+00:00",
+  "deleted_at": null,
+  "last_bumped_at": null,
+  "last_published_at": "2026-11-23T03:25:04.947491+00:00",
+  "status_changed_at": "2026-11-23T03:25:04.947491+00:00",
+  "current_version_id": "708c7ebe-d685-4af3-b5e6-ce9bbaabdc74",
+  "first_published_at": "2026-11-23T03:25:04.947491+00:00",
+  "first_submitted_at": "2026-11-23T03:25:04.12088+00:00",
+  "published_version_at": "2026-11-23T03:25:04.947491+00:00",
+  "published_version_id": "708c7ebe-d685-4af3-b5e6-ce9bbaabdc74",
+  "visibility_updated_at": "2026-11-23T03:25:04.947491+00:00"
+}

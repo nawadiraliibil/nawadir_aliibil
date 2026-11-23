@@ -262,3 +262,588 @@
 - الإصلاح: في `build_previews.py` صارت `FAB=set(MAIN)`؛ فيظهر الزر في كل شاشات الشريط السفلي الثمانية بالوضعين. أُعيد بناء `screens/` (F01 وG01 فقط تغيّرتا) وصُوّرت معاينات F01 وG01.
 - الفحوص: إعادة فحص 124 صفحة عند 360/390/430: لا تجاوز أفقي ولا صور مكسورة ولا خطوط مفقودة؛ مقارنة بصرية لـB01 وF01 (الكبسولة والزر بنفس الموضع). لم تُفحص بقية الشاشات الستّ بصريًا ولا جهاز حقيقي.
 - ملاحظة للتنفيذ في Flutter: يجب أن يكون الشريط (الكبسولة + زر الإعلان) عنصرًا ثابتًا واحدًا في الـShell لا يُعاد بناؤه حسب الصفحة. لم تُنشر النسخة على gh-pages.
+
+### MOBILE-NAV-STABLE-20261121 — نشر التصحيح
+
+- 2026-11-21 — Asia/Riyadh؛ MOBILE / Claude Code، بطلب المستخدم. التزام 56e57f3 على `gh-pages` دون force، تحت `/distinct/` فقط: `screens/` و`previews/` لـF01 وG01 بالوضعين (8 ملفات). لم يُمس `main` ولا الجذر ولا `/app/`.
+- التحقق: الرابط الحي لـF01-light وG01-dark يحتوي زر «إعلان» (HTTP 200). لم تُعاينا بصريًا على الرابط الحي. ملفات المصدر ما زالت غير ملتزم بها في `main`.
+
+## MOBILE-PLAN-20261122 — خارطة تنفيذ تطبيق الجوال والخلفية
+
+- التاريخ والوقت: 2026-11-22، 09:10 — Asia/Riyadh؛ الجانب والمالك: MOBILE / Claude Code، بطلب المستخدم المباشر (خطة تنفيذ تطبيق الجوال مع الربط بـSupabase وتأجيل ربط لوحة الإدارة وتجهيز تعليمات وكيل الإدارة) وموافقته على الخطة.
+- الحالة: معتمدة للتنفيذ. القرارات: TEAM-DEC-007 إلى TEAM-DEC-011. طلبات التكامل: INT-001 وINT-002 (محدّثان)، INT-003 إلى INT-006 (جديدة).
+- المسارات المحجوزة للخارطة: `mobile_app/**`، `supabase/**`، `contracts/**`، `docs/shared/ADMIN-HANDOFF-20261122.md`. الإسناد المشترك لـ`supabase/` و`contracts/` مصدره TEAM-DEC-007. لا تعديل لـ`web_platform/`.
+- فحص التعارض: لا مهمة ADMIN مسجلة، ولا مهمة نشطة على هذه المسارات. `PROGRESS.md` فيه إضافة سابقة غير ملتزم بها (MOBILE-NAV-STABLE-20261121 — نشر التصحيح) وبُنيت هذه الإضافة فوقها دون مساس بها.
+- المرجع: SRS 4.1-draft مع قسم تعديلات النطاق 2026-11-22، والتصميم `stitch-distinct-20261121/`.
+
+| المرحلة | المهام | الوصف | الحالة |
+|---|---|---|---|
+| M0 | MOBILE-GOV-001 | قيود الحوكمة وتعليمات وكيل الإدارة وتعديل النطاق في SRS | جارٍ |
+| M0 | MOBILE-ENV-001 | هيكل `supabase/` و`contracts/` وربط مشروع التطوير | مخطط |
+| M1 | MOBILE-BE-101 إلى MOBILE-BE-109 | الترحيلات 01–13: الأمان الأساسي، القوائم والإعدادات، الحسابات، الموظفون وسجل الإجراءات، الإعلانات والتخزين، دوال المعلن والإدارة، القراءة العامة، الإشعارات الأساسية | مخطط |
+| M1 | MOBILE-CON-101 | العقد 0.1.0 | مخطط |
+| M1 | MOBILE-APP-101 إلى MOBILE-APP-110 | مشروع Flutter، السمة، الهيكل والبداية، `core/`، الدخول، الحساب، إنشاء الإعلان، إعلاناتي | مخطط |
+| M1 | MOBILE-QA-101 | AD-AC-001، 003، 004، 005، 009، 012 | مخطط |
+| M2 | MOBILE-BE-201، MOBILE-BE-202، MOBILE-CON-201 | البحث والمفضلة والمشاركة؛ العقد 0.2.0 | مخطط |
+| M2 | MOBILE-APP-201 إلى MOBILE-APP-205، MOBILE-QA-201 | التصفح والتفاصيل والمفضلة وملف المعلن والمشاركة | مخطط |
+| M3 | MOBILE-BE-301 إلى MOBILE-BE-305، MOBILE-CON-301 | المحادثات، الحظر والردود، البلاغات، المتابعات، الدفع الإشعاري؛ العقد 0.3.0 | مخطط |
+| M3 | MOBILE-APP-301 إلى MOBILE-APP-305، MOBILE-QA-301 | المحادثات والردود والحظر والبلاغات والمتابعات والإشعارات | مخطط |
+| M4 | MOBILE-BE-401، MOBILE-BE-402، MOBILE-CON-401 | التقييمات والإدارة الموسعة؛ العقد 1.0.0 | مخطط |
+| M4 | MOBILE-APP-401، MOBILE-APP-402، MOBILE-QA-401 | التقييمات والإعدادات والمراجعة الشاملة | مخطط |
+
+كل مهمة تضيف قيد «بدء» قبل تعديل الشيفرة وقيد «تسليم» يذكر الفحوص المنفذة فعلًا فقط.
+
+## MOBILE-GOV-001 — بدء قيود الحوكمة وتسليم عقد الإدارة
+
+- التاريخ والوقت: 2026-11-22، 09:10 — Asia/Riyadh؛ MOBILE / Claude Code.
+- الحالة: جارٍ.
+- الهدف ومرجع المتطلب: تسجيل قرارات المستخدم وإسناد الخلفية والعقود وتعديل النطاق، وكتابة تعليمات وكيل الإدارة؛ SRS القسم 12.5 وتعليمات الجذر.
+- المسارات المحجوزة: `docs/shared/PROGRESS.md`، `docs/shared/DECISIONS.md`، `docs/shared/INTEGRATION.md`، `docs/shared/ADMIN-HANDOFF-20261122.md` (جديد)، وإضافة قسم تعديلات النطاق في `Nawader_AlIbil_SRS_Ads_AR.md` (تعديل جذر محدود منصوص عليه في الخطة المعتمدة؛ إضافة فقط دون حذف نص).
+- معايير القبول: وجود القيود المذكورة في الخطة؛ `git diff` يظهر إضافات فقط على السجلات القائمة.
+
+### MOBILE-GOV-001 — تسليم
+
+- التاريخ والوقت: 2026-11-22، 09:25 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل.
+- ما تغير بالفعل: إضافة TEAM-DEC-007 إلى TEAM-DEC-011 في `DECISIONS.md`؛ تحديث INT-001 وINT-002 وإضافة INT-003 إلى INT-006 في `INTEGRATION.md`؛ ملف جديد [ADMIN-HANDOFF-20261122.md](./ADMIN-HANDOFF-20261122.md)؛ قسم «13. تعديلات النطاق — 2026-11-22» وتنبيه تحت العنوان في `Nawader_AlIbil_SRS_Ads_AR.md`؛ قيود الخارطة والبدء في هذا السجل.
+- الفحوص والنتائج: `git diff --numstat` يظهر إضافات فقط دون أي سطر محذوف في الملفات الأربعة القائمة (SRS 23، DECISIONS 65، INTEGRATION 67، PROGRESS 38 عند الفحص). لم ينفذ فحص آخر؛ المهمة توثيقية.
+- العائق والخطوة التالية: لا عائق. التالي MOBILE-ENV-001. لم ينفذ أي التزام git.
+
+## MOBILE-ENV-001 — بدء تهيئة `supabase/` و`contracts/`
+
+- التاريخ والوقت: 2026-11-22، 09:25 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: هيكل الخلفية والعقود وفق SRS 12.1، بإسناد TEAM-DEC-007.
+- المسارات المحجوزة: `supabase/config.toml`، `supabase/.gitignore`، `supabase/README.md`، `contracts/README.md`، `contracts/VERSION`، `contracts/CHANGELOG.md`.
+- معايير القبول: المشروع مربوط، `supabase start` و`supabase migration list` يعملان، لا أسرار في git.
+- ملاحظة عند البدء: Docker غير مثبت على الجهاز (INT-006)، وSupabase CLI بالإصدار 2.84.2.
+
+### MOBILE-ENV-001 — تسليم جزئي
+
+- التاريخ والوقت: 2026-11-22، 09:40 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: متعطل في بندي الربط والتشغيل المحلي؛ الهيكل منجز.
+- ما تغير بالفعل: `supabase init` أنشأ `supabase/config.toml` و`supabase/.gitignore`. عُدل `config.toml`: تفعيل دخول الهاتف، فاصل إعادة الإرسال 60 ثانية، قالب رسالة عربي، ثلاثة أرقام اختبارية وهمية للتطوير المحلي، وتفعيل TOTP. ملفات جديدة: `supabase/README.md`، `contracts/README.md`، `contracts/VERSION` (0.0.0)، `contracts/CHANGELOG.md`.
+- الفحوص والنتائج: `supabase init` انتهى بنجاح. `supabase projects list` يعمل، أي أن الواجهة مسجلة الدخول. لم يشغل `supabase start` ولا `supabase migration list` ولا أي اختبار، لغياب Docker وعدم الربط؛ فإعدادات `config.toml` المعدلة غير مجربة بعد.
+- العائق: (1) Docker Desktop غير مثبت. (2) لا يوجد في حساب Supabase المسجل مشروع باسم يخص نوادر الإبل، فلم يربط أي مشروع ولم يدفع شيء؛ يلزم أن يحدد المستخدم مشروع التطوير أو الحساب الصحيح.
+- الخطوة التالية: بعد تثبيت Docker وتحديد المشروع: `supabase start`، ثم `supabase link`، ثم بدء MOBILE-BE-101. في الأثناء يبدأ MOBILE-APP-101 لأنه لا يعتمد عليهما.
+
+## MOBILE-APP-101 — بدء إنشاء مشروع Flutter
+
+- التاريخ والوقت: 2026-11-22، 09:40 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: مشروع Flutter قابل للتشغيل بالبنية `lib/{app,core,features}` وملف بيئة وREADME؛ SRS 12.1 و12.4، AD-NFR-010، TEAM-DEC-008 وTEAM-DEC-010.
+- المسارات المحجوزة: `mobile_app/**`.
+- معايير القبول: التطبيق يبنى ويعمل بملف البيئة؛ `flutter analyze` و`flutter test` ناجحان؛ README يوثق أوامر التشغيل والفحص؛ لا أسرار في git.
+
+## MOBILE-APP-102 — بدء السمة والخطوط والمكونات الأساسية
+
+- التاريخ والوقت: 2026-11-22، 10:00 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: جارٍ (بالتوازي مع انتظار نتيجة بناء MOBILE-APP-101).
+- الهدف ومرجع المتطلب: رموز التصميم من `stitch-distinct-20261121/ui.css` بالوضعين، وخطا Tajawal وReadex Pro مضمّنان، والمكونات الأساسية؛ AD-NFR-001، TEAM-DEC-008.
+- المسارات المحجوزة: `mobile_app/lib/app/theme/**`، `mobile_app/lib/core/widgets/**`، `mobile_app/assets/fonts/**`، `mobile_app/pubspec.yaml`، واختباراتها.
+- معايير القبول: السمة الفاتحة والداكنة بألوان المعرض؛ الخطان يعملان من الأصول؛ المكونات باتجاه RTL وأهداف لمس لا تقل عن 48؛ `flutter analyze` و`flutter test` ناجحان.
+
+### MOBILE-APP-101 — تسليم
+
+- التاريخ والوقت: 2026-11-22، 10:20 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل، عدا التشغيل على جهاز.
+- ما تغير بالفعل: `flutter create` داخل `mobile_app/` لمنصتي Android وiOS (Flutter 3.41.6، Dart 3.11.4). معرف التطبيق `com.nawadiraliibil.app` في `android/app/build.gradle.kts` ومسار `MainActivity.kt` وملف `ios/Runner.xcodeproj/project.pbxproj`، واسم العرض «نوادر الإبل». ملفات جديدة: `lib/main.dart`، `lib/app/{bootstrap,app}.dart`، `lib/app/router/app_router.dart`، `lib/app/startup/startup_screen.dart` (شاشة مؤقتة موسومة)، `lib/core/config/env.dart`، `lib/core/supabase/{secure_session_storage,supabase_providers}.dart`، `env/dev.example.json`، `README.md`، واختبارات `test/core/config/env_test.dart` و`test/app/app_test.dart`. `.gitignore` يستثني `env/*.json` عدا الأمثلة.
+- الاعتماديات المضافة: `supabase_flutter`، `flutter_riverpod`، `go_router`، `freezed_annotation`، `json_annotation`، `intl`، `flutter_secure_storage`، `shared_preferences`، `connectivity_plus`، `uuid`، `flutter_svg`، `flutter_localizations`؛ وللتطوير `build_runner`، `freezed`، `json_serializable`، `mocktail`. بقية اعتماديات الخطة تضاف مع مهام ميزاتها.
+- انحراف عن الخطة: لم يضف `riverpod_generator` ولا `riverpod_lint` لأنهما يشترطان `meta ^1.18.0` وFlutter 3.41.6 يثبت `meta 1.17.0`. يستخدم Riverpod بمزودات مكتوبة يدويًا. لم يرقَّ Flutter لأنه تغيير على جهاز المستخدم خارج نطاق المهمة.
+- الفحوص والنتائج: `dart format --set-exit-if-changed` دون تغييرات؛ `flutter analyze` دون ملاحظات؛ `flutter test` ناجح؛ `flutter build apk --debug --dart-define-from-file=env/dev.example.json` أنتج `app-debug.apk`. `git check-ignore` يؤكد استثناء `env/dev.json`.
+- لم يفحص: التشغيل على جهاز أو محاكٍ (لا محاكي Android ولا جهاز متصل)؛ الاتصال الفعلي بـSupabase (لا مشروع مربوط ولا ملف بيئة حقيقي)؛ بناء iOS (يتطلب macOS).
+
+### MOBILE-APP-102 — تسليم
+
+- التاريخ والوقت: 2026-11-22، 10:45 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل، عدا المعاينة على جهاز.
+- ما تغير بالفعل: `lib/app/theme/{app_colors,app_shapes,app_typography,app_theme}.dart` من رموز `ui.css` بالوضعين، وتضبط مكونات Material نفسها (الأزرار الكبسولية، الحقول المملوءة بخط سفلي ذهبي عند التركيز، الشرائح، الحوارات، الأوراق السفلية). مكونات لا يوفرها Material في `lib/core/widgets/`: `WasmRing`، `SectionTitle`، `AppBadge`، `AppNote`، `EmptyState`. الخطوط في `assets/fonts/` (Tajawal 400/500/700 وReadex Pro المتغير) من مستودع Google Fonts مع ملفي الرخصة؛ كلاهما SIL OFL 1.1، فبند «رخص الخطوط لم تفحص» في تقرير MOBILE-GUI-DISTINCT-20261121 محسوم. `app.dart` يستخدم السمتين ويتبع مظهر النظام.
+- رفع عن المعرض عمدًا: أصغر نص 12 بدل 9–11، وأهداف اللمس 48 (AD-NFR-001).
+- الفحوص والنتائج: `flutter analyze` دون ملاحظات؛ `flutter test` 32 اختبارًا ناجحًا، ومنها مطابقة الألوان لـ`ui.css`، وتباين النص الأساسي والثانوي ونص الزر 4.5 على الأقل في الوضعين، وارتفاع الأزرار والحقل، وعدم تجاوز الحدود مع تكبير النص إلى الضعف في شاشة 320×420. معاينة بصرية بتصيير المكونات إلى صورة بالخطوط الحقيقية في الوضعين عبر اختبار مؤقت حذف بعدها: النص العربي واتجاهه والألوان والشارات والحقول سليمة. قياس عرض النص أكد أن الخطين محمّلان ومختلفان وأن أوزان Tajawal ومحور وزن Readex Pro تعمل.
+- خلل كشفته المعاينة وأصلح: `FilledButton.tonal` كان يظهر بلون الزر الرئيسي لأن السمة ضبطت لون الخلفية للنوعين؛ أزيل الضبط وأضيف اختبار للوضعين.
+- لم يفحص: المعاينة على جهاز Android أو iOS حقيقي؛ قارئ الشاشة. تسمية الحقل تظهر داخله بأسلوب Material، بينما المعرض يضعها فوقه؛ تعالج مع أول نموذج في MOBILE-APP-105.
+
+## MOBILE-APP-103 — بدء الهيكل والتنقل وشاشة البداية
+
+- التاريخ والوقت: 2026-11-22، 10:50 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: هيكل التطبيق بأربعة تبويبات وكبسولة تنقل عائمة مع زر «إعلان» كعنصر واحد ثابت، وشاشة البداية A00 بانتقالها إلى شعار الترويسة؛ TEAM-DEC-008، ملاحظتا MOBILE-NAV-STABLE-20261121 وMOBILE-SPLASH-20261121.
+- المسارات المحجوزة: `mobile_app/lib/app/{router,shell,splash,startup}/**`، `mobile_app/lib/app/app.dart`، `mobile_app/assets/images/**`، `mobile_app/pubspec.yaml`، واختباراتها.
+- معايير القبول: الكبسولة والزر لا يعاد بناؤهما عند تبديل التبويب، وحالة كل تبويب محفوظة؛ البداية تعرض 1000ms ثم تهبط في 720ms على شعار الترويسة، مع بديل «تقليل الحركة»؛ `flutter analyze` و`flutter test` ناجحان.
+- خارج هذه المهمة: محتوى شاشات التبويبات (مهام M1 وM2)، وحراس الدخول والحساب (MOBILE-APP-105 و106).
+
+### MOBILE-APP-103 — تسليم
+
+- التاريخ والوقت: 2026-11-22، 11:40 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل، عدا حركة المشي في شعار البداية والمعاينة على جهاز.
+- ما تغير بالفعل: `lib/app/router/{routes,app_router}.dart` (`StatefulShellRoute.indexedStack` بأربعة فروع، ومسار `/post` خارج الهيكل، وتحويل إلى شاشة الإعداد عند نقص البيئة)؛ `lib/app/shell/{app_shell,app_nav_bar,brand_header,pending_screen}.dart`؛ `lib/app/splash/{splash_overlay,splash_handoff}.dart`؛ تعديل `lib/app/app.dart` و`lib/app/startup/startup_screen.dart`؛ `assets/images/logo_emblem.webp` منسوخ من المعرض؛ اختبارات `test/app/{app_test.dart,shell/app_shell_test.dart,splash/splash_overlay_test.dart}` و`test/helpers/pump_app.dart`.
+- السلوك: الكبسولة وزر «إعلان» عنصر واحد يبنيه الهيكل، ويزاد الهامش الآمن السفلي للتبويبات بارتفاعه. البداية تعرض 1000ms ثم يهبط الشعار في 720ms بمنحنى المعرض على مستطيل شعار الترويسة ويتلاشى في 140ms. مع «تقليل الحركة» أو غياب الرئيسية: تلاشٍ 200ms دون انتقال مكاني.
+- شاشات التبويبات و«إعلان جديد» شاشات مؤقتة موسومة بعبارة «قيد التنفيذ» ومعرف مهمتها، وليست من التصميم.
+- الفحوص والنتائج: `dart format --set-exit-if-changed` دون تغييرات؛ `flutter analyze` دون ملاحظات؛ `flutter test` 42 اختبارًا ناجحًا؛ `flutter build apk --debug` ناجح. الاختبارات تثبت: بقاء عنصر الشريط نفسه بالموضع والأبعاد نفسها عند تبديل التبويبات الأربعة؛ فتح «إعلان» خارج الهيكل والرجوع؛ عدم اختباء المحتوى تحت الشريط؛ توقيتات البداية ومطابقة موضع الهبوط لمستطيل شعار الترويسة؛ وضع «تقليل الحركة»؛ عدم تجاوز الحدود عند عرض 320 مع تكبير النص إلى الضعف. معاينة بصرية بالتصيير إلى صور بالخطوط الحقيقية (البداية، منتصف الانتقال، الرئيسية، الرسائل في الوضع الداكن) عبر اختبار مؤقت حذف بعدها.
+- أخطاء كشفتها الاختبارات وأصلحت: (1) وجهات الكبسولة وزر «إعلان» كانت تعلن لقارئ الشاشة دون إجراء الضغط. (2) تجاوز أفقي في الترويسة وفي سطر «جارٍ التحميل» عند عرض 320 مع تكبير النص. (3) تلاشي «تقليل الحركة» كان يقصر تلقائيًا إلى 10ms بدل 200ms.
+- لم ينفذ: حركة مشي الشعار في البداية (شعار ثابت حاليًا)؛ نقلها من `splash.js` يحتاج رسم مسارات الأرجل بـCustomPainter ويسجل بندًا لاحقًا. أيقونات التنقل من Material وليست أيقونات المعرض الخطية.
+- لم يفحص: التشغيل على جهاز أو محاكٍ (غير متوفر)؛ قارئ الشاشة الفعلي؛ iOS.
+
+## MOBILE-PLAN-20261122 — حالة التوقف والعوائق (2026-11-22، 11:40)
+
+- المنجز: MOBILE-GOV-001، MOBILE-APP-101، MOBILE-APP-102، MOBILE-APP-103. MOBILE-ENV-001 منجز جزئيًا.
+- المتعطل بانتظار المستخدم (INT-006): (1) تثبيت Docker Desktop لتشغيل الخلفية محليًا واختبارات pgTAP. (2) تحديد مشروع Supabase للتطوير: لا يوجد في الحساب المسجل بالواجهة مشروع باسم يخص نوادر الإبل، ولم يربط أو يدفع شيء إلى أي مشروع.
+- الخطوة التالية بعد زوال العائقين: `supabase start` ثم `supabase link` ثم MOBILE-BE-101. مهام واجهات M1 التالية (MOBILE-APP-104 وما بعدها) تعتمد على عقد الخلفية، فتبدأ بعد MOBILE-BE-101 إلى MOBILE-BE-103.
+- لم ينفذ أي التزام git؛ كل التغييرات في مساحة العمل.
+
+## MOBILE-ENV-002 — ربط مشروع Supabase للتطوير وMCP
+
+- التاريخ والوقت: 2026-11-22 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل (ربط وقراءة فقط).
+- يحل جزئيًا عائق INT-006 (البند 2: تحديد مشروع Supabase للتطوير). البند 1 (Docker Desktop) ما زال قائمًا.
+- ما تغير بالفعل: إنشاء `.mcp.json` في الجذر (خادم `supabase` عبر HTTP، مقيّد بالمشروع ووضع القراءة فقط، دون أسرار)؛ تنفيذ `supabase link` على المشروع «nawadiraliibil's Project» (ap-southeast-1)، وحالة الربط في `supabase/.temp` المستبعد من git. لم يعدَّل أي ملف داخل `supabase/` أو `contracts/`.
+- الفحوص والنتائج: بعد تسجيل الدخول عبر `/mcp` نجح `get_project_url` وأعاد عنوان المشروع؛ `list_tables` (schema public) أعاد قائمة فارغة؛ `list_migrations` أعاد قائمة فارغة. أي أن المشروع جديد ولا يحوي جداولًا أو ترحيلات.
+- لم ينفذ: `db push` أو أي تغيير على قاعدة البيانات البعيدة؛ لم تشغَّل أدوات الكتابة لأن الوضع للقراءة فقط.
+- الخطوة التالية: MOBILE-BE-101 (إنشاء المخطط عبر ملفات ترحيل محلية ثم دفعها بقرار صريح)، وتتطلب Docker للاختبار المحلي.
+
+### MOBILE-ENV-002 — متابعة: حالة Docker وMCP
+
+- التاريخ والوقت: 2026-11-22، 18:35 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: متعطل بانتظار المستخدم.
+- Docker Desktop 4.99.0 مثبت (Docker CLI 29.9.3) لكن المحرك لا يقلع. سجل `com.docker.backend.exe.log` يذكر: `engine linux/wsl failed to start: checking preconditions: Virtual Machine Platform not enabled — No virtualization available`. لا توجد توزيعة WSL مثبتة. لم ينفذ `supabase start` ولا أي اختبار محلي.
+- `.mcp.json` عدّله المستخدم لإزالة `read_only`؛ بعد إعادة التشغيل يطلب خادم `supabase` تسجيل دخول جديدًا، فلم تُتحقق أدوات الكتابة بعد.
+- `supabase projects list` يُظهر المشروع مربوطًا (`linked: true`). لم يدفع شيء إلى المشروع البعيد.
+- الخطوة التالية (المستخدم): تفعيل ميزة Virtual Machine Platform بصلاحيات المدير ثم إعادة تشغيل الجهاز، وتسجيل الدخول لخادم `supabase` عبر `/mcp`. بعدها: `supabase start` ثم MOBILE-BE-101.
+
+### MOBILE-ENV-002 — متابعة: تشغيل الخلفية محليًا
+
+- التاريخ والوقت: 2026-11-22، 18:40 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: الخلفية المحلية تعمل؛ MCP غير متحقق.
+- بعد تفعيل Virtual Machine Platform وإعادة تشغيل الجهاز: محرك Docker يعمل (29.9.3، linux)، و`supabase start` أقلع الحاويات. يزول بذلك البند 1 من INT-006.
+- الفحوص والنتائج: `http://127.0.0.1:54321/auth/v1/health` أعاد 200؛ Studio على `http://127.0.0.1:54323` أعاد 200؛ حاويات db وauth وrest وstorage وrealtime وkong وstudio بحالة Up.
+- مشكلة قائمة: حاوية `supabase_vector` تعيد التشغيل باستمرار (`docker_logs: Listing currently running containers failed`)، أي أن جمع السجلات في Studio المحلي لا يعمل. لا يؤثر على قاعدة البيانات أو المصادقة أو pgTAP. لم يعدَّل `supabase/config.toml`.
+- لم يُتحقق: أدوات خادم `supabase` في MCP لا تظهر في الجلسة بعد إزالة `read_only`. لم ينفذ `db push` ولا أي تغيير على المشروع البعيد.
+- الخطوة التالية: MOBILE-BE-101.
+
+### MOBILE-ENV-002 — تسليم: MCP بوضع الكتابة
+
+- التاريخ والوقت: 2026-11-22، 18:45 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل.
+- خادم `supabase` في MCP متصل بعد إزالة `read_only`، وتظهر أدوات الكتابة (`apply_migration` و`deploy_edge_function` وأدوات الفروع) مع أدوات القراءة.
+- الفحوص والنتائج: `get_project_url` أعاد عنوان المشروع؛ `list_tables` (public) و`list_migrations` أعادا قائمتين فارغتين. لم تستدعَ أي أداة كتابة، والمشروع البعيد ما زال فارغًا.
+- الخلفية المحلية ما زالت تعمل (فحص المصادقة 200)؛ مشكلة `supabase_vector` قائمة كما سُجلت.
+- الخطوة التالية: MOBILE-BE-101.
+
+## MOBILE-BE-101 — بدء الأمان الأساسي والـenums
+
+- التاريخ والوقت: 2026-11-22، 18:55 — Asia/Riyadh؛ MOBILE / Claude Code، بطلب المستخدم. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: الترحيلان 01 `baseline_security` و02 `enums` من خارطة MOBILE-PLAN-20261122؛ AD-NFR-002، SRS القسمان 5 و6، TEAM-DEC-007 وTEAM-DEC-011.
+- المسارات المحجوزة: `supabase/migrations/**` (الترحيلان 01 و02)، `supabase/tests/database/**` (اختباراهما)، `contracts/api/enums.json`، `contracts/CHANGELOG.md`.
+- فحص التعارض: لا مهمة نشطة على `supabase/` أو `contracts/`؛ لا مهمة ADMIN مسجلة.
+- معايير القبول: مخطط `private` غير متاح لأدوار العميل؛ أي جدول أو دالة تنشأ في `public` لا تمنح تلقائيًا لـ`anon` أو `authenticated`؛ دالة رفع الأخطاء ترفع الرمز في الرسالة والتفاصيل JSON؛ قيم الـenums مثبتة باختبار؛ `supabase db reset` و`supabase test db` و`supabase db lint` ناجحة محليًا.
+- خارج هذه المهمة: الدفع إلى المشروع السحابي (بقرار صريح من المستخدم)، وبقية الترحيلات، وإصدار العقد 0.1.0 (MOBILE-CON-101).
+
+### MOBILE-BE-101 — تسليم
+
+- التاريخ والوقت: 2026-11-22، 19:15 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل محليًا؛ لم يدفع إلى المشروع السحابي.
+- ما تغير بالفعل: `supabase/migrations/20261122154131_baseline_security.sql` (سحب الصلاحيات الافتراضية لـ`anon` و`authenticated` على جداول وتسلسلات ودوال `public`، وسحب `EXECUTE` الافتراضي من `PUBLIC`، مخطط `private`، امتداد `pg_trgm`، الدالة `private.raise_error(text, jsonb)`)؛ `supabase/migrations/20261122154132_enums.sql` (تسعة enums)؛ `supabase/tests/database/01_baseline_security.test.sql` و`02_enums.test.sql`؛ `contracts/api/enums.json` (جديد)؛ قيد «غير منشور» في `contracts/CHANGELOG.md`.
+- قرار تصميم ضمن المهمة: حالات النسخة `DRAFT`، `SUBMITTED`، `APPROVED`، `REJECTED` فقط؛ تضاف قيمة لاحقًا إن احتاجها الترحيل 07 (الإضافة غير كاسرة). `service_role` يحتفظ بصلاحياته الافتراضية لأنه لا يصل إلى العميل.
+- الفحوص والنتائج: `supabase db reset` طبق الترحيلين دون خطأ؛ `supabase test db` ملفان و28 اختبارًا ناجحًا (Result: PASS)؛ `supabase db lint --schema public,private` دون أخطاء.
+- لم ينفذ: `supabase db push` (المشروع السحابي ما زال فارغًا)؛ توليد `contracts/generated/database.types.ts`؛ `contracts/api/errors.json`؛ `VERSION` باق `0.0.0`.
+- ملاحظات: (1) `supabase migration new` يعلق في طرفية غير تفاعلية لأنه يقرأ من الإدخال؛ أنشئ ملف الترحيل الثاني يدويًا بالتسمية نفسها. (2) كل أمر CLI يطبع `no SMS provider is enabled. Disabling phone login`: دخول الهاتف معطل محليًا رغم الأرقام الاختبارية في `config.toml`؛ يلزم حله قبل MOBILE-BE-103 (الحسابات). (3) `supabase/seed.sql` غير موجود (تحذير فقط).
+- الخطوة التالية: MOBILE-BE-102 (الترحيلان 03 `lookups` و04 `settings`)؛ يحتاج قائمة السلالات والمدن المعتمدة من المستخدم أو قرارًا بقائمة مؤقتة.
+
+### MOBILE-BE-101 — دفع إلى مشروع التطوير السحابي
+
+- التاريخ والوقت: 2026-11-22، 19:40 — Asia/Riyadh؛ MOBILE / Claude Code، بطلب المستخدم الصريح. الحالة: مكتمل.
+- `supabase db push` لم يعمل: الواجهة تطلب `SUPABASE_DB_PASSWORD` (خطأ 403 عند إنشاء دور الدخول المؤقت). دفع الترحيلان بأداة `apply_migration` في Supabase MCP بنص الملفين نفسه.
+- MCP يعطي كل ترحيل رقم إصدار من عنده، فأعيدت تسمية الملفات المحلية لتطابق السجل السحابي: `20261122154657_baseline_security.sql`، `20261122154704_enums.sql`.
+- فرق مكتشف بين البيئتين: الصلاحيات الافتراضية لـ`service_role` في المشروع السحابي أضيق من المحلية (لا قراءة أو كتابة على الجداول الجديدة ولا `EXECUTE`). أضيف ترحيل ثالث `20261122155207_service_role_defaults.sql` يثبتها صراحة، ودفع أيضًا؛ هذا خارج «الترحيلين» المطلوبين حرفيًا وأضيف لتتطابق البيئتان.
+- الفحوص والنتائج (سحابيًا عبر MCP): `list_migrations` يعرض الترحيلات الثلاثة؛ تسعة enums في `public`؛ `anon` بلا `USAGE` على `private`؛ `pg_trgm` في `extensions`؛ الصلاحيات الافتراضية لـ`postgres` في `public` لا تتضمن `anon` أو `authenticated`؛ `get_advisors` (security) دون ملاحظات.
+- لم ينفذ: اختبارات pgTAP على المشروع السحابي (تشغل محليًا فقط)؛ `supabase migration list` من الواجهة (تحتاج كلمة المرور).
+
+## MOBILE-BE-102 — القوائم المرجعية والإعدادات
+
+- التاريخ والوقت: 2026-11-22، 19:40 — Asia/Riyadh؛ MOBILE / Claude Code، بطلب المستخدم. الحالة: مكتمل محليًا؛ لم يدفع إلى المشروع السحابي.
+- الهدف ومرجع المتطلب: الترحيلان 03 `lookups` و04 `settings`؛ AD-FR-037، DEC-02، SRS 10.1 و10.2، TEAM-DEC-011 البند 4.
+- المسارات: `supabase/migrations/20261122170000_lookups.sql`، `supabase/migrations/20261122170100_settings.sql`، `supabase/tests/database/03_lookups.test.sql`، `04_settings.test.sql`، `contracts/api/errors.json` (جديد)، `contracts/CHANGELOG.md`. رقما الإصدار مؤقتان ويتغيران عند الدفع عبر MCP.
+- ما تغير بالفعل: جداول `regions` (13 منطقة بمعرفات ثابتة) و`cities` (152 مدينة ومحافظة) و`breeds` (13 سلالة) بـRLS وقراءة القيم الفعالة فقط؛ `settings_versions` (إضافة فقط) و`platform_settings` (صف واحد) مغلقان أمام العميل؛ الإصدار 1 بقيم SRS 10.1؛ `private.validate_settings` (سقوف تقنية، حد أدنى لا يتجاوز الأعلى، رفض تجديد أقل من 24 ساعة بـ`BELOW_HARD_MINIMUM`)؛ `public.get_published_settings()` لـ`anon` و`authenticated`.
+- قرارات ضمن المهمة: (1) قائمة السلالات مؤقتة بقرار المستخدم (المجاهيم، الوضح، الشعل، الصفر، الحمر، الشقح، العمانيات، الحرايز، الساحليات، الأوارك، السودانيات، المهجنات، أخرى)؛ تعدل من الإدارة دون ترحيل. (2) قائمة المدن قائمة بدء من معرفة عامة بمحافظات المناطق، غير حصرية ولم تراجع على مصدر رسمي. (3) القوائم تتغير فورًا بدوال الإدارة، والحدود فقط تمر بالمسودة والنشر. (4) مفاتيح محتوى الإعدادات: `listing`، `media`، `interaction`، `rate_limits`، `follows`، `bump`.
+- الفحوص والنتائج: `supabase db reset` طبق الترحيلات الخمسة؛ `supabase test db` أربعة ملفات و67 اختبارًا ناجحًا (Result: PASS)؛ `supabase db lint --schema public,private` دون أخطاء. خطأ كشفته الاختبارات وأصلح: إلحاق نص بمصفوفة في `validate_settings` كان يرفع `22P02` بدل `VALIDATION_FAILED`.
+- لم ينفذ: الدفع إلى المشروع السحابي؛ قراءة الموظف للقيم المعطلة والإعدادات (مع الترحيل 06)؛ دوال إدارة القوائم والإعدادات (الترحيل 11)؛ حدود OTP والبحث القريب ليست ضمن الإعدادات (الأولى من Supabase Auth، والثانية ملغاة بـTEAM-DEC-009).
+- ملاحظة: القاعدة المحلية تحمل رقم الإصدار القديم لترحيل `service_role_defaults` إلى أن يشغل `supabase db reset` التالي.
+- الخطوة التالية: MOBILE-BE-103 (الترحيل 05 `profiles_policies`)؛ يسبقه حل تعطل دخول الهاتف محليًا (`no SMS provider is enabled`) والحاجة إلى نصوص الشروط والخصوصية أو قرار بنص مؤقت.
+
+### MOBILE-BE-102 — دفع إلى مشروع التطوير السحابي
+
+- التاريخ والوقت: 2026-11-22، 19:55 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل.
+- توجيه المستخدم (2026-11-22): يدفع كل ترحيل إلى مشروع التطوير تلقائيًا بعد نجاح فحوصه المحلية، دون سؤال لكل ترحيل. يسري على مشروع التطوير فقط.
+- دفع الترحيلان عبر `apply_migration` في MCP وأعيدت تسمية الملفين: `20261122155411_lookups.sql` و`20261122155438_settings.sql`.
+- التحقق من التطابق: استعلام بصمة واحد نفذ على القاعدتين المحلية والسحابية (md5 لنصوص دوال `public` و`private`، ولصفوف `regions` و`cities` و`breeds`، ولمحتوى الإصدار 1، وعدد السياسات) وأعاد القيم نفسها في البيئتين. سحابيًا: `anon` ينفذ `get_published_settings()` ولا يملك `SELECT` على `settings_versions`.
+- لم ينفذ: pgTAP على المشروع السحابي.
+
+## MOBILE-BE-103 — بدء الحسابات والسياسات
+
+- التاريخ والوقت: 2026-11-22، 19:55 — Asia/Riyadh؛ MOBILE / Claude Code، بطلب المستخدم. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: الترحيل 05 `profiles_policies`؛ AD-FR-001 إلى AD-FR-004 (دون إغلاق الحساب، TEAM-DEC-009)، AD-AC-002.
+- المسارات المحجوزة: `supabase/migrations/**` (الترحيل 05)، `supabase/tests/database/**`، `supabase/config.toml` (مزود SMS المحلي)، `contracts/api/{enums,errors}.json`، `contracts/CHANGELOG.md`.
+- معايير القبول: ملف شخصي ينشأ تلقائيًا لحساب الهاتف؛ المستخدم يقرأ ملفه فقط ولا يكتب مباشرة؛ حفظ اسم العرض والمنطقة والموافقة بنسختها وتاريخها؛ دالة تمنع النشر قبل إكمال البيانات والموافقة؛ الفحوص المحلية ناجحة ثم الدفع.
+- نصوص الشروط والخصوصية: نص مؤقت موسوم بقرار المستخدم (2026-11-22).
+
+### MOBILE-BE-103 — تسليم
+
+- التاريخ والوقت: 2026-11-22، 20:20 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل ومدفوع إلى مشروع التطوير.
+- ما تغير بالفعل: `supabase/migrations/20261122155908_profiles_policies.sql` (enum ‏`policy_kind`؛ جداول `profiles` و`policy_documents` و`policy_consents` بـRLS؛ trigger على `auth.users` ينشئ ملفًا لحساب الهاتف فقط؛ الدوال `get_current_policies` و`get_my_account` و`update_my_profile` و`accept_policies`؛ الدالة الداخلية `private.assert_can_publish` لشرط AD-FR-003؛ نصان مؤقتان موسومان `is_placeholder`)؛ `supabase/config.toml` (مزود Twilio بقيم وهمية محلية ليعمل دخول الهاتف بالأرقام الاختبارية)؛ اختبارات `05_profiles_policies.test.sql` و`99_api_surface.test.sql` (جديدان) وتحديث `02_enums.test.sql` و`04_settings.test.sql`؛ `contracts/api/enums.json` و`errors.json` و`CHANGELOG.md`.
+- قرارات ضمن المهمة: (1) حساب البريد (موظف) لا ينشأ له ملف شخصي ولا يستدعي دوال الحساب. (2) المنطقة فقط في الملف (SRS القسم 7)، دون مدينة. (3) الحساب المعلق يقرأ حسابه ويوافق على السياسات ولا يعدل ملفه. (4) نشر إصدار جديد من نص يعيد طلب الموافقة ويوقف النشر حتى تتم. (5) أسباب التعليق تضاف مع `moderation_reasons` في ترحيل الإعلانات.
+- الفحوص والنتائج محليًا: `supabase db reset` طبق الترحيلات الستة؛ `supabase test db` ستة ملفات و98 اختبارًا ناجحًا (Result: PASS)؛ `supabase db lint --schema public,private` دون أخطاء بعد إزالة وسم `STABLE` عن ثلاث دوال ترفع أخطاء. اختبار من العميل عبر HTTP على الخلفية المحلية: إرسال OTP للرقم الاختباري 200؛ رمز خاطئ يرفض (`otp_expired`)؛ الرمز الصحيح يفتح جلسة؛ `get_my_account` يعيد ملفًا أنشئ تلقائيًا بنصين معلقين؛ `update_my_profile` باسم قصير يعيد `VALIDATION_FAILED` بتفاصيل الحقل؛ الزائر يحصل على 401.
+- الفحوص سحابيًا (MCP): بصمة نصوص الدوال وخصائصها، ونصوص السياسات، وأسماء سياسات RLS، وtrigger ‏`auth.users` مطابقة للمحلي؛ قائمتا دوال `anon` و`authenticated` كما في `99_api_surface.test.sql`.
+- ملاحظات `get_advisors` (security) سحابيًا، كلها مقصودة بالتصميم: INFO «RLS مفعل دون سياسات» على `platform_settings` و`settings_versions` و`policy_documents` (مغلقة وتقرأ بالدوال)؛ WARN على دوال `SECURITY DEFINER` المتاحة لـ`anon` و`authenticated` (قاعدة المشروع: كل وصول عبر دوال من هذا النوع بـ`search_path` فارغ).
+- لم ينفذ ولم يفحص: دخول الهاتف على المشروع السحابي (يحتاج تفعيل مزود الهاتف وأرقامًا اختبارية في لوحة Supabase، INT-006)؛ حدود OTP «5 طلبات/ساعة للرقم» و«5 محاولات فاشلة/15 دقيقة» لم تفحص إمكانية فرضها (فجوة مفتوحة، TEAM-DEC-011)؛ pgTAP على السحابة؛ تسجيل الخروج وإبطال الجلسة (من Supabase Auth، يختبر مع تطبيق الجوال).
+- الخطوة التالية: MOBILE-BE-104 (الترحيل 06 `staff_audit`: `admin_roles`، `audit_log`، `admin_whoami`، منح وسحب الأدوار، وقراءة الموظف للقوائم والإعدادات).
+
+## MOBILE-BE-104 — بدء الموظفين وسجل الإجراءات
+
+- التاريخ والوقت: 2026-11-22، 20:30 — Asia/Riyadh؛ MOBILE / Claude Code، بطلب المستخدم. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: الترحيل 06 `staff_audit`؛ AD-FR-017، AD-FR-021، TEAM-DEC-011 البند 6، `ADMIN-HANDOFF-20261122.md` القسم 3.
+- المسارات المحجوزة: `supabase/migrations/**` (الترحيل 06)، `supabase/tests/database/**`، `supabase/scripts/admin/**`، `contracts/api/errors.json`، `contracts/CHANGELOG.md`.
+- معايير القبول: الدور يفحص من `admin_roles` في كل استدعاء مع اشتراط `aal2`؛ المستخدم العادي يرفض؛ سحب الدور يسري في الاستدعاء التالي؛ لا يغير الموظف دوره؛ `audit_log` إضافة فقط وتكتبه الدوال؛ الفحوص المحلية ناجحة ثم الدفع.
+
+### MOBILE-BE-104 — تسليم
+
+- التاريخ والوقت: 2026-11-22، 21:00 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل ومدفوع إلى مشروع التطوير.
+- ما تغير بالفعل: `supabase/migrations/20261122162332_staff_audit.sql` (جدولا `admin_roles` و`audit_log`؛ `private.require_staff` و`private.audit`؛ الدوال `admin_whoami` و`admin_grant_role` و`admin_revoke_role` و`has_staff_capability`؛ سياسات قراءة الموظف على الأدوار والسجل والإعدادات والقوائم والملفات الشخصية؛ `private.bootstrap_first_admin`)؛ `supabase/scripts/admin/bootstrap_first_admin.sql` (جديد)؛ `supabase/tests/database/06_staff_audit.test.sql` (جديد) وتحديث `04_settings.test.sql` و`99_api_surface.test.sql`؛ `contracts/api/errors.json` و`CHANGELOG.md`.
+- قرارات ضمن المهمة: (1) القدرات `staff.manage` و`audit.read` و`stats.read` للمدير وحده ولا تمنح لمشرف (SRS القسم 2). (2) حساب الموظف حساب بريد دون ملف مستخدم؛ حساب الهاتف لا يمنح دورًا. (3) سحب الدور تعطيل للصف لا حذف. (4) `has_staff_capability` في `public` لا `private`، لأن سياسات RLS تنفذ بصلاحيات المستعلم ومخطط `private` مغلق أمامه؛ الدالة لا تكشف شيئًا عن غير صاحب الجلسة. (5) أول مدير ينشأ بسكربت من محرر SQL لا من العميل.
+- الفحوص والنتائج محليًا: `supabase db reset` طبق الترحيلات السبعة؛ `supabase test db` سبعة ملفات و132 اختبارًا ناجحًا (Result: PASS)؛ `supabase db lint --schema public,private` دون أخطاء. الاختبارات تغطي: رفض المستخدم العادي (`FORBIDDEN`)، رفض جلسة دون `aal2` (`MFA_REQUIRED`)، منع تغيير الموظف دوره (`CANNOT_MODIFY_SELF`)، سريان سحب الدور في الاستدعاء التالي، منع الكتابة المباشرة في السجل والأدوار، وبقاء السجل دون حذف.
+- الفحوص سحابيًا (MCP): بصمة الدوال وسياسات RLS وقيود الجداول مطابقة للمحلي؛ دوال `anon` لم تتغير.
+- لم ينفذ ولم يفحص: الخطأ `LAST_ADMIN` غير قابل للوصول من العميل حاليًا (المدير لا يعدل نفسه، ومن يملك `staff.manage` مدير آخر) فلم يغطه اختبار؛ التحقق متعدد العوامل الفعلي بـTOTP لم يجرب (الاختبار يحاكي قيمة `aal` في الرمز)؛ لم ينشأ حساب مدير في المشروع السحابي؛ pgTAP على السحابة.
+- المطلوب من المستخدم لتشغيل الدوال الإدارية على السحابة: إنشاء حساب موظف ببريد وكلمة مرور في لوحة Supabase، ثم تنفيذ `supabase/scripts/admin/bootstrap_first_admin.sql` بمعرفه، ثم تسجيل عامل TOTP.
+- الخطوة التالية: MOBILE-BE-105 (الترحيلان 07 `listings_core` و08 `storage`).
+
+## MOBILE-BE-105 — بدء جداول الإعلانات والتخزين
+
+- التاريخ والوقت: 2026-11-22، 21:15 — Asia/Riyadh؛ MOBILE / Claude Code، بطلب المستخدم. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: الترحيلان 07 `listings_core` و08 `storage`؛ AD-FR-005 إلى AD-FR-010، AD-FR-014، AD-FR-025، AD-FR-030، SRS الأقسام 5 و6 و7، TEAM-DEC-009 وTEAM-DEC-011.
+- المسارات المحجوزة: `supabase/migrations/**` (الترحيلان 07 و08)، `supabase/tests/database/**`، `contracts/api/{enums,errors}.json`، `contracts/CHANGELOG.md`.
+- معايير القبول: قيود قاعدة البيانات تمنع غياب السعر عن العرض السعري وغياب المكان والموعد عن المزاد؛ المدينة تتبع المنطقة؛ نسخة غير مسودة لا تتغير؛ غلاف واحد للنسخة؛ المالك يقرأ إعلاناته فقط ولا يكتب مباشرة؛ وسائط الإعلان غير المنشور لا يقرؤها غير مالكها والموظف؛ الفحوص المحلية ناجحة ثم الدفع.
+- خارج هذه المهمة: دوال المعلن والإدارة (الترحيلات 09 إلى 11)، الـviews العامة (12)، دالة `media-finalize`.
+
+### MOBILE-BE-105 — تسليم
+
+- التاريخ والوقت: 2026-11-22، 22:00 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل ومدفوع إلى مشروع التطوير.
+- ما تغير بالفعل: `supabase/migrations/20261122163821_listings_core.sql` (enum ‏`review_decision`؛ جداول `moderation_reasons` بعشرة أسباب بدء، `listings`، `listing_versions`، `media`، `reviews`، `listing_bumps`؛ عمودا سبب التعليق في `profiles`؛ قيد فريد `(id, region_id)` على `cities`؛ triggers ثبات النسخة ووسائطها؛ سياسات القراءة)؛ `supabase/migrations/20261122164040_storage.sql` (bucket ‏`listing-images` و`listing-videos` الخاصان، الدالة `storage_object_is_public`، خمس سياسات على `storage.objects`)؛ اختبارات `07_listings_core.test.sql` و`08_storage.test.sql` (جديدان) وتحديث `02_enums.test.sql` و`99_api_surface.test.sql`؛ `contracts/api/enums.json` و`errors.json` و`CHANGELOG.md`.
+- قيود قاعدة البيانات المنفذة: السعر للعرض السعري فقط وحقول المزاد للمزاد فقط؛ نسخة غير مسودة مكتملة الحقول (ومنها قناة تواصل ورقم بصيغة ‎+9665XXXXXXXX)؛ المدينة تتبع المنطقة بمفتاح أجنبي مركب؛ مسودة واحدة ونسخة واحدة قيد المراجعة لكل إعلان؛ غلاف واحد (صورة) وفيديو واحد للنسخة؛ منشور لا يكون دون نسخة معتمدة؛ الرفض والإخفاء يستلزمان سببًا؛ `reviews` و`listing_bumps` إضافة فقط.
+- قرارات ضمن المهمة: (1) مكان المزاد عمودان `auction_region_id` و`auction_city_id` مع `auction_venue`، مستقلة عن موقع الإعلان العام. (2) حذف المعلن لإعلان له سجل مراجعة حذف منطقي (`deleted_at`) لأن السجل لا يحذف؛ الإعلان الذي لم يرسل قط يحذف فعليًا. (3) نسخة التعديل تنسخ صفوف الوسائط بالمسار نفسه دون إعادة رفع. (4) المعلن لا يقرأ `reviews`؛ سبب الرفض يصله عبر دالة «إعلاناتي». (5) قائمة أسباب الإشراف قائمة بدء تديرها الإدارة. (6) رقم التواصل سعودي جوال فقط بالصيغة الدولية.
+- الفحوص والنتائج محليًا: `supabase db reset` طبق الترحيلات التسعة؛ `supabase test db` تسعة ملفات و179 اختبارًا ناجحًا (Result: PASS)؛ `supabase db lint --schema public,private` دون أخطاء.
+- الفحوص سحابيًا (MCP): بصمات الدوال، وسياسات `public` و`storage.objects`، وقيود الجداول، والفهارس، والأعمدة، والـtriggers، وبيانات الأسباب والـbuckets مطابقة للمحلي.
+- ملاحظات `get_advisors` (performance) سحابيًا، مؤجلة عن قصد: INFO «مفاتيح أجنبية دون فهرس» (14؛ تشير إلى قوائم لا يحذف منها، وفهارس البحث تضاف مع الترحيل 14)؛ INFO «فهارس غير مستخدمة» (القاعدة فارغة)؛ WARN «سياسات متعددة للدور نفسه» (11 جدولًا؛ سياسة للمالك وأخرى للموظف مفصولتان للوضوح، وشرط الموظف يحسب مرة للاستعلام).
+- لم ينفذ ولم يفحص: سياسة حذف ملفات التخزين (التخزين يمنع الحذف المباشر بـSQL؛ تختبر من العميل)؛ الرفع الفعلي عبر واجهة التخزين وحدود الحجم والنوع فيها؛ الرفع المتقطع وإعادة الرفع بعد فشل (لا سياسة UPDATE)؛ حد 100MB للفيديو قد يتجاوز حد خطة المشروع (الفيديو معطل في الإعدادات)؛ pgTAP على السحابة.
+- الخطوة التالية: MOBILE-BE-106 (الترحيل 09 `listing_owner_rpcs`: مسودة، حفظ، وسائط، إرسال، تعديل، أرشفة، حذف، تجديد).
+
+## MOBILE-BE-106 — بدء دوال المعلن
+
+- التاريخ والوقت: 2026-11-22، 22:10 — Asia/Riyadh؛ MOBILE / Claude Code، بطلب المستخدم. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: الترحيل 09 `listing_owner_rpcs` (مسودة، حفظ، وسائط، إرسال، تعديل، أرشفة، حذف، تجديد ظهور)؛ AD-FR-005 إلى AD-FR-010، AD-FR-014، AD-FR-025، AD-FR-030، AD-NFR-005، AD-NFR-008، TEAM-DEC-011.
+- المسارات المحجوزة: `supabase/migrations/**` (الترحيل 09)، `supabase/tests/database/**`، `contracts/api/errors.json`، `contracts/CHANGELOG.md`.
+- معايير القبول: إعادة طلب الإنشاء أو الإرسال بالمعرف نفسه لا تنشئ شيئًا؛ لا إرسال قبل إكمال الملف والموافقة والحقول والوسائط الجاهزة؛ المدينة تمسح عند تغيير المنطقة وترفض إن لم تتبعها؛ تبديل النوع يمسح الحقول غير المنطبقة؛ حد 5 إعلانات جديدة كل 24 ساعة عند أول إرسال؛ التجديد يرفض قبل 24 ساعة وللمزاد الماضي؛ مستخدم آخر لا يعدل إعلان غيره؛ الفحوص المحلية ناجحة ثم الدفع.
+- خارج هذه المهمة: دالة Edge ‏`media-finalize` (فحص البايتات وإزالة بيانات الموقع)، دوال الإدارة (10 و11)، الـviews العامة و«إعلاناتي» (12).
+
+### MOBILE-BE-106 — تسليم محلي؛ الدفع معلق
+
+- التاريخ والوقت: 2026-11-22، 23:00 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل محليًا؛ **لم يدفع إلى مشروع التطوير**.
+- ما تغير بالفعل: `supabase/migrations/20261122220000_listing_owner_rpcs.sql` (رقم إصدار مؤقت يتغير عند الدفع): الدوال `create_listing_draft`، `save_listing_draft`، `add_listing_media`، `remove_listing_media`، `arrange_listing_media`، `submit_listing`، `start_listing_edit`، `discard_listing_edit`، `archive_listing`، `delete_listing`، `bump_listing` للمستخدم، و`finalize_listing_media` لدور الخادم فقط، مع مساعدات `private`؛ `supabase/tests/database/09_listing_owner_rpcs.test.sql` (جديد) وتحديث `99_api_surface.test.sql`؛ `contracts/api/errors.json` و`CHANGELOG.md`.
+- قرارات ضمن المهمة: (1) الحفظ جزئي: المفتاح الغائب لا يتغير وnull يمسح؛ السقوف تفحص عند الحفظ والحدود الدنيا والحقول المطلوبة عند الإرسال. (2) تغيير المنطقة يمسح المدينة في الخادم، وتبديل النوع يمسح حقول النوع الآخر. (3) رقم التواصل يقبل `05XXXXXXXX` ويحفظ `+9665XXXXXXXX`، ووقت الموافقة يحفظه الخادم عند حفظ رقم جديد. (4) تثبيت جاهزية الوسائط دالة لدور الخادم لا للعميل؛ العميل سيستدعي دالة Edge ‏`media-finalize` غير المبنية بعد، فلا يمكن إرسال إعلان من التطبيق قبل بنائها. (5) دالة إضافية `discard_listing_edit` للتراجع عن تعديل منشور. (6) المنشور والمخفي والمؤرشف لا تحذف؛ الحذف للمسودة والمرفوض. (7) بصمة المحتوى SHA-256 لحقول النسخة ووسائطها.
+- الفحوص والنتائج محليًا: `supabase db reset` طبق الترحيلات العشرة؛ `supabase test db` عشرة ملفات و257 اختبارًا ناجحًا (Result: PASS)؛ `supabase db lint --schema public,private` دون أخطاء، مع سبعة تحذيرات «warning extra» لمتغيرات غير مقروءة (متغير نتيجة القفل وباراميترات INOUT) تركت كما هي.
+- الدفع: استدعاء `apply_migration` في MCP رُفض (declined) من جهة المستخدم أو إعدادات الأذونات، ولم يعد تنفيذه. المشروع السحابي ما زال عند الترحيل `20261122164040_storage`. البيئتان غير متطابقتين الآن.
+- لم ينفذ ولم يفحص: سباق طلبين متزامنين للتجديد أو الإرسال (pgTAP يعمل في جلسة واحدة؛ يختبر من العميل)؛ دالة Edge ‏`media-finalize` وفحص البايتات وإزالة بيانات الموقع؛ الرفع الفعلي.
+- الخطوة التالية: دفع الترحيل 09 بعد موافقة المستخدم، ثم MOBILE-BE-107 (الترحيل 10 `listing_admin_rpcs`).
+
+### MOBILE-BE-106 — محاولة دفع ثانية
+
+- التاريخ والوقت: 2026-11-22، 23:20 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: الدفع متعطل.
+- بعد موافقة المستخدم الصريحة أعيد استدعاء `apply_migration` بنص الترحيل 09 نفسه، فرُفض مرة ثانية بالرد `Migration was declined`. خادم Supabase MCP يطلب تأكيدًا للعبارات التي يعدها متلفة (الترحيل يحوي `delete` داخل أجسام الدوال)، والتأكيد لا يكتمل في هذه الجلسة. لم تعد المحاولة ولم يقسم الترحيل لتجاوز التأكيد.
+- البدائل المعروضة على المستخدم: (1) `supabase db push` من الواجهة بمتغير البيئة `SUPABASE_DB_PASSWORD` في طرفيته؛ يدفع الملفات كما هي بأرقامها المحلية. (2) قبول نافذة التأكيد إن ظهرت في واجهة Claude Code. المشروع السحابي باق عند `20261122164040_storage`.
+
+## MOBILE-BE-107 — دوال الإدارة للإعلانات والحسابات
+
+- التاريخ والوقت: 2026-11-22، 23:40 — Asia/Riyadh؛ MOBILE / Claude Code، بطلب المستخدم. الحالة: مكتمل محليًا؛ **لم يدفع إلى مشروع التطوير** (متوقف على دفع الترحيل 09).
+- الهدف ومرجع المتطلب: الترحيل 10 `listing_admin_rpcs`؛ AD-FR-008، AD-FR-009، AD-FR-017، AD-FR-018، AD-AC-004، AD-AC-005، AD-AC-009، TEAM-DEC-011، `ADMIN-HANDOFF-20261122.md` القسمان 4 و5.
+- ما تغير بالفعل: `supabase/migrations/20261122230000_listing_admin_rpcs.sql` (رقم مؤقت): `admin_review_queue`، `admin_get_listing_review`، `admin_approve_listing_version`، `admin_reject_listing_version`، `admin_hide_listing`، `admin_unhide_listing`، `admin_get_account`، `admin_suspend_account`، `admin_reactivate_account`؛ `supabase/scripts/admin/listing_moderation.sql` (جديد)؛ `supabase/tests/database/10_listing_admin_rpcs.test.sql` (جديد) وتحديث `99_api_surface.test.sql`؛ `contracts/api/errors.json` و`CHANGELOG.md`.
+- السلوك: القرار على نسخة محددة ببصمتها (`VERSION_CHANGED` عند الاختلاف)؛ السبب إلزامي للرفض والإخفاء والتعليق من `moderation_reasons` بحسب الإجراء، والنص إلزامي مع «أخرى» (`REASON_REQUIRED`)؛ الاعتماد يرفض لحساب معلق ولمزاد مضى موعده (`AUCTION_TIME_PASSED`)؛ ترتيب الظهور يثبت عند أول نشر، و`last_published_at` يتجدد مع كل عودة للنشر فلا يتجاوز الإخفاء وإعادة الإظهار مهلة التجديد؛ التعليق يخفي الإعلانات المنشورة ويسجل قرار إخفاء لكل منها، والتفعيل لا يعيد نشرها؛ كل إجراء يكتب في `reviews` و`audit_log`.
+- قرارات ضمن المهمة: (1) الإخفاء لإعلان `PUBLISHED` فقط. (2) إعادة الإظهار تعيده `PUBLISHED` مباشرة بقرار إداري، وترفض إن كان حساب المعلن معلقًا. (3) `admin_get_account` تعيد هاتف الدخول لمن يملك `accounts.manage`. (4) `admin_get_listing_review` متاحة لقدرتي `listings.review` و`listings.hide`. (5) سكربت الإدارة المؤقت يحاكي جلسة الموظف بضبط `request.jwt.claims` داخل معاملة، لبيئة التطوير فقط.
+- الفحوص والنتائج محليًا: `supabase db reset` طبق الترحيلات الأحد عشر؛ `supabase test db` أحد عشر ملفًا و304 اختبارات ناجحة (Result: PASS)؛ `supabase db lint --schema public,private` دون أخطاء (تحذيرات «never read» السابقة فقط). الاختبار يمر بالرحلة كاملة بالدوال الفعلية: إنشاء وإرسال، رفض بسبب، تصحيح وإعادة إرسال، اعتماد، إخفاء، إعادة إظهار، تعليق حساب وتفعيله.
+- لم ينفذ ولم يفحص: الدفع إلى السحابة؛ السكربت `listing_moderation.sql` لم يشغل؛ إشعار المعلن بالقرارات (الترحيل 13)؛ قراران متزامنان على الإعلان نفسه (القفل موجود ولم يختبر بجلستين).
+- تحديث `ADMIN-HANDOFF-20261122.md` القسم 9 مؤجل إلى أن تدفع ترحيلات W1 ويصدر العقد 0.1.0.
+- الخطوة التالية: دفع الترحيلين 09 و10، ثم MOBILE-BE-108 (الترحيل 11 `settings_lookup_admin_rpcs`).
+
+### MOBILE-BE-106 وMOBILE-BE-107 — دفع إلى مشروع التطوير
+
+- التاريخ والوقت: 2026-11-23، 00:05 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل.
+- المستخدم نفذ `supabase db push` من طرفيته. الترحيلان مسجلان سحابيًا بأرقام الملفات المحلية: `20261122220000_listing_owner_rpcs` و`20261122230000_listing_admin_rpcs`.
+- التحقق (MCP): `list_migrations` يعرض أحد عشر ترحيلًا؛ بصمة 68 دالة في `public` و`private` مطابقة للمحلي؛ 30 دالة متاحة لـ`authenticated` في البيئتين؛ دوال `anon` ثلاث لم تتغير؛ `finalize_listing_media` غير متاحة لـ`authenticated` ومتاحة لـ`service_role`.
+- طريقة الدفع من الآن: المستخدم ينفذ `supabase db push` بعد نجاح الفحوص المحلية. أداة `apply_migration` في MCP لا تستخدم: تعطي رقم إصدار بوقتها يسبق أرقام الملفات المدفوعة بالواجهة فيختل الترتيب، وترفض الترحيلات التي تحوي `delete`.
+- لم ينفذ: pgTAP على السحابة.
+
+## MOBILE-BE-108 — بدء دوال إدارة القوائم والإعدادات
+
+- التاريخ والوقت: 2026-11-23، 00:05 — Asia/Riyadh؛ MOBILE / Claude Code، بطلب المستخدم. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: الترحيل 11 `settings_lookup_admin_rpcs`؛ AD-FR-037، DEC-02، SRS 10.2، AD-AC-024، `ADMIN-HANDOFF-20261122.md` القسمان 4 و5.
+- المسارات المحجوزة: `supabase/migrations/**` (الترحيل 11)، `supabase/tests/database/**`، `contracts/CHANGELOG.md`.
+- معايير القبول: إضافة وتعديل وترتيب وتعطيل القيم دون حذف؛ القيمة المعطلة لا تقبل في جديد وتبقى في السابق؛ الإعدادات تعدل على مسودة وتنشر ذريًا بإصدار جديد؛ التراجع ينشر إصدارًا جديدًا بمحتوى سابق؛ رفض تجديد أقل من 24 ساعة؛ غير المخول يرفض؛ كل إجراء في سجل الإجراءات.
+
+### MOBILE-BE-108 — تسليم محلي؛ ينتظر الدفع
+
+- التاريخ والوقت: 2026-11-23، 00:50 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل محليًا؛ ينتظر `supabase db push` من المستخدم.
+- ما تغير بالفعل: `supabase/migrations/20261122231000_settings_lookup_admin_rpcs.sql`: دوال القوائم `admin_upsert_region`، `admin_upsert_city`، `admin_upsert_breed`، `admin_upsert_moderation_reason`، `admin_set_lookup_active`، `admin_reorder_lookup`؛ ودوال الإعدادات `admin_get_settings`، `admin_update_settings_draft`، `admin_publish_settings`، `admin_rollback_settings`؛ مع مساعدات `private` (`normalize_settings`، `apply_settings_to_storage`)؛ `supabase/tests/database/11_settings_lookup_admin_rpcs.test.sql` (جديد) وتحديث `99_api_surface.test.sql`؛ `contracts/api/errors.json` (توضيح تفاصيل فقط) و`CHANGELOG.md`.
+- السلوك: القوائم تتغير فورًا دون حذف؛ القيمة المعطلة تختفي من `get_published_settings` وتبقى في الجدول؛ الاسم المكرر يرفض؛ مدينة مستخدمة في إعلانات لا تنقل إلى منطقة أخرى. الإعدادات: المسودة تحفظ بعد التحقق وتهمل المفاتيح غير المعرفة؛ النشر ذري ينشئ إصدارًا جديدًا ويرفض دون مسودة أو دون تغيير؛ التراجع ينشر إصدارًا جديدًا يشير إلى مصدره؛ تجديد أقل من 24 ساعة يرفض بـ`BELOW_HARD_MINIMUM`.
+- قرارات ضمن المهمة: (1) النشر والتراجع يحدثان في المعاملة نفسها حد الحجم والصيغ في bucket ‏`listing-images` وحد الحجم في `listing-videos` (SRS 10.2: لا ينجح النشر دون تفعيله في مصدر التنفيذ). (2) المسودة تحفظ كاملة لا كرقعة جزئية. (3) دالتان خارج جدول التسليم: `admin_upsert_moderation_reason` و`admin_get_settings`. (4) `admin_reorder_lookup` تقبل جزءًا من القيم وتبقي ترتيب الباقي.
+- الفحوص والنتائج محليًا: `supabase db reset` طبق الترحيلات الاثني عشر؛ `supabase test db` اثنا عشر ملفًا و355 اختبارًا ناجحًا (Result: PASS)؛ `supabase db lint --schema public,private` دون أخطاء (تحذيرات «never read» السابقة فقط). في أحد تشغيلات `db reset` انتهى الأمر بمهلة عند قراءة buckets من خدمة التخزين أثناء إعادة تشغيل الحاويات، مع تطبيق الترحيلات كلها؛ التشغيل التالي انتهى دون خطأ.
+- لم ينفذ ولم يفحص: الدفع إلى السحابة؛ تعديل `storage.buckets` بـSQL لم يجرب على المشروع السحابي (نجح محليًا)؛ حدود Supabase Auth لا تدار من هذه الإعدادات؛ نشران متزامنان (القفل موجود ولم يختبر بجلستين).
+- الخطوة التالية: دفع الترحيل 11، ثم MOBILE-BE-109 (الترحيلان 12 `public_surface` و13 `notifications_core`) ودالة Edge ‏`media-finalize`.
+
+### MOBILE-BE-108 — دفع إلى مشروع التطوير
+
+- التاريخ والوقت: 2026-11-23، 01:10 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل.
+- المستخدم نفذ `supabase db push`. التحقق (MCP): اثنا عشر ترحيلًا وآخرها `20261122231000`؛ بصمة 82 دالة في `public` و`private` مطابقة للمحلي؛ حدود buckets كما هي (10485760 و104857600). لم يجرب نشر إعدادات على السحابة، فتعديل `storage.buckets` من الدالة غير مجرب هناك.
+
+## MOBILE-BE-109 — بدء القراءة العامة والإشعارات الأساسية
+
+- التاريخ والوقت: 2026-11-23، 01:10 — Asia/Riyadh؛ MOBILE / Claude Code، بطلب المستخدم. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: الترحيلان 12 `public_surface` و13 `notifications_core`؛ AD-FR-010، AD-FR-011، AD-FR-016، AD-FR-024، AD-NFR-002، SRS القسمان 6 و7.
+- المسارات المحجوزة: `supabase/migrations/**` (الترحيلان 12 و13)، `supabase/tests/database/**`، `contracts/CHANGELOG.md`.
+- معايير القبول: الزائر يقرأ الإعلانات المنشورة فقط عبر views بأعمدة محددة مثبتة باختبار؛ غير المنشور لا يظهر حتى بطلب مباشر؛ لا هاتف دخول في أي view؛ «إعلاناتي» تعرض إعلانات صاحب الجلسة مع سبب الرفض أو الإخفاء؛ قرار الإدارة ينشئ إشعارًا واحدًا لصاحب الإعلان داخل معاملة القرار دون تكرار؛ المستخدم يقرأ إشعاراته فقط.
+
+### MOBILE-BE-109 — تسليم محلي؛ ينتظر الدفع
+
+- التاريخ والوقت: 2026-11-23، 02:00 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل محليًا؛ ينتظر `supabase db push` من المستخدم.
+- ما تغير بالفعل: `supabase/migrations/20261122232000_public_surface.sql` (views ‏`public_profiles`، `public_listing_cards`، `public_listing_details`، `public_listing_media` للزائر والمستخدم، و`my_listings` للمستخدم، كلها `security_barrier`)؛ `supabase/migrations/20261122233000_notifications_core.sql` (جدولا `notifications` و`notification_outbox`؛ `private.notify`؛ trigger على `reviews` وآخر على حالة `profiles`؛ الدالة `mark_notifications_read`)؛ اختبارات `12_public_surface.test.sql` و`13_notifications_core.test.sql` (جديدان) وتحديث `99_api_surface.test.sql`؛ `contracts/CHANGELOG.md`.
+- السلوك: الزائر يقرأ الإعلانات المنشورة فقط من نسختها المعتمدة؛ قيد المراجعة والمسودة والمخفي لا تعيد صفًا حتى بطلب مباشر؛ الإخفاء يسري على البطاقات والتفاصيل والوسائط في الطلب التالي؛ التسميات التاريخية للقيم المعطلة تبقى ظاهرة. `my_listings` تعرض إعلانات صاحب الجلسة مع سبب الرفض أو الإخفاء بتسميته ونصه. قرار الإشراف ينشئ إشعارًا واحدًا لصاحب الإعلان داخل معاملة القرار مع صف في الطابور؛ المفتاح `(recipient_id, dedupe_key)` يمنع التكرار.
+- قرارات ضمن المهمة: (1) الإشعارات تولد بـtriggers على `reviews` وحالة `profiles` بدل تعديل دوال الإدارة، فكل قرار مسجل يشعر صاحبه. (2) إخفاء الإعلانات الناتج عن تعليق الحساب لا يولد إشعارًا لكل إعلان؛ يكفي إشعار التعليق. (3) ملاحظة إعادة الإظهار داخلية ولا ترسل للمعلن. (4) نص الإشعار يركبه العميل من `event` و`payload`. (5) `public_listing_details` تعرض رقم التواصل المنشور للزائر أيضًا (SRS: الزائر يقرأ التفاصيل، والرقم منشور بموافقة المعلن). (6) الـviews تعمل بصلاحيات مالكها عمدًا لأن الجداول مغلقة أمام الزائر؛ منشئ تنبيه «security definer view» في فاحص Supabase متوقع.
+- الفحوص والنتائج محليًا: `supabase db reset` طبق الترحيلات الأربعة عشر؛ `supabase test db` أربعة عشر ملفًا و426 اختبارًا ناجحًا (Result: PASS)؛ `supabase db lint --schema public,private` دون أخطاء. أعمدة كل view مثبتة بـ`columns_are`.
+- لم ينفذ ولم يفحص: الدفع إلى السحابة؛ البحث والفرز والتصفح على دفعات (الترحيل 14، M2)؛ إرسال الدفع الإشعاري وتفضيلات الفئات (M3)، فصفوف الطابور تبقى `PENDING`؛ اشتراك Realtime على الإشعارات؛ أداء الـviews على بيانات كثيرة.
+- الباقي من M1 للخلفية: دالة Edge ‏`media-finalize`، وMOBILE-CON-101 (العقد 0.1.0)، وتحديث القسم 9 في `ADMIN-HANDOFF-20261122.md`.
+
+## MOBILE-BE-110 — بدء دالة Edge ‏`media-finalize`
+
+- التاريخ والوقت: 2026-11-23، 02:15 — Asia/Riyadh؛ MOBILE / Claude Code، بتوجيه المستخدم بإكمال المراحل دون توقف بين المهام. الحالة: جارٍ.
+- ملاحظة: معرف خارج ترقيم الخارطة (101 إلى 109)؛ المهمة منصوص عليها في خطة M1 («`media-finalize`») دون معرف مستقل.
+- الهدف ومرجع المتطلب: فحص النوع الفعلي للملف المرفوع وحجمه وملكيته، وإزالة بيانات الموقع المضمنة من الصور، ثم تثبيت النتيجة بـ`finalize_listing_media`؛ AD-FR-007، SRS القسم 5 (الفقرة الأخيرة)، TEAM-DEC-011 البند 5.
+- المسارات المحجوزة: `supabase/functions/media-finalize/**`، `supabase/config.toml` (قسم الدالة إن لزم).
+- معايير القبول: ملف ليس JPEG أو PNG فعليًا يفشل؛ بيانات الموقع تزال من الصورة المخزنة مع بقاء اتجاهها؛ مستخدم لا يثبت وسائط غيره؛ ملف لم يرفع لا يصير جاهزًا.
+- الدفع: `supabase db push` من جلسة الوكيل يفشل (403 عند إنشاء دور الدخول، ولا `SUPABASE_DB_PASSWORD` في بيئة الوكيل)؛ الترحيلان 12 و13 ما زالا محليين.
+
+### MOBILE-BE-110 — تسليم
+
+- التاريخ والوقت: 2026-11-23، 03:00 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل؛ منشور على مشروع التطوير.
+- ما تغير بالفعل: `supabase/functions/media-finalize/index.ts` (المعالج)، `image.ts` (فحص البايتات وتنظيف الصور، دون اعتماديات)، `image.test.ts` (اختبارات وحدة)؛ `supabase/tests/functions/media_finalize.integration.mjs` (اختبار تكامل على الخلفية المحلية)؛ `contracts/api/errors.json` و`CHANGELOG.md`.
+- السلوك: الدالة تقرأ صف الوسيط بجلسة المستخدم وتشترط أنه مالكه؛ تنزل الملف بدور الخادم؛ تحدد النوع من البايتات (JPEG أو PNG)؛ تحذف من JPEG مقاطع EXIF وXMP وIPTC والتعليقات وتبقي الاتجاه بمقطع EXIF أدنى، ومن PNG مقاطع eXIf والنصوص وما بعد IEND، دون إعادة ضغط؛ تعيد رفع النسخة المنظفة ثم تستدعي `finalize_listing_media`. الفيديو يفشل صراحة بـ`VIDEO_PROCESSING_UNAVAILABLE` (لا عامل معالجة، والفيديو معطل في الإعدادات).
+- قرارات ضمن المهمة: (1) إزالة كل EXIF لا إحداثيات GPS وحدها، مع حفظ الاتجاه فقط؛ أبسط وأضمن لعدم تسرب الموقع. (2) ملف لم يرفع يعيد `MEDIA_NOT_UPLOADED` ويبقي الوسيط `PENDING` ليعيد العميل المحاولة. (3) فشل حفظ النسخة المنظفة لا يثبت الوسيط جاهزًا.
+- الفحوص والنتائج: `node --test supabase/functions/media-finalize/image.test.ts` سبعة اختبارات ناجحة. اختبار التكامل على الخلفية المحلية (`supabase functions serve`) 13 فحصًا ناجحًا، بالمسار الفعلي: دخول برقم اختباري، `create_listing_draft`، `add_listing_media`، رفع عبر واجهة التخزين، استدعاء الدالة، ثم تنزيل الملف والتأكد من غياب نص الإحداثيات وبقاء الاتجاه؛ ومعه: رفض دون جلسة، رفض مستخدم آخر للرفع والتثبيت، ملف HTML بترويسة JPEG يفشل، JPEG مبتور يفشل، والزائر لا يقرأ وسيط مسودة. هذا أول تحقق فعلي من سياسات الرفع والقراءة في التخزين عبر واجهته.
+- النشر: `supabase functions deploy` من جلسة الوكيل رُفض بـ403؛ نشرت الدالة بأداة `deploy_edge_function` في MCP (الحالة ACTIVE، الإصدار 1، `verify_jwt` مفعل). طلب دون جلسة على العنوان السحابي يعيد 401.
+- لم ينفذ ولم يفحص: الدالة على السحابة بملف حقيقي (يحتاج جلسة مستخدم وتفعيل دخول الهاتف هناك)؛ صور حقيقية من كاميرات الجوال (الاختبار بملفات مركبة يدويًا)؛ صور كبيرة قرب حد الذاكرة؛ سياسة حذف ملفات التخزين.
+
+## MOBILE-CON-101 — بدء العقد 0.1.0
+
+- التاريخ والوقت: 2026-11-23، 03:05 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: توثيق سطح M1 في `contracts/` بالإصدار 0.1.0 (دوال، enums، أخطاء، قراءة، تخزين، حالات، مخططات وأمثلة، أنواع مولدة)؛ خطة MOBILE-PLAN-20261122 قسم العقود، INT-003.
+- المسارات المحجوزة: `contracts/**`، `docs/shared/ADMIN-HANDOFF-20261122.md` (القسم 9 فقط).
+- معايير القبول: كل دالة متاحة للعميل موثقة، والتوثيق مولد من القاعدة فلا يختلف عنها؛ الأمثلة ردود فعلية من الخادم؛ الأنواع مولدة لا مكتوبة يدويًا.
+
+### MOBILE-CON-101 — تسليم
+
+- التاريخ والوقت: 2026-11-23، 04:00 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل؛ العقد 0.1.0.
+- ما تغير بالفعل: `contracts/VERSION` (0.1.0)؛ `contracts/CHANGELOG.md` (عنوان الإصدار وقيده)؛ `contracts/README.md` (الحالة وقسم التوليد)؛ `contracts/api/rpc.yaml` (42 دالة)، `read-surface.md`، `states.md`، `storage.md`، `events.json` (جديدة)؛ `contracts/schemas/*.schema.json` (ثمانية)؛ `contracts/fixtures/*.json` (24)؛ `contracts/generated/database.types.ts`؛ `contracts/tools/build_rpc.mjs` و`build_schemas.mjs` و`build_fixtures.mjs`؛ قيد «جاهز للتحقق» للموجة W1 في `docs/shared/ADMIN-HANDOFF-20261122.md` القسم 9.
+- طريقة الضمان: `rpc.yaml` يولد من القاعدة (التوقيع والوصف والصلاحية الفعلية لكل دالة) ويفشل التوليد إن اختلفت الصلاحية الموثقة عن الفعلية أو ذكر رمز خطأ غير معرف. الأمثلة ردود فعلية من الخادم عبر رحلة كاملة بواجهات العميل.
+- الفحوص والنتائج: `node contracts/tools/build_rpc.mjs` نجح دون فروق (42 دالة). `node contracts/tools/build_fixtures.mjs` على قاعدة محلية نظيفة أكمل الرحلة: دخول برقم اختباري، ملف وموافقة، إنشاء إعلان، رفع ثلاث صور وتثبيتها بـ`media-finalize`، إرسال، دخول موظف ببريد وكلمة مرور، رفض `admin_whoami` بـ`MFA_REQUIRED` قبل التحقق، تسجيل عامل TOTP والتحقق منه برمز محسوب (جلسة `aal2` فعلية لأول مرة)، قائمة المراجعة، رفض قرار ببصمة خاطئة (`VERSION_CHANGED`)، اعتماد، ثم قراءة الـviews العامة و`my_listings` والإشعارات. تحقق لمرة واحدة بـajv (خارج المستودع): 14 مستندًا من الأمثلة مطابقة لمخططاتها. قراءة الزائر لملف صورة إعلان منشور عبر واجهة التخزين تعيد 200.
+- لم ينفذ ولم يفحص: `api/realtime.md` (لا نشر لحظي بعد)؛ التحقق الآلي للأمثلة ضد المخططات ليس ضمن أدوات المستودع (سيغطى باختبارات `mobile_app/test/contracts`)؛ مخططات ردود دوال الإدارة غير مكتوبة (أمثلتها موجودة)؛ الأنواع مولدة من القاعدة المحلية التي تسبق السحابة بترحيلين.
+- العائق: الدفع إلى السحابة. `supabase db push` و`supabase functions deploy` من جلسة الوكيل يرفضان بـ403؛ الدالة نشرت عبر MCP، والترحيلان 12 و13 ينتظران `supabase db push` من المستخدم أو إتاحة كلمة مرور القاعدة للوكيل.
+- الخطوة التالية: MOBILE-APP-104 (`core/` في التطبيق: الإعدادات، Supabase، الأخطاء، القوائم) ثم MOBILE-APP-105 (الدخول).
+
+### MOBILE-BE-109 — دفع إلى مشروع التطوير
+
+- التاريخ والوقت: 2026-11-23، 04:20 — Asia/Riyadh؛ MOBILE / Claude Code، بتوجيه المستخدم. الحالة: مكتمل.
+- المستخدم أتاح كلمة مرور قاعدة التطوير للوكيل؛ حفظت في `supabase/.env.local` غير المتتبع (تحقق: `git check-ignore` يطابق `supabase/.gitignore`). `supabase db push --dry-run` عرض الترحيلين، ثم `supabase db push --yes` طبقهما: `20261122232000_public_surface` و`20261122233000_notifications_core`.
+- التحقق (MCP مقابل المحلي): أربعة عشر ترحيلًا سحابيًا؛ بصمات الدوال، وتعريفات الـviews، والأعمدة، والـtriggers، وسياسات RLS مطابقة للمحلي؛ `anon` يقرأ `public_listing_cards` ولا يقرأ `notifications`.
+- حالة مشروع التطوير الآن: سطح العقد 0.1.0 كله منشور (14 ترحيلًا ودالة `media-finalize`). يحل البند 1 من تحديث INT-006 بتاريخ 2026-11-23.
+- من الآن يدفع الوكيل الترحيلات بنفسه بعد نجاح الفحوص المحلية.
+- لم ينفذ: pgTAP على السحابة؛ تجربة بجلسة مستخدم هناك (دخول الهاتف غير مفعل، ولا حساب مدير).
+
+## MOBILE-APP-104 — بدء `core/` في التطبيق
+
+- التاريخ والوقت: 2026-11-23، 04:40 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: أساس مشترك للميزات: نموذج أخطاء معرّب مطابق لـ`contracts/api/errors.json`، نماذج القوائم والإعدادات المنشورة من `get_published_settings` مع تخزين مؤقت للعمل دون اتصال، مزود حالة الاتصال؛ AD-FR-037، AD-NFR-010.
+- المسارات المحجوزة: `mobile_app/lib/core/{errors,settings,network}/**`، `mobile_app/test/core/**`، `mobile_app/test/contracts/**`.
+- معايير القبول: كل رمز خطأ في العقد له رسالة عربية؛ تحليل مثال `published-settings.json` ينجح؛ الإعدادات المخزنة تُستعمل عند فشل الشبكة؛ `flutter analyze` و`flutter test` ناجحان.
+
+### MOBILE-APP-104 — تسليم
+
+- التاريخ والوقت: 2026-11-23، 05:10 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل.
+- ما تغير بالفعل: `lib/core/errors/{app_error,error_messages}.dart` (`AppErrorCode` يطابق رموز العقد، و`AppError.from` يحول `PostgrestException` ودوال Edge والمصادقة وأخطاء الشبكة، ورسائل عربية بتفاصيل الحد والموعد، ورسائل أسباب فشل الوسائط)؛ `lib/core/settings/{published_settings,settings_repository}.dart` (نماذج `get_published_settings` والقوائم، ومستودع يخزن آخر نسخة ناجحة ويرجع إليها عند فشل الاتصال، والمزود `publishedSettingsProvider`)؛ `lib/core/network/connectivity_provider.dart`؛ اختبارات `test/contracts/contract_conformance_test.dart` و`test/core/errors/` و`test/core/settings/`؛ اعتمادية تطوير `shared_preferences_platform_interface` في `pubspec.yaml`. الإعدادات والعميل (`core/config`, `core/supabase`) كانت منجزة في MOBILE-APP-101 دون تغيير.
+- قرار ضمن المهمة: سُمّي النوع `AppErrorCode` لا `ErrorCode` لتعارضه مع نوع في حزمة gotrue التي يصدّرها `supabase_flutter`.
+- الفحوص والنتائج: `dart format` دون خلل؛ `flutter analyze` دون ملاحظات؛ `flutter test` 59 اختبارًا ناجحًا (17 جديدة). تثبت أن رموز الأخطاء في التطبيق تساوي رموز `errors.json` تمامًا، ولكل رمز وسبب فشل وسائط رسالة عربية، وأن مثال `published-settings.json` يحلل وكل مدينة تتبع منطقة، وتحويل كل نوع استثناء، وسلوك التخزين المؤقت (نجاح، رجوع عند فشل الشبكة، تالف يحذف، رد غير مطابق لا يخزن).
+- لم ينفذ ولم يفحص: الجلب الفعلي من مشروع التطوير (المستودع مختبر بدالة مستبدلة لا بعميل حقيقي)؛ أشكال `FunctionException` الفعلية لدالة `media-finalize` (افترض أن الجسم `{code, details}`؛ يتحقق منه في MOBILE-APP-109)؛ مزود الاتصال على جهاز؛ نماذج freezed للإعلانات (تأتي مع مهام ميزاتها).
+- الخطوة التالية: MOBILE-APP-105 (الدخول).
+
+## MOBILE-APP-105 — بدء الدخول برقم الهاتف
+
+- التاريخ والوقت: 2026-11-23، 05:30 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: شاشات A02 (رقم الجوال) وA03 (رمز التحقق) وA05 (تعذر التحقق) بالتصميم المعتمد، وجلسة محفوظة، وحارس يوجه الزائر إلى الدخول عند فتح «إعلان جديد» ويعيده إلى وجهته؛ AD-FR-001، AD-FR-002، AD-AC-001.
+- المسارات المحجوزة: `mobile_app/lib/features/auth/**`، `mobile_app/lib/app/router/**`، `mobile_app/test/features/auth/**`.
+- معايير القبول: تطبيع الأرقام السعودية؛ إعادة الإرسال بعد 60 ثانية؛ رمز خاطئ أو منتهٍ لا يفتح جلسة ويعرض A05؛ لا يعتمد المنع على تعطيل الزر وحده (الحد في الخادم) فيعرض خطأ الخادم؛ `flutter analyze` و`flutter test` ناجحان.
+- خارج المهمة: إكمال الحساب (A04) وزر الخروج في شاشة الحساب (MOBILE-APP-106).
+
+### MOBILE-APP-105 — تسليم
+
+- التاريخ والوقت: 2026-11-23، 06:30 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل، عدا التجربة على خادم حقيقي.
+- ما تغير بالفعل: `lib/features/auth/domain/saudi_phone.dart` (تطبيع الأرقام السعودية بصيغها وأرقامًا عربية-هندية، وإخفاء للعرض)؛ `data/auth_backend.dart` (واجهة `AuthBackend` وتنفيذ Supabase، وتصنيف أخطاء المصادقة إلى: رمز غير صالح، حد إرسال، رقم مرفوض، انقطاع، غير متاح)؛ `application/auth_providers.dart` (`signedInProvider` و`AuthRefreshNotifier` لإيقاظ الموجّه)؛ `presentation/{phone_screen,otp_screen,otp_field,auth_messages}.dart` (A02 وA03 وA05 بحقل رمز من ست خانات يدعم اللصق والتعبئة التلقائية، وعد تنازلي 60 ثانية لإعادة الإرسال)؛ تعديل `app/router/{routes,app_router}.dart` (مساران `/login` و`/login/otp`، وحارس يوجّه الزائر من `/post` إلى الدخول ثم يعيده، وتحقق أن وجهة العودة مسار داخلي)؛ اختبارات `test/features/auth/{saudi_phone,login_flow}_test.dart` و`test/helpers/fake_auth_backend.dart`، وتحديث `test/helpers/pump_app.dart` ليحقن خلفية دخول مزيفة.
+- قرارات ضمن المهمة: (1) الحدود (60 ثانية بين الإرسالين، محاولات التحقق) يفرضها الخادم؛ العميل يعد تنازليًا ويعرض رد الخادم إن تجاوزها، فلا يعتمد المنع على تعطيل الزر. (2) رمز خاطئ أو منتهٍ أو مستهلك يظهر A05 لأن الخادم يعيد `otp_expired` للثلاثة معًا ولا يميز بينها. (3) مسار الدخول يستخدم `go` لا `push`: تبين أن go_router يعيد تقييم الحارس على الموقع الأساسي لا على الشاشة المدفوعة، فلم يكن الحارس يعيد المستخدم بعد الدخول.
+- الفحوص والنتائج: `dart format` دون خلل؛ `flutter analyze` دون ملاحظات؛ `flutter test` 75 اختبارًا ناجحًا (16 جديدة). تثبت: صيغ الأرقام الصالحة وغير الصالحة؛ تصنيف الأخطاء؛ زائد يوجَّه من «إعلان» إلى الدخول ويعود بعد رمز صحيح؛ المسجل يفتح «إعلان» مباشرة؛ رمز خاطئ لا يفتح جلسة ويعرض A05 ثم يعيد المحاولة؛ رسالة تجاوز الحد ورسالة الانقطاع؛ قفل إعادة الإرسال 60 ثانية ثم تشغيله وإعادة العد؛ تسجيل الخروج يعيد الحماية؛ عدم تجاوز الحدود عند عرض 320 وتكبير النص ضعفين.
+- لم ينفذ ولم يفحص: التجربة على Supabase فعلي (الاختبارات بخلفية مزيفة؛ دخول الهاتف غير مفعل على مشروع التطوير، والخلفية المحلية لم تُشغَّل في هذه المهمة)؛ الأرقام الاختبارية المحلية؛ تعبئة الرمز التلقائية من الرسالة على جهاز؛ قارئ الشاشة؛ استمرار الجلسة بعد إعادة تشغيل التطبيق (التخزين الآمن من MOBILE-APP-101 غير مجرب على جهاز).
+- المتبقي إلى MOBILE-APP-106: زر تسجيل الخروج في شاشة الحساب (الدالة `AuthBackend.signOut` جاهزة ومختبرة)، وإكمال الحساب A04 والموافقة على السياسات، وتوجيه الحساب غير المكتمل. لذلك لا مدخل دخول للزائر الآن إلا عبر «إعلان».
+
+## MOBILE-APP-106 — بدء الحساب وإكمال الملف
+
+- التاريخ والوقت: 2026-11-23، 06:45 — Asia/Riyadh؛ MOBILE / Claude Code، بتوجيه المستخدم بإكمال المراحل دون توقف. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: شاشات G01 (حسابي: زائر ومسجل)، A04 (إكمال الحساب مع الموافقة على الشروط والخصوصية)، G02 (تعديل الملف)، G10 (تأكيد الخروج)، وحالة H08 (الحساب موقوف)؛ AD-FR-002، AD-FR-003، AD-FR-004 (دون إغلاق الحساب: TEAM-DEC-009)، AD-AC-002.
+- المسارات المحجوزة: `mobile_app/lib/features/account/**`، `mobile_app/lib/core/supabase/rpc.dart`، `mobile_app/lib/app/router/**`، `mobile_app/lib/features/auth/data/auth_backend.dart` (إضافة الهاتف)، واختباراتها.
+- معايير القبول: الدوال `get_my_account` و`update_my_profile` و`accept_policies` بمعاملاتها الفعلية؛ لا نشر قبل الاكتمال يُفرض في الخادم (والعميل يوجه فقط)؛ الخروج بتأكيد ويبطل الجلسة؛ `flutter analyze` و`flutter test` ناجحان.
+- ملاحظة: حاجز «إكمال الحساب» عند الإرسال للمراجعة يُبنى في MOBILE-APP-107 (المسودة مسموحة قبل الاكتمال).
+
+### MOBILE-APP-106 — تسليم
+
+- التاريخ والوقت: 2026-11-23، 07:30 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل، عدا التجربة على خادم حقيقي.
+- ما تغير بالفعل: `lib/core/supabase/rpc.dart` (منفذ موحد لدوال الخلفية `rpcProvider` و`guardRpc`؛ ومستودع الإعدادات صار يستخدمه)؛ `lib/features/account/data/{account_models,account_repository}.dart` (`get_my_account` و`update_my_profile` بالمعاملين `p_display_name`/`p_region_id` و`accept_policies` بـ`p_document_ids` و`get_current_policies`)؛ `application/account_providers.dart`؛ `presentation/{account_screen,profile_form,profile_screens}.dart` (G01 بنسختي الزائر والمسجل، A04، G02، تأكيد الخروج G10، تنبيه الإيقاف H08، وقراءة نص الشروط في ورقة سفلية)؛ إضافة `phone` إلى `AuthBackend`؛ مساران `/account/complete` و`/account/edit` يشترطان الدخول؛ تبويب «حسابي» صار الشاشة الفعلية. اختبارات: `test/features/account/account_flow_test.dart`، ومساعد `test/helpers/fake_rpc.dart`، وتحديث `pump_app.dart` و`app_shell_test.dart`.
+- قرارات ضمن المهمة: (1) الاسم يقص من الأطراف قبل الإرسال والتحقق المحلي يطابق قاعدة الخادم (2 إلى 40، دون أحرف تحكم)، والخادم هو المرجع. (2) الموافقات تُرسل بعد حفظ الملف في الشاشة نفسها؛ تكرارها آمن في الخادم فإعادة المحاولة بعد فشل جزئي سليمة. (3) حاجز «إكمال الحساب» لا يوضع على مسار `/post` لأن المسودة مسموحة قبل الاكتمال؛ يوضع عند الإرسال في MOBILE-APP-107. (4) لم تُنفذ في G01 صفوف المتابعات والمحظورين والتنبيهات والإعدادات والشروط والمساعدة؛ تُضاف مع مهامها (M2 وM3 وM4) لتجنب صفوف ميتة. «إعلاناتي» تُضاف في MOBILE-APP-110.
+- الفحوص والنتائج: `dart format` دون خلل؛ `flutter analyze` دون ملاحظات؛ `flutter test` 87 اختبارًا ناجحًا (12 جديدة وتحديث اختبار واحد). تثبت: تحليل أمثلة `account-new` و`account-ready` و`current-policies`؛ أسماء معاملات الدوال؛ تحويل أخطاء الخادم؛ زائد يرى الدعوة ويعود لحسابه بعد الدخول؛ حساب جديد لا يحفظ دون اسم ومنطقة وموافقتين ثم يحفظ ويرسل الموافقتين؛ قراءة النص؛ خطأ الحفظ يبقي النموذج؛ تعديل الملف معبأ مسبقًا دون موافقات؛ تنبيه الإيقاف؛ الخروج بالإلغاء والتأكيد؛ إعادة المحاولة عند فشل التحميل.
+- لم ينفذ ولم يفحص: التشغيل على خادم فعلي (الدوال مستبدلة بأمثلة العقد المسجلة)؛ منع الحساب الموقوف من الحفظ يظهر من الخادم برمز `ACCOUNT_SUSPENDED` ولم يُختبر في الشاشة؛ المعاينة البصرية على جهاز.
+
+## MOBILE-APP-107 — بدء إنشاء الإعلان: بيانات المسودة
+
+- التاريخ والوقت: 2026-11-23، 08:00 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: معالج «إعلان جديد» بالشاشات D01 (نوع العرض)، D02 (بيانات الإبل)، D03 (الوصف والحالة الصحية)، D04 (الموقع)، D05 (السعر) أو D06 (موعد ومكان المزاد)، D08 (رقم التواصل)، D12 (مغادرة وحفظ المسودة)؛ حفظ المسودة في الخادم بـ`create_listing_draft` و`save_listing_draft`؛ AD-FR-005، AD-FR-006، AD-FR-014، AD-AC-003.
+- المسارات المحجوزة: `mobile_app/lib/features/listing/**`، `mobile_app/lib/core/format/**`، `mobile_app/lib/app/router/app_router.dart`، واختباراتها.
+- تقسيم المراحل (من MOBILE-APP-107 إلى 109): 107 البيانات والحفظ؛ 108 الصور والفيديو (D07) ورفعها واستدعاء `media-finalize`؛ 109 المعاينة والإقرار والإرسال (D09 إلى D11) وحاجز إكمال الحساب. الخطوتان 5 و7 في المعالج شاشتان مؤقتتان موسومتان بمهمتيهما إلى أن تنفذا.
+- معايير القبول: الحقول والحدود من الإعدادات المنشورة؛ التحقق المحلي يطابق الخادم؛ طلب الإنشاء بمعرف طلب ثابت (إعادة المحاولة لا تنشئ مسودة ثانية)؛ المغادرة تسأل عند وجود تغييرات غير محفوظة؛ `flutter analyze` و`flutter test` ناجحان.
+
+### MOBILE-APP-107 — تسليم
+
+- التاريخ والوقت: 2026-11-23، 10:00 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل، عدا منتقيي التاريخ والوقت وتجربة خادم حقيقي.
+- ما تغير بالفعل: `lib/features/listing/data/{draft_form,listing_repository}.dart` (نموذج الحقول بمفاتيح الرقعة نفسها مع حساب الفرق، ودوال `create_listing_draft` بـ`p_request_id` و`save_listing_draft` بـ`p_listing_id`/`p_patch`)؛ `domain/draft_validation.dart` (قواعد الخطوات من الإعدادات المنشورة وقواعد `submit_listing`)؛ `application/post_controller.dart` (حالة المعالج، والحفظ الجزئي، ومعرف طلب إنشاء ثابت)؛ `presentation/{post_wizard,post_steps,step_widgets}.dart` (D01 وD02 وD03 وD04 وD05 وD06 وD08 وD12)؛ `lib/core/format/digits.dart`؛ ربط المسار `/post`. اختبارات `test/features/listing/post_wizard_test.dart` (23 اختبارًا) ومساعد `FakeListingServer` في `test/helpers/fake_rpc.dart`.
+- قرارات ضمن المهمة: (1) المعالج بخطوات داخل مسار واحد بحالة Riverpod تتلف عند الإغلاق؛ المسودة المحفوظة في الخادم. (2) تُحفظ كل خطوة عند «متابعة» برقعة تحمل ما تغير وحده، فلا يمحو حفظ خطوة ما عدله المستخدم في غيرها. (3) معرف طلب الإنشاء يولد مرة لكل معالج: إن فشل الرد بعد إنشاء الخادم المسودة، تعيد المحاولة المسودة نفسها ولا تنشئ ثانية (مختبر). (4) **انحراف عن التصميم D08**: الخلفية تحفظ رقم تواصل واحدًا بعلامتي قناة (`contact_call_enabled`، `contact_whatsapp_enabled`) لا رقمين، فالشاشة حقل رقم واحد ومفتاحا «اتصال» و«واتساب»، وقناة الاتصال مفعلة افتراضيًا. تعديل التصميم أو العقد قرار منتج لم يُتخذ. (5) مكان المزاد: منطقة ومدينة ووصف نصي (TEAM-DEC-009)، وموعده يُدخل بتوقيت السعودية (UTC+3) ويرسل UTC. (6) عناوين الخطوات في الترويسة فقط كما في التصميم.
+- خلل أصلح أثناء الاختبار: مفاتيح حقول النص كانت تُنشأ كسولًا فتنشأ داخل `dispose` باستعمال `ref` (خطأ Riverpod)؛ صارت تُنشأ في `initState`.
+- الفحوص والنتائج: `dart format` دون خلل؛ `flutter analyze` دون ملاحظات؛ `flutter test` 105 اختبارات ناجحة (18 جديدة في هذه المهمة وتعديل اختبارين قائمين للشاشة الجديدة). تثبت: فرق الرقعة والمسح بـnull؛ تحليل مثال `listing-owner-draft`؛ حدود العنوان والعمر والوصف من الإعدادات؛ «أخرى» تتطلب اسم السلالة؛ المدينة تتبع المنطقة؛ السعر بمنزلتين؛ الموعد القادم؛ رقم التواصل وقناة واحدة على الأقل؛ مسار السعر المحدد كاملًا برقع كل خطوة؛ مسار المزاد؛ خطأ الخادم يبقي الخطوة ثم ينجح الحفظ؛ D12 بخياراته الثلاثة؛ عدم تجاوز الحدود عند 320 مع تكبير النص.
+- لم ينفذ ولم يفحص: منتقيا التاريخ والوقت (الحواران) لتعذر النقر عليهما في بيئة الاختبار؛ يختبر ضبط الموعد عبر المتحكم؛ التشغيل على خادم فعلي (الخلفية مستبدلة بخادم مسودات مزيف يطبق الرقع)؛ استئناف مسودة سابقة (يأتي مع «إعلاناتي» MOBILE-APP-110)؛ المعاينة البصرية على جهاز.
+- الخطوة التالية: MOBILE-APP-108 (الصور والفيديو D07).
+
+## MOBILE-APP-108 — بدء صور الإعلان (D07)
+
+- التاريخ والوقت: 2026-11-23، 10:20 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: اختيار الصور من المعرض أو الكاميرا، فحصها محليًا (JPEG أو PNG من البايتات، والحجم)، ثم `add_listing_media` فالرفع إلى التخزين فـ`media-finalize`، مع حذف الوسيط وتعيين الغلاف وترتيب الصور بـ`arrange_listing_media`؛ AD-FR-007، AD-AC-003، `contracts/api/storage.md`.
+- المسارات المحجوزة: `mobile_app/lib/features/listing/**` (ملفات الوسائط)، `mobile_app/lib/core/errors/app_error.dart` (تحويل أخطاء التخزين)، `mobile_app/pubspec.yaml` (اعتمادية `image_picker`)، `mobile_app/ios/Runner/Info.plist` (نصا إذني الصور والكاميرا)، واختباراتها.
+- معايير القبول: لا رفع لملف ليس JPEG أو PNG أو أكبر من الحد؛ حد عدد الصور من الإعدادات؛ فشل الشبكة في أي مرحلة يستأنف من المرحلة نفسها؛ `FAILED` يظهر سببه العربي ويحذف؛ `arrange_listing_media` يستلم كل معرفات الوسائط؛ لا متابعة قبل بلوغ الحد الأدنى وجاهزية كل الصور.
+- خارج المهمة: الفيديو (معطل في الإعدادات ولا معالجة له في الخادم: `VIDEO_PROCESSING_UNAVAILABLE`)؛ عرض صور مسودة سابقة من الخادم (روابط موقعة؛ مع MOBILE-APP-110).
+
+### MOBILE-APP-108 — تسليم
+
+- التاريخ والوقت: 2026-11-23، 12:00 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل، عدا التشغيل على جهاز وخادم حقيقيين.
+- ما تغير بالفعل: `lib/features/listing/domain/image_sniff.dart` (النوع الفعلي من البايتات)؛ `data/media_models.dart` و`data/media_backend.dart` (واجهة `MediaBackend` وتنفيذها: `add_listing_media` بمعاملاته، والرفع بـ`uploadBinary` دون استبدال، واستدعاء `media-finalize`، و`remove_listing_media` مع حذف الملف من التخزين عند `delete_object`، و`arrange_listing_media`؛ وواجهة `PhotoSource` وتنفيذها بـ`image_picker`)؛ `application/media_controller.dart` (طابور واحد بعد آخر وحالات المراحل والاستئناف)؛ `presentation/media_step.dart` (D07)؛ تحويل `StorageException` في `core/errors/app_error.dart`؛ اعتمادية `image_picker`؛ نصا إذني الصور والكاميرا في `ios/Runner/Info.plist`؛ ربط الخطوة 5 في المعالج. اختبارات: `media_controller_test.dart` (11) و`media_step_test.dart` (7) ومساعد `test/helpers/fake_media.dart`، وتحديث `post_wizard_test.dart`.
+- السلوك: الفحص المحلي قبل أي رفع: JPEG أو PNG من البايتات، وحجم لا يتجاوز `image_max_bytes`، وعدد لا يتجاوز `images_max`، وملف غير فارغ؛ المرفوض يظهر تنبيهه ولا يصل إلى الخادم. الاختيار بجودة 90 وحد 2560 بكسل يقلل الحجم ويحول HEIC إلى JPEG على الجهاز (TEAM-DEC-011 البند 5). فشل الشبكة في أي مرحلة يترك الصورة «متعثرة» وزر «أعد المحاولة» يستأنف من المرحلة نفسها (لا تسجيل ثانٍ). `MEDIA_NOT_UPLOADED` يعيد الرفع مرة، و`MEDIA_PROCESSING_FAILED` يعيد التثبيت حتى ثلاث محاولات. `FAILED` يظهر سببه العربي ويمنع المتابعة حتى يحذف. «متابعة» تشترط جاهزية كل الصور وبلوغ الحد الأدنى ثم ترتب بـ`arrange_listing_media` بكل المعرفات (الخادم يشترط القائمة الكاملة) والغلاف.
+- قرارات ضمن المهمة: (1) الفيديو غير مبني: معطل في الإعدادات والخادم يرفضه بـ`VIDEO_PROCESSING_UNAVAILABLE`؛ يضاف حين يتوفر عامل معالجة. (2) الغلاف والترتيب بقائمة خيارات لكل صورة (تعيين غلاف، تقديم، تأخير، حذف) بدل السحب، لسهولة الوصول لقارئ الشاشة. (3) الرفع متسلسل صورة بعد صورة لتجنب استهلاك الذاكرة والشبكة. (4) متحكم الوسائط يبقى حيًا مع المعالج فلا تضيع الصور بين الخطوات.
+- الفحوص والنتائج: `dart format` دون خلل؛ `flutter analyze` دون ملاحظات؛ `flutter test` 123 اختبارًا ناجحًا (18 جديدة في هذه المهمة)؛ `flutter build apk --debug` ناجح بعد إضافة `image_picker`. تثبت الاختبارات: رفض ملف HTML بامتداد صورة وملف فارغ وأكبر من الحد؛ حد 10 صور؛ التسجيل فالرفع فالتثبيت بالترتيب؛ الرفض بعد الفحص وحذفه؛ الاستئناف بعد انقطاع دون تسجيل ثانٍ؛ إعادة الرفع عند `MEDIA_NOT_UPLOADED`؛ إعادة التثبيت ثلاث مرات؛ ترتيب الغلاف وإرسال كل المعرفات؛ فشل الترتيب؛ حاجز الحد الأدنى والصور الفاشلة في الواجهة؛ الكاميرا.
+- لم ينفذ ولم يفحص: التشغيل على جهاز أو خادم فعلي (الخلفية والتخزين مستبدلان بمزيفين)؛ منتقي الصور الحقيقي وصلاحياته وتحويل HEIC على iOS؛ أداء رفع عشر صور بحجم 10MB على شبكة ضعيفة؛ شريط تقدم الرفع (حالة «جارٍ الرفع» دون نسبة)؛ إلغاء رفع جارٍ؛ حذف ملف التخزين عند فشل الصف (الدالة تتسامح مع فشل حذف الملف عمدًا)؛ عرض صور مسودة سابقة (MOBILE-APP-110).
+- الخطوة التالية: MOBILE-APP-109 (المعاينة والإقرار والإرسال D09 إلى D11 وحاجز إكمال الحساب).
+
+## MOBILE-APP-109 — بدء المعاينة والإقرار والإرسال (D09 إلى D11)
+
+- التاريخ والوقت: 2026-11-23، 12:10 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: معاينة الإعلان بنوعيه (D09 وD10)، وإقرار صحة البيانات، و`submit_listing` بمعرف طلب ثابت (منع الإرسال المزدوج)، وشاشة «تم الإرسال للمراجعة» (D11)، وحاجز إكمال الحساب والموافقات والإيقاف (H08) قبل الإرسال؛ AD-FR-003، AD-FR-008، AD-AC-002، AD-AC-003، AD-NFR-005.
+- المسارات المحجوزة: `mobile_app/lib/features/listing/**`، `mobile_app/lib/features/account/presentation/profile_screens.dart` (إرجاع نتيجة عند الفتح بـpush)، `mobile_app/lib/app/router/**`، واختباراتها.
+- معايير القبول: لا إرسال قبل الإقرار؛ أخطاء الخادم تعرض رسالتها وتوجه إلى الخطوة المعنية؛ الإرسال المكرر لا ينشئ إرسالًا ثانيًا؛ الحساب غير المكتمل يفتح شاشة إكمال الحساب ثم يتابع؛ `flutter analyze` و`flutter test` ناجحان.
+
+### MOBILE-APP-109 — تسليم
+
+- التاريخ والوقت: 2026-11-23، 13:30 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل، عدا التجربة على خادم حقيقي.
+- ما تغير بالفعل: `lib/features/listing/presentation/preview_step.dart` (D09 وD10 المعاينة بنوعيها، والإقرار، والإرسال، ومعالجة أخطاء الخادم، وشاشة D11 `SentView`، ودالة `stepForField`)؛ `data/listing_repository.dart` (`submit_listing` بـ`p_listing_id` و`p_request_id`)؛ `application/post_controller.dart` (`submit()` بمعرف طلب ثابت وحالة `submitted`)؛ ربط الخطوة 7 وشاشة الإرسال في المعالج؛ مسار `/account/listings` مؤقت موسوم بمهمته؛ `features/account/presentation/profile_screens.dart` (شاشة إكمال الحساب تعيد `true` عند فتحها بـpush)؛ إزالة الخطوة المؤقتة `PendingStep`. اختبارات `test/features/listing/submit_flow_test.dart` (12) وتوسيع `FakeListingServer`.
+- السلوك: الإرسال معطل ما لم يُقر المستخدم. قبل الإرسال يُفحص حساب المستخدم: غير المكتمل (ملف أو نصوص) يفتح شاشة إكمال الحساب فوق المعالج دون فقدان الإدخال، وعند إتمامها يتابع الإرسال تلقائيًا؛ الموقوف يظهر له تنبيه H08 ولا يرسل. أخطاء الخادم: `VALIDATION_FAILED` يعرض أزرار «عدّل: …» بحسب الحقول المرفوضة وينتقل إلى خطوتها، و`MEDIA_NOT_READY` يوجه إلى الصور، و`PROFILE_INCOMPLETE` و`POLICIES_NOT_ACCEPTED` يفتحان إكمال الحساب، و`RATE_LIMITED` يعرض رسالته. إعادة المحاولة بعد انقطاع تستعمل معرف الطلب نفسه فلا ينشأ إرسال ثانٍ (مختبر).
+- قرار ضمن المهمة: المعاينة تعرض الغلاف من الصورة المحلية لا من رابط الخادم، فتعمل دون روابط موقعة؛ وتعرض «الحالة الصحية … حسب المعلن» كما في D09.
+- الفحوص والنتائج: `dart format` دون خلل؛ `flutter analyze` دون ملاحظات؛ `flutter test` 135 اختبارًا ناجحًا (12 جديدة). تثبت: المعاينة بنوعيها (السعر بفواصل الآلاف، والمزاد بموعد 18:30 بتوقيت السعودية من 15:30 UTC)؛ لا إرسال قبل الإقرار؛ حفظ الإقرار ثم الإرسال ثم D11؛ معرف الطلب الثابت عند إعادة المحاولة؛ توجيه الحقول المرفوضة؛ `MEDIA_NOT_READY` و`RATE_LIMITED`؛ مسار الحساب غير المكتمل بتمامه؛ الحساب الموقوف؛ فشل حفظ الإقرار لا يُحتسب إرسالًا.
+- لم ينفذ ولم يفحص: خادم حقيقي؛ حالة سباق إغلاق التطبيق أثناء الإرسال؛ قارئ الشاشة على المعاينة؛ استئناف مسودة سابقة بصورها (MOBILE-APP-110 والروابط الموقعة).
+
+## MOBILE-APP-110 — بدء إعلاناتي
+
+- التاريخ والوقت: 2026-11-23، 13:40 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: قائمة إعلانات صاحب الجلسة بكل حالاتها من `my_listings` مع الشارة وسبب الرفض أو الإخفاء، وإجراءات المسودة والرفض (متابعة التحرير، حذف)؛ AD-FR-005، AD-FR-009، AD-AC-003، `contracts/api/read-surface.md`.
+- المسارات المحجوزة: `mobile_app/lib/features/my_listings/**`، `mobile_app/lib/app/router/**`، `mobile_app/lib/features/account/presentation/account_screen.dart` (صف «إعلاناتي»)، واختباراتها.
+
+### MOBILE-APP-110 — تسليم
+
+- التاريخ والوقت: 2026-11-23، 16:00 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل، عدا التجربة على خادم حقيقي.
+- ما تغير بالفعل: `lib/core/supabase/rest.dart` (منافذ القراءة المباشرة من PostgREST، والروابط الموقعة للصور الخاصة، وحذف ملفات التخزين)؛ `lib/core/format/money.dart`؛ `lib/features/my_listings/{data,application,presentation}` (`my_listings` بترتيب الأحدث تعديلًا، شارة كل حالة، سبب الرفض أو الإخفاء بتسميته ونصه، علامة «تعديل قيد التحرير»، موعد المزاد المنتهي، حالة فارغة، سحب للتحديث، إعادة محاولة)؛ إجراءات الإعلان: متابعة تحرير مسودة، تعديل منشور أو مرفوض («تعديل وإعادة الإرسال»)، حذف بتأكيد (`delete_listing` ثم حذف الملفات التي يعيدها)؛ استئناف المسودة في المعالج (`/post?draft=<id>` بقراءة الجداول، و`/post?edit=<id>` بـ`start_listing_edit`) مع تحميل صورها بروابط موقعة؛ صف «إعلاناتي» في شاشة الحساب؛ `MediaItem` يدعم صورًا محفوظة في الخادم؛ تعطيل إعادة المحاولة التلقائية الصامتة في Riverpod (`retry: null`) لتظهر الأخطاء بأزرارها الصريحة. اختبارات `test/features/my_listings/my_listings_test.dart` (11) ومساعد `test/helpers/fake_tables.dart`.
+- قرارات ضمن المهمة: (1) استئناف مسودة يقرأ `listings` و`listing_versions` و`media` بقراءة المالك (متاحة في `read-surface.md`) لأن لا دالة تعيد مسودة قائمة؛ ولغير المسودات `start_listing_edit`. (2) تحميل حتى 100 إعلان دون تصفح على دفعات (حد المسودات 20 والإرسال اليومي 5)؛ يلزم الترقيم عند نمو القائمة. (3) وسيط بانتظار الرفع في مسودة مستأنفة يُعامل «مرفوضًا» ويحذف ويضاف غيره، لأن بايتاته ضاعت مع الجلسة السابقة.
+- الفحوص والنتائج: `dart format --set-exit-if-changed` دون تغيير؛ `flutter analyze` دون ملاحظات؛ `flutter test` 146 اختبارًا ناجحًا (11 جديدة)؛ `flutter build apk --debug` ناجح. تثبت: تحليل مثال `my-listing.json` وأعلام الإجراءات لكل حالة؛ تنسيق المبلغ والموعد؛ شارات الحالات الست والأسباب؛ القائمة الفارغة والخطأ وإعادة المحاولة؛ الحذف بالإلغاء والتأكيد وحذف الملفات وخطأ الحذف؛ استئناف مسودة (دون إنشاء مسودة ثانية ودون حفظ زائد)؛ تعديل منشور؛ فشل تحميل المسودة.
+- لم ينفذ ولم يفحص: خادم حقيقي (القراءة والروابط الموقعة مستبدلة بمزيفة)؛ عرض الصور المحفوظة فعليًا؛ تجديد الظهور (`bump_listing`) وأرشفة الإعلان؛ ترتيب القائمة على بيانات كثيرة.
+
+## MOBILE-PLAN-20261122 — حالة المرحلة M1 للتطبيق (2026-11-23، 16:10)
+
+- المنجز في M1: MOBILE-APP-101 إلى MOBILE-APP-110 كلها مسلّمة، والخلفية والعقد 0.1.0 (MOBILE-BE-101 إلى 110، MOBILE-CON-101).
+- المتبقي: **MOBILE-QA-101** (قبول AD-AC-001 و003 و004 و005 و009 و012 على خلفية فعلية). كل اختبارات التطبيق الحالية تعمل على خلفية مزيفة تطبق العقد؛ لا تثبت سلوك Supabase الفعلي. يلزم لها: (1) خلفية محلية (`supabase start`) أو مشروع تطوير بدخول الهاتف مفعلًا (INT-006)، (2) جهاز أو محاكٍ لـAndroid، (3) رقم اختباري أو مزود رسائل.
+- نقاط تنتظر قرارًا أو تحققًا: انحراف D08 (رقم تواصل واحد بقناتين، لا رقمان)؛ الفيديو غير مبني (معطل في الإعدادات والخادم لا يعالجه)؛ منتقيا التاريخ والوقت لم يُختبرا آليًا؛ تشغيل الحركة والواجهات على جهاز لم يتم.
+
+## MOBILE-BE-201 / MOBILE-BE-202 / MOBILE-CON-201 — خلفية M2 والعقد 0.2.0
+
+- التاريخ والوقت: 2026-11-23، 18:00 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل ومدفوع إلى مشروع التطوير.
+- ما تغير بالفعل: ترحيلان `20261123100000_search.sql` و`20261123101000_favorites_share.sql`؛ اختبارات pgTAP `14_search` و`15_favorites_share` وتحديث `12_public_surface` و`99_api_surface`؛ `contracts/` بالإصدار 0.2.0 (`rpc.yaml` 47 دالة، ثلاثة مخططات جديدة، سبعة أمثلة، الأنواع، `read-surface.md`، `CHANGELOG.md`) وأدوات التوليد في `contracts/tools/`.
+- السطح الجديد: `search_listings` (مرشحات مجتمعة، أربعة فرز، مؤشر keyset، المزاد الماضي خارج النتائج)، `get_listing`، `resolve_listing_ref`، `add_favorite`، `remove_favorite`، view ‏`my_favorites`، والعمود `public_ref`. لا رموز أخطاء جديدة. إضافي بالكامل فلا يمس الجوال ولا لوحة الإدارة.
+- قرارات: (1) `get_listing` و`resolve_listing_ref` ضمن الترحيلين 15 و14 على الترتيب (تغيير طفيف عن الخطة بسبب اعتماد `get_listing` على المفضلة). (2) الدوال دون `STABLE` لأنها ترفع أخطاء (تحذير lint). (3) البحث حرفي في العنوان دون تطبيع الهمزات والتشكيل. (4) الترتيب في البحث بتعبيرات CASE فلا يستفيد من فهرس الظهور؛ يراجع عند نمو البيانات.
+- الفحوص والنتائج: `supabase db reset` و`supabase test db` على قاعدة نظيفة: 512 اختبارًا ناجحًا (بينها 47 للبحث وما يقارب 35 للمفضلة)؛ `supabase db lint` دون تحذيرات على الدوال الجديدة بعد إزالة STABLE؛ `flutter test test/contracts` ناجح؛ على السحابة: الدوال الخمس وview المفضلة موجودة وآخر ترحيل 20261123101000. ملاحظة: تشغيل `build_fixtures.mjs` يترك بيانات في القاعدة المحلية فتفشل اختبارات pgTAP حتى `db reset`.
+- لم ينفذ: اختبار الأداء على بيانات كثيرة؛ تجربة الدوال على السحابة بجلسة فعلية.
+- الخطوة التالية: MOBILE-APP-201 (التصفح B01 إلى B05 وB08 والتفاصيل C01 وC02).
+
+## MOBILE-APP-201 — بدء التصفح والبحث (B01 إلى B05) وتفاصيل الإعلان (C01 وC02) والمفضلة (B09)
+
+- التاريخ والوقت: 2026-11-23، 18:10 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: جارٍ.
+- الهدف ومرجع المتطلب: الرئيسية بقائمة الإعلانات المنشورة على دفعات من 20 مع بحث ومرشحات وفرز (`search_listings`)، وتفاصيل الإعلان بمعرض صور قابل للتكبير ورقم التواصل (اتصال وواتساب للقنوات المفعلة فقط) و«الإعلان غير متاح» دون سبب، والمفضلة (`add_favorite`/`remove_favorite`/`my_favorites`)؛ AD-FR-011 إلى AD-FR-013، AD-FR-022، AD-AC-006.
+- المسارات المحجوزة: `mobile_app/lib/features/browse/**`، `mobile_app/lib/features/favorites/**`، `mobile_app/lib/app/router/**`، `mobile_app/pubspec.yaml` (`url_launcher`)، واختباراتها.
+- معايير القبول: لا اشتراط دخول للتصفح؛ الدفعة التالية بالمؤشر نفسه دون تكرار؛ فشل جلب دفعة لا يمحو ما عُرض؛ المفضلة تطلب الدخول عند الحفظ؛ `flutter analyze` و`flutter test` ناجحان.
+- خارج المهمة: ملف المعلن العام (C06) والمشاركة (MOBILE-APP-205)، الفيديو.
+
+### MOBILE-APP-201 — تسليم (التصفح والتفاصيل والمفضلة وملف المعلن والمشاركة)
+
+- التاريخ والوقت: 2026-11-23، 20:30 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل، عدا التجربة على خادم وجهاز حقيقيين وفتح الروابط الواردة. شمل أيضًا نطاق MOBILE-APP-202 إلى 205 من الخارطة (التفاصيل، التواصل، المفضلة، ملف المعلن، المشاركة).
+- ما تغير بالفعل (كله في `mobile_app/`): `lib/features/browse/` (نموذج البطاقة والمرشحات والتفاصيل، `BrowseRepository` فوق `search_listings` و`get_listing` و`resolve_listing_ref`، مزودات النتائج على دفعات، الرئيسية B01 بالبحث والمرشحات، ورقة المرشحات والفرز، قائمة النتائج المشتركة، بطاقة الإعلان، شاشة التفاصيل بالمعرض والتكبير وأزرار التواصل والمزاد، رابط المشاركة)؛ `lib/features/favorites/` (`add_favorite`/`remove_favorite` وقراءة `my_favorites`، زر القلب، شاشة B09)؛ `lib/features/seller/` (C06 من `public_profiles` وبحث `p_owner_id`)؛ المسارات `/listing/:id` و`/seller/:id` وربط تبويبي الرئيسية والمفضلة؛ اعتماديتا `url_launcher` و`share_plus` واستعلامات `tel` و`https` في `AndroidManifest.xml`. اختبارات `test/features/browse/browse_test.dart` (31 اختبارًا) وتحديث اختباري الهيكل والبداية ومساعد `pumpApp` (`extraOverrides`) وإضافة `search_listings` إلى `FakeRpc`.
+- السلوك: الدفعة 20 بالمؤشر نفسه دون تكرار ودون إعادة محاولة تلقائية بعد فشل (زر صريح)؛ فشل الدفعة التالية يبقي ما عُرض؛ تغيير المرشحات يبدأ نتائج جديدة؛ المنطقة تمسح المدينة؛ التحقق المحلي للنطاقات المعكوسة والسالبة يطابق الخادم؛ نطاق السعر يعطل نوع «مزاد»؛ الاتصال وواتساب للقنوات المفعلة فقط (`tel:` و`https://wa.me/`)؛ غير المنشور «الإعلان غير متاح» دون سبب؛ الحفظ يطلب الدخول ثم يعود؛ المفضلة غير المتاحة صف بلا محتوى يُزال؛ زر المشاركة لا يظهر إلا مع `SHARE_BASE_URL` والنص العنوان والرابط `/l/<public_ref>` فقط.
+- قرارات ضمن المهمة: (1) الفيديو غير معروض في المعرض (غير مفعل في الإعدادات). (2) تكبير الصور بـ`InteractiveViewer` دون حزمة `photo_view`. (3) البطاقة أفقية مدمجة لا عمودية؛ تعديل التصميم يعود للمستخدم. (4) المفضلة حتى 200 إعلان دون ترقيم. (5) لا معالجة للروابط الواردة (`/l/<ref>`) بعد؛ تنتظر النطاق وملفي الربط (INT-005).
+- الفحوص والنتائج: `dart format --set-exit-if-changed` دون تغيير؛ `flutter analyze` دون ملاحظات؛ `flutter test` 180 اختبارًا ناجحًا؛ `flutter build apk --debug` ناجح بعد إضافة الاعتماديتين.
+- لم ينفذ ولم يفحص: التشغيل على خادم أو جهاز فعليين (الخلفية والصور مستبدلتان)؛ الاتصال وواتساب على جهاز؛ ورقة المشاركة؛ الصور الحقيقية في المعرض؛ الأداء على قائمة طويلة؛ معالجة الروابط الواردة؛ القلب في بطاقات ملف المعلن بعد تسجيل الدخول؛ iOS (`LSApplicationQueriesSchemes` غير لازم لـ`launchUrl` دون `canLaunchUrl`).
+- الخطوة التالية: MOBILE-QA-201 (AD-AC-006 و013 و014 و018 و023 على خلفية فعلية) مع MOBILE-QA-101، ثم M3 (المحادثات).
+
+## MOBILE-BE-301 إلى MOBILE-BE-305 وMOBILE-CON-301 — خلفية M3 والعقد 0.3.0
+
+- التاريخ والوقت: 2026-11-23، 23:30 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل ومدفوع إلى مشروع التطوير، عدا نشر دالة Edge ‏`push-dispatch` وتجربتها على FCM.
+- ما تغير بالفعل: خمسة ترحيلات (`conversations` و`blocks_comments` و`reports` و`follows` و`push` بتاريخ 20261123)؛ اختبارات pgTAP من 16 إلى 20 وتحديث 07 و12 و99؛ `supabase/functions/push-dispatch/` (`index.ts` و`payload.ts` و`payload.test.ts`)؛ `contracts/` بالإصدار 0.3.0 (`rpc.yaml` 74 دالة، ستة مخططات، 29 مثالًا جديدًا من الخادم، الأنواع، أربعة رموز أخطاء، أحداث الإشعارات، `read-surface.md`، `CHANGELOG.md`)؛ في الجوال: أربعة رموز أخطاء ورسائلها العربية.
+- السطح الجديد وقواعده في `contracts/CHANGELOG.md` (0.3.0). أبرزها: محادثة لكل إعلان وطرفين بقراءة الطرفين فقط وRealtime؛ القراءة فقط بعد الإخفاء أو التعليق أو الحظر دون كشف سبب الحظر؛ إشعار واحد لرسائل غير مقروءة وبلا نص؛ ردود عامة بحد 5 في الدقيقة وإغلاق من المعلن وإخفاء إشرافي بسبب (`COMMENT_HIDE`)؛ بلاغات بمرجع `R-…` وبلاغ مفتوح واحد لكل مبلغ وهدف والأدلة بقدرة `evidence.read` وسجل اطلاع؛ متابعة بحوث ومعلنين بإشعار أول نشر واحد؛ تفضيلات دفع لكل فئة وانتقال ملكية رمز الجهاز.
+- قرارات: (1) `my_conversations` يضمّن شرط الكتابة بدل دالة لأن دوال الـview تُنفذ بصلاحيات المستدعي ولا صلاحية له على `private`. (2) أوقات الرسائل والردود `clock_timestamp()` لضمان الترتيب داخل معاملة واحدة. (3) المبلغ لا يطلع على قائمة بلاغاته (SRS ملغى)، بل يحصل على المرجع والحالة وإشعار الإغلاق. (4) لم تُربط مهمة pg_cron لاستدعاء `push-dispatch` ولم تنشر الدالة: تنتظر Firebase وسر الجدولة (INT-006). (5) المتابعة والنشر: الإشعار عند أول اعتماد فقط عبر trigger على `first_published_at`.
+- الفحوص والنتائج: `supabase db reset` و`supabase test db` على قاعدة نظيفة: 810 اختبارات ناجحة (21 ملفًا)؛ `supabase db lint` دون تحذيرات على الدوال الجديدة؛ `flutter test test/contracts` ناجح؛ على السحابة الترحيلات الخمسة مطبقة. تشغيل `build_fixtures.mjs` يترك بيانات تفشل معها pgTAP حتى `db reset`.
+- لم ينفذ: اختبارات Deno لـ`payload.ts` (Deno غير مثبت في البيئة)؛ الإرسال الفعلي عبر FCM؛ اختبار حد 5 محادثات جديدة/ساعة (يلزم إعدادات خاصة)؛ الأداء على بيانات كثيرة (مطابقة المتابعات عند النشر خطية بعدد البحوث المحفوظة).
+- الخطوة التالية: MOBILE-APP-301 إلى 305 (المحادثات والردود والحظر والبلاغات والمتابعات والإشعارات).
+
+## MOBILE-APP-301 إلى MOBILE-APP-305 — المحادثات والردود والحظر والبلاغات والمتابعات والإشعارات
+
+- التاريخ والوقت: 2026-11-24، 02:30 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل، عدا التشغيل على خادم وجهاز حقيقيين، وتكامل الدفع الفعلي (FCM) المؤجل لمشروع Firebase (INT-006). نُفذت خمس مهام معًا فوق العقد 0.3.0.
+- المسارات المحجوزة: `mobile_app/lib/features/{chat,comments,safety,follows,notifications}/**`، `mobile_app/lib/core/{push,supabase/realtime.dart,format,errors}`، `mobile_app/lib/app/{router,shell}`، `mobile_app/lib/features/{browse,account,seller,auth}` (ربط محدود)، واختباراتها.
+- ما تغير بالفعل (كله في `mobile_app/`):
+  - 301 المحادثات: قائمة F01 (الأحدث نشاطًا، غير المقروء، «الإعلان غير متاح» دون عنوان ولا غلاف) وشاشة F02 (حالات الإرسال، إعادة المحاولة بمعرف الطلب نفسه، حذف الفاشلة، حد طول الرسالة من الإعدادات، كتم التنبيهات، القراءة فقط بملاحظة)، واستقبال Realtime بدمج يمنع التكرار، وشارة غير المقروء في الشريط السفلي، وزر «راسل المعلن» في التفاصيل (يخفى على إعلان صاحب الجلسة ويوجّه الزائر للدخول). `AuthBackend.userId` جديد.
+  - 302 الردود: قسم «الأسئلة والردود» في التفاصيل (خيوط، وسم المعلن، المخفي والمحذوف بلا نص، نشر بمعرف طلب يبقى بعد الفشل، تحرير الكاتب وحذفه، رد المعلن، إغلاق الردود وإعادة فتحها).
+  - 303 الأمان: ورقة الإبلاغ (سبب إلزامي و«أخرى» تشترط وصفًا، معرف طلب ثابت، رقم البلاغ المرجعي، رسالة لبلاغ مفتوح سابق)، وحظر بتأكيد، وشاشة المحظورين G08؛ مداخلها: قائمة الإعلان، وملف المعلن، وقائمة المحادثة، والضغط المطول على رسالة الطرف الآخر، وقائمة ردّ غيرك.
+  - 304 المتابعات: «متابعة هذا البحث» في الرئيسية، وزر المتابعة في ملف المعلن، وشاشة G03 بتبويبي عمليات البحث (تطبيقها في الرئيسية وإلغاؤها) والمعلنين.
+  - 305 الإشعارات: مركز G04 (جرس بعدد غير المقروء، فتح المورد، تعليم الكل، ارتداد عند فشل الخادم) وإعدادات G05 (دفع لكل فئة) و`PushService` (افتراضيه `NoopPushService`) و`PushRegistrar` (تسجيل الرمز بعد الدخول وإلغاؤه قبل الخروج دون أن يمنع فشله الخروج).
+  - مساعدة: `pumpApp` بـ`messageInserts` و`extraOverrides`؛ أربعة رموز أخطاء جديدة.
+  - اختبارات جديدة: `test/features/{chat,comments,safety,follows,notifications}/*` (112 اختبارًا) وتحديث اختباري الهيكل والبداية.
+- قرارات ضمن المهمة: (1) نص رسالة المحادثة `Text` لا `SelectableText` لأن الضغط المطول للإبلاغ يتعارض مع التحديد. (2) الدفع الفعلي لا يبنى قبل Firebase: لا `firebase_messaging` في الاعتماديات؛ الواجهة الخلفية للتسجيل جاهزة خلف `PushService`. (3) القائمة المحمّلة تُحدَّث قبل فتح محادثة جديدة لتحمل اسم الطرف الآخر، وتُعاد قراءتها مرة واحدة إن غابت. (4) رد الإعلان بلا ترقيم (حتى 300) والمحادثات حتى 200 والرسائل آخر 200، فلا تحميل لأقدم منها بعد. (5) الإبلاغ عن رسالة بالضغط المطول لا بزر ظاهر: اكتشافه ضعيف ويحتاج مراجعة تصميم. (6) لا شاشات لإنشاء تقييم ولا لـG06/G09/H09/H10 (M4).
+- الفحوص والنتائج: `dart format --set-exit-if-changed` دون تغيير؛ `flutter analyze` دون ملاحظات؛ `flutter test` 260 اختبارًا ناجحًا. تثبت الاختبارات سلوك الواجهات على خلفية مزيفة تطبق شكل العقد (أمثلة الخادم المسجلة).
+- لم ينفذ ولم يفحص: التشغيل على خادم فعلي وRealtime الفعلي (البث مستبدل بمصدر اختباري)؛ بناء Android بعد إضافات هذه المهمة (لم تضف اعتماديات)؛ الدفع عبر FCM وإذن النظام؛ قارئ الشاشة على الشاشات الجديدة؛ أداء قوائم كبيرة؛ حدود الشاشات الضيقة وتكبير النص للشاشات الجديدة؛ iOS.
+- الخطوة التالية: تحقق QA على خلفية فعلية (MOBILE-QA-101 و201 و301) ثم M4 (التقييمات). يلزم من المستخدم لتفعيل الدفع: مشروع Firebase وملف `google-services.json` وسر `FCM_SERVICE_ACCOUNT` (INT-006).
+
+## MOBILE-BE-401 / MOBILE-BE-402 / MOBILE-CON-401 / MOBILE-APP-401 / MOBILE-APP-402 — M4 والعقد 1.0.0
+
+- التاريخ والوقت: 2026-11-24، 05:30 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: مكتمل ومدفوع إلى مشروع التطوير (الترحيلان 21 و22)، عدا التجربة على خلفية وجهاز حقيقيين، وجزء من APP-402 كما يلي.
+- الخلفية (BE-401، BE-402): ترحيل `ratings` (جداول `seller_ratings` و`seller_rating_history` و`rating_replies` و`rating_appeals`، دوال `get_rating_eligibility` و`submit_rating` و`edit_rating` و`reply_to_rating` و`appeal_rating`، ودوال الإدارة `admin_hide_rating` و`admin_unhide_rating` و`admin_decide_rating_appeal`، views `public_ratings` و`my_received_ratings`، `rating_avg` و`rating_count` في `public_profiles`، هدف البلاغ `RATING`، إجراء الإشراف `RATING_HIDE`) وترحيل `admin_stats` (أعداد تجميعية بالقدرة `stats.read`). اختبارات pgTAP `21_ratings` (79) و`22_admin_stats` (14) وتحديث 07 و12 و17 و99.
+- العقد 1.0.0 (CON-401): `rpc.yaml` 83 دالة، أربعة مخططات جديدة، 11 مثالًا من الخادم، الأنواع المولدة، رمزا خطأ (`RATING_NOT_ELIGIBLE`، `RATING_EXISTS`)، أحداث التقييم، `read-surface.md`، `CHANGELOG.md`. إضافي بالكامل؛ لا تغيير كاسر على ADMIN. دوال الإدارة الجديدة (W3) جاهزة للتحقق من جانب ADMIN.
+- التطبيق (APP-401): ملخص التقييم في ملف المعلن، شاشة F05 (المتوسط والعدد من الظاهر، الردود، البلاغ عن تقييم الآخرين، تعديل تقييمي)، ورقة F06 (نجوم بكلمات، تعليق، إقرار «تعاملت مع هذا المعلن» غير مفعل مسبقًا للجديد، معرف طلب ثابت، دون ادعاء شراء)، شرح عدم الأهلية F07، وشاشة F08 «تقييماتي كمعلن» (رد منفصل واعتراض بسبب، حالة الاعتراض، المخفي بشارة بلا إجراءات).
+- التطبيق (APP-402، الجزء المنفذ): G06 الإعدادات (اختيار المظهر فاتح/داكن/النظام يطبق ويحفظ، وإرشاد حجم الخط، ومداخل الإشعارات والشروط)، وG09 الشروط والخصوصية والمساعدة (قارئ النصوص السارية يوسم المؤقت منها صراحة، وأسئلة شائعة بلا رقم دعم مختلق).
+- **لم ينفذ من APP-402:** G10 إغلاق الحساب (ملغى بـTEAM-DEC-009؛ تسجيل الخروج قائم)، وH09 (شاشة شرح الأذونات قبل طلبها؛ الصور تعتمد على نافذة النظام وإذن الدفع على زر الإعدادات)، وH10 (حالة حفظ/نجاح/فشل موحدة؛ كل شاشة تعرض حالتها المحلية)، وG07 (أرقام التواصل ملغاة). تحتاج قرارًا بالنطاق قبل التنفيذ.
+- قرارات: (1) أهلية التقييم: المقيّم هو مشتري المحادثة وكلا الطرفين أرسل رسالة، وبلا حظر (الأهلية تقلل الإساءة ولا تثبت شراء). (2) تقييم واحد لكل معلن؛ التعديل يحفظ الصيغة السابقة في سجل. (3) قبول الاعتراض يخفي التقييم بقرار إداري بسبب مسجل ورفضه يبقيه؛ الاعتراض نفسه لا يخفي. (4) متوسط التقييم وعدده من الظاهر فقط. (5) الدخول إلى التقييمات الذاتية للجوال فقط؛ لا شاشة إدارية (ADMIN-W3-001 تبنيها فوق العقد).
+- الفحوص والنتائج: pgTAP على قاعدة نظيفة 903 اختبارات (23 ملفًا) ناجحة؛ `flutter analyze` دون ملاحظات؛ `dart format` دون تغيير؛ `flutter test` 284 اختبارًا ناجحًا؛ `flutter build apk --debug` ناجح؛ السحابة: الترحيلات حتى `20261123170000` مطبقة.
+- لم ينفذ ولم يفحص: التشغيل على خادم وجهاز فعليين؛ اختبار أداء `admin_stats` على بيانات كثيرة (عدّ مباشر دون فهارس تاريخ لبعض الجداول)؛ إشعارات التقييم على FCM.
+- الخطوة التالية: MOBILE-QA-101/201/301/401 على خلفية فعلية وجهاز، وقرار المستخدم في المتبقي من APP-402 وفي مسار الدفع (Firebase) والنطاق (INT-005).
+
+## MOBILE-FCM-001 — ربط الجوال بـFirebase Cloud Messaging (INT-006)
+
+- التاريخ والوقت: 2026-11-23 — Asia/Riyadh؛ MOBILE / Claude Code. الحالة: الشيفرة مكتملة، والتفعيل الفعلي ينتظر ملف `google-services.json` من المستخدم.
+- المسارات: `mobile_app/{pubspec.yaml,pubspec.lock,lib/app/bootstrap.dart,lib/core/push/firebase_push_service.dart,android/settings.gradle.kts,android/app/build.gradle.kts,android/app/src/main/AndroidManifest.xml}`.
+- ما تغير: اعتماديتا `firebase_core` و`firebase_messaging`؛ `FirebasePushService` ينفذ `PushService` (الإذن، الرمز، تجديده، المنصة)؛ `bootstrap` يهيئ Firebase ويستبدل `NoopPushService` عند النجاح، ويبقى الدفع معطلًا دون خطأ إن غاب الملف؛ إضافة `com.google.gms.google-services` في Gradle مشروطة بوجود `android/app/google-services.json` فيبنى التطبيق دونه؛ إذن `POST_NOTIFICATIONS`.
+- قرار: استُبقيت `getToken` و`onTokenRefresh` (متروكتان في الإصدار 17) لأن `push-dispatch` ترسل عبر FCM HTTP v1 برمز تسجيل، بينما `register/onRegistered` تعطي معرّف تثبيت لنموذج إرسال مختلف.
+- الفحوص: `dart format` دون تغيير؛ `flutter analyze` دون ملاحظات؛ `flutter test` 284 ناجحًا؛ `flutter build apk --debug` ناجح (دون ملف Firebase).
+- لم ينفذ: التشغيل بملف Firebase حقيقي وتسجيل رمز فعلي؛ استقبال إشعار على جهاز؛ iOS (يلزم `GoogleService-Info.plist` ومفتاح APNs وجهاز macOS)؛ نشر `push-dispatch` وجدولته.
+- الخطوة التالية (المستخدم): (1) إنشاء مشروع Firebase وتطبيق Android بالمعرّف `com.nawadiraliibil.app` وتنزيل `google-services.json` إلى `mobile_app/android/app/`. (2) إنشاء مفتاح حساب خدمة وتعيينه سرًا: `supabase secrets set FCM_SERVICE_ACCOUNT=<base64>` مع `PUSH_DISPATCH_SECRET`. (3) نشر الدالة وجدولتها (يحتاج إسناد `supabase/`).

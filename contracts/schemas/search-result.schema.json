@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/search-result.schema.json",
+  "title": "رد search_listings",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "items",
+    "next_cursor"
+  ],
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "https://nawadiraliibil.example/contracts/schemas/public-listing-card.schema.json"
+      }
+    },
+    "next_cursor": {
+      "anyOf": [
+        {
+          "type": "object",
+          "description": "يمرر كما هو في p_cursor للصفحة التالية مع المرشحات والفرز نفسها",
+          "additionalProperties": false,
+          "properties": {
+            "ts": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "price": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

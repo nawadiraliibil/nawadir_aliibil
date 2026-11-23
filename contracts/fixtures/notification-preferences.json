@@ -1,0 +1,30 @@
+[
+  {
+    "category": "FOLLOWS",
+    "push_enabled": true
+  },
+  {
+    "category": "RATINGS",
+    "push_enabled": true
+  },
+  {
+    "category": "COMMENTS",
+    "push_enabled": true
+  },
+  {
+    "category": "REPORTS",
+    "push_enabled": true
+  },
+  {
+    "category": "MESSAGES",
+    "push_enabled": true
+  },
+  {
+    "category": "ACCOUNT",
+    "push_enabled": true
+  },
+  {
+    "category": "LISTING_STATUS",
+    "push_enabled": true
+  }
+]

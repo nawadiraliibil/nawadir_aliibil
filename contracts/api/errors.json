@@ -1,0 +1,248 @@
+{
+  "format": {
+    "sqlstate": "P0001",
+    "code": "حقل message في رد PostgREST",
+    "details": "حقل details: نص JSON"
+  },
+  "errors": {
+    "VALIDATION_FAILED": {
+      "meaning": "قيمة حقل أو أكثر غير صالحة",
+      "details": {
+        "fields": [
+          "مسار الحقل"
+        ],
+        "reason": "اختياري: unknown_field لمفتاح غير معروف في رقعة الحفظ، duplicate لاسم مكرر في قائمة"
+      },
+      "message_key": "error.validation_failed"
+    },
+    "BELOW_HARD_MINIMUM": {
+      "meaning": "قيمة أدنى من حد ثابت لا يقبل التخفيض (تجديد الظهور 24 ساعة)",
+      "details": {
+        "field": "مسار الحقل",
+        "minimum": 24
+      },
+      "message_key": "error.below_hard_minimum"
+    },
+    "APPEND_ONLY": {
+      "meaning": "محاولة تعديل أو حذف في سجل إضافة فقط",
+      "details": {
+        "table": "اسم الجدول",
+        "operation": "UPDATE | DELETE"
+      },
+      "message_key": "error.append_only"
+    },
+    "INTERNAL_ERROR": {
+      "meaning": "خطأ داخلي في الخادم",
+      "details": {
+        "reason": "وصف تقني"
+      },
+      "message_key": "error.internal"
+    },
+    "AUTH_REQUIRED": {
+      "meaning": "الطلب دون جلسة مستخدم",
+      "details": {},
+      "message_key": "error.auth_required"
+    },
+    "FORBIDDEN": {
+      "meaning": "لا صلاحية لهذا الإجراء",
+      "details": {
+        "reason": "no_profile عند حساب بلا ملف شخصي",
+        "capability": "القدرة الناقصة عند موظف لا يملكها"
+      },
+      "message_key": "error.forbidden"
+    },
+    "ACCOUNT_SUSPENDED": {
+      "meaning": "الحساب معلق ولا يملك وظائف النشر والتعديل",
+      "details": {},
+      "message_key": "error.account_suspended"
+    },
+    "PROFILE_INCOMPLETE": {
+      "meaning": "بيانات الملف الشخصي ناقصة قبل النشر",
+      "details": {
+        "fields": [
+          "display_name",
+          "region_id"
+        ]
+      },
+      "message_key": "error.profile_incomplete"
+    },
+    "POLICIES_NOT_ACCEPTED": {
+      "meaning": "نصوص سارية لم يوافق عليها المستخدم",
+      "details": {
+        "document_ids": [
+          1
+        ]
+      },
+      "message_key": "error.policies_not_accepted"
+    },
+    "MFA_REQUIRED": {
+      "meaning": "جلسة موظف دون مستوى aal2 (لم يكتمل التحقق متعدد العوامل)",
+      "details": {},
+      "message_key": "error.mfa_required"
+    },
+    "INVALID_STATE": {
+      "meaning": "الإجراء غير مسموح في الحالة الحالية",
+      "details": {
+        "reason": "وصف مختصر: no_draft، owner_suspended، deleted، ...",
+        "status": "الحالة الحالية عند رفض الانتقال"
+      },
+      "message_key": "error.invalid_state"
+    },
+    "CANNOT_MODIFY_SELF": {
+      "meaning": "لا يغير الموظف دوره أو يسحبه بنفسه",
+      "details": {},
+      "message_key": "error.cannot_modify_self"
+    },
+    "LAST_ADMIN": {
+      "meaning": "لا يسحب أو يخفض دور آخر مدير فعال",
+      "details": {},
+      "message_key": "error.last_admin"
+    },
+    "VERSION_IMMUTABLE": {
+      "meaning": "محاولة تغيير نسخة إعلان غير مسودة أو وسائطها",
+      "details": {
+        "version_id": "معرف النسخة",
+        "status": "حالتها"
+      },
+      "message_key": "error.version_immutable"
+    },
+    "NOT_FOUND": {
+      "meaning": "المورد غير موجود أو لا يخص صاحب الجلسة",
+      "details": {
+        "resource": "listing | media | account | region | city | breed | moderation_reason | settings_version | conversation | comment | report | report_target | rating | rating_appeal"
+      },
+      "message_key": "error.not_found"
+    },
+    "DRAFT_LIMIT_REACHED": {
+      "meaning": "بلغ الحساب حد المسودات المفتوحة",
+      "details": {
+        "limit": 20
+      },
+      "message_key": "error.draft_limit_reached"
+    },
+    "MEDIA_LIMIT_REACHED": {
+      "meaning": "بلغت المسودة حد الصور أو الفيديو",
+      "details": {
+        "kind": "IMAGE | VIDEO",
+        "limit": 10
+      },
+      "message_key": "error.media_limit_reached"
+    },
+    "MEDIA_NOT_READY": {
+      "meaning": "وسائط لم يكتمل تجهيزها أو فشل فحصها",
+      "details": {
+        "media_ids": [
+          "معرف الوسيط"
+        ]
+      },
+      "message_key": "error.media_not_ready"
+    },
+    "VIDEO_DISABLED": {
+      "meaning": "الفيديو معطل في الإعدادات المنشورة",
+      "details": {},
+      "message_key": "error.video_disabled"
+    },
+    "RATE_LIMITED": {
+      "meaning": "تجاوز حد الاستخدام في النافذة الزمنية",
+      "details": {
+        "limit": 5,
+        "window_hours": "24 (أو window_minutes: 1 للرسائل والردود)",
+        "retry_at": "وقت ISO 8601"
+      },
+      "message_key": "error.rate_limited"
+    },
+    "BUMP_TOO_EARLY": {
+      "meaning": "لم تكتمل مهلة تجديد الظهور",
+      "details": {
+        "eligible_at": "وقت ISO 8601"
+      },
+      "message_key": "error.bump_too_early"
+    },
+    "AUCTION_TIME_PASSED": {
+      "meaning": "مضى موعد المزاد الحضوري",
+      "details": {},
+      "message_key": "error.auction_time_passed"
+    },
+    "VERSION_CHANGED": {
+      "meaning": "النسخة قيد المراجعة تغيرت أو لا تطابق البصمة المرسلة مع القرار",
+      "details": {
+        "current_version_id": "معرف النسخة الحالية"
+      },
+      "message_key": "error.version_changed"
+    },
+    "REASON_REQUIRED": {
+      "meaning": "سبب الإشراف ناقص: الرمز، أو النص الحر مع «أخرى»",
+      "details": {
+        "field": "reason_code | reason_text"
+      },
+      "message_key": "error.reason_required"
+    },
+    "MEDIA_NOT_UPLOADED": {
+      "meaning": "الملف لم يرفع إلى التخزين بعد؛ الوسيط باق بانتظار الرفع (دالة media-finalize)",
+      "details": {
+        "media_id": "معرف الوسيط"
+      },
+      "message_key": "error.media_not_uploaded"
+    },
+    "MEDIA_PROCESSING_FAILED": {
+      "meaning": "تعذر حفظ نسخة الصورة المنظفة؛ يعاد الطلب (دالة media-finalize)",
+      "details": {
+        "media_id": "معرف الوسيط"
+      },
+      "message_key": "error.media_processing_failed"
+    },
+    "METHOD_NOT_ALLOWED": {
+      "meaning": "طريقة HTTP غير مدعومة في دالة Edge",
+      "details": {},
+      "message_key": "error.internal"
+    },
+    "CANNOT_MESSAGE_SELF": {
+      "meaning": "لا محادثة مع النفس: الإعلان لصاحب الجلسة",
+      "details": {},
+      "message_key": "error.cannot_message_self"
+    },
+    "CONVERSATION_READ_ONLY": {
+      "meaning": "المحادثة للقراءة فقط: الإعلان لم يعد منشورًا، أو أحد الطرفين موقوف، أو بينهما حظر. لا يكشف السبب",
+      "details": {},
+      "message_key": "error.conversation_read_only"
+    },
+    "COMMENTS_CLOSED": {
+      "meaning": "أغلق المعلن الردود الجديدة على الإعلان",
+      "details": {},
+      "message_key": "error.comments_closed"
+    },
+    "FOLLOW_LIMIT_REACHED": {
+      "meaning": "بلغ الحساب حد المتابعات المسموح",
+      "details": {
+        "kind": "saved_searches | sellers",
+        "limit": 20
+      },
+      "message_key": "error.follow_limit_reached"
+    },
+    "RATING_NOT_ELIGIBLE": {
+      "meaning": "لا يحق لصاحب الجلسة تقييم هذا المعلن: لا محادثة تبادلا فيها الرسائل، أو تقييم للنفس، أو حظر",
+      "details": {
+        "reason": "SELF | BLOCKED | NO_CONVERSATION | NO_EXCHANGE"
+      },
+      "message_key": "error.rating_not_eligible"
+    },
+    "RATING_EXISTS": {
+      "meaning": "قيّم صاحب الجلسة هذا المعلن من قبل؛ تقييم واحد لكل معلن، ويعدّل التقييم القائم",
+      "details": {
+        "rating_id": "معرف التقييم القائم"
+      },
+      "message_key": "error.rating_exists"
+    }
+  },
+  "media_failure_reasons": {
+    "note": "قيمة failure_reason لوسيط حالته FAILED",
+    "values": [
+      "EMPTY_FILE",
+      "UNSUPPORTED_TYPE",
+      "FILE_TOO_LARGE",
+      "CORRUPT_FILE",
+      "VIDEO_TOO_LONG",
+      "VIDEO_PROCESSING_UNAVAILABLE"
+    ]
+  }
+}

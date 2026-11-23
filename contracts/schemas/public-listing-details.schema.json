@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/public-listing-details.schema.json",
+  "title": "صف من public_listing_details",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "listing_id",
+    "owner_id",
+    "owner_display_name",
+    "owner_joined_at",
+    "title",
+    "description",
+    "offer_type",
+    "price",
+    "auction_region_id",
+    "auction_region_name_ar",
+    "auction_city_id",
+    "auction_city_name_ar",
+    "auction_venue",
+    "auction_starts_at",
+    "auction_passed",
+    "breed_id",
+    "breed_name_ar",
+    "breed_note",
+    "sex",
+    "age_months",
+    "color",
+    "health_notes",
+    "region_id",
+    "region_name_ar",
+    "city_id",
+    "city_name_ar",
+    "contact_phone",
+    "contact_call_enabled",
+    "contact_whatsapp_enabled",
+    "first_published_at",
+    "published_version_at",
+    "visibility_updated_at",
+    "public_ref"
+  ],
+  "properties": {
+    "listing_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "owner_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "owner_display_name": {
+      "type": "string"
+    },
+    "owner_joined_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "offer_type": {
+      "enum": [
+        "FIXED_PRICE",
+        "IN_PERSON_AUCTION"
+      ]
+    },
+    "price": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_region_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_region_name_ar": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_city_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_city_name_ar": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_venue": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_starts_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_passed": {
+      "type": "boolean"
+    },
+    "breed_id": {
+      "type": "integer"
+    },
+    "breed_name_ar": {
+      "type": "string"
+    },
+    "breed_note": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sex": {
+      "enum": [
+        "MALE",
+        "FEMALE"
+      ]
+    },
+    "age_months": {
+      "type": "integer"
+    },
+    "color": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "health_notes": {
+      "type": "string"
+    },
+    "region_id": {
+      "type": "integer"
+    },
+    "region_name_ar": {
+      "type": "string"
+    },
+    "city_id": {
+      "type": "integer"
+    },
+    "city_name_ar": {
+      "type": "string"
+    },
+    "contact_phone": {
+      "type": "string"
+    },
+    "contact_call_enabled": {
+      "type": "boolean"
+    },
+    "contact_whatsapp_enabled": {
+      "type": "boolean"
+    },
+    "first_published_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "published_version_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "visibility_updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "public_ref": {
+      "type": "string"
+    }
+  }
+}

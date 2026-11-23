@@ -1,0 +1,41 @@
+{
+  "period": {
+    "to": "2026-11-23T03:25:05.458048+00:00",
+    "from": "2026-10-24T03:25:05.458074+00:00"
+  },
+  "follows": {
+    "searches_saved": 1,
+    "sellers_followed": 1
+  },
+  "ratings": {
+    "created": 1,
+    "hidden_now": 0,
+    "appeals_opened": 1,
+    "appeals_open_now": 0
+  },
+  "reports": {
+    "closed": 1,
+    "opened": 1,
+    "open_now": 0
+  },
+  "accounts": {
+    "total": 2,
+    "created": 2,
+    "suspended_now": 0
+  },
+  "listings": {
+    "hidden": 0,
+    "approved": 1,
+    "rejected": 0,
+    "submitted": 1,
+    "published_now": 1,
+    "under_review_now": 0
+  },
+  "interaction": {
+    "messages_sent": 2,
+    "comments_posted": 2,
+    "favorites_added": 0,
+    "conversations_started": 1
+  },
+  "generated_at": "2026-11-23T03:25:05.459579+00:00"
+}

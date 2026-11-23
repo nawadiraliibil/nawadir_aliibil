@@ -1,0 +1,41 @@
+[
+  {
+    "listing_id": "a833d8e3-ee17-4332-af0d-8155d21e1e55",
+    "media_id": "79fd3d96-4422-4c51-a036-a11d0b276391",
+    "kind": "IMAGE",
+    "bucket": "listing-images",
+    "object_path": "ba24f799-5ca6-4002-a95c-9a7e92d37eee/a833d8e3-ee17-4332-af0d-8155d21e1e55/79fd3d96-4422-4c51-a036-a11d0b276391.jpg",
+    "mime_type": "image/jpeg",
+    "width": 800,
+    "height": 600,
+    "duration_seconds": null,
+    "sort_order": 1,
+    "is_cover": true
+  },
+  {
+    "listing_id": "a833d8e3-ee17-4332-af0d-8155d21e1e55",
+    "media_id": "ceef34fe-acc9-4bd6-a855-55405402378f",
+    "kind": "IMAGE",
+    "bucket": "listing-images",
+    "object_path": "ba24f799-5ca6-4002-a95c-9a7e92d37eee/a833d8e3-ee17-4332-af0d-8155d21e1e55/ceef34fe-acc9-4bd6-a855-55405402378f.jpg",
+    "mime_type": "image/jpeg",
+    "width": 800,
+    "height": 600,
+    "duration_seconds": null,
+    "sort_order": 2,
+    "is_cover": false
+  },
+  {
+    "listing_id": "a833d8e3-ee17-4332-af0d-8155d21e1e55",
+    "media_id": "9d701472-45cd-42d3-853c-49b4e115e011",
+    "kind": "IMAGE",
+    "bucket": "listing-images",
+    "object_path": "ba24f799-5ca6-4002-a95c-9a7e92d37eee/a833d8e3-ee17-4332-af0d-8155d21e1e55/9d701472-45cd-42d3-853c-49b4e115e011.jpg",
+    "mime_type": "image/jpeg",
+    "width": 800,
+    "height": 600,
+    "duration_seconds": null,
+    "sort_order": 3,
+    "is_cover": false
+  }
+]

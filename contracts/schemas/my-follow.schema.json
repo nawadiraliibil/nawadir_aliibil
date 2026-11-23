@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/my-follow.schema.json",
+  "title": "صف من my_follows",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "user_id",
+    "display_name",
+    "region_id",
+    "region_name_ar",
+    "followed_at",
+    "published_listings_count"
+  ],
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "display_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "region_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "region_name_ar": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "followed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "published_listings_count": {
+      "type": "integer"
+    }
+  }
+}

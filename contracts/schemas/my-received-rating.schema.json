@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/my-received-rating.schema.json",
+  "title": "صف من my_received_ratings",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "rating_id",
+    "rater_id",
+    "rater_display_name",
+    "score",
+    "body",
+    "status",
+    "reply_body",
+    "appeal_id",
+    "appeal_status",
+    "edited_at",
+    "created_at"
+  ],
+  "properties": {
+    "rating_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "rater_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "rater_display_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "score": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "body": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "enum": [
+        "VISIBLE",
+        "HIDDEN"
+      ]
+    },
+    "reply_body": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "appeal_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "appeal_status": {
+      "anyOf": [
+        {
+          "enum": [
+            "OPEN",
+            "ACCEPTED",
+            "REJECTED"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "edited_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
