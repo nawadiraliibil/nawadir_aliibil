@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_note.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/router/routes.dart';
+import '../../../app/theme/app_colors.dart';
 import '../../../core/errors/app_error.dart';
 import '../../../core/errors/error_messages.dart';
 import '../../../core/settings/settings_repository.dart';
@@ -14,7 +17,7 @@ import '../data/listing_repository.dart';
 import 'media_step.dart';
 import 'post_steps.dart';
 import 'preview_step.dart';
-import 'step_widgets.dart' show stepSubtitle;
+import 'step_widgets.dart' show PostStepper;
 
 enum _LeaveChoice { save, keepEditing, discard }
 
@@ -87,7 +90,7 @@ class _Wizard extends ConsumerWidget {
       if (await post.save(DraftKeys.all) && context.mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('تم حفظ المسودة.')));
+        ).showApp('تم حفظ المسودة.', kind: AppNoteKind.success);
         _close(context);
       }
     }
@@ -99,26 +102,10 @@ class _Wizard extends ConsumerWidget {
       }
       if (!state.dirty) return _close(context);
       // D12 — مغادرة وحفظ المسودة.
-      final choice = await showDialog<_LeaveChoice>(
+      final choice = await showModalBottomSheet<_LeaveChoice>(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('حفظ المسودة؟'),
-          content: const Text('يمكنك إكمال إعلانك لاحقًا.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, _LeaveChoice.discard),
-              child: const Text('تجاهل التغييرات'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, _LeaveChoice.keepEditing),
-              child: const Text('متابعة التحرير'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, _LeaveChoice.save),
-              child: const Text('حفظ ومغادرة'),
-            ),
-          ],
-        ),
+        isScrollControlled: true,
+        builder: (context) => const _LeaveSheet(),
       );
       if (!context.mounted) return;
       switch (choice) {
@@ -137,10 +124,10 @@ class _Wizard extends ConsumerWidget {
         appBar: AppBar(
           leading: IconButton(
             tooltip: 'رجوع',
-            icon: const Icon(Icons.arrow_forward),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () => _close(context),
           ),
-          title: const Text('تم الإرسال'),
+          title: const Text('تم نشر الإعلان'),
         ),
         body: const SafeArea(child: SentView()),
       );
@@ -155,21 +142,19 @@ class _Wizard extends ConsumerWidget {
         appBar: AppBar(
           leading: IconButton(
             tooltip: 'رجوع',
-            icon: const Icon(Icons.arrow_forward),
+            icon: const Icon(Icons.arrow_back),
             onPressed: back,
           ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          title: Text(_titles[state.step]!),
+        ),
+        body: SafeArea(
+          child: Column(
             children: [
-              Text(_titles[state.step]!),
-              Text(
-                stepSubtitle(state.step),
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
+              PostStepper(step: state.step),
+              Expanded(child: _stepView(state.step, saveDraft)),
             ],
           ),
         ),
-        body: SafeArea(child: _stepView(state.step, saveDraft)),
       ),
     );
   }
@@ -185,6 +170,53 @@ class _Wizard extends ConsumerWidget {
         PostStep.contact => ContactStep(onSaveDraft: saveDraft),
         PostStep.preview => PreviewStep(onSaveDraft: saveDraft),
       };
+}
+
+/// D12 — ورقة المغادرة: حفظ، أو متابعة التحرير، أو تجاهل التغييرات.
+class _LeaveSheet extends StatelessWidget {
+  const _LeaveSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text('حفظ المسودة؟', style: theme.textTheme.titleLarge),
+            const SizedBox(height: 8),
+            Text(
+              'يمكنك إكمال إعلانك لاحقًا.',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: context.colors.muted,
+              ),
+            ),
+            const SizedBox(height: 20),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, _LeaveChoice.save),
+              child: const Text('حفظ ومغادرة'),
+            ),
+            const SizedBox(height: 8),
+            FilledButton.tonal(
+              onPressed: () => Navigator.pop(context, _LeaveChoice.keepEditing),
+              child: const Text('متابعة التحرير'),
+            ),
+            const SizedBox(height: 4),
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: context.colors.error,
+              ),
+              onPressed: () => Navigator.pop(context, _LeaveChoice.discard),
+              child: const Text('تجاهل التغييرات'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 /// يحمّل مسودة من الخادم إلى المعالج قبل عرضه. يبقي المتحكمين حيين أثناء التحميل.

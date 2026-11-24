@@ -37,6 +37,17 @@ class BrowseRepository {
     );
   });
 
+  /// يسجل مشاهدة إعلان منشور (مرة لكل فتح لشاشة التفاصيل). يعيد العدد الجديد.
+  /// المشاهدة تحسب مرة لكل شخص: [deviceId] يميز الزائر غير الداخل.
+  Future<int> recordView(String listingId, {String? deviceId}) =>
+      guardRpc(() async {
+        final res = await _rpc(
+          'record_listing_view',
+          params: {'p_listing_id': listingId, 'p_device_id': ?deviceId},
+        );
+        return res as int;
+      });
+
   /// يترجم المعرّف العام في رابط المشاركة إلى معرف الإعلان.
   Future<String> resolveRef(String ref) => guardRpc(() async {
     final res = await _rpc('resolve_listing_ref', params: {'p_ref': ref});

@@ -22,7 +22,11 @@
       "auction_starts_at": null,
       "first_published_at": "2026-11-23T03:25:04.947491+00:00",
       "owner_display_name": "معلن تجريبي",
-      "visibility_updated_at": "2026-11-23T03:25:04.947491+00:00"
+      "visibility_updated_at": "2026-11-23T03:25:04.947491+00:00",
+      "auction_lat": null,
+      "auction_lng": null,
+      "view_count": 42,
+      "favorite_count": 7
     }
   ],
   "next_cursor": null

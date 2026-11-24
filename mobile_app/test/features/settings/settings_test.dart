@@ -12,9 +12,7 @@ import '../../helpers/fake_rpc.dart';
 import '../../helpers/pump_app.dart';
 
 Future<void> _openSettings(WidgetTester tester) async {
-  await tester.tap(find.text('حسابي').last);
-  await tester.pumpAndSettle();
-  await tester.tap(find.text('الإعدادات والمساعدة'));
+  await tester.tap(find.byKey(const ValueKey('home-settings')));
   await tester.pumpAndSettle();
 }
 
@@ -63,27 +61,33 @@ void main() {
       expect(current(), Brightness.light);
     });
 
-    testWidgets('إرشاد حجم الخط ومداخل الإشعارات والشروط', (tester) async {
+    testWidgets('مداخل الإشعارات والشروط بلا ملاحظة حجم الخط', (tester) async {
       await pumpApp(
         tester,
         rpc: FakeRpc({'get_my_account': (_) => fixture('account-ready')}),
       );
       await _openSettings(tester);
+      expect(find.text('حجم الخط'), findsNothing);
       expect(
         find.textContaining('يتبع التطبيق حجم الخط المضبوط'),
-        findsOneWidget,
+        findsNothing,
       );
       expect(find.text('إعدادات الإشعارات'), findsOneWidget);
       expect(find.byKey(const ValueKey('settings-legal')), findsOneWidget);
     });
 
-    testWidgets('الزائر يصل إلى الإعدادات من «حسابي»', (tester) async {
+    testWidgets('الزائر يصل إلى الإعدادات من الرئيسية لا من «حسابي»', (
+      tester,
+    ) async {
       await pumpApp(tester, auth: FakeAuthBackend(signedIn: false));
+      await _openSettings(tester);
+      expect(find.text('المظهر'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('رجوع'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('حسابي').last);
       await tester.pumpAndSettle();
-      await tester.tap(find.text('الإعدادات'));
-      await tester.pumpAndSettle();
-      expect(find.text('المظهر'), findsOneWidget);
+      expect(find.text('الإعدادات'), findsNothing);
     });
   });
 

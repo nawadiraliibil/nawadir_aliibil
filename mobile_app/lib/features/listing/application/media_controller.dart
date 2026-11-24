@@ -34,6 +34,7 @@ class MediaItem {
     required this.mimeType,
     this.slot,
     this.uploaded = false,
+    this.kind = 'IMAGE',
     this.stage = MediaStage.queued,
     this.error,
     this.failureReason,
@@ -46,6 +47,10 @@ class MediaItem {
   /// برابط موقع من [slot].
   final Uint8List? bytes;
   final String mimeType;
+
+  /// `IMAGE` أو `VIDEO`.
+  final String kind;
+  bool get isVideo => kind == 'VIDEO';
 
   /// موضع الملف بعد `add_listing_media`.
   final MediaSlot? slot;
@@ -72,6 +77,7 @@ class MediaItem {
     key: key,
     bytes: bytes,
     mimeType: mimeType,
+    kind: kind,
     slot: slot ?? this.slot,
     uploaded: uploaded ?? this.uploaded,
     stage: stage ?? this.stage,
@@ -104,6 +110,12 @@ class MediaState {
   final AppError? error;
 
   int get readyCount => items.where((i) => i.stage == MediaStage.ready).length;
+
+  /// الصور فقط (دون الفيديو): هي التي تحسب مقابل حدي الصور الأدنى والأقصى.
+  int get imageCount => items.where((i) => !i.isVideo).length;
+  int get readyImageCount =>
+      items.where((i) => !i.isVideo && i.stage == MediaStage.ready).length;
+  bool get hasVideo => items.any((i) => i.isVideo);
   bool get anyBusy => items.any((i) => i.isBusy);
 
   /// جاهزة كلها وبلا فاشلة أو متعثرة.
@@ -111,9 +123,17 @@ class MediaState {
       items.isNotEmpty && items.every((i) => i.stage == MediaStage.ready);
 
   String? get effectiveCoverKey {
+    // الغلاف صورة دائمًا؛ الفيديو لا يصلح غلافًا.
     final chosen = items.where((i) => i.key == coverKey).firstOrNull;
-    if (chosen != null && chosen.stage != MediaStage.failed) return chosen.key;
-    return items.where((i) => i.stage == MediaStage.ready).firstOrNull?.key;
+    if (chosen != null &&
+        !chosen.isVideo &&
+        chosen.stage != MediaStage.failed) {
+      return chosen.key;
+    }
+    return items
+        .where((i) => !i.isVideo && i.stage == MediaStage.ready)
+        .firstOrNull
+        ?.key;
   }
 
   MediaState copyWith({
@@ -148,7 +168,7 @@ class MediaController extends Notifier<MediaState> {
 
   /// كم صورة بقي مكانها.
   int get remainingSlots =>
-      (_settings.media.imagesMax - state.items.length).clamp(0, 999);
+      (_settings.media.imagesMax - state.imageCount).clamp(0, 999);
 
   /// يحمّل صور مسودة محفوظة في الخادم (استئناف مسودة). يستبدل ما في الحالة.
   void preload(List<OwnerMedia> media) {
@@ -156,7 +176,8 @@ class MediaController extends Notifier<MediaState> {
       for (final m in media)
         MediaItem(
           key: m.id,
-          mimeType: 'image/jpeg',
+          mimeType: m.kind == 'VIDEO' ? VideoSniff.mp4 : 'image/jpeg',
+          kind: m.kind,
           slot: MediaSlot(
             mediaId: m.id,
             bucket: m.bucket,
@@ -217,6 +238,46 @@ class MediaController extends Notifier<MediaState> {
     _drain();
   }
 
+  /// يضيف الفيديو المختار بعد فحصه محليًا (فيديو واحد، mp4، الحجم والمدة) ثم
+  /// يبدأ رفعه. يتجاهله دون أثر إن كان الفيديو معطلًا في الإعدادات.
+  void addVideo(PickedVideo picked) {
+    final media = _settings.media;
+    if (!media.videoEnabled) return;
+    String? notice;
+    final mb = (media.videoMaxBytes / (1024 * 1024)).round();
+    if (state.hasVideo) {
+      notice = 'يُسمح بفيديو واحد فقط لكل إعلان.';
+    } else if (picked.sizeBytes <= 0) {
+      notice = 'تجوهل الفيديو: الملف فارغ.';
+    } else if (picked.sizeBytes > media.videoMaxBytes) {
+      notice = 'تجوهل الفيديو: أكبر من $mb ميغابايت.';
+    } else if (picked.durationSeconds != null &&
+        picked.durationSeconds! > media.videoMaxSeconds) {
+      notice = 'تجوهل الفيديو: مدته أطول من ${media.videoMaxSeconds} ثانية.';
+    } else if (VideoSniff.mimeOf(picked.bytes) != VideoSniff.mp4) {
+      notice = 'تجوهل الفيديو: الصيغة غير مدعومة. المسموح MP4.';
+    }
+    if (notice != null) {
+      state = state.copyWith(notices: [notice]);
+      return;
+    }
+    state = state.copyWith(
+      items: [
+        ...state.items,
+        MediaItem(
+          key: const Uuid().v4(),
+          bytes: picked.bytes,
+          mimeType: VideoSniff.mp4,
+          kind: 'VIDEO',
+        ),
+      ],
+      arranged: false,
+      clearError: true,
+      notices: const [],
+    );
+    _drain();
+  }
+
   /// يستأنف عنصرًا متعثرًا من المرحلة التي توقف عندها.
   void retry(String key) {
     _update(key, (i) => i.copyWith(stage: MediaStage.queued, clearError: true));
@@ -249,8 +310,10 @@ class MediaController extends Notifier<MediaState> {
     clearError: true,
   );
 
-  void setCover(String key) =>
-      state = state.copyWith(coverKey: key, arranged: false);
+  void setCover(String key) {
+    if (_byKey(key)?.isVideo ?? false) return;
+    state = state.copyWith(coverKey: key, arranged: false);
+  }
 
   /// يحرك عنصرًا موضعًا واحدًا: [delta] سالب للأمام، موجب للخلف.
   void move(String key, int delta) {
@@ -329,6 +392,7 @@ class MediaController extends Notifier<MediaState> {
           listingId,
           mimeType: item.mimeType,
           sizeBytes: item.bytes!.length,
+          kind: item.kind,
         );
         _update(key, (i) => i.copyWith(slot: slot));
         item = _byKey(key)!;

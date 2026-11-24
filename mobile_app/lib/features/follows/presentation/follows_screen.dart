@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_note.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/router/routes.dart';
 import '../../../app/theme/app_colors.dart';
-import '../../../app/theme/app_shapes.dart';
 import '../../../core/errors/app_error.dart';
 import '../../../core/errors/error_messages.dart';
 import '../../../core/format/money.dart';
@@ -48,21 +49,94 @@ class FollowsScreen extends ConsumerWidget {
         appBar: AppBar(
           leading: IconButton(
             tooltip: 'رجوع',
-            icon: const Icon(Icons.arrow_forward),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () =>
                 context.canPop() ? context.pop() : context.go(Routes.account),
           ),
           title: const Text('المتابعات'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'عمليات البحث'),
-              Tab(text: 'المعلنون'),
-            ],
+          bottom: const PreferredSize(
+            preferredSize: Size.fromHeight(56),
+            child: _FollowChips(),
           ),
         ),
         body: const SafeArea(
           child: TabBarView(children: [_SearchesTab(), _SellersTab()]),
         ),
+      ),
+    );
+  }
+}
+
+/// شرائح التبويب (بحوث محفوظة / معلنون): المحددة بلون الزر والبقية مملوءة.
+class _FollowChips extends StatelessWidget {
+  const _FollowChips();
+
+  static const _labels = ['بحوث محفوظة', 'المعلنون'];
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = DefaultTabController.of(context);
+    final c = context.colors;
+    return ListenableBuilder(
+      listenable: controller.animation!,
+      builder: (context, _) => Padding(
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+        child: Row(
+          children: [
+            for (var i = 0; i < _labels.length; i++) ...[
+              if (i > 0) const SizedBox(width: 8),
+              Semantics(
+                button: true,
+                selected: controller.index == i,
+                child: Material(
+                  color: controller.index == i ? c.button : c.soft,
+                  shape: const StadiumBorder(),
+                  child: InkWell(
+                    customBorder: const StadiumBorder(),
+                    onTap: () => controller.animateTo(i),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(minHeight: 40),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18),
+                        child: Center(
+                          widthFactor: 1,
+                          child: Text(
+                            _labels[i],
+                            style: Theme.of(context).textTheme.labelLarge
+                                ?.copyWith(
+                                  color: controller.index == i
+                                      ? c.buttonText
+                                      : c.text,
+                                ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// أيقونة داخل دائرة ذهبية فاتحة (صف قائمة G03).
+class _RowIcon extends StatelessWidget {
+  const _RowIcon(this.icon);
+
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return DecoratedBox(
+      decoration: BoxDecoration(color: c.tintGold, shape: BoxShape.circle),
+      child: SizedBox.square(
+        dimension: 40,
+        child: Icon(icon, size: 20, color: c.gold),
       ),
     );
   }
@@ -95,42 +169,38 @@ class _SearchesTab extends ConsumerWidget {
           : ListView.separated(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
               itemCount: items.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 10),
+              separatorBuilder: (_, _) =>
+                  Divider(height: 1, thickness: 1, color: c.hair),
               itemBuilder: (context, i) {
                 final s = items[i];
-                return DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: c.soft,
-                    borderRadius: BorderRadius.circular(AppShapes.card),
-                  ),
-                  child: ListTile(
-                    key: ValueKey('saved-${s.id}'),
-                    title: Text(s.name ?? 'بحث محفوظ'),
-                    subtitle: Text(describeFilters(s.filters, lookups)),
-                    onTap: () {
-                      ref.read(homeFiltersProvider.notifier).set(s.filters);
-                      context.go(Routes.home);
+                return ListTile(
+                  key: ValueKey('saved-${s.id}'),
+                  contentPadding: EdgeInsets.zero,
+                  leading: const _RowIcon(Icons.search),
+                  title: Text(s.name ?? 'بحث محفوظ'),
+                  subtitle: Text(describeFilters(s.filters, lookups)),
+                  onTap: () {
+                    ref.read(homeFiltersProvider.notifier).set(s.filters);
+                    context.go(Routes.home);
+                  },
+                  trailing: IconButton(
+                    key: ValueKey('saved-delete-${s.id}'),
+                    tooltip: 'إلغاء المتابعة',
+                    icon: const Icon(Icons.close),
+                    onPressed: () async {
+                      final messenger = ScaffoldMessenger.of(context);
+                      try {
+                        await ref
+                            .read(followsRepositoryProvider)
+                            .deleteSearch(s.id);
+                        ref.invalidate(savedSearchesProvider);
+                      } on Object catch (e) {
+                        messenger.showApp(
+                          errorMessage(AppError.from(e)),
+                          kind: AppNoteKind.error,
+                        );
+                      }
                     },
-                    trailing: IconButton(
-                      key: ValueKey('saved-delete-${s.id}'),
-                      tooltip: 'إلغاء المتابعة',
-                      icon: const Icon(Icons.close),
-                      onPressed: () async {
-                        final messenger = ScaffoldMessenger.of(context);
-                        try {
-                          await ref
-                              .read(followsRepositoryProvider)
-                              .deleteSearch(s.id);
-                          ref.invalidate(savedSearchesProvider);
-                        } on Object catch (e) {
-                          messenger.showSnackBar(
-                            SnackBar(
-                              content: Text(errorMessage(AppError.from(e))),
-                            ),
-                          );
-                        }
-                      },
-                    ),
                   ),
                 );
               },
@@ -164,43 +234,39 @@ class _SellersTab extends ConsumerWidget {
           : ListView.separated(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
               itemCount: items.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 10),
+              separatorBuilder: (_, _) =>
+                  Divider(height: 1, thickness: 1, color: c.hair),
               itemBuilder: (context, i) {
                 final s = items[i];
-                return DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: c.soft,
-                    borderRadius: BorderRadius.circular(AppShapes.card),
+                return ListTile(
+                  key: ValueKey('followed-${s.userId}'),
+                  contentPadding: EdgeInsets.zero,
+                  leading: const _RowIcon(Icons.person_outline),
+                  title: Text(s.displayName),
+                  subtitle: Text(
+                    [
+                      ?s.regionName,
+                      '${s.publishedCount} إعلانًا منشورًا',
+                    ].join(' · '),
                   ),
-                  child: ListTile(
-                    key: ValueKey('followed-${s.userId}'),
-                    title: Text(s.displayName),
-                    subtitle: Text(
-                      [
-                        ?s.regionName,
-                        '${s.publishedCount} إعلانًا منشورًا',
-                      ].join(' · '),
-                    ),
-                    onTap: () => context.push(Routes.seller(s.userId)),
-                    trailing: TextButton(
-                      key: ValueKey('unfollow-${s.userId}'),
-                      onPressed: () async {
-                        final messenger = ScaffoldMessenger.of(context);
-                        try {
-                          await ref
-                              .read(followsRepositoryProvider)
-                              .unfollow(s.userId);
-                          ref.invalidate(followedSellersProvider);
-                        } on Object catch (e) {
-                          messenger.showSnackBar(
-                            SnackBar(
-                              content: Text(errorMessage(AppError.from(e))),
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text('إلغاء المتابعة'),
-                    ),
+                  onTap: () => context.push(Routes.seller(s.userId)),
+                  trailing: TextButton(
+                    key: ValueKey('unfollow-${s.userId}'),
+                    onPressed: () async {
+                      final messenger = ScaffoldMessenger.of(context);
+                      try {
+                        await ref
+                            .read(followsRepositoryProvider)
+                            .unfollow(s.userId);
+                        ref.invalidate(followedSellersProvider);
+                      } on Object catch (e) {
+                        messenger.showApp(
+                          errorMessage(AppError.from(e)),
+                          kind: AppNoteKind.error,
+                        );
+                      }
+                    },
+                    child: const Text('إلغاء المتابعة'),
                   ),
                 );
               },

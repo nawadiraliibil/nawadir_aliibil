@@ -35,6 +35,9 @@ class FakeMediaBackend implements MediaBackend {
   /// `remove:<id>`، `arrange`.
   final calls = <String>[];
 
+  /// نوع كل استدعاء add بالترتيب (IMAGE أو VIDEO).
+  final kinds = <String>[];
+
   /// أخطاء تُرمى بالترتيب عند الرفع (واحد لكل استدعاء، ثم نجاح).
   final uploadFailures = <Object>[];
 
@@ -56,14 +59,16 @@ class FakeMediaBackend implements MediaBackend {
     String listingId, {
     required String mimeType,
     required int sizeBytes,
+    String kind = 'IMAGE',
   }) async {
     calls.add('add');
+    kinds.add(kind);
     final id = 'media-${++_n}';
     _sizes[id] = sizeBytes;
     return MediaSlot(
       mediaId: id,
-      bucket: 'listing-images',
-      objectPath: 'owner/$listingId/$id.jpg',
+      bucket: kind == 'VIDEO' ? 'listing-videos' : 'listing-images',
+      objectPath: 'owner/$listingId/$id.${kind == 'VIDEO' ? 'mp4' : 'jpg'}',
     );
   }
 
@@ -109,10 +114,12 @@ class FakeMediaBackend implements MediaBackend {
 
 /// مصدر صور مزيف: يعيد ما يُضبط عليه.
 class FakePhotoSource implements PhotoSource {
-  FakePhotoSource({this.gallery = const [], this.camera});
+  FakePhotoSource({this.gallery = const [], this.camera, this.video});
 
   List<PickedImage> gallery;
   PickedImage? camera;
+  PickedVideo? video;
+  final videoRequests = <({bool camera, int maxBytes, int maxSeconds})>[];
   final limits = <int>[];
 
   @override
@@ -123,4 +130,32 @@ class FakePhotoSource implements PhotoSource {
 
   @override
   Future<PickedImage?> pickFromCamera() async => camera;
+
+  @override
+  Future<PickedVideo?> pickVideo({
+    required bool camera,
+    required int maxBytes,
+    required int maxSeconds,
+  }) async {
+    videoRequests.add((
+      camera: camera,
+      maxBytes: maxBytes,
+      maxSeconds: maxSeconds,
+    ));
+    return video;
+  }
 }
+
+/// بايتات تبدأ بترويسة MP4 (ftyp).
+Uint8List mp4Bytes({int length = 64}) => Uint8List.fromList([
+  0,
+  0,
+  0,
+  0x18,
+  0x66,
+  0x74,
+  0x79,
+  0x70,
+  ...'mp42'.codeUnits,
+  ...List.filled(length - 12, 0),
+]);

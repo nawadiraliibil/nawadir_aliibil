@@ -26,11 +26,16 @@
   "city_id": 1,
   "city_name_ar": "الرياض",
   "contact_phone": "+966500000009",
+  "contact_whatsapp_phone": "+966551112222",
   "contact_call_enabled": true,
   "contact_whatsapp_enabled": true,
   "first_published_at": "2026-11-23T03:25:04.947491+00:00",
   "published_version_at": "2026-11-23T03:25:04.947491+00:00",
   "visibility_updated_at": "2026-11-23T03:25:04.947491+00:00",
   "public_ref": "dzymbgq8",
-  "comments_closed": false
+  "comments_closed": false,
+  "auction_lat": null,
+  "auction_lng": null,
+  "view_count": 42,
+  "favorite_count": 7
 }

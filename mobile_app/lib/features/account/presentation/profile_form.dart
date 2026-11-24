@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../app/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errors/app_error.dart';
@@ -7,6 +8,7 @@ import '../../../core/settings/settings_repository.dart';
 import '../../../core/widgets/app_note.dart';
 import '../application/account_providers.dart';
 import '../data/account_models.dart';
+import 'menu_group.dart';
 
 /// تحقق اسم العرض: 2 إلى 40 حرفًا بعد حذف المسافات الطرفية، دون أحرف تحكم.
 /// الخادم يفرض القاعدة نفسها؛ هذا لرسالة فورية.
@@ -30,12 +32,16 @@ class ProfileForm extends ConsumerStatefulWidget {
     this.initialName,
     this.initialRegionId,
     this.pendingPolicies = const [],
+    this.extra,
   });
 
   final String submitLabel;
   final String? initialName;
   final int? initialRegionId;
   final List<PendingPolicy> pendingPolicies;
+
+  /// محتوى إضافي بين الحقول وزر الحفظ (مثل صفوف الجوال في G02).
+  final Widget? extra;
 
   /// يستدعى بعد اجتياز التحقق المحلي. يرمي [AppError] ليعرضه النموذج.
   final Future<void> Function(
@@ -99,15 +105,15 @@ class _ProfileFormState extends ConsumerState<ProfileForm> {
   Widget build(BuildContext context) {
     final settings = ref.watch(publishedSettingsProvider);
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
+        const FieldLabel('الاسم المعروض'),
         TextField(
           controller: _name,
           enabled: !_busy,
           textInputAction: TextInputAction.next,
           maxLength: 40,
           decoration: InputDecoration(
-            labelText: 'الاسم المعروض',
             hintText: 'اسمك في التطبيق',
             counterText: '',
             errorText: _touched || _name.text.isNotEmpty
@@ -117,12 +123,12 @@ class _ProfileFormState extends ConsumerState<ProfileForm> {
           onChanged: (_) => setState(() => _error = null),
         ),
         const SizedBox(height: 16),
+        const FieldLabel('المنطقة'),
         settings.when(
           data: (s) => DropdownButtonFormField<int>(
             initialValue: s.lookups.region(_regionId)?.id,
             isExpanded: true,
             decoration: InputDecoration(
-              labelText: 'المنطقة',
               errorText: _touched && _regionId == null ? 'اختر منطقتك.' : null,
             ),
             hint: const Text('اختر'),
@@ -165,6 +171,10 @@ class _ProfileFormState extends ConsumerState<ProfileForm> {
               }),
             ),
         ],
+        if (widget.extra != null) ...[
+          const SizedBox(height: 16),
+          widget.extra!,
+        ],
         if (_error != null) ...[
           const SizedBox(height: 16),
           AppNote(errorMessage(_error!), kind: AppNoteKind.error),
@@ -197,28 +207,64 @@ class _PolicyTile extends ConsumerWidget {
   final bool enabled;
   final ValueChanged<bool> onChanged;
 
-  String get _label => policy.kind == 'PRIVACY'
-      ? 'أوافق على سياسة الخصوصية'
-      : 'أوافق على شروط الاستخدام';
+  /// نص الرابط الذي يفتح قارئ النص (A04): «سياسة الخصوصية» أو «شروط الاستخدام».
+  String get _linkLabel =>
+      policy.kind == 'PRIVACY' ? 'سياسة الخصوصية' : 'شروط الاستخدام';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Row(
-      children: [
-        Expanded(
-          child: CheckboxListTile(
-            value: checked,
-            onChanged: enabled ? (v) => onChanged(v ?? false) : null,
-            title: Text(_label),
-            controlAffinity: ListTileControlAffinity.leading,
-            contentPadding: EdgeInsets.zero,
+    final c = context.colors;
+    final theme = Theme.of(context);
+    // مربع اختيار ثم «أوافق على» ثم رابط مسطر بأيقونة خارجية، كما في A04.
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          Semantics(
+            label: 'أوافق على $_linkLabel',
+            child: Checkbox(
+              key: ValueKey('policy-check-${policy.kind}'),
+              value: checked,
+              onChanged: enabled ? (v) => onChanged(v ?? false) : null,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
           ),
-        ),
-        TextButton(
-          onPressed: () => _read(context, ref),
-          child: const Text('قراءة'),
-        ),
-      ],
+          ExcludeSemantics(
+            child: GestureDetector(
+              onTap: enabled ? () => onChanged(!checked) : null,
+              child: Text('أوافق على ', style: theme.textTheme.bodyMedium),
+            ),
+          ),
+          Flexible(
+            child: InkWell(
+              key: ValueKey('policy-read-${policy.kind}'),
+              onTap: () => _read(context, ref),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        _linkLabel,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: c.gold,
+                          decoration: TextDecoration.underline,
+                          decorationColor: c.gold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(Icons.open_in_new, size: 14, color: c.gold),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +15,7 @@ import '../../../core/widgets/empty_state.dart';
 import '../application/chat_providers.dart';
 import '../data/chat_models.dart';
 import '../data/chat_repository.dart';
+import '../../listing/presentation/media_image.dart';
 import '../../safety/data/safety_repository.dart';
 import '../../safety/presentation/safety_actions.dart';
 
@@ -56,8 +58,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       await ref.read(chatRepositoryProvider).setMuted(conv.id, next);
       ref.read(conversationsProvider.notifier).setMutedLocally(conv.id, next);
     } on Object catch (e) {
-      messenger.showSnackBar(
-        SnackBar(content: Text(errorMessage(AppError.from(e)))),
+      messenger.showApp(
+        errorMessage(AppError.from(e)),
+        kind: AppNoteKind.error,
       );
     }
   }
@@ -65,7 +68,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final c = context.colors;
     final conversations = ref.watch(conversationsProvider);
     final conv = conversations.value
         ?.where((x) => x.id == widget.conversationId)
@@ -86,33 +88,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       appBar: AppBar(
         leading: IconButton(
           tooltip: 'رجوع',
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () =>
               context.canPop() ? context.pop() : context.go(Routes.messages),
         ),
-        title: conv == null
-            ? const Text('المحادثة')
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(conv.displayName, style: theme.textTheme.titleMedium),
-                  Text(
-                    conv.listingAvailable
-                        ? (conv.listingTitle ?? '')
-                        : 'الإعلان غير متاح',
-                    style: theme.textTheme.bodySmall?.copyWith(color: c.muted),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
+        title: Text(
+          conv == null ? 'المحادثة' : conv.displayName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         actions: [
-          if (conv != null && conv.listingAvailable)
-            IconButton(
-              tooltip: 'فتح الإعلان',
-              icon: const Icon(Icons.open_in_new),
-              onPressed: () => context.push(Routes.listing(conv.listingId)),
-            ),
           if (conv != null)
             IconButton(
               key: const ValueKey('chat-mute'),
@@ -179,6 +164,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             final writable = conv?.writable ?? true;
             return Column(
               children: [
+                if (conv != null) _ListingContext(conversation: conv),
                 Expanded(
                   child: messages.isEmpty
                       ? Center(
@@ -193,26 +179,34 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           reverse: true,
                           padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
                           itemCount: messages.length,
-                          itemBuilder: (context, i) => _Bubble(
-                            message: messages[i],
-                            mine: messages[i].senderId != conv?.otherUserId,
-                            onRetry: (id) => ref
-                                .read(
-                                  chatProvider(widget.conversationId).notifier,
-                                )
-                                .retry(id),
-                            onReport: (m) => showReportSheet(
-                              context,
-                              ref,
-                              target: ReportTarget.message,
-                              targetId: m.id,
-                              targetLabel: 'الرسالة',
+                          itemBuilder: (context, i) => _withDay(
+                            messages,
+                            i,
+                            _Bubble(
+                              message: messages[i],
+                              mine: messages[i].senderId != conv?.otherUserId,
+                              onRetry: (id) => ref
+                                  .read(
+                                    chatProvider(
+                                      widget.conversationId,
+                                    ).notifier,
+                                  )
+                                  .retry(id),
+                              onReport: (m) => showReportSheet(
+                                context,
+                                ref,
+                                target: ReportTarget.message,
+                                targetId: m.id,
+                                targetLabel: 'الرسالة',
+                              ),
+                              onDiscard: (id) => ref
+                                  .read(
+                                    chatProvider(
+                                      widget.conversationId,
+                                    ).notifier,
+                                  )
+                                  .discard(id),
                             ),
-                            onDiscard: (id) => ref
-                                .read(
-                                  chatProvider(widget.conversationId).notifier,
-                                )
-                                .discard(id),
                           ),
                         ),
                 ),
@@ -256,33 +250,190 @@ class _Composer extends StatelessWidget {
   Widget build(BuildContext context) {
     final text = controller.text.trim();
     final tooLong = text.length > max;
+    final c = context.colors;
+    final canSend = text.isNotEmpty && !tooLong;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: TextField(
-              key: const ValueKey('chat-input'),
-              controller: controller,
-              minLines: 1,
-              maxLines: 5,
-              textInputAction: TextInputAction.newline,
-              decoration: InputDecoration(
-                hintText: 'اكتب رسالة',
-                errorText: tooLong ? 'الحد $max حرفًا.' : null,
+          DecoratedBox(
+            decoration: ShapeDecoration(
+              color: c.soft,
+              shape: const StadiumBorder(),
+            ),
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(6, 5, 18, 5),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      key: const ValueKey('chat-input'),
+                      controller: controller,
+                      minLines: 1,
+                      maxLines: 5,
+                      textInputAction: TextInputAction.newline,
+                      decoration: const InputDecoration(
+                        hintText: 'اكتب رسالة',
+                        filled: false,
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(vertical: 10),
+                      ),
+                      onChanged: (_) => onChanged(),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton.filled(
+                    key: const ValueKey('chat-send'),
+                    tooltip: 'إرسال',
+                    style: IconButton.styleFrom(
+                      backgroundColor: c.button,
+                      foregroundColor: c.buttonText,
+                      disabledBackgroundColor: c.surface,
+                      disabledForegroundColor: c.muted,
+                      fixedSize: const Size.square(44),
+                    ),
+                    icon: const Icon(Icons.send_outlined, size: 20),
+                    onPressed: canSend ? onSend : null,
+                  ),
+                ],
               ),
-              onChanged: (_) => onChanged(),
             ),
           ),
-          const SizedBox(width: 8),
-          IconButton.filled(
-            key: const ValueKey('chat-send'),
-            tooltip: 'إرسال',
-            icon: const Icon(Icons.send),
-            onPressed: text.isEmpty || tooLong ? null : onSend,
-          ),
+          if (tooLong)
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 18, top: 4),
+              child: Text(
+                'الحد $max حرفًا.',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: c.error),
+              ),
+            ),
         ],
+      ),
+    );
+  }
+}
+
+/// شريط سياق الإعلان أعلى المحادثة: غلاف وعنوان وسهم، ويفتح الإعلان.
+class _ListingContext extends StatelessWidget {
+  const _ListingContext({required this.conversation});
+
+  final Conversation conversation;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final c = context.colors;
+    final conv = conversation;
+    final available = conv.listingAvailable;
+    final title = available ? (conv.listingTitle ?? '') : 'الإعلان غير متاح';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+      child: Semantics(
+        button: available,
+        label: available ? 'فتح الإعلان: $title' : title,
+        excludeSemantics: true,
+        child: Material(
+          color: c.soft,
+          borderRadius: BorderRadius.circular(AppShapes.image),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(AppShapes.image),
+            onTap: available
+                ? () => context.push(Routes.listing(conv.listingId))
+                : null,
+            child: Padding(
+              padding: const EdgeInsets.all(9),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: SizedBox.square(
+                      dimension: 44,
+                      child: MediaImage(
+                        bucket: available ? conv.coverBucket : null,
+                        path: available ? conv.coverPath : null,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: available ? null : c.muted,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (available)
+                    Icon(Icons.chevron_left, size: 20, color: c.muted),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// يضيف فاصل اليوم فوق أول رسالة في كل يوم (القائمة معكوسة: الأقدم لاحقًا).
+Widget _withDay(List<ChatMessage> messages, int i, Widget bubble) {
+  final day = _dayOf(messages[i].createdAt);
+  final olderIsSameDay =
+      i + 1 < messages.length && _dayOf(messages[i + 1].createdAt) == day;
+  if (olderIsSameDay) return bubble;
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      _DateDivider(day: day),
+      bubble,
+    ],
+  );
+}
+
+DateTime _dayOf(DateTime utc) {
+  final ksa = utc.toUtc().add(const Duration(hours: 3));
+  return DateTime.utc(ksa.year, ksa.month, ksa.day);
+}
+
+class _DateDivider extends StatelessWidget {
+  const _DateDivider({required this.day});
+
+  final DateTime day;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final today = _dayOf(DateTime.now());
+    final label = day == today
+        ? 'اليوم'
+        : '${day.day.toString().padLeft(2, '0')}/'
+              '${day.month.toString().padLeft(2, '0')}';
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          color: c.soft,
+          shape: const StadiumBorder(),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          child: Text(
+            label,
+            style: Theme.of(
+              context,
+            ).textTheme.labelSmall?.copyWith(color: c.muted),
+          ),
+        ),
       ),
     );
   }
@@ -313,62 +464,77 @@ class _Bubble extends StatelessWidget {
       SendState.failed => 'تعذّر الإرسال',
       SendState.sent => formatShortTime(message.createdAt),
     };
+    final bubbleColor = mine ? c.tintGold : c.soft;
+    final radius = BorderRadiusDirectional.only(
+      topStart: const Radius.circular(18),
+      topEnd: const Radius.circular(18),
+      bottomStart: Radius.circular(mine ? 4 : 18),
+      bottomEnd: Radius.circular(mine ? 18 : 4),
+    );
     return Align(
       alignment: mine
-          ? AlignmentDirectional.centerStart
-          : AlignmentDirectional.centerEnd,
+          ? AlignmentDirectional.centerEnd
+          : AlignmentDirectional.centerStart,
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.sizeOf(context).width * 0.78,
+          maxWidth: MediaQuery.sizeOf(context).width * 0.82,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Column(
-            crossAxisAlignment: mine
-                ? CrossAxisAlignment.start
-                : CrossAxisAlignment.end,
-            children: [
-              GestureDetector(
-                // الضغط المطول على رسالة الطرف الآخر الواصلة يتيح الإبلاغ عنها.
-                onLongPress: !mine && message.state == SendState.sent
-                    ? () => onReport(message)
-                    : null,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: failed ? c.tintRed : (mine ? c.tintGold : c.soft),
-                    borderRadius: BorderRadius.circular(AppShapes.card),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 10,
-                    ),
-                    child: Text(message.body, style: theme.textTheme.bodyLarge),
-                  ),
-                ),
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: GestureDetector(
+            // الضغط المطول على رسالة الطرف الآخر الواصلة يتيح الإبلاغ عنها.
+            onLongPress: !mine && message.state == SendState.sent
+                ? () => onReport(message)
+                : null,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: bubbleColor,
+                borderRadius: radius,
+                border: failed ? Border.all(color: c.error) : null,
               ),
-              const SizedBox(height: 2),
-              Text(
-                status,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: failed ? c.error : c.muted,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
                 ),
-              ),
-              if (failed && message.requestId != null)
-                Row(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextButton(
-                      onPressed: () => onRetry(message.requestId!),
-                      child: const Text('إعادة المحاولة'),
+                    // الوقت بجانب النص القصير، وينزل سطرًا حين يطول النص.
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 4,
+                      alignment: WrapAlignment.end,
+                      crossAxisAlignment: WrapCrossAlignment.end,
+                      children: [
+                        Text(message.body, style: theme.textTheme.bodyLarge),
+                        Text(
+                          status,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: failed ? c.error : c.muted,
+                          ),
+                        ),
+                      ],
                     ),
-                    TextButton(
-                      onPressed: () => onDiscard(message.requestId!),
-                      child: const Text('حذف'),
-                    ),
+                    if (failed && message.requestId != null)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextButton(
+                            onPressed: () => onRetry(message.requestId!),
+                            child: const Text('إعادة المحاولة'),
+                          ),
+                          TextButton(
+                            onPressed: () => onDiscard(message.requestId!),
+                            child: const Text('حذف'),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
-            ],
+              ),
+            ),
           ),
         ),
       ),

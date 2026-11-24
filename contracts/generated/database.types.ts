@@ -662,10 +662,66 @@ export type Database = {
           },
         ]
       }
+      listing_stats: {
+        Row: {
+          favorite_count: number
+          listing_id: string
+          view_count: number
+        }
+        Insert: {
+          favorite_count?: number
+          listing_id: string
+          view_count?: number
+        }
+        Update: {
+          favorite_count?: number
+          listing_id?: string
+          view_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_stats_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: true
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_stats_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: true
+            referencedRelation: "my_listings"
+            referencedColumns: ["listing_id"]
+          },
+          {
+            foreignKeyName: "listing_stats_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: true
+            referencedRelation: "public_listing_cards"
+            referencedColumns: ["listing_id"]
+          },
+          {
+            foreignKeyName: "listing_stats_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: true
+            referencedRelation: "public_listing_details"
+            referencedColumns: ["listing_id"]
+          },
+          {
+            foreignKeyName: "listing_stats_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: true
+            referencedRelation: "public_listing_media"
+            referencedColumns: ["listing_id"]
+          },
+        ]
+      }
       listing_versions: {
         Row: {
           age_months: number | null
           auction_city_id: number | null
+          auction_lat: number | null
+          auction_lng: number | null
           auction_region_id: number | null
           auction_starts_at: string | null
           auction_venue: string | null
@@ -677,6 +733,7 @@ export type Database = {
           contact_consent_at: string | null
           contact_phone: string | null
           contact_whatsapp_enabled: boolean
+          contact_whatsapp_phone: string | null
           content_hash: string | null
           created_at: string
           decided_at: string | null
@@ -700,6 +757,8 @@ export type Database = {
         Insert: {
           age_months?: number | null
           auction_city_id?: number | null
+          auction_lat?: number | null
+          auction_lng?: number | null
           auction_region_id?: number | null
           auction_starts_at?: string | null
           auction_venue?: string | null
@@ -711,6 +770,7 @@ export type Database = {
           contact_consent_at?: string | null
           contact_phone?: string | null
           contact_whatsapp_enabled?: boolean
+          contact_whatsapp_phone?: string | null
           content_hash?: string | null
           created_at?: string
           decided_at?: string | null
@@ -734,6 +794,8 @@ export type Database = {
         Update: {
           age_months?: number | null
           auction_city_id?: number | null
+          auction_lat?: number | null
+          auction_lng?: number | null
           auction_region_id?: number | null
           auction_starts_at?: string | null
           auction_venue?: string | null
@@ -745,6 +807,7 @@ export type Database = {
           contact_consent_at?: string | null
           contact_phone?: string | null
           contact_whatsapp_enabled?: boolean
+          contact_whatsapp_phone?: string | null
           content_hash?: string | null
           created_at?: string
           decided_at?: string | null
@@ -842,6 +905,57 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "settings_versions"
             referencedColumns: ["version"]
+          },
+        ]
+      }
+      listing_view_log: {
+        Row: {
+          listing_id: string
+          viewer: string
+        }
+        Insert: {
+          listing_id: string
+          viewer: string
+        }
+        Update: {
+          listing_id?: string
+          viewer?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_view_log_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_view_log_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "my_listings"
+            referencedColumns: ["listing_id"]
+          },
+          {
+            foreignKeyName: "listing_view_log_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "public_listing_cards"
+            referencedColumns: ["listing_id"]
+          },
+          {
+            foreignKeyName: "listing_view_log_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "public_listing_details"
+            referencedColumns: ["listing_id"]
+          },
+          {
+            foreignKeyName: "listing_view_log_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "public_listing_media"
+            referencedColumns: ["listing_id"]
           },
         ]
       }
@@ -2297,6 +2411,8 @@ export type Database = {
       my_favorites: {
         Row: {
           age_months: number | null
+          auction_lat: number | null
+          auction_lng: number | null
           auction_passed: boolean | null
           auction_starts_at: string | null
           available: boolean | null
@@ -2307,6 +2423,7 @@ export type Database = {
           city_name_ar: string | null
           cover_bucket: string | null
           cover_path: string | null
+          favorite_count: number | null
           listing_id: string | null
           offer_type: Database["public"]["Enums"]["offer_type"] | null
           owner_display_name: string | null
@@ -2318,6 +2435,7 @@ export type Database = {
           saved_at: string | null
           sex: Database["public"]["Enums"]["animal_sex"] | null
           title: string | null
+          view_count: number | null
         }
         Relationships: [
           {
@@ -2447,6 +2565,7 @@ export type Database = {
           cover_path: string | null
           created_at: string | null
           current_version_id: string | null
+          favorite_count: number | null
           first_published_at: string | null
           first_submitted_at: string | null
           has_draft: boolean | null
@@ -2469,6 +2588,7 @@ export type Database = {
           version_status:
             | Database["public"]["Enums"]["listing_version_status"]
             | null
+          view_count: number | null
         }
         Relationships: [
           {
@@ -2649,6 +2769,8 @@ export type Database = {
       public_listing_cards: {
         Row: {
           age_months: number | null
+          auction_lat: number | null
+          auction_lng: number | null
           auction_passed: boolean | null
           auction_starts_at: string | null
           breed_id: number | null
@@ -2658,6 +2780,7 @@ export type Database = {
           city_name_ar: string | null
           cover_bucket: string | null
           cover_path: string | null
+          favorite_count: number | null
           first_published_at: string | null
           listing_id: string | null
           offer_type: Database["public"]["Enums"]["offer_type"] | null
@@ -2669,6 +2792,7 @@ export type Database = {
           region_name_ar: string | null
           sex: Database["public"]["Enums"]["animal_sex"] | null
           title: string | null
+          view_count: number | null
           visibility_updated_at: string | null
         }
         Relationships: [
@@ -2721,6 +2845,8 @@ export type Database = {
           age_months: number | null
           auction_city_id: number | null
           auction_city_name_ar: string | null
+          auction_lat: number | null
+          auction_lng: number | null
           auction_passed: boolean | null
           auction_region_id: number | null
           auction_region_name_ar: string | null
@@ -2736,7 +2862,9 @@ export type Database = {
           contact_call_enabled: boolean | null
           contact_phone: string | null
           contact_whatsapp_enabled: boolean | null
+          contact_whatsapp_phone: string | null
           description: string | null
+          favorite_count: number | null
           first_published_at: string | null
           health_notes: string | null
           listing_id: string | null
@@ -2751,6 +2879,7 @@ export type Database = {
           region_name_ar: string | null
           sex: Database["public"]["Enums"]["animal_sex"] | null
           title: string | null
+          view_count: number | null
           visibility_updated_at: string | null
         }
         Relationships: [
@@ -2992,6 +3121,16 @@ export type Database = {
         }
         Returns: Json
       }
+      admin_list_listings: {
+        Args: {
+          p_after_changed_at?: string
+          p_after_id?: string
+          p_limit?: number
+          p_query?: string
+          p_status?: string
+        }
+        Returns: Json
+      }
       admin_publish_settings: { Args: { p_note?: string }; Returns: Json }
       admin_reactivate_account: {
         Args: { p_note?: string; p_user_id: string }
@@ -3161,6 +3300,10 @@ export type Database = {
           p_request_id: string
         }
         Returns: Json
+      }
+      record_listing_view: {
+        Args: { p_device_id?: string; p_listing_id: string }
+        Returns: number
       }
       register_device_token: {
         Args: { p_platform: string; p_token: string }

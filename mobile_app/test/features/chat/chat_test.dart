@@ -113,7 +113,7 @@ void main() {
       final now = DateTime.utc(2026, 11, 23, 12);
       expect(
         formatShortTime(DateTime.utc(2026, 11, 23, 15, 30), now: now),
-        '18:30',
+        '6:30 م',
       );
       expect(formatShortTime(DateTime.utc(2026, 11, 20, 9), now: now), '20/11');
     });
@@ -165,6 +165,47 @@ void main() {
       await _openMessagesTab(tester);
       expect(find.text('الإعلان غير متاح'), findsOneWidget);
       expect(find.text('ناقة مجاهيم للبيع'), findsNothing);
+    });
+
+    testWidgets('البحث المحلي بالاسم أو العنوان، بلا استدعاء خادم', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(320, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      tester.platformDispatcher.textScaleFactorTestValue = 2;
+      addTearDown(tester.platformDispatcher.clearAllTestValues);
+      final tables = FakeTables({
+        'my_conversations': [
+          _conv('c1', name: 'سالم', title: 'ناقة مجاهيم'),
+          _conv('c2', name: 'ماجد', title: 'حاشي أصيل'),
+        ],
+      });
+      await pumpApp(tester, tables: tables);
+      await _openMessagesTab(tester);
+      final reads = tables.requests.length;
+      final search = find.byKey(const ValueKey('conversations-search'));
+
+      await tester.enterText(search, 'سالم');
+      await tester.pump();
+      expect(find.text('سالم'), findsWidgets);
+      expect(find.text('ماجد'), findsNothing);
+
+      await tester.enterText(search, 'حاشي');
+      await tester.pump();
+      expect(find.text('ماجد'), findsOneWidget);
+      expect(find.text('سالم'), findsNothing);
+
+      await tester.enterText(search, 'لا يوجد');
+      await tester.pump();
+      expect(find.text('لا نتائج مطابقة'), findsOneWidget);
+      expect(tables.requests.length, reads);
+      expect(tester.takeException(), isNull);
+
+      await tester.tap(find.byTooltip('مسح البحث'));
+      await tester.pump();
+      expect(find.text('سالم'), findsOneWidget);
+      expect(find.text('ماجد'), findsOneWidget);
     });
 
     testWidgets('فارغة: حالة فراغ بإجراء', (tester) async {
@@ -428,6 +469,7 @@ void main() {
       tester.view.physicalSize = const Size(800, 2600);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
+      await tester.pumpAndSettle();
       await tester.tap(find.text('ناقة مجاهيم للبيع').first);
       await tester.pumpAndSettle();
     }

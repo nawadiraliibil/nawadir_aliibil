@@ -26,7 +26,11 @@
     "cover_path",
     "first_published_at",
     "visibility_updated_at",
-    "public_ref"
+    "public_ref",
+    "auction_lat",
+    "auction_lng",
+    "view_count",
+    "favorite_count"
   ],
   "properties": {
     "listing_id": {
@@ -140,6 +144,32 @@
     },
     "public_ref": {
       "type": "string"
+    },
+    "auction_lat": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_lng": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "view_count": {
+      "type": "integer"
+    },
+    "favorite_count": {
+      "type": "integer"
     }
   }
 }

@@ -17,6 +17,7 @@ class FakeRpc {
         'get_published_settings': (_) => fixture('published-settings'),
         'get_current_policies': (_) => fixture('current-policies'),
         'search_listings': (_) => fixture('search-result'),
+        'record_listing_view': (_) => 1,
         ...?handlers,
       };
 

@@ -185,11 +185,48 @@
         }
       ]
     },
+    "auction_lat": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90,
+          "description": "خط عرض موقع المزاد؛ يرسل مع auction_lng ويلزم عند الإرسال للمزاد (1.3.0)"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_lng": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180,
+          "description": "خط طول موقع المزاد؛ يرسل مع auction_lat (1.3.0)"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "contact_phone": {
       "anyOf": [
         {
           "type": "string",
-          "description": "05XXXXXXXX أو ‎+9665XXXXXXXX"
+          "description": "رقم الاتصال: 05XXXXXXXX أو ‎+9665XXXXXXXX"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "contact_whatsapp_phone": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "رقم واتساب المستقل: 05XXXXXXXX أو ‎+9665XXXXXXXX (TEAM-DEC-012)"
         },
         {
           "type": "null"
@@ -197,10 +234,12 @@
       ]
     },
     "contact_call_enabled": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "قديم ومشتق: contact_phone غير فارغ؛ يُتجاهل في patch ويحوَّل"
     },
     "contact_whatsapp_enabled": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "قديم ومشتق: contact_whatsapp_phone غير فارغ؛ يُتجاهل في patch ويحوَّل"
     }
   }
 }

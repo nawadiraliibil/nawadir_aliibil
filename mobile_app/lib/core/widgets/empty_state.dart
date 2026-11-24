@@ -35,7 +35,9 @@ class EmptyState extends StatelessWidget {
     final theme = Theme.of(context);
     final c = context.colors;
 
-    return Center(
+    // أعلى قليلًا من المنتصف الهندسي كي لا تبدو هابطة تحت الترويسة.
+    return Align(
+      alignment: const Alignment(0, -0.3),
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
         child: Column(

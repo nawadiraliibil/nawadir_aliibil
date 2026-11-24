@@ -208,6 +208,8 @@ void main() {
       );
       await tester.tap(find.text('ناقة مجاهيم للبيع').first);
       await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('tab-owner')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('owner-row')));
       await tester.pumpAndSettle();
       return (rpc, tables);

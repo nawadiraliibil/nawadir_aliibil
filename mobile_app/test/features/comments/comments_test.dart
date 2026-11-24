@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nawadir_aliibil/core/widgets/app_badge.dart';
 import 'package:nawadir_aliibil/features/comments/data/comment.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -117,7 +118,7 @@ void main() {
       await openDetail(tester);
       expect(find.text('هل يمكن معاينتها؟'), findsOneWidget);
       expect(find.text('نعم بعد العصر'), findsOneWidget);
-      expect(find.text('المعلن'), findsOneWidget);
+      expect(find.widgetWithText(AppBadge, 'المعلن'), findsOneWidget);
       expect(find.text('أُخفي هذا الرد بقرار الإشراف.'), findsOneWidget);
       expect(find.text('حذف كاتب الرد ردّه.'), findsOneWidget);
       expect(find.text('معدّل'), findsOneWidget);

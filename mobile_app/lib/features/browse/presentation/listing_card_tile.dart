@@ -1,111 +1,271 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_shapes.dart';
+import '../../../app/theme/app_typography.dart';
+import '../../../core/supabase/supabase_providers.dart';
+import '../../../core/format/money.dart';
 import '../../../core/widgets/app_badge.dart';
 import '../../favorites/presentation/favorite_button.dart';
 import '../../listing/presentation/media_image.dart';
 import '../data/listing_card.dart';
 import '../domain/labels.dart';
+import 'auction_widgets.dart';
+import 'listing_detail_screen.dart' show listingShareLink, shareTextProvider;
+import 'listing_stats.dart';
 
-/// بطاقة إعلان في القوائم: الغلاف والعنوان والسعر أو المزاد والمواصفات والموقع.
-class ListingCardTile extends StatelessWidget {
+/// السعر بخط العناوين الذهبي، و«ريال» أصغر بعده. نص واحد لقارئ الشاشة.
+class PriceText extends StatelessWidget {
+  const PriceText(this.price, {super.key, this.size = 20});
+
+  final num price;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(
+            text: formatMoney(price),
+            style: AppTypography.displayStyle(
+              size: size,
+              color: c.gold,
+              height: 1.3,
+            ),
+          ),
+          TextSpan(
+            text: ' ريال',
+            style: TextStyle(
+              fontSize: size * 0.6,
+              fontWeight: FontWeight.w700,
+              color: c.text,
+            ),
+          ),
+        ],
+      ),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+}
+
+/// بطاقة إعلان في القوائم. الافتراضي بطاقة كبيرة: صورة 4:3 ثم سطر واحد
+/// (العنوان والسعر) ثم المدينة. [compact] نسخة أصغر لعرض عمودين.
+/// المزاد بلاطة تاريخ على الصورة بدل السعر.
+class ListingCardTile extends ConsumerWidget {
   const ListingCardTile({
     super.key,
     required this.card,
     required this.onTap,
     this.showFavorite = true,
+    this.compact = false,
   });
 
   final ListingCard card;
   final VoidCallback onTap;
   final bool showFavorite;
+  final bool compact;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final c = context.colors;
-    final offer = offerLine(
-      isAuction: card.isAuction,
-      price: card.price,
-      auctionStartsAt: card.auctionStartsAt,
-      auctionPassed: card.auctionPassed,
-    );
-    final specs = [
-      card.breedLabel,
-      sexLabel(card.sex),
-      ageLabel(card.ageMonths),
-    ].join(' · ');
+    final startsAt = card.auctionStartsAt;
 
-    return Material(
-      color: c.soft,
-      borderRadius: BorderRadius.circular(AppShapes.card),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(AppShapes.card),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(AppShapes.image),
-                child: SizedBox.square(
-                  dimension: 96,
-                  child: ExcludeSemantics(
-                    child: MediaImage(
-                      bucket: card.coverBucket,
-                      path: card.coverPath,
-                    ),
+    final image = Stack(
+      children: [
+        // سقف للارتفاع كي لا تتضخم الصورة على الشاشات العريضة.
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 280),
+          child: AspectRatio(
+            aspectRatio: compact ? 1 : 4 / 3,
+            child: ClipRRect(
+              borderRadius: AppShapes.imageRadius,
+              child: SizedBox.expand(
+                child: ExcludeSemantics(
+                  child: MediaImage(
+                    bucket: card.coverBucket,
+                    path: card.coverPath,
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      card.title,
-                      style: theme.textTheme.titleMedium,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 2),
-                    Wrap(
-                      spacing: 8,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        AppBadge(
-                          label: card.isAuction ? 'مزاد' : 'سعر محدد',
-                          kind: card.isAuction
-                              ? AppBadgeKind.auction
-                              : AppBadgeKind.fixedPrice,
-                        ),
-                        Text(offer, style: theme.textTheme.titleSmall),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      specs,
-                      style: theme.textTheme.bodyMedium,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      '${card.regionName} · ${card.cityName}',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: c.muted,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              if (showFavorite) FavoriteButton(listingId: card.listingId),
-            ],
+            ),
           ),
+        ),
+        PositionedDirectional(
+          top: 10,
+          start: 10,
+          child: AppBadge(
+            label: card.isAuction ? 'مزاد حضوري' : 'سعر محدد',
+            kind: card.isAuction
+                ? AppBadgeKind.auction
+                : AppBadgeKind.fixedPrice,
+          ),
+        ),
+        if (showFavorite)
+          PositionedDirectional(
+            top: 4,
+            end: 4,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: c.surface,
+                shape: BoxShape.circle,
+              ),
+              child: FavoriteButton(listingId: card.listingId, dense: compact),
+            ),
+          ),
+        if (card.isAuction && startsAt != null && !card.auctionPassed)
+          PositionedDirectional(
+            bottom: 10,
+            start: 10,
+            child: AuctionDateTile(startsAt: startsAt),
+          ),
+      ],
+    );
+
+    final Widget offer;
+    if (card.isAuction) {
+      // بنفس حجم وخط السعر في بطاقة السعر المحدد كي تتناسق البطاقتان.
+      final size = compact ? 16.0 : 20.0;
+      final timeText = Text(
+        card.auctionPassed
+            ? 'مضى موعده'
+            : startsAt == null
+            ? ''
+            : saudiTime12(startsAt),
+        style: card.auctionPassed
+            ? AppTypography.displayStyle(
+                size: size,
+                color: c.muted,
+                height: 1.3,
+              )
+            : AppTypography.displayStyle(
+                size: size,
+                color: c.info,
+                height: 1.3,
+              ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      );
+      // أيقونة ساعة تفسّر الوقت المنفرد بجانب العنوان.
+      offer = card.auctionPassed || startsAt == null
+          ? timeText
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.schedule, size: size - 2, color: c.info),
+                const SizedBox(width: 4),
+                Flexible(child: timeText),
+              ],
+            );
+    } else {
+      offer = card.price == null
+          ? const SizedBox.shrink()
+          : PriceText(card.price!, size: compact ? 16 : 20);
+    }
+
+    final title = Text(
+      card.title,
+      style: compact ? theme.textTheme.titleSmall : theme.textTheme.titleMedium,
+      maxLines: compact ? 1 : 2,
+      overflow: TextOverflow.ellipsis,
+    );
+
+    final place = Row(
+      children: [
+        Icon(Icons.location_on_outlined, size: 15, color: c.muted),
+        const SizedBox(width: 3),
+        Expanded(
+          child: Text(
+            '${card.regionName} · ${card.cityName}',
+            style: theme.textTheme.bodySmall?.copyWith(color: c.muted),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+
+    // البعد عن المتصفح للمزاد الحضوري المحدد موقعه، ثم الإعجابات والمشاهدات والمشاركة.
+    final showDistance =
+        card.isAuction && card.hasAuctionLocation && !card.auctionPassed;
+    // الأرقام في البداية، والمشاركة في الطرف المقابل.
+    final statItems = <Widget>[
+      StatLabel(
+        icon: Icons.favorite_border,
+        count: card.favoriteCount,
+        noun: 'إعجاب',
+        size: compact ? 15 : 16,
+      ),
+      if (!compact) const SizedBox(width: 14),
+      StatLabel(
+        icon: Icons.visibility_outlined,
+        count: card.viewCount,
+        noun: 'مشاهدة',
+        size: compact ? 15 : 16,
+      ),
+      if (!compact) const Spacer(),
+      IconButton(
+        color: c.muted,
+        key: ValueKey('card-share-${card.listingId}'),
+        tooltip: 'مشاركة',
+        visualDensity: VisualDensity.compact,
+        constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+        iconSize: 20,
+        icon: const Icon(Icons.ios_share),
+        onPressed: () {
+          final link = listingShareLink(
+            ref.read(envProvider).shareBaseUrl,
+            card.publicRef,
+          );
+          ref.read(shareTextProvider)(
+            link == null ? card.title : '${card.title}\n$link',
+            card.title,
+          );
+        },
+      ),
+    ];
+    // العمود الضيق يلتف؛ الكبير صف واحد تتباعد أطرافه.
+    final stats = compact
+        ? Wrap(
+            spacing: 10,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: statItems,
+          )
+        : Row(children: statItems);
+
+    return Semantics(
+      container: true,
+      child: InkWell(
+        borderRadius: AppShapes.imageRadius,
+        onTap: onTap,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            image,
+            const SizedBox(height: 10),
+            if (compact) ...[
+              title,
+              const SizedBox(height: 2),
+              offer,
+            ] else ...[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: title),
+                  const SizedBox(width: 12),
+                  Flexible(child: offer),
+                ],
+              ),
+              place,
+            ],
+            if (showDistance)
+              DistanceLabel(lat: card.auctionLat!, lng: card.auctionLng!),
+            stats,
+          ],
         ),
       ),
     );

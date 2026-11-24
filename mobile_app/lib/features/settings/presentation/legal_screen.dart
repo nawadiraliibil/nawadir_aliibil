@@ -5,19 +5,22 @@ import 'package:go_router/go_router.dart';
 import '../../../app/router/routes.dart';
 import '../../../core/errors/app_error.dart';
 import '../../../core/errors/error_messages.dart';
+import '../../../app/theme/app_colors.dart';
 import '../../../core/widgets/app_note.dart';
+import '../../../core/widgets/section_title.dart';
 import '../../account/application/account_providers.dart';
 import '../../account/data/account_models.dart';
+import '../../account/presentation/menu_group.dart';
 
 /// أسئلة شائعة بسيطة. لا رقم دعم ولا بريد مختلق: قناة الدعم الرسمية تعلن مع الإطلاق.
 const faq = <(String, String)>[
   (
     'كيف أنشر إعلانًا؟',
-    'اضغط «إعلان» في الشريط السفلي، واختر نوع العرض، وأدخل بيانات الإبل وصورها ثم أرسله للمراجعة. يظهر الإعلان بعد اعتماده.',
+    'اضغط «إعلان» في الشريط السفلي، واختر نوع العرض، وأدخل بيانات الإبل وصورها ثم انشره. يظهر الإعلان فور نشره.',
   ),
   (
     'لماذا لم يظهر إعلاني بعد؟',
-    'كل إعلان يراجع قبل نشره. تجد حالته في «حسابي ← إعلاناتي»، وإن رُفض تجد السبب هناك وتستطيع تعديله وإعادة إرساله.',
+    'الإعلان يُنشر فور إرساله. تجد حالته في «حسابي ← إعلاناتي»، وقد تخفيه الإدارة إن خالف الشروط وتجد السبب هناك.',
   ),
   (
     'كيف أتواصل مع المعلن؟',
@@ -45,20 +48,18 @@ class LegalScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           tooltip: 'رجوع',
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () =>
               context.canPop() ? context.pop() : context.go(Routes.account),
         ),
-        title: const Text('الشروط والخصوصية والمساعدة'),
+        title: const Text('الشروط والمساعدة'),
       ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
-            Text(
-              'الشروط والسياسات',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            const SectionTitle('الشروط والخصوصية'),
+            const SizedBox(height: 12),
             docs.when(
               loading: () => const Padding(
                 padding: EdgeInsets.all(16),
@@ -73,19 +74,16 @@ class LegalScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              data: (list) => Column(
+              data: (list) => MenuGroup(
                 children: [
                   for (final d in list)
-                    ListTile(
+                    MenuRow(
                       key: ValueKey('policy-${d.kind}'),
-                      contentPadding: EdgeInsets.zero,
-                      leading: Icon(
-                        d.kind == 'PRIVACY'
-                            ? Icons.privacy_tip_outlined
-                            : Icons.gavel_outlined,
-                      ),
-                      title: Text(d.title),
-                      trailing: const Icon(Icons.chevron_left),
+                      icon: d.kind == 'PRIVACY'
+                          ? Icons.lock_outline
+                          : Icons.description_outlined,
+                      title: d.title,
+                      subtitle: 'اقرأ النص كاملًا',
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute<void>(
                           builder: (_) => PolicyReader(document: d),
@@ -95,15 +93,25 @@ class LegalScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            const Divider(),
-            Text('أسئلة شائعة', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 24),
+            const SectionTitle('مساعدة'),
+            const SizedBox(height: 4),
             for (final (q, a) in faq)
               ExpansionTile(
                 tilePadding: EdgeInsets.zero,
-                title: Text(q),
+                shape: const Border(),
+                collapsedShape: const Border(),
+                title: Text(q, style: Theme.of(context).textTheme.titleSmall),
                 childrenPadding: const EdgeInsets.only(bottom: 12),
                 expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text(a)],
+                children: [
+                  Text(
+                    a,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: context.colors.muted,
+                    ),
+                  ),
+                ],
               ),
           ],
         ),

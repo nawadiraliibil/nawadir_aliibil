@@ -15,6 +15,9 @@ abstract final class DraftValidation {
   static const healthNotesMax = 2000;
   static const venueMax = 300;
 
+  /// سقف السعر: 999 مليون ريال.
+  static const priceMax = 999000000;
+
   /// الصيغة التي يقبلها الخادم لسعر موجب بمنزلتين عشريتين كحد أقصى.
   static final _priceFormat = RegExp(r'^[0-9]{1,10}(\.[0-9]{1,2})?$');
 
@@ -72,6 +75,9 @@ abstract final class DraftValidation {
     if (p == null || p <= 0 || !_priceFormat.hasMatch(_plain(p))) {
       return {'price': 'أدخل مبلغًا موجبًا بمنزلتين عشريتين كحد أقصى.'};
     }
+    if (p > priceMax) {
+      return {'price': 'أعلى سعر مسموح 999 مليون ريال.'};
+    }
     return {};
   }
 
@@ -89,6 +95,9 @@ abstract final class DraftValidation {
     } else if (venue.length > venueMax) {
       e['auction_venue'] = 'لا يزيد على $venueMax حرف.';
     }
+    if (!f.hasAuctionLocation) {
+      e['auction_location'] = 'حدد موقع المزاد على الخريطة.';
+    }
     final at = f.auctionStartsAt;
     if (at == null || !at.isAfter(now)) {
       e['auction_starts_at'] = 'اختر تاريخًا ووقتًا قادمين.';
@@ -96,13 +105,21 @@ abstract final class DraftValidation {
     return e;
   }
 
+  /// رقم اتصال ورقم واتساب مستقلان (TEAM-DEC-012): كلاهما اختياري، ويلزم
+  /// أحدهما على الأقل، وما أُدخل منهما يجب أن يكون رقمًا سعوديًا صالحًا.
   static FieldErrors contact(DraftForm f) {
     final e = <String, String>{};
-    if (SaudiPhone.tryParse(f.contactPhone ?? '') == null) {
-      e['contact_phone'] = 'أدخل رقم جوال سعوديًا يبدأ بـ5 ويتكون من 9 أرقام.';
+    const invalid = 'أدخل رقم جوال سعوديًا يبدأ بـ5 ويتكون من 9 أرقام.';
+    final call = (f.contactPhone ?? '').trim();
+    final wa = (f.whatsappPhone ?? '').trim();
+    if (call.isNotEmpty && SaudiPhone.tryParse(call) == null) {
+      e['contact_phone'] = invalid;
     }
-    if (!f.callEnabled && !f.whatsappEnabled) {
-      e['contact_channels'] = 'اختر قناة تواصل واحدة على الأقل.';
+    if (wa.isNotEmpty && SaudiPhone.tryParse(wa) == null) {
+      e['contact_whatsapp_phone'] = invalid;
+    }
+    if (call.isEmpty && wa.isEmpty) {
+      e['contact_channels'] = 'أدخل رقم اتصال أو رقم واتساب على الأقل.';
     }
     return e;
   }

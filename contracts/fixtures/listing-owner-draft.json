@@ -84,6 +84,7 @@
     "submitted_at": null,
     "auction_venue": null,
     "contact_phone": "+966500000009",
+    "contact_whatsapp_phone": "+966551112222",
     "auction_city_id": null,
     "settings_version": null,
     "auction_region_id": null,
@@ -91,6 +92,8 @@
     "contact_consent_at": "2026-11-23T03:25:03.543462+00:00",
     "contact_call_enabled": true,
     "owner_declaration_at": "2026-11-23T03:25:03.543462+00:00",
-    "contact_whatsapp_enabled": true
+    "contact_whatsapp_enabled": true,
+    "auction_lat": null,
+    "auction_lng": null
   }
 }

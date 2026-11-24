@@ -20,5 +20,9 @@
   "city_name_ar": "الرياض",
   "cover_bucket": "listing-images",
   "cover_path": "ba24f799-5ca6-4002-a95c-9a7e92d37eee/a833d8e3-ee17-4332-af0d-8155d21e1e55/79fd3d96-4422-4c51-a036-a11d0b276391.jpg",
-  "public_ref": "dzymbgq8"
+  "public_ref": "dzymbgq8",
+  "auction_lat": null,
+  "auction_lng": null,
+  "view_count": 42,
+  "favorite_count": 7
 }

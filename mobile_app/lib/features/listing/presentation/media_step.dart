@@ -12,7 +12,8 @@ import '../data/media_backend.dart';
 import 'media_image.dart';
 import 'step_widgets.dart';
 
-/// D07 — صور الإعلان. الفيديو غير متاح: معطل في الإعدادات ولا معالجة له في الخادم.
+/// D07 — صور الإعلان وفيديوه. الفيديو يظهر فقط عند `media.video_enabled` في
+/// الإعدادات المنشورة (معطل افتراضيًا)؛ دونه تبقى الخطوة صورًا فقط.
 class MediaStep extends ConsumerStatefulWidget {
   const MediaStep({super.key, required this.onSaveDraft});
 
@@ -34,7 +35,7 @@ class _MediaStepState extends ConsumerState<MediaStep> {
       block = 'انتظر اكتمال رفع الصور.';
     } else if (state.items.any((i) => i.stage != MediaStage.ready)) {
       block = 'احذف الصور التي تعذّر قبولها أو أعد محاولة رفعها.';
-    } else if (state.readyCount < media.imagesMin) {
+    } else if (state.readyImageCount < media.imagesMin) {
       block = 'أضف ${media.imagesMin} صور على الأقل.';
     }
     setState(() => _blocker = block);
@@ -47,7 +48,10 @@ class _MediaStepState extends ConsumerState<MediaStep> {
     if (ok) ref.read(postControllerProvider.notifier).goTo(PostStep.contact);
   }
 
-  Future<void> _add() async {
+  Future<void> _add({required bool canAddImages}) async {
+    final media = ref.read(publishedSettingsProvider).requireValue.media;
+    final videoAllowed =
+        media.videoEnabled && !ref.read(mediaControllerProvider).hasVideo;
     final source = await showModalBottomSheet<_Source>(
       context: context,
       showDragHandle: true,
@@ -55,16 +59,30 @@ class _MediaStepState extends ConsumerState<MediaStep> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ListTile(
-              leading: const Icon(Icons.photo_library_outlined),
-              title: const Text('من المعرض'),
-              onTap: () => Navigator.pop(context, _Source.gallery),
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_camera_outlined),
-              title: const Text('التقاط صورة'),
-              onTap: () => Navigator.pop(context, _Source.camera),
-            ),
+            if (canAddImages) ...[
+              ListTile(
+                leading: const Icon(Icons.photo_library_outlined),
+                title: const Text('من المعرض'),
+                onTap: () => Navigator.pop(context, _Source.gallery),
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera_outlined),
+                title: const Text('التقاط صورة'),
+                onTap: () => Navigator.pop(context, _Source.camera),
+              ),
+            ],
+            if (videoAllowed) ...[
+              ListTile(
+                leading: const Icon(Icons.video_library_outlined),
+                title: const Text('اختيار فيديو من المعرض'),
+                onTap: () => Navigator.pop(context, _Source.videoGallery),
+              ),
+              ListTile(
+                leading: const Icon(Icons.videocam_outlined),
+                title: const Text('تسجيل فيديو'),
+                onTap: () => Navigator.pop(context, _Source.videoCamera),
+              ),
+            ],
           ],
         ),
       ),
@@ -79,9 +97,51 @@ class _MediaStepState extends ConsumerState<MediaStep> {
         );
         if (picked.isNotEmpty) controller.addPicked(picked);
       case _Source.camera:
+        if (!await _explainCamera() || !mounted) return;
         final one = await photos.pickFromCamera();
         if (one != null) controller.addPicked([one]);
+      case _Source.videoGallery || _Source.videoCamera:
+        final isCamera = source == _Source.videoCamera;
+        if (isCamera && !await _explainCamera() || !mounted) return;
+        final v = await photos.pickVideo(
+          camera: isCamera,
+          maxBytes: media.videoMaxBytes,
+          maxSeconds: media.videoMaxSeconds,
+        );
+        if (v != null) controller.addVideo(v);
     }
+  }
+
+  /// H09 — شرح سبب إذن الكاميرا مرة واحدة قبل أن يطلبه النظام.
+  Future<bool> _explainCamera() async {
+    const key = 'camera_rationale_seen';
+    final prefs = ref.read(sharedPreferencesProvider);
+    if (await prefs.getBool(key) ?? false) return true;
+    if (!mounted) return false;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('السماح باستخدام الكاميرا'),
+        content: const Text(
+          'نستخدم الكاميرا لالتقاط صور إعلانك فقط، ولا نصل إلى الكاميرا في '
+          'أي وقت آخر. سيطلب النظام إذنك بعد المتابعة، ويمكنك الرفض واختيار '
+          'الصور من المعرض بدلًا من ذلك.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('ليس الآن'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('متابعة'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true) return false;
+    await prefs.setBool(key, true);
+    return true;
   }
 
   @override
@@ -92,19 +152,27 @@ class _MediaStepState extends ConsumerState<MediaStep> {
     final theme = Theme.of(context);
     final mb = (media.imageMaxBytes / (1024 * 1024)).round();
     final cover = state.effectiveCoverKey;
-    final canAdd = controller.remainingSlots > 0;
+    final videoEnabled = media.videoEnabled;
+    final canAddImages = controller.remainingSlots > 0;
+    final canAddVideo = videoEnabled && !state.hasVideo;
+    final canAdd = canAddImages || canAddVideo;
+    final videoMb = (media.videoMaxBytes / (1024 * 1024)).round();
 
     return StepFrame(
       onContinue: _continue,
       onSaveDraft: widget.onSaveDraft,
       children: [
         Text(
-          '${media.imagesMin}–${media.imagesMax} صور، حتى $mb MB للصورة. '
-          'الصورة الأولى غلاف الإعلان.',
+          videoEnabled
+              ? '${media.imagesMin}–${media.imagesMax} صور حتى $mb MB للصورة · '
+                    'فيديو واحد حتى ${media.videoMaxSeconds} ثانية و$videoMb MB. '
+                    'الصورة الأولى غلاف الإعلان.'
+              : '${media.imagesMin}–${media.imagesMax} صور، حتى $mb MB للصورة. '
+                    'الصورة الأولى غلاف الإعلان.',
           style: theme.textTheme.bodyMedium,
         ),
         const SizedBox(height: 16),
-        if (state.items.isNotEmpty)
+        if (state.items.isNotEmpty || canAdd)
           GridView.count(
             crossAxisCount: 3,
             shrinkWrap: true,
@@ -119,14 +187,17 @@ class _MediaStepState extends ConsumerState<MediaStep> {
                   total: state.items.length,
                   isCover: state.items[i].key == cover,
                 ),
+              if (canAdd)
+                _AddTile(
+                  label: videoEnabled ? 'إضافة صور أو فيديو' : 'إضافة صور',
+                  onTap: () => _add(canAddImages: canAddImages),
+                ),
             ],
           ),
-        const SizedBox(height: 12),
-        OutlinedButton.icon(
-          onPressed: canAdd ? _add : null,
-          icon: const Icon(Icons.add_photo_alternate_outlined),
-          label: Text(canAdd ? 'إضافة صور' : 'بلغت الحد الأقصى من الصور'),
-        ),
+        if (!canAddImages) ...[
+          const SizedBox(height: 8),
+          const AppNote('بلغت الحد الأقصى من الصور'),
+        ],
         for (final n in state.notices) ...[
           const SizedBox(height: 8),
           AppNote(n),
@@ -145,7 +216,83 @@ class _MediaStepState extends ConsumerState<MediaStep> {
   }
 }
 
-enum _Source { gallery, camera }
+enum _Source { gallery, camera, videoGallery, videoCamera }
+
+/// خانة الإضافة: إطار ذهبي متقطع بعلامة «+» (D07).
+class _AddTile extends StatelessWidget {
+  const _AddTile({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Semantics(
+      button: true,
+      label: label,
+      excludeSemantics: true,
+      onTap: onTap,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppShapes.image),
+        child: CustomPaint(
+          painter: _DashedBorder(c.gold, AppShapes.image),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.add, size: 28, color: c.text),
+                    Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DashedBorder extends CustomPainter {
+  const _DashedBorder(this.color, this.radius);
+
+  final Color color;
+  final double radius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
+    final path = Path()
+      ..addRRect(
+        RRect.fromRectAndRadius(
+          (Offset.zero & size).deflate(1),
+          Radius.circular(radius),
+        ),
+      );
+    for (final metric in path.computeMetrics()) {
+      for (double d = 0; d < metric.length; d += 8) {
+        canvas.drawPath(metric.extractPath(d, d + 4), paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DashedBorder old) =>
+      old.color != color || old.radius != radius;
+}
 
 class _Tile extends ConsumerWidget {
   const _Tile({
@@ -175,6 +322,50 @@ class _Tile extends ConsumerWidget {
     final controller = ref.read(mediaControllerProvider.notifier);
     final theme = Theme.of(context);
 
+    if (item.isVideo) {
+      // بلاطة الفيديو (D07): إطار داكن بزر تشغيل وزر حذف مباشر.
+      return Semantics(
+        label: 'فيديو الإعلان، $_status',
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppShapes.image),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              const ColoredBox(color: Color(0xFF2B2118)),
+              const ExcludeSemantics(
+                child: Center(
+                  child: Icon(
+                    Icons.play_circle_fill,
+                    size: 44,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              if (item.stage != MediaStage.ready)
+                ColoredBox(
+                  color: Colors.black54,
+                  child: Center(child: _overlay(context, controller, theme)),
+                ),
+              PositionedDirectional(
+                top: 4,
+                end: 4,
+                child: IconButton.filled(
+                  key: const ValueKey('video-delete'),
+                  tooltip: 'حذف الفيديو',
+                  visualDensity: VisualDensity.compact,
+                  iconSize: 18,
+                  style: IconButton.styleFrom(backgroundColor: c.surface),
+                  color: c.text,
+                  onPressed: () => controller.remove(item.key),
+                  icon: const Icon(Icons.close),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Semantics(
       label:
           'صورة ${index + 1} من $total، $_status${isCover ? '، الغلاف' : ''}',
@@ -196,12 +387,12 @@ class _Tile extends ConsumerWidget {
                 child: Center(child: _overlay(context, controller, theme)),
               ),
             if (isCover)
-              Positioned(
-                top: 4,
-                right: 4,
+              PositionedDirectional(
+                bottom: 6,
+                start: 6,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: c.gold,
+                    color: c.surface,
                     borderRadius: BorderRadius.circular(AppShapes.chip),
                   ),
                   child: Padding(
@@ -212,19 +403,29 @@ class _Tile extends ConsumerWidget {
                     child: Text(
                       'غلاف',
                       style: theme.textTheme.labelSmall?.copyWith(
-                        color: c.buttonText,
+                        color: c.gold,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ),
                 ),
               ),
-            Positioned(
-              top: 0,
-              left: 0,
+            PositionedDirectional(
+              top: 4,
+              end: 4,
               child: PopupMenuButton<String>(
                 tooltip: 'خيارات الصورة ${index + 1}',
-                iconColor: Colors.white,
-                icon: const Icon(Icons.more_vert),
+                padding: EdgeInsets.zero,
+                icon: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: c.surface,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Icon(Icons.more_vert, size: 18, color: c.text),
+                  ),
+                ),
                 onSelected: (v) {
                   switch (v) {
                     case 'cover':

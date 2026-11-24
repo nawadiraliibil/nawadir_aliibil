@@ -1,5 +1,9 @@
 {
   "note": "قيم نصية مغلقة ليست enums في قاعدة البيانات. تغييرها يتبع قواعد التغيير في README.",
+  "deprecated_notification_events": {
+    "note": "1.2.0 (TEAM-DEC-013): لا مراجعة فلا يُنتج الحدثان؛ باقيان في LISTING_STATUS للتوافق.",
+    "events": ["listing.approved", "listing.rejected"]
+  },
   "notification_events": {
     "LISTING_STATUS": [
       "listing.approved",

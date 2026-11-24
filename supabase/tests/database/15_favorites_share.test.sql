@@ -56,9 +56,6 @@ begin
   perform public.arrange_listing_media(v_listing, v_media, v_media[1]);
   perform public.submit_listing(v_listing, gen_random_uuid());
   perform pg_temp.login('00000000-0000-0000-0000-0000000000a1', 'aal2');
-  v_ver := (public.admin_get_listing_review(v_listing) #>> '{version,id}')::uuid;
-  v_hash := public.admin_get_listing_review(v_listing) #>> '{version,content_hash}';
-  perform public.admin_approve_listing_version(v_listing, v_ver, v_hash);
 end;
 $$;
 
@@ -70,7 +67,7 @@ select pg_temp.publish('d1', 'مسودة لم ترسل بعد', false);
 select columns_are('public', 'my_favorites', array[
   'listing_id', 'saved_at', 'available', 'owner_id', 'owner_display_name', 'title', 'offer_type', 'price',
   'auction_starts_at', 'auction_passed', 'breed_id', 'breed_name_ar', 'breed_note', 'sex', 'age_months',
-  'region_id', 'region_name_ar', 'city_id', 'city_name_ar', 'cover_bucket', 'cover_path', 'public_ref']);
+  'region_id', 'region_name_ar', 'city_id', 'city_name_ar', 'cover_bucket', 'cover_path', 'public_ref', 'auction_lat', 'auction_lng', 'view_count', 'favorite_count']);
 select columns_are('public', 'favorites', array['user_id', 'listing_id', 'created_at']);
 
 -- الزائر

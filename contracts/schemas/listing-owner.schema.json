@@ -159,7 +159,10 @@
             "auction_city_id",
             "auction_venue",
             "auction_starts_at",
+            "auction_lat",
+            "auction_lng",
             "contact_phone",
+            "contact_whatsapp_phone",
             "contact_call_enabled",
             "contact_whatsapp_enabled",
             "contact_consent_at",
@@ -369,7 +372,37 @@
                 }
               ]
             },
+            "auction_lat": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "auction_lng": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
             "contact_phone": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "contact_whatsapp_phone": {
               "anyOf": [
                 {
                   "type": "string"

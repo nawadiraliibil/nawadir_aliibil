@@ -12,6 +12,7 @@
   "offer_type": "FIXED_PRICE",
   "price": 25000,
   "contact_phone": "0500000009",
+  "contact_whatsapp_phone": "0551112222",
   "contact_call_enabled": true,
   "contact_whatsapp_enabled": true
 }

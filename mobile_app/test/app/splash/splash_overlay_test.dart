@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nawadir_aliibil/app/app.dart';
 import 'package:nawadir_aliibil/app/shell/app_nav_bar.dart';
+import 'package:nawadir_aliibil/features/browse/presentation/listing_card_tile.dart';
 import 'package:nawadir_aliibil/app/splash/splash_handoff.dart';
 import 'package:nawadir_aliibil/app/splash/splash_overlay.dart';
 import 'package:nawadir_aliibil/core/config/env.dart';
@@ -123,22 +124,14 @@ void main() {
     await tester.pump();
     // شعار الترويسة يظهر فورًا، ولا نسخة متحركة من الشعار.
     expect(handoff.logoVisible.value, isTrue);
+    int positionedIn(Type type) => find
+        .descendant(of: find.byType(type), matching: find.byType(Positioned))
+        .evaluate()
+        .length;
+    // Positioned بطاقات القوائم (الشارة والمفضلة) ليست من الشعار المتحرك.
     expect(
-      find.descendant(
-        of: find.byType(SplashOverlay),
-        matching: find.byType(Positioned),
-      ),
-      findsNWidgets(
-        tester
-                .widgetList(
-                  find.descendant(
-                    of: find.byType(AppNavBar),
-                    matching: find.byType(Positioned),
-                  ),
-                )
-                .length +
-            1,
-      ),
+      positionedIn(SplashOverlay) - positionedIn(ListingCardTile),
+      positionedIn(AppNavBar) + 1,
       reason: 'لا Positioned لشعار متحرك؛ الموجود هو موضع شريط التنقل فقط',
     );
 

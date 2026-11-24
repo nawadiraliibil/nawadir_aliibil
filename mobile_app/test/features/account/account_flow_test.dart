@@ -108,6 +108,26 @@ void main() {
     expect(find.text('تسجيل الخروج'), findsOneWidget);
   });
 
+  testWidgets('بعد التسجيل بحساب جديد تفتح شاشة إكمال الحساب تلقائيًا', (
+    tester,
+  ) async {
+    final auth = FakeAuthBackend();
+    final rpc = FakeRpc({'get_my_account': (_) => fixture('account-new')});
+    await pumpApp(tester, auth: auth, rpc: rpc);
+    await _openAccountTab(tester);
+    await tester.tap(find.text('تسجيل الدخول'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '500000001');
+    await tester.pump();
+    await tester.tap(find.text('إرسال الرمز'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '123456');
+    await tester.pumpAndSettle();
+
+    expect(find.text('إكمال الحساب'), findsWidgets);
+    expect(find.text('حفظ ومتابعة'), findsOneWidget);
+  });
+
   testWidgets('حساب جديد: تنبيه إكمال، ولا حفظ دون اسم ومنطقة وموافقتين', (
     tester,
   ) async {
@@ -141,8 +161,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(rpc.paramsOf('update_my_profile'), isEmpty);
 
-    await tester.tap(find.text('أوافق على شروط الاستخدام'));
-    await tester.tap(find.text('أوافق على سياسة الخصوصية'));
+    await tester.tap(find.byKey(const ValueKey('policy-check-TERMS')));
+    await tester.tap(find.byKey(const ValueKey('policy-check-PRIVACY')));
     await tester.pump();
 
     // بعد الحفظ يعيد الخادم حسابًا مكتملًا.
@@ -169,7 +189,7 @@ void main() {
     await tester.tap(find.text('إكمال الحساب'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('قراءة').first);
+    await tester.tap(find.byKey(const ValueKey('policy-read-TERMS')));
     await tester.pumpAndSettle();
     expect(find.textContaining('نص مؤقت لأغراض التطوير'), findsOneWidget);
   });
@@ -193,8 +213,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('الرياض').last);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('أوافق على شروط الاستخدام'));
-    await tester.tap(find.text('أوافق على سياسة الخصوصية'));
+    await tester.tap(find.byKey(const ValueKey('policy-check-TERMS')));
+    await tester.tap(find.byKey(const ValueKey('policy-check-PRIVACY')));
     await tester.pump();
     await tester.tap(find.text('حفظ ومتابعة'));
     await tester.pumpAndSettle();

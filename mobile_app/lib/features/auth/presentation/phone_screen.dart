@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/router/routes.dart';
 import '../../../core/widgets/app_note.dart';
+import '../../account/presentation/menu_group.dart';
 import '../application/auth_providers.dart';
 import '../data/auth_backend.dart';
 import '../domain/saudi_phone.dart';
@@ -65,18 +66,20 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
     final theme = Theme.of(context);
     final showInvalid = _controller.text.isNotEmpty && _phone == null;
     return Scaffold(
-      appBar: AppBar(leading: _backButton(context)),
+      appBar: AppBar(
+        leading: _backButton(context),
+        title: const Text('رقم الجوال'),
+      ),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
-            Text('رقم الجوال', style: theme.textTheme.headlineSmall),
-            const SizedBox(height: 8),
             Text(
               'أدخل جوالك لاستلام رمز التحقق.',
-              style: theme.textTheme.bodyLarge,
+              style: theme.textTheme.bodySmall,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
+            const FieldLabel('رقم الجوال'),
             TextField(
               controller: _controller,
               enabled: !_busy,
@@ -90,9 +93,8 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
                 LengthLimitingTextInputFormatter(16),
               ],
               decoration: InputDecoration(
-                labelText: 'رقم الجوال',
                 hintText: '5X XXX XXXX',
-                prefixText: '+966 · السعودية  ',
+                helperText: '+966 · السعودية',
                 errorText: showInvalid
                     ? 'أدخل رقم جوال سعوديًا يبدأ بـ5 ويتكون من 9 أرقام.'
                     : null,
@@ -128,7 +130,7 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
 
   Widget _backButton(BuildContext context) => IconButton(
     tooltip: 'رجوع',
-    icon: const Icon(Icons.arrow_forward),
+    icon: const Icon(Icons.arrow_back),
     onPressed: () => _close(context),
   );
 

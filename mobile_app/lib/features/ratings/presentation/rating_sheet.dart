@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../app/theme/app_colors.dart';
 import '../../../core/errors/app_error.dart';
 import '../../../core/errors/error_messages.dart';
 import '../../../core/settings/settings_repository.dart';
@@ -118,7 +119,9 @@ class _RatingSheetState extends ConsumerState<_RatingSheet> {
               style: theme.textTheme.titleLarge,
             ),
             const SizedBox(height: 12),
-            Row(
+            Wrap(
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 for (var i = 1; i <= 5; i++)
                   IconButton(
@@ -126,7 +129,7 @@ class _RatingSheetState extends ConsumerState<_RatingSheet> {
                     tooltip: '$i من 5 — ${scoreWords[i]}',
                     icon: Icon(
                       i <= _score ? Icons.star : Icons.star_border,
-                      color: Colors.amber.shade700,
+                      color: context.colors.gold,
                       size: 32,
                     ),
                     onPressed: () => setState(() => _score = i),

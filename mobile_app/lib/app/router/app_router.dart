@@ -19,6 +19,7 @@ import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/ratings/presentation/seller_ratings_screen.dart';
 import '../../features/safety/presentation/blocked_users_screen.dart';
 import '../../features/seller/presentation/seller_screen.dart';
+import '../../features/my_listings/presentation/my_listing_detail_screen.dart';
 import '../../features/my_listings/presentation/my_listings_screen.dart';
 import '../../features/auth/application/auth_providers.dart';
 import '../../features/auth/presentation/otp_screen.dart';
@@ -29,7 +30,7 @@ import 'routes.dart';
 
 /// مسارات التطبيق: أربعة تبويبات داخل الهيكل، وشاشات كاملة خارجه.
 ///
-/// حارس الدخول هنا؛ اكتمال الحساب يفرض عند الإرسال للمراجعة (MOBILE-APP-107).
+/// حارس الدخول هنا؛ اكتمال الحساب يفرض عند نشر الإعلان (MOBILE-APP-107).
 final appRouterProvider = Provider<GoRouter>((ref) {
   final env = ref.watch(envProvider);
 
@@ -51,9 +52,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final path = state.matchedLocation;
       final atLogin = path == Routes.login || path == Routes.loginOtp;
       if (auth!.signedIn) {
-        // دخل للتو: يعود إلى وجهته الأصلية أو الرئيسية.
+        // دخل للتو: تفتح شاشة إكمال الحساب تلقائيًا، وتمضي بنفسها إلى الوجهة
+        // الأصلية أو الرئيسية إن كان الحساب مكتملًا (A04).
         return atLogin
-            ? Routes.safeFrom(state.uri.queryParameters['from'])
+            ? Uri(
+                path: Routes.accountComplete,
+                queryParameters: {
+                  'from': Routes.safeFrom(state.uri.queryParameters['from']),
+                  'auto': '1',
+                },
+              ).toString()
             : null;
       }
       if (Routes.needsSignIn(path)) {
@@ -149,8 +157,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.accountComplete,
-        builder: (context, state) =>
-            CompleteAccountScreen(from: state.uri.queryParameters['from']),
+        builder: (context, state) => CompleteAccountScreen(
+          from: state.uri.queryParameters['from'],
+          auto: state.uri.queryParameters['auto'] == '1',
+        ),
       ),
       GoRoute(
         path: Routes.accountEdit,
@@ -183,6 +193,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.myListings,
         builder: (context, state) => const MyListingsScreen(),
+      ),
+      GoRoute(
+        path: Routes.myListingPattern,
+        builder: (context, state) =>
+            MyListingDetailScreen(listingId: state.pathParameters['id']!),
       ),
       GoRoute(
         path: Routes.postAd,

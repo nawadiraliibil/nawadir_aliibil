@@ -26,3 +26,19 @@ abstract final class ImageSniff {
     return null;
   }
 }
+
+/// النوع الفعلي للفيديو: حاوية ISO BMFF (صندوق ثم `ftyp`) كما يفحصها الخادم.
+abstract final class VideoSniff {
+  static const mp4 = 'video/mp4';
+
+  static String? mimeOf(Uint8List b) {
+    if (b.length >= 12 &&
+        b[4] == 0x66 &&
+        b[5] == 0x74 &&
+        b[6] == 0x79 &&
+        b[7] == 0x70) {
+      return mp4;
+    }
+    return null;
+  }
+}

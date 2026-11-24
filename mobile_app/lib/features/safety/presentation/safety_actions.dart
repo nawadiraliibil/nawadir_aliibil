@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_note.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../app/router/routes.dart';
+import '../../../app/theme/app_colors.dart';
+import '../../../app/theme/app_shapes.dart';
 import '../../../core/errors/app_error.dart';
 import '../../../core/errors/error_messages.dart';
 import '../../auth/application/auth_providers.dart';
@@ -43,14 +47,11 @@ Future<void> showReportSheet(
     ),
   );
   if (receipt == null) return;
-  messenger.showSnackBar(
-    SnackBar(
-      content: Text(
-        receipt.duplicate
-            ? 'لديك بلاغ مفتوح عن هذا الأمر (${receipt.ref}). سنراجعه قريبًا.'
-            : 'تم استلام بلاغك. رقمه ${receipt.ref}.',
-      ),
-    ),
+  messenger.showApp(
+    receipt.duplicate
+        ? 'لديك بلاغ مفتوح عن هذا الأمر (${receipt.ref}). سنراجعه قريبًا.'
+        : 'تم استلام بلاغك. رقمه ${receipt.ref}.',
+    kind: AppNoteKind.success,
   );
 }
 
@@ -144,21 +145,40 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
               style: theme.textTheme.bodyMedium,
             ),
             const SizedBox(height: 8),
-            RadioGroup<ReportReason>(
-              groupValue: _reason,
-              onChanged: (v) => setState(() => _reason = v),
-              child: Column(
-                children: [
-                  for (final r in ReportReason.values)
-                    RadioListTile<ReportReason>(
-                      key: ValueKey('report-reason-${r.wire}'),
-                      value: r,
-                      title: Text(r.label),
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                ],
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: context.colors.soft,
+                borderRadius: BorderRadius.circular(AppShapes.card),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppShapes.card),
+                child: RadioGroup<ReportReason>(
+                  groupValue: _reason,
+                  onChanged: (v) => setState(() => _reason = v),
+                  child: Column(
+                    children: [
+                      for (final (i, r) in ReportReason.values.indexed) ...[
+                        if (i > 0)
+                          Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: context.colors.hair,
+                          ),
+                        RadioListTile<ReportReason>(
+                          key: ValueKey('report-reason-${r.wire}'),
+                          value: r,
+                          title: Text(r.label),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
               ),
             ),
+            const SizedBox(height: 12),
             TextField(
               key: const ValueKey('report-description'),
               controller: _description,
@@ -209,25 +229,42 @@ Future<bool> confirmAndBlock(
 }) async {
   if (!requireSignIn(context, ref)) return false;
   final messenger = ScaffoldMessenger.of(context);
-  final sure = await showDialog<bool>(
+  final sure = await showModalBottomSheet<bool>(
     context: context,
-    builder: (context) => AlertDialog(
-      title: Text('حظر $name؟'),
-      content: const Text(
-        'لن يتمكن أي منكما من إرسال رسائل جديدة للآخر، ولن يرد على إعلاناتك '
-        'ولن ترد على إعلاناته. تبقى المحادثات السابقة للقراءة، ويمكنك إلغاء '
-        'الحظر في أي وقت.',
+    isScrollControlled: true,
+    showDragHandle: true,
+    builder: (context) => Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text('حظر $name؟', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 8),
+          Text(
+            'لن يتمكن أي منكما من إرسال رسائل جديدة للآخر، ولن يرد على '
+            'إعلاناتك ولن ترد على إعلاناته. تبقى المحادثات السابقة للقراءة، '
+            'ويمكنك إلغاء الحظر في أي وقت.',
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: context.colors.muted),
+          ),
+          const SizedBox(height: 20),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('حظر'),
+          ),
+          const SizedBox(height: 8),
+          FilledButton.tonal(
+            style: FilledButton.styleFrom(
+              backgroundColor: context.colors.soft,
+              foregroundColor: context.colors.text,
+            ),
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('إلغاء'),
+          ),
+        ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context, false),
-          child: const Text('إلغاء'),
-        ),
-        FilledButton(
-          onPressed: () => Navigator.pop(context, true),
-          child: const Text('حظر'),
-        ),
-      ],
     ),
   );
   if (sure != true) return false;
@@ -235,12 +272,10 @@ Future<bool> confirmAndBlock(
     await ref.read(safetyRepositoryProvider).block(userId);
     ref.invalidate(blockedUsersProvider);
     ref.invalidate(conversationsProvider);
-    messenger.showSnackBar(SnackBar(content: Text('تم حظر $name.')));
+    messenger.showApp('تم حظر $name.', kind: AppNoteKind.success);
     return true;
   } on Object catch (e) {
-    messenger.showSnackBar(
-      SnackBar(content: Text(errorMessage(AppError.from(e)))),
-    );
+    messenger.showApp(errorMessage(AppError.from(e)), kind: AppNoteKind.error);
     return false;
   }
 }

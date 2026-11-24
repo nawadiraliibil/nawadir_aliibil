@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_note.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -72,8 +74,9 @@ class NotificationsScreen extends ConsumerWidget {
       try {
         await ref.read(notificationsProvider.notifier).markRead([n.id]);
       } on Object catch (e) {
-        messenger.showSnackBar(
-          SnackBar(content: Text(errorMessage(AppError.from(e)))),
+        messenger.showApp(
+          errorMessage(AppError.from(e)),
+          kind: AppNoteKind.error,
         );
       }
     }
@@ -84,8 +87,9 @@ class NotificationsScreen extends ConsumerWidget {
     try {
       await ref.read(notificationsProvider.notifier).markAllRead();
     } on Object catch (e) {
-      messenger.showSnackBar(
-        SnackBar(content: Text(errorMessage(AppError.from(e)))),
+      messenger.showApp(
+        errorMessage(AppError.from(e)),
+        kind: AppNoteKind.error,
       );
     }
   }
@@ -102,7 +106,7 @@ class NotificationsScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           tooltip: 'رجوع',
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () =>
               context.canPop() ? context.pop() : context.go(Routes.home),
         ),
@@ -161,7 +165,7 @@ class NotificationsScreen extends ConsumerWidget {
                           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                           itemCount: list.length,
                           separatorBuilder: (_, _) =>
-                              const SizedBox(height: 10),
+                              Divider(height: 1, thickness: 1, color: c.hair),
                           itemBuilder: (context, i) {
                             final n = list[i];
                             return Semantics(
@@ -169,24 +173,33 @@ class NotificationsScreen extends ConsumerWidget {
                               button: true,
                               label:
                                   '${n.isUnread ? 'غير مقروء. ' : ''}${n.title}',
-                              child: Material(
-                                color: n.isUnread ? c.tintGold : c.soft,
-                                borderRadius: BorderRadius.circular(
-                                  AppShapes.card,
-                                ),
-                                child: InkWell(
-                                  key: ValueKey('notification-${n.id}'),
-                                  borderRadius: BorderRadius.circular(
-                                    AppShapes.card,
+                              child: InkWell(
+                                key: ValueKey('notification-${n.id}'),
+                                onTap: () => _open(context, ref, n),
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minHeight: AppShapes.minTouchTarget,
                                   ),
-                                  onTap: () => _open(context, ref, n),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(12),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 12,
+                                    ),
                                     child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
                                       children: [
-                                        Icon(_icon(n.category), color: c.gold),
+                                        DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            color: c.tintGold,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: SizedBox.square(
+                                            dimension: 40,
+                                            child: Icon(
+                                              _icon(n.category),
+                                              size: 20,
+                                              color: c.gold,
+                                            ),
+                                          ),
+                                        ),
                                         const SizedBox(width: 12),
                                         Expanded(
                                           child: ExcludeSemantics(
@@ -212,15 +225,36 @@ class NotificationsScreen extends ConsumerWidget {
                                                         .textTheme
                                                         .bodyMedium,
                                                   ),
+                                                Text(
+                                                  formatShortTime(n.createdAt),
+                                                  style: theme
+                                                      .textTheme
+                                                      .bodySmall
+                                                      ?.copyWith(
+                                                        color: c.muted,
+                                                      ),
+                                                ),
                                               ],
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          formatShortTime(n.createdAt),
-                                          style: theme.textTheme.bodySmall
-                                              ?.copyWith(color: c.muted),
+                                        if (n.isUnread) ...[
+                                          const SizedBox(width: 8),
+                                          DecoratedBox(
+                                            decoration: BoxDecoration(
+                                              color: c.gold,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: const SizedBox.square(
+                                              dimension: 8,
+                                            ),
+                                          ),
+                                        ],
+                                        const SizedBox(width: 4),
+                                        Icon(
+                                          Icons.chevron_left,
+                                          size: 20,
+                                          color: c.muted,
                                         ),
                                       ],
                                     ),

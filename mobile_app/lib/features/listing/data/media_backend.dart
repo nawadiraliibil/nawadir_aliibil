@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../core/errors/app_error.dart';
 import '../../../core/supabase/rpc.dart';
@@ -17,6 +19,7 @@ abstract class MediaBackend {
     String listingId, {
     required String mimeType,
     required int sizeBytes,
+    String kind = 'IMAGE',
   });
 
   /// يرفع البايتات إلى `bucket/objectPath` بجلسة المستخدم.
@@ -51,12 +54,13 @@ class SupabaseMediaBackend implements MediaBackend {
     String listingId, {
     required String mimeType,
     required int sizeBytes,
+    String kind = 'IMAGE',
   }) => guardRpc(() async {
     final res = await _rpc(
       'add_listing_media',
       params: {
         'p_listing_id': listingId,
-        'p_kind': 'IMAGE',
+        'p_kind': kind,
         'p_mime_type': mimeType,
         'p_size_bytes': sizeBytes,
       },
@@ -145,6 +149,14 @@ abstract class PhotoSource {
 
   /// صورة واحدة من الكاميرا، أو `null` عند الإلغاء.
   Future<PickedImage?> pickFromCamera();
+
+  /// فيديو من المعرض أو تسجيل بالكاميرا، أو `null` عند الإلغاء. [maxBytes]
+  /// و[maxSeconds] من الإعدادات المنشورة.
+  Future<PickedVideo?> pickVideo({
+    required bool camera,
+    required int maxBytes,
+    required int maxSeconds,
+  });
 }
 
 class PlatformPhotoSource implements PhotoSource {
@@ -178,6 +190,41 @@ class PlatformPhotoSource implements PhotoSource {
       maxHeight: _maxSide,
     );
     return f == null ? null : _read(f);
+  }
+
+  @override
+  Future<PickedVideo?> pickVideo({
+    required bool camera,
+    required int maxBytes,
+    required int maxSeconds,
+  }) async {
+    final f = await _picker.pickVideo(
+      source: camera ? ImageSource.camera : ImageSource.gallery,
+      maxDuration: Duration(seconds: maxSeconds),
+    );
+    if (f == null) return null;
+    final size = await f.length();
+    // أكبر من الحد: يُرفض محليًا دون قراءته في الذاكرة.
+    final bytes = size > maxBytes ? Uint8List(0) : await f.readAsBytes();
+    return PickedVideo(
+      name: f.name,
+      sizeBytes: size,
+      bytes: bytes,
+      durationSeconds: await _probeSeconds(f.path),
+    );
+  }
+
+  /// مدة الفيديو بالثواني مقربة للأعلى، أو `null` إن تعذر قياسها.
+  static Future<int?> _probeSeconds(String path) async {
+    final c = VideoPlayerController.file(File(path));
+    try {
+      await c.initialize();
+      return (c.value.duration.inMilliseconds / 1000).ceil();
+    } on Object {
+      return null;
+    } finally {
+      await c.dispose();
+    }
   }
 
   static Future<PickedImage> _read(XFile f) async =>

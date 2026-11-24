@@ -145,6 +145,8 @@ void main() {
       );
       await tester.tap(find.text('ناقة مجاهيم للبيع').first);
       await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('tab-owner')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('owner-row')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('seller-rating-summary')));
@@ -398,7 +400,7 @@ void main() {
         find.byKey(const ValueKey('rating-dialog-input')),
         'شكرًا',
       );
-      await tester.tap(find.text('نشر'));
+      await tester.tap(find.text('إرسال الرد'));
       await tester.pumpAndSettle();
       expect(rpc.paramsOf('reply_to_rating').single, {
         'p_rating_id': 'r1',
@@ -435,6 +437,45 @@ void main() {
       });
     });
 
+    testWidgets('الورقة السفلية: تبويبان، والتبديل إلى الاعتراض يرسله', (
+      tester,
+    ) async {
+      tester.platformDispatcher.textScaleFactorTestValue = 2;
+      addTearDown(tester.platformDispatcher.clearAllTestValues);
+      final rpc = await open(
+        tester,
+        [_received()],
+        handlers: {
+          'appeal_rating': (p) => {
+            'appeal_id': 'a1',
+            'status': 'OPEN',
+            'created': true,
+          },
+        },
+      );
+      await tester.tap(find.byKey(const ValueKey('reply-rating-r1')));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.text('رد المعلن'), findsOneWidget);
+      expect(find.text('إرسال الرد'), findsOneWidget);
+
+      await tester.tap(find.byKey(const ValueKey('rating-tab-appeal')));
+      await tester.pumpAndSettle();
+      expect(find.text('سبب الاعتراض'), findsOneWidget);
+      await tester.enterText(
+        find.byKey(const ValueKey('rating-dialog-input')),
+        'سبب',
+      );
+      await tester.tap(find.text('إرسال الاعتراض'));
+      await tester.pumpAndSettle();
+      expect(rpc.paramsOf('appeal_rating').single, {
+        'p_rating_id': 'r1',
+        'p_reason': 'سبب',
+      });
+      expect(rpc.paramsOf('reply_to_rating'), isEmpty);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('اعتراض قائم: حالته وبلا زر اعتراض ثانٍ', (tester) async {
       await open(tester, [_received(appealId: 'a1', appealStatus: 'OPEN')]);
       expect(find.text('اعتراضك قيد المراجعة.'), findsOneWidget);
@@ -465,7 +506,7 @@ void main() {
         find.byKey(const ValueKey('rating-dialog-input')),
         'رد',
       );
-      await tester.tap(find.text('نشر'));
+      await tester.tap(find.text('إرسال الرد'));
       await tester.pumpAndSettle();
       expect(
         find.text('هذا الإجراء غير متاح في حالة الإعلان الحالية.'),

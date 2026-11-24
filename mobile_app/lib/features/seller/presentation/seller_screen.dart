@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_note.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,6 +9,7 @@ import '../../../app/theme/app_colors.dart';
 import '../../../core/errors/app_error.dart';
 import '../../../core/errors/error_messages.dart';
 import '../../../core/widgets/empty_state.dart';
+import '../../../core/widgets/section_title.dart';
 import '../../auth/application/auth_providers.dart';
 import '../../browse/data/listing_card.dart';
 import '../../browse/presentation/search_results_view.dart';
@@ -30,7 +33,7 @@ class SellerScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           tooltip: 'رجوع',
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () =>
               context.canPop() ? context.pop() : context.go(Routes.home),
         ),
@@ -119,8 +122,9 @@ class _Header extends ConsumerWidget {
       }
       ref.invalidate(followedSellersProvider);
     } on Object catch (e) {
-      messenger.showSnackBar(
-        SnackBar(content: Text(errorMessage(AppError.from(e)))),
+      messenger.showApp(
+        errorMessage(AppError.from(e)),
+        kind: AppNoteKind.error,
       );
     }
   }
@@ -131,75 +135,99 @@ class _Header extends ConsumerWidget {
     final following = ref.watch(isFollowingProvider(profile.id)) ?? false;
     final theme = Theme.of(context);
     final c = context.colors;
+    final ratingLabel = profile.ratingCount == 0
+        ? 'لا تقييمات بعد'
+        : '${profile.ratingAvg!.toStringAsFixed(1)} · '
+              '${profile.ratingCount} تقييمًا';
+    final region = profile.regionName;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-      child: Row(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+      child: Column(
         children: [
           CircleAvatar(
-            radius: 28,
-            backgroundColor: c.tintGold,
+            radius: 36,
+            backgroundColor: c.soft,
             child: Text(
               profile.displayName.characters.first,
-              style: theme.textTheme.titleLarge,
+              style: theme.textTheme.headlineSmall,
             ),
           ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(profile.displayName, style: theme.textTheme.titleLarge),
-                if (profile.regionName != null)
-                  Text(profile.regionName!, style: theme.textTheme.bodyMedium),
-                InkWell(
+          const SizedBox(height: 12),
+          Text(
+            profile.displayName,
+            style: theme.textTheme.headlineSmall,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '${region == null ? '' : '$region · '}'
+            'عضو منذ ${profile.joinedAt.toUtc().year} · '
+            '${profile.publishedCount} إعلانًا منشورًا',
+            style: theme.textTheme.bodySmall?.copyWith(color: c.muted),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 10,
+            runSpacing: 10,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              if (myId != profile.id)
+                following
+                    ? OutlinedButton(
+                        key: const ValueKey('follow-seller'),
+                        onPressed: () => _toggleFollow(context, ref, true),
+                        child: const Text('إلغاء المتابعة'),
+                      )
+                    : FilledButton(
+                        key: const ValueKey('follow-seller'),
+                        onPressed: () => _toggleFollow(context, ref, false),
+                        child: const Text('متابعة'),
+                      ),
+              Material(
+                color: c.soft,
+                shape: const StadiumBorder(),
+                child: InkWell(
                   key: const ValueKey('seller-rating-summary'),
+                  customBorder: const StadiumBorder(),
                   onTap: () => context.push(
                     Uri(
                       path: Routes.sellerRatings(profile.id),
                       queryParameters: {'name': profile.displayName},
                     ).toString(),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (profile.ratingAvg != null) ...[
-                          StarsRow(score: profile.ratingAvg!),
-                          const SizedBox(width: 6),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 48),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (profile.ratingAvg != null) ...[
+                            StarsRow(score: profile.ratingAvg!, size: 16),
+                            const SizedBox(width: 8),
+                          ],
+                          Flexible(
+                            child: Text(
+                              ratingLabel,
+                              style: theme.textTheme.bodyMedium,
+                            ),
+                          ),
+                          const Icon(Icons.chevron_left, size: 18),
                         ],
-                        Text(
-                          profile.ratingCount == 0
-                              ? 'لا تقييمات بعد'
-                              : '${profile.ratingAvg!.toStringAsFixed(1)} · '
-                                    '${profile.ratingCount} تقييمًا',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        const Icon(Icons.chevron_left, size: 18),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-                Text(
-                  'عضو منذ ${profile.joinedAt.toUtc().year} · '
-                  '${profile.publishedCount} إعلانًا منشورًا',
-                  style: theme.textTheme.bodySmall?.copyWith(color: c.muted),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          if (myId != profile.id)
-            following
-                ? OutlinedButton(
-                    key: const ValueKey('follow-seller'),
-                    onPressed: () => _toggleFollow(context, ref, true),
-                    child: const Text('إلغاء المتابعة'),
-                  )
-                : FilledButton(
-                    key: const ValueKey('follow-seller'),
-                    onPressed: () => _toggleFollow(context, ref, false),
-                    child: const Text('متابعة'),
-                  ),
+          const SizedBox(height: 20),
+          const Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: SectionTitle('إعلانات المعلن'),
+          ),
         ],
       ),
     );

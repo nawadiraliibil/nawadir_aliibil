@@ -34,7 +34,7 @@ select columns_are('public', 'public_listing_cards', array[
   'listing_id', 'owner_id', 'owner_display_name', 'title', 'offer_type', 'price',
   'auction_starts_at', 'auction_passed', 'breed_id', 'breed_name_ar', 'breed_note', 'sex',
   'age_months', 'region_id', 'region_name_ar', 'city_id', 'city_name_ar',
-  'cover_bucket', 'cover_path', 'first_published_at', 'visibility_updated_at', 'public_ref']);
+  'cover_bucket', 'cover_path', 'first_published_at', 'visibility_updated_at', 'public_ref', 'auction_lat', 'auction_lng', 'view_count', 'favorite_count']);
 select columns_are('public', 'public_listing_details', array[
   'listing_id', 'owner_id', 'owner_display_name', 'owner_joined_at', 'title', 'description',
   'offer_type', 'price', 'auction_region_id', 'auction_region_name_ar', 'auction_city_id',
@@ -42,7 +42,8 @@ select columns_are('public', 'public_listing_details', array[
   'breed_id', 'breed_name_ar', 'breed_note', 'sex', 'age_months', 'color', 'health_notes',
   'region_id', 'region_name_ar', 'city_id', 'city_name_ar',
   'contact_phone', 'contact_call_enabled', 'contact_whatsapp_enabled',
-  'first_published_at', 'published_version_at', 'visibility_updated_at', 'public_ref', 'comments_closed']);
+  'first_published_at', 'published_version_at', 'visibility_updated_at', 'public_ref', 'comments_closed',
+  'contact_whatsapp_phone', 'auction_lat', 'auction_lng', 'view_count', 'favorite_count']);
 select columns_are('public', 'public_listing_media', array[
   'listing_id', 'media_id', 'kind', 'bucket', 'object_path', 'mime_type',
   'width', 'height', 'duration_seconds', 'sort_order', 'is_cover']);
@@ -52,7 +53,7 @@ select columns_are('public', 'my_listings', array[
   'auction_passed', 'cover_bucket', 'cover_path', 'reason_code', 'reason_label_ar',
   'reason_text', 'reason_decided_at', 'first_submitted_at', 'first_published_at',
   'last_published_at', 'last_bumped_at', 'next_bump_at', 'status_changed_at',
-  'created_at', 'updated_at']);
+  'created_at', 'updated_at', 'view_count', 'favorite_count']);
 
 -- المعلن: إعلان مرسل ومسودة ثانية
 select pg_temp.login('00000000-0000-0000-0000-00000000000a', 'aal1');
@@ -91,23 +92,7 @@ select lives_ok(
   'إرسال الإعلان');
 reset role;
 
--- قبل الاعتماد: لا شيء للعامة
-select set_config('request.jwt.claims', '', true);
-set local role anon;
-select is((select count(*)::integer from public.public_listing_cards), 0, 'قيد المراجعة لا يظهر للعامة');
-select is((select count(*)::integer from public.public_listing_media), 0, 'وسائط قيد المراجعة لا تظهر');
-reset role;
-
--- الاعتماد
-select pg_temp.login('00000000-0000-0000-0000-0000000000a1', 'aal2');
-set local role authenticated;
-insert into ids select 'v1', (public.admin_get_listing_review((select v from ids where k = 'l1')) #>> '{version,id}')::uuid;
-insert into vals select 'h1', public.admin_get_listing_review((select v from ids where k = 'l1')) #>> '{version,content_hash}';
-select lives_ok(
-  $$select public.admin_approve_listing_version((select v from ids where k = 'l1'),
-      (select v from ids where k = 'v1'), (select v from vals where k = 'h1'))$$,
-  'اعتماد الإعلان');
-reset role;
+-- النشر المباشر: الإعلان ظاهر فور الإرسال، والمسودة الثانية لا تظهر
 
 -- الزائر
 select set_config('request.jwt.claims', '', true);

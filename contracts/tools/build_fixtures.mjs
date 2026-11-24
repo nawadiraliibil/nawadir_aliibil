@@ -132,6 +132,7 @@ const patch = {
   offer_type: "FIXED_PRICE",
   price: 25000,
   contact_phone: "0500000009",
+  contact_whatsapp_phone: "0551112222",
   contact_call_enabled: true,
   contact_whatsapp_enabled: true,
 };
@@ -195,19 +196,22 @@ const verified = await ok(await http(`/auth/v1/factors/${factor.id}/verify`, {
 const admin = verified.access_token;
 
 save("admin-whoami", await rpc("admin_whoami", {}, admin));
+// 1.2.0 (TEAM-DEC-013): الإرسال ينشر مباشرة؛ قائمة المراجعة مهملة وفارغة، والاعتماد والرفض يرفعان INVALID_STATE.
 const queue = await rpc("admin_review_queue", { p_limit: 20 }, admin);
+assert.deepEqual(queue, []);
 save("admin-review-queue", queue);
 const review = await rpc("admin_get_listing_review", { p_listing_id: listingId }, admin);
 save("admin-listing-review", review);
+save("admin-list-listings", await rpc("admin_list_listings", { p_status: "PUBLISHED", p_limit: 20 }, admin));
 
-const stale = await rpcRaw("admin_approve_listing_version", {
-  p_listing_id: listingId, p_version_id: review.version.id, p_content_hash: "0".repeat(64),
-}, admin);
-save("error-version-changed", await stale.json());
-
-save("admin-approved-listing", await rpc("admin_approve_listing_version", {
+const deprecated = await rpcRaw("admin_approve_listing_version", {
   p_listing_id: listingId, p_version_id: review.version.id, p_content_hash: review.version.content_hash,
-}, admin));
+}, admin);
+assert.equal((await deprecated.json()).message, "INVALID_STATE");
+
+// إخفاء ثم إعادة إظهار (يعيد حالة الإعلان الإدارية)
+await rpc("admin_hide_listing", { p_listing_id: listingId, p_reason_code: "OTHER", p_reason_text: "مثال" }, admin);
+save("admin-unhidden-listing", await rpc("admin_unhide_listing", { p_listing_id: listingId }, admin));
 
 const forbidden = await rpcRaw("admin_review_queue", {}, user);
 save("error-forbidden", await forbidden.json());

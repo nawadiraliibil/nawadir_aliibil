@@ -190,8 +190,12 @@ delete from public.listings where id <> (select v from ids where k = 'l1');
 set local role authenticated;
 select is(
   public.submit_listing((select v from ids where k = 'l1'), 'bbbbbbbb-0000-0000-0000-000000000001') #>> '{listing,status}',
-  'UNDER_REVIEW', 'الإرسال ينقل الإعلان إلى المراجعة');
-select is((select status::text from public.listing_versions), 'SUBMITTED', 'النسخة مرسلة');
+  'PUBLISHED', 'الإرسال ينشر الإعلان مباشرة');
+select is((select status::text from public.listing_versions), 'APPROVED', 'النسخة المرسلة تصير معتمدة تلقائيًا');
+select ok((select l.published_version_id = l.current_version_id and l.first_published_at is not null
+    and l.first_submitted_at is not null and l.last_published_at is not null
+    and l.visibility_updated_at is not null from public.listings l),
+  'مؤشرات النشر تضبط عند أول نشر');
 select ok((select content_hash ~ '^[0-9a-f]{64}$' and settings_version = 1 from public.listing_versions),
   'البصمة وإصدار الإعدادات يحفظان عند الإرسال');
 select lives_ok(
@@ -200,13 +204,10 @@ select lives_ok(
 select is((select count(*)::integer from public.listing_versions), 1, 'إرسال مكرر لا ينشئ نسخة');
 select throws_ok(
   $$select public.save_listing_draft((select v from ids where k = 'l1'), '{"title": "عنوان آخر للإعلان"}')$$,
-  'P0001', 'INVALID_STATE', 'لا تعديل أثناء المراجعة');
-select throws_ok(
-  $$select public.start_listing_edit((select v from ids where k = 'l1'))$$,
-  'P0001', 'INVALID_STATE', 'لا بدء تعديل أثناء المراجعة');
+  'P0001', 'INVALID_STATE', 'لا حفظ مسودة دون مسودة تعديل');
 select throws_ok(
   $$select public.delete_listing((select v from ids where k = 'l1'))$$,
-  'P0001', 'INVALID_STATE', 'لا حذف أثناء المراجعة');
+  'P0001', 'INVALID_STATE', 'لا حذف لإعلان منشور');
 reset role;
 
 ------------------------------------------------------------------------------
@@ -250,10 +251,7 @@ reset role;
 ------------------------------------------------------------------------------
 -- بعد الاعتماد (محاكاة قرار الإدارة): تجديد وتعديل وأرشفة
 ------------------------------------------------------------------------------
-update public.listing_versions set status = 'APPROVED', decided_at = now()
-  where listing_id = (select v from ids where k = 'l1');
-update public.listings set status = 'PUBLISHED',
-    published_version_id = current_version_id,
+update public.listings set
     first_published_at = now() - interval '23 hours', published_version_at = now() - interval '23 hours',
     last_published_at = now() - interval '23 hours', visibility_updated_at = now() - interval '23 hours'
   where id = (select v from ids where k = 'l1');
@@ -298,16 +296,24 @@ select lives_ok(
   $$select public.save_listing_draft((select v from ids where k = 'l1'), '{"price": 30000}')$$, 'تعديل السعر');
 select is(
   public.submit_listing((select v from ids where k = 'l1'), 'bbbbbbbb-0000-0000-0000-000000000002') #>> '{listing,status}',
-  'UNDER_REVIEW', 'إرسال تعديل المنشور يعيده للمراجعة');
+  'PUBLISHED', 'إرسال تعديل المنشور يسري فورًا');
+select is(
+  (select l.published_version_id from public.listings l where l.id = (select v from ids where k = 'l1')),
+  (select v.id from public.listing_versions v where v.version_no = 2),
+  'النسخة المعدلة هي المنشورة');
+select is((select price from public.public_listing_details where listing_id = (select v from ids where k = 'l1')),
+  30000.00::numeric, 'السعر الجديد ظاهر للعامة فورًا');
+select ok((select l.visibility_updated_at = l.last_bumped_at and l.first_published_at = now() - interval '23 hours'
+    and l.last_published_at = now() - interval '24 hours 1 second'
+    from public.listings l where l.id = (select v from ids where k = 'l1')),
+  'التعديل لا يرفع ترتيب الظهور ولا يجدد last_published_at ولا يغير النشر الأول');
 select isnt(
   (select content_hash from public.listing_versions where version_no = 2),
   (select content_hash from public.listing_versions where version_no = 1),
   'بصمة النسخة المعدلة تختلف');
 reset role;
 
--- رفض التعديل (محاكاة) ثم تصحيح
-update public.listing_versions set status = 'REJECTED', decided_at = now()
-  where listing_id = (select v from ids where k = 'l1') and version_no = 2;
+-- إعلان مرفوض قديم (بيانات سابقة لإلغاء المراجعة) ثم تصحيح
 update public.listings set status = 'REJECTED' where id = (select v from ids where k = 'l1');
 
 set local role authenticated;

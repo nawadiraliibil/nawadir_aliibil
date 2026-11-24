@@ -54,7 +54,7 @@ void main() {
       backend: FakeMediaBackend(),
       photos: FakePhotoSource(gallery: [_img(1)]),
     );
-    expect(find.text('إعلان جديد 5 / 7'), findsOneWidget);
+    expect(find.text('5 / 7'), findsOneWidget);
     expect(find.textContaining('3–10 صور'), findsOneWidget);
 
     await tester.tap(find.text('متابعة'));
@@ -159,7 +159,34 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('التقاط صورة'));
     await tester.pumpAndSettle();
+    expect(find.text('السماح باستخدام الكاميرا'), findsOneWidget);
+    await tester.tap(find.text('متابعة').last);
+    await tester.pumpAndSettle();
     expect(find.bySemanticsLabel(RegExp('صورة 1 من 1')), findsOneWidget);
+
+    // الشرح يظهر مرة واحدة فقط.
+    await tester.tap(find.text('إضافة صور'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('التقاط صورة'));
+    await tester.pumpAndSettle();
+    expect(find.text('السماح باستخدام الكاميرا'), findsNothing);
+  });
+
+  testWidgets('رفض شرح الكاميرا لا يفتح الكاميرا ولا يضيف صورة', (
+    tester,
+  ) async {
+    await _openMediaStep(
+      tester,
+      backend: FakeMediaBackend(),
+      photos: FakePhotoSource(camera: _img(9)),
+    );
+    await tester.tap(find.text('إضافة صور'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('التقاط صورة'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('ليس الآن'));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel(RegExp('صورة 1 من 1')), findsNothing);
   });
 
   testWidgets('الغلاف يتغير من قائمة الصورة ويرسل إلى الخادم', (tester) async {

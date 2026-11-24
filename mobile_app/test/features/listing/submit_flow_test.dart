@@ -23,8 +23,6 @@ const _fixedForm = <String, Object?>{
   'city_id': 2,
   'price': 48000,
   'contact_phone': '0500000009',
-  'contact_call_enabled': true,
-  'contact_whatsapp_enabled': false,
 };
 
 ProviderContainer _container(WidgetTester tester) =>
@@ -83,14 +81,14 @@ void main() {
 
   testWidgets('المعاينة تعرض بيانات الإعلان بصيغة سعر محدد', (tester) async {
     await _openPreview(tester);
-    expect(find.text('إعلان جديد 7 / 7'), findsOneWidget);
+    expect(find.text('7 / 7'), findsOneWidget);
     expect(find.text('سعر محدد'), findsOneWidget);
     expect(find.text('ناقة وضح أصيلة للبيع'), findsOneWidget);
     expect(find.text('48,000 ريال'), findsOneWidget);
     expect(find.text('الرياض · الدرعية'), findsOneWidget);
     expect(find.textContaining('36 شهرًا'), findsOneWidget);
     expect(find.textContaining('حسب المعلن'), findsOneWidget);
-    expect(find.textContaining('0500000009 · اتصال'), findsOneWidget);
+    expect(find.textContaining('اتصال: 0500000009'), findsOneWidget);
     expect(find.text('معلن تجريبي'), findsOneWidget);
   });
 
@@ -111,15 +109,15 @@ void main() {
     );
     expect(find.text('مزاد حضوري'), findsOneWidget);
     expect(find.textContaining('سوق الإبل'), findsOneWidget);
-    expect(find.textContaining('5/1/2099 18:30'), findsOneWidget);
+    expect(find.text('6:30 م'), findsOneWidget);
     expect(find.textContaining('ريال'), findsNothing);
   });
 
   testWidgets('لا إرسال قبل الإقرار', (tester) async {
     final server = await _openPreview(tester);
-    await _tapText(tester, 'إرسال للمراجعة');
+    await _tapText(tester, 'نشر الإعلان');
     expect(server.submitRequestIds, isEmpty);
-    expect(find.text('أُرسل للمراجعة'), findsNothing);
+    expect(find.text('تم نشر إعلانك'), findsNothing);
   });
 
   testWidgets('الإقرار ثم الإرسال: يحفظ الإقرار ويرسل ويعرض شاشة الإرسال', (
@@ -127,12 +125,17 @@ void main() {
   ) async {
     final server = await _openPreview(tester);
     await _tapText(tester, 'أقر بصحة البيانات وأحقيتي في العرض');
-    await _tapText(tester, 'إرسال للمراجعة');
+    await _tapText(tester, 'نشر الإعلان');
 
     expect(server.patches.last, {'owner_declaration': true});
     expect(server.submitRequestIds, hasLength(1));
-    expect(find.text('أُرسل للمراجعة'), findsOneWidget);
-    expect(find.text('سيظهر إعلانك بعد اعتماد الإدارة.'), findsOneWidget);
+    expect(find.text('تم نشر إعلانك'), findsOneWidget);
+    expect(
+      find.text(
+        'إعلانك ظاهر الآن للجميع. تجد حالته وتستطيع تعديله أو إيقافه من «إعلاناتي».',
+      ),
+      findsOneWidget,
+    );
 
     await tester.tap(find.text('إعلاناتي'));
     await tester.pumpAndSettle();
@@ -147,12 +150,12 @@ void main() {
     await _openPreview(tester, server: server);
     await _tapText(tester, 'أقر بصحة البيانات وأحقيتي في العرض');
 
-    await _tapText(tester, 'إرسال للمراجعة');
+    await _tapText(tester, 'نشر الإعلان');
     expect(find.textContaining('حدث خطأ غير متوقع'), findsOneWidget);
-    expect(find.text('أُرسل للمراجعة'), findsNothing);
+    expect(find.text('تم نشر إعلانك'), findsNothing);
 
-    await _tapText(tester, 'إرسال للمراجعة');
-    expect(find.text('أُرسل للمراجعة'), findsOneWidget);
+    await _tapText(tester, 'نشر الإعلان');
+    expect(find.text('تم نشر إعلانك'), findsOneWidget);
     expect(server.submitRequestIds, hasLength(2));
     expect(server.submitRequestIds.toSet(), hasLength(1));
   });
@@ -170,7 +173,7 @@ void main() {
       );
     await _openPreview(tester, server: server);
     await _tapText(tester, 'أقر بصحة البيانات وأحقيتي في العرض');
-    await _tapText(tester, 'إرسال للمراجعة');
+    await _tapText(tester, 'نشر الإعلان');
 
     expect(find.textContaining('تحقق من البيانات'), findsOneWidget);
     expect(find.text('عدّل: بيانات الإبل'), findsOneWidget);
@@ -178,7 +181,7 @@ void main() {
     expect(find.text('عدّل: الصور'), findsOneWidget);
 
     await _tapText(tester, 'عدّل: رقم التواصل');
-    expect(find.text('إعلان جديد 6 / 7'), findsOneWidget);
+    expect(find.text('6 / 7'), findsOneWidget);
   });
 
   testWidgets('MEDIA_NOT_READY يوجه إلى خطوة الصور', (tester) async {
@@ -188,7 +191,7 @@ void main() {
       );
     await _openPreview(tester, server: server);
     await _tapText(tester, 'أقر بصحة البيانات وأحقيتي في العرض');
-    await _tapText(tester, 'إرسال للمراجعة');
+    await _tapText(tester, 'نشر الإعلان');
     expect(find.text('عدّل: الصور'), findsOneWidget);
   });
 
@@ -203,7 +206,7 @@ void main() {
       );
     await _openPreview(tester, server: server);
     await _tapText(tester, 'أقر بصحة البيانات وأحقيتي في العرض');
-    await _tapText(tester, 'إرسال للمراجعة');
+    await _tapText(tester, 'نشر الإعلان');
     expect(find.textContaining('تجاوزت الحد المسموح'), findsOneWidget);
   });
 
@@ -214,7 +217,7 @@ void main() {
     final server = FakeListingServer();
     await _openPreview(tester, account: account, server: server);
     await _tapText(tester, 'أقر بصحة البيانات وأحقيتي في العرض');
-    await _tapText(tester, 'إرسال للمراجعة');
+    await _tapText(tester, 'نشر الإعلان');
 
     // A04 مفتوحة فوق المعالج، ولم يرسل شيء بعد.
     expect(find.text('إكمال الحساب'), findsWidgets);
@@ -225,15 +228,15 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('الرياض').last);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('أوافق على شروط الاستخدام'));
-    await tester.tap(find.text('أوافق على سياسة الخصوصية'));
+    await tester.tap(find.byKey(const ValueKey('policy-check-TERMS')));
+    await tester.tap(find.byKey(const ValueKey('policy-check-PRIVACY')));
     await tester.pump();
     await tester.tap(find.text('حفظ ومتابعة'));
     await tester.pumpAndSettle();
 
     // عاد إلى المعاينة وأكمل الإرسال تلقائيًا.
     expect(server.submitRequestIds, hasLength(1));
-    expect(find.text('أُرسل للمراجعة'), findsOneWidget);
+    expect(find.text('تم نشر إعلانك'), findsOneWidget);
   });
 
   testWidgets('الحساب الموقوف: تنبيه H08 ولا إرسال', (tester) async {
@@ -243,7 +246,7 @@ void main() {
     expect(find.textContaining('الحساب موقوف'), findsOneWidget);
 
     await _tapText(tester, 'أقر بصحة البيانات وأحقيتي في العرض');
-    await _tapText(tester, 'إرسال للمراجعة');
+    await _tapText(tester, 'نشر الإعلان');
     expect(server.submitRequestIds, isEmpty);
   });
 
@@ -255,7 +258,7 @@ void main() {
       message: 'ACCOUNT_SUSPENDED',
     );
     await _tapText(tester, 'أقر بصحة البيانات وأحقيتي في العرض');
-    await _tapText(tester, 'إرسال للمراجعة');
+    await _tapText(tester, 'نشر الإعلان');
     expect(find.textContaining('حسابك معلّق'), findsOneWidget);
     expect(server.submitRequestIds, isEmpty);
     expect(

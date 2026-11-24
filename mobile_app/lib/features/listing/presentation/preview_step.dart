@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../../app/router/routes.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_shapes.dart';
+import '../../../app/theme/app_typography.dart';
 import '../../../core/errors/app_error.dart';
 import '../../../core/format/money.dart';
+import '../../../core/location/map_widgets.dart';
 import '../../../core/settings/published_settings.dart';
 import '../../../core/settings/settings_repository.dart';
 import '../../../core/widgets/app_badge.dart';
 import '../../../core/widgets/app_note.dart';
+import '../../../core/widgets/section_title.dart';
+import '../../../core/widgets/wasm_ring.dart';
 import '../../account/application/account_providers.dart';
 import '../../auth/domain/saudi_phone.dart';
+import '../../browse/domain/labels.dart';
+import '../../browse/presentation/auction_widgets.dart';
 import '../application/media_controller.dart';
 import '../application/post_controller.dart';
 import '../data/draft_form.dart';
@@ -39,9 +46,11 @@ PostStep stepForField(String field) {
         'auction_region_id' ||
         'auction_city_id' ||
         'auction_venue' ||
-        'auction_starts_at':
+        'auction_starts_at' ||
+        'auction_lat' ||
+        'auction_lng':
       return PostStep.details;
-    case 'contact_phone' || 'contact_channels':
+    case 'contact_phone' || 'contact_whatsapp_phone' || 'contact_channels':
       return PostStep.contact;
     case 'images' || 'media_ids' || 'cover_id':
       return PostStep.media;
@@ -50,7 +59,7 @@ PostStep stepForField(String field) {
   }
 }
 
-/// D09 / D10 — معاينة الإعلان، والإقرار، والإرسال للمراجعة.
+/// D09 / D10 — معاينة الإعلان، والإقرار، والنشر المباشر (TEAM-DEC-013).
 class PreviewStep extends ConsumerStatefulWidget {
   const PreviewStep({super.key, required this.onSaveDraft});
 
@@ -118,7 +127,7 @@ class _PreviewStepState extends ConsumerState<PreviewStep> {
         if (!form.ownerDeclaration || suspended) return;
         await _submit();
       },
-      continueLabel: 'إرسال للمراجعة',
+      continueLabel: 'نشر الإعلان',
       onSaveDraft: widget.onSaveDraft,
       children: [
         const AppNote('معاينة — هكذا سيظهر إعلانك.'),
@@ -153,35 +162,83 @@ class _PreviewStepState extends ConsumerState<PreviewStep> {
           ),
         ),
         const SizedBox(height: 8),
-        Text(form.title ?? '', style: theme.textTheme.titleLarge),
-        const SizedBox(height: 4),
-        if (!form.isAuction && form.price != null)
-          Text(
-            '${formatMoney(form.price!)} ريال',
-            style: theme.textTheme.titleMedium?.copyWith(color: c.gold),
+        Text(
+          form.title ?? '',
+          style: AppTypography.displayStyle(
+            size: 24,
+            color: c.text,
+            height: 1.4,
           ),
-        Text(_place(settings.lookups, form), style: theme.textTheme.bodyMedium),
+        ),
+        if (!form.isAuction && form.price != null) ...[
+          const SizedBox(height: 4),
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: formatMoney(form.price!),
+                  style: AppTypography.displayStyle(
+                    size: 28,
+                    color: c.gold,
+                    height: 1.3,
+                  ),
+                ),
+                TextSpan(
+                  text: ' ريال',
+                  style: theme.textTheme.bodyMedium?.copyWith(color: c.text),
+                ),
+              ],
+            ),
+          ),
+        ],
+        const SizedBox(height: 6),
+        Row(
+          children: [
+            Icon(Icons.location_on_outlined, size: 16, color: c.muted),
+            const SizedBox(width: 4),
+            Expanded(
+              child: Text(
+                _place(settings.lookups, form),
+                style: theme.textTheme.bodySmall,
+              ),
+            ),
+          ],
+        ),
         if (form.isAuction) ..._auctionLines(context, settings.lookups, form),
-        const Divider(height: 32),
-        _Fact('السلالة', _breed(settings.lookups, form)),
-        _Fact('الجنس', form.sex == 'MALE' ? 'ذكر' : 'أنثى'),
-        _Fact('العمر', '${form.ageMonths ?? ''} شهرًا'),
+        const SizedBox(height: 16),
+        _SpecStrip(
+          items: [
+            ('السلالة', _breed(settings.lookups, form)),
+            ('الجنس', form.sex == 'MALE' ? 'ذكر' : 'أنثى'),
+            ('العمر', '${form.ageMonths ?? ''} شهرًا'),
+          ],
+        ),
         if ((form.color ?? '').isNotEmpty) _Fact('اللون', form.color!),
         _Fact('الحالة الصحية', '${form.healthNotes ?? ''} · حسب المعلن'),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
+        const SectionTitle('الوصف'),
+        const SizedBox(height: 4),
         Text(form.description ?? '', style: theme.textTheme.bodyLarge),
-        const Divider(height: 32),
+        const SizedBox(height: 16),
+        const SectionTitle('المعلن'),
+        const SizedBox(height: 4),
         _Fact('المعلن', account?.displayName ?? '—'),
         _Fact('التواصل', _contact(form)),
-        const SizedBox(height: 8),
-        CheckboxListTile(
-          contentPadding: EdgeInsets.zero,
-          controlAffinity: ListTileControlAffinity.leading,
-          value: form.ownerDeclaration,
-          onChanged: state.busy
-              ? null
-              : (v) => post.set('owner_declaration', v ?? false),
-          title: const Text('أقر بصحة البيانات وأحقيتي في العرض'),
+        const SizedBox(height: 12),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: c.soft,
+            borderRadius: BorderRadius.circular(AppShapes.field),
+          ),
+          child: CheckboxListTile(
+            contentPadding: const EdgeInsetsDirectional.only(start: 8, end: 12),
+            controlAffinity: ListTileControlAffinity.leading,
+            value: form.ownerDeclaration,
+            onChanged: state.busy
+                ? null
+                : (v) => post.set('owner_declaration', v ?? false),
+            title: const Text('أقر بصحة البيانات وأحقيتي في العرض'),
+          ),
         ),
         if (_fixSteps.isNotEmpty) ...[
           const SizedBox(height: 8),
@@ -229,38 +286,143 @@ class _PreviewStepState extends ConsumerState<PreviewStep> {
   }
 
   static String _contact(DraftForm f) {
-    final phone = SaudiPhone.tryParse(f.contactPhone ?? '')?.local ?? '';
-    final channels = [
-      if (f.callEnabled) 'اتصال',
-      if (f.whatsappEnabled) 'واتساب',
-    ].join(' و');
-    return '$phone · $channels';
+    String local(String? v) => SaudiPhone.tryParse(v ?? '')?.local ?? '';
+    final call = local(f.contactPhone);
+    final wa = local(f.whatsappPhone);
+    return [
+      if (call.isNotEmpty) 'اتصال: $call',
+      if (wa.isNotEmpty) 'واتساب: $wa',
+    ].join(' · ');
   }
 
+  /// بطاقة المزاد (بلاطة التاريخ والوقت والمكان) كما في تفاصيل الإعلان.
   static List<Widget> _auctionLines(
     BuildContext context,
     Lookups l,
     DraftForm f,
   ) {
-    final at = f.auctionStartsAt?.add(const Duration(hours: 3));
+    final startsAt = f.auctionStartsAt;
+    final venue = (f.auctionVenue ?? '').trim();
     final place = [
-      ?l.region(f.auctionRegionId)?.nameAr,
+      if (venue.isNotEmpty) venue,
       ?l.city(f.auctionCityId)?.nameAr,
     ].join(' · ');
-    return [
-      const SizedBox(height: 8),
-      _Fact('مكان المزاد', '$place — ${f.auctionVenue ?? ''}'),
-      if (at != null)
-        _Fact(
-          'موعد المزاد',
-          '${at.day}/${at.month}/${at.year} '
-              '${at.hour.toString().padLeft(2, '0')}:'
-              '${at.minute.toString().padLeft(2, '0')} بتوقيت السعودية',
+    final c = context.colors;
+    final theme = Theme.of(context);
+
+    Widget field(String label, String value) => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: c.info,
+            fontWeight: FontWeight.w700,
+          ),
         ),
+        Text(value, style: theme.textTheme.titleSmall),
+      ],
+    );
+
+    return [
+      const SizedBox(height: 16),
+      DecoratedBox(
+        decoration: BoxDecoration(
+          color: c.tintBlue,
+          borderRadius: BorderRadius.circular(AppShapes.card),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (startsAt != null) ...[
+                AuctionDateTile(startsAt: startsAt, large: true),
+                const SizedBox(width: 14),
+              ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (startsAt != null)
+                      field(
+                        'موعد المزاد (توقيت السعودية)',
+                        saudiTime12(startsAt),
+                      ),
+                    if (place.isNotEmpty) ...[
+                      const SizedBox(height: 6),
+                      field('مكان المزاد', place),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      if (f.hasAuctionLocation) ...[
+        const SizedBox(height: 10),
+        MiniMap(
+          key: const ValueKey('preview-location'),
+          point: LatLng(f.auctionLat!, f.auctionLng!),
+          height: 130,
+        ),
+      ],
+      const SizedBox(height: 8),
+      Text('المزايدة حضورية خارج التطبيق.', style: theme.textTheme.bodySmall),
     ];
   }
 }
 
+/// شريط الخصائص: ثلاث خانات تفصلها خطوط رأسية (سلالة وجنس وعمر).
+class _SpecStrip extends StatelessWidget {
+  const _SpecStrip({required this.items});
+
+  final List<(String, String)> items;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final theme = Theme.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: c.soft,
+        borderRadius: BorderRadius.circular(AppShapes.card),
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var i = 0; i < items.length; i++) ...[
+              if (i > 0) VerticalDivider(width: 1, thickness: 1, color: c.line),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 14,
+                    horizontal: 8,
+                  ),
+                  child: Column(
+                    children: [
+                      Text(items[i].$1, style: theme.textTheme.bodySmall),
+                      const SizedBox(height: 2),
+                      Text(
+                        items[i].$2,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.titleSmall,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// صف حقيقة: التسمية في البداية والقيمة في النهاية، وفاصل رفيع أسفله.
 class _Fact extends StatelessWidget {
   const _Fact(this.label, this.value);
 
@@ -270,23 +432,32 @@ class _Fact extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 96,
-            child: Text(label, style: theme.textTheme.bodyMedium),
-          ),
-          Expanded(child: Text(value, style: theme.textTheme.bodyLarge)),
-        ],
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: context.colors.hair)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: theme.textTheme.bodySmall),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                value,
+                textAlign: TextAlign.end,
+                style: theme.textTheme.bodyLarge,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-/// D11 — تم إرسال الإعلان للمراجعة.
+/// D11 — تم نشر الإعلان مباشرة؛ يتحكم المشرف بظهوره لاحقًا بالإخفاء.
 class SentView extends StatelessWidget {
   const SentView({super.key});
 
@@ -299,17 +470,18 @@ class SentView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.check_circle_outline,
-              size: 64,
-              color: context.colors.success,
+            WasmRing(
+              size: 76,
+              strokeWidth: 2,
+              dashed: true,
+              child: Icon(Icons.check, size: 30, color: context.colors.gold),
             ),
             const SizedBox(height: 16),
-            Text('أُرسل للمراجعة', style: theme.textTheme.headlineSmall),
+            Text('تم نشر إعلانك', style: theme.textTheme.titleLarge),
             const SizedBox(height: 8),
             Text(
-              'سيظهر إعلانك بعد اعتماد الإدارة.',
-              style: theme.textTheme.bodyLarge,
+              'إعلانك ظاهر الآن للجميع. تجد حالته وتستطيع تعديله أو إيقافه من «إعلاناتي».',
+              style: theme.textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),

@@ -1,9 +1,12 @@
+import 'dart:ui' show Size;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:nawadir_aliibil/app/app.dart';
 import 'package:nawadir_aliibil/app/splash/splash_overlay.dart';
 import 'package:nawadir_aliibil/core/config/env.dart';
+import 'package:nawadir_aliibil/core/location/location_service.dart';
 import 'package:nawadir_aliibil/core/supabase/realtime.dart';
 import 'package:nawadir_aliibil/core/supabase/rest.dart';
 import 'package:nawadir_aliibil/core/supabase/rpc.dart';
@@ -35,7 +38,16 @@ Future<void> pumpAppAtSplash(
   FakeStorage? storage,
   List<Override> extraOverrides = const [],
   Stream<Map<String, dynamic>>? messageInserts,
+  LatLng? deviceLocation,
 }) async {
+  // البطاقات الكبيرة أطول من إطار الاختبار الافتراضي (800×600)، فيُرفع ارتفاعه
+  // ما لم يضبط الاختبار حجمًا خاصًا قبل التشغيل.
+  if (tester.view.physicalSize / tester.view.devicePixelRatio ==
+      const Size(800, 600)) {
+    tester.view.physicalSize = const Size(800, 1400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+  }
   SharedPreferencesAsyncPlatform.instance =
       InMemorySharedPreferencesAsync.empty();
   await tester.pumpWidget(
@@ -44,6 +56,10 @@ Future<void> pumpAppAtSplash(
       retry: (_, _) => null,
       overrides: [
         envProvider.overrideWithValue(env),
+        // لا موقع للجهاز افتراضيًا؛ تحقن الاختبارات موقعها عند الحاجة.
+        deviceLocatorProvider.overrideWithValue(
+          ({askPermission = true}) async => deviceLocation,
+        ),
         rpcProvider.overrideWithValue((rpc ?? FakeRpc()).caller),
         tableReaderProvider.overrideWithValue((tables ?? FakeTables()).reader),
         storageRemoverProvider.overrideWithValue(
@@ -83,6 +99,7 @@ Future<void> pumpApp(
   FakeStorage? storage,
   List<Override> extraOverrides = const [],
   Stream<Map<String, dynamic>>? messageInserts,
+  LatLng? deviceLocation,
 }) async {
   await pumpAppAtSplash(
     tester,
@@ -95,6 +112,7 @@ Future<void> pumpApp(
     storage: storage,
     extraOverrides: extraOverrides,
     messageInserts: messageInserts,
+    deviceLocation: deviceLocation,
   );
   await tester.pump(SplashOverlay.hold);
   await tester.pumpAndSettle();

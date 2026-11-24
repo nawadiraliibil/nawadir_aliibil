@@ -136,3 +136,32 @@
 - تم (MOBILE-FCM-001): `FirebasePushService` ومعالجة التهيئة الاختيارية وإضافة Gradle المشروطة وإذن الإشعارات؛ البناء يعمل دون الملف.
 - المطلوب: مشروع Firebase وتطبيق Android بمعرّف `com.nawadiraliibil.app` وملف `google-services.json` في `mobile_app/android/app/`؛ مفتاح حساب خدمة كسر `FCM_SERVICE_ACCOUNT` (base64) و`PUSH_DISPATCH_SECRET` لدالة `push-dispatch`؛ لاحقًا `GoogleService-Info.plist` ومفتاح APNs.
 - معيار القبول: بعد وضع الملف يظهر طلب الإذن في إعدادات الإشعارات وتسجل `register_device_token` رمزًا ويصل إشعار تجريبي عبر `push-dispatch`.
+
+## INT-007 — رقم واتساب مستقل في الإعلان (TEAM-DEC-012)
+
+- المعرف: INT-007.
+- التاريخ والجانب الطالب: 2026-11-23 — Asia/Riyadh؛ MOBILE / Claude Code؛ المهمة MOBILE-BE-WA-20261123.
+- المستفيد: ADMIN (لوحة المراجعة) والجوال (D08 والمعاينة والتفاصيل).
+- الحالة: الخلفية والعقد 1.1.0 جاهزان محليًا؛ الترحيل `20261123180000_whatsapp_phone` بانتظار دفع المستخدم إلى مشروع التطوير. تعديل التطبيق ينفذه MOBILE لاحقًا.
+- التغيير: لكل نسخة إعلان رقم اتصال `contact_phone` ورقم واتساب `contact_whatsapp_phone` مستقلان واختياريان بصيغة `+9665XXXXXXXX`، ويلزم أحدهما على الأقل عند الإرسال. `contact_call_enabled` و`contact_whatsapp_enabled` باقيان في المخرجات بقيمة مشتقة (الرقم المقابل غير فارغ).
+- أثر على ADMIN: `admin_get_listing_review` يعيد في `version` الحقلين `contact_phone` و`contact_whatsapp_phone` (أيهما قد يكون `null`)؛ يلزم عرضهما معًا في صفحة المراجعة وعدم افتراض أن `contact_phone` موجود دائمًا ولا أن علامات القنوات مدخلات مستقلة. لا تغيير في توقيع أي دالة إدارة ولا في القدرات.
+- معايير القبول: عرض الرقمين في المراجعة مع التسمية الصحيحة لكل قناة، وقبول إعلان بواتساب فقط أو اتصال فقط؛ أمثلة `contracts/fixtures/admin-listing-review.json` تحوي الحقلين (واتساب مختلف عن الاتصال).
+
+## INT-008 — إزالة طابور المراجعة وبناء «إدارة الإعلانات» (TEAM-DEC-013)
+
+- المعرف: INT-008.
+- التاريخ والجانب الطالب: 2026-11-24 — Asia/Riyadh؛ MOBILE / Claude Code؛ المهمة MOBILE-BE-DIRECT-PUBLISH-20261124.
+- المستفيد والمنفذ المسند: ADMIN (مطور الإدارة) لواجهات `web_platform/src/admin/` فقط؛ لا تعديل لـ`supabase/` ولا `contracts/`.
+- الحالة: الخلفية والعقد 1.2.0 جاهزان محليًا؛ الترحيل `20261124100000_direct_publish` بانتظار دفع المستخدم. واجهة الإدارة مفتوحة.
+- التغيير: الإعلانات تنشر عند الإرسال بلا اعتماد. تُزال من اللوحة شاشة طابور المراجعة وأزرار «اعتماد» و«رفض» وكل عداد «قيد المراجعة»، وتبنى شاشة «إدارة الإعلانات».
+- الدوال (الاستدعاء بـ`supabase.rpc`، كلها تشترط موظفًا فعالًا وجلسة aal2):
+  - `admin_list_listings(p_status text = null, p_query text = null, p_limit int = 50, p_after_changed_at timestamptz = null, p_after_id uuid = null)` ← مصفوفة JSON، القدرة `listings.hide` أو `listings.review`. `p_status`: `DRAFT|PUBLISHED|HIDDEN|ARCHIVED|REJECTED` (REJECTED قديم) أو فارغ لكل الحالات؛ غيره `VALIDATION_FAILED`. `p_query`: جزء من العنوان أو اسم المعلن أو المعرف العام `public_ref` أو معرف الإعلان. الترتيب `status_changed_at` تنازليًا؛ الصفحة التالية بتمرير `status_changed_at` و`listing_id` لآخر عنصر. العنصر: `listing_id, public_ref, status, version_id, version_no, published_version_id, has_draft, title, offer_type, price, auction_starts_at, region_id, city_id, owner_id, owner_display_name, owner_status, first_published_at, last_published_at, status_changed_at, deleted_at, created_at, hide_reason_code, hide_reason_text, hidden_at, cover {bucket, object_path}`. العنوان من النسخة المنشورة للمنشور والمخفي.
+  - `admin_get_listing_review(p_listing_id)` (تفاصيل للإعلان بأي حالة): `listing, version, media, published_version, published_media, owner, reviews`. صف النشر التلقائي في `reviews`: `decision = APPROVED` و`reason_text = 'AUTO_PUBLISH'` و`moderator_id` = معرف المعلن؛ يعرض كـ«نشر تلقائي» لا كقرار موظف. عند وجود مسودة تعديل خاصة يكون `version` هو المسودة و`published_version` هو المنشور.
+  - `admin_hide_listing(p_listing_id, p_reason_code, p_reason_text = null)`: القدرة `listings.hide`؛ للمنشور فقط؛ السبب إلزامي من `moderation_reasons` بإجراء `LISTING_HIDE`، والنص إلزامي عند «أخرى». المعلن يُشعَر بالسبب (`listing.hidden`).
+  - `admin_unhide_listing(p_listing_id, p_note = null)`: القدرة `listings.hide`؛ للمخفي فقط؛ ترفض لإعلان صاحب حساب معلق. ملاحظة إعادة الإظهار داخلية ولا تصل المعلن.
+  - مهملة وتبقى دون استخدام: `admin_review_queue` (تعيد `[]`)، `admin_approve_listing_version` و`admin_reject_listing_version` (ترفعان `INVALID_STATE`). تعليق/تفعيل الحساب بلا تغيير.
+- أخطاء متوقعة: `FORBIDDEN` و`MFA_REQUIRED` و`REASON_REQUIRED` و`VALIDATION_FAILED` و`NOT_FOUND` و`INVALID_STATE`.
+- أثر على الإحصاءات: `admin_stats().listings.under_review_now` يبقى 0 (يخفى من اللوحة)؛ `listings.approved` يعد عمليات النشر المباشر (يعاد تسميته «نُشر مباشرة» أو يخفى)؛ `listings.rejected` يتوقف عن الزيادة.
+- معايير القبول: (1) لا شاشة ولا زر لاعتماد أو رفض ولا شارة «قيد المراجعة»؛ (2) قائمة بحث وتصفية بالحالة (منشور/مخفي/مؤرشف/مسودة) بتصفح بالصفحات؛ (3) إخفاء إعلان منشور بسبب من القائمة وإلزام النص عند «أخرى»، وإعادة إظهار المخفي؛ (4) صفحة التفاصيل تعمل للمنشور والمخفي وتعرض سجل القرارات مع «نشر تلقائي» وسبب الإخفاء؛ (5) عرض `contact_phone` و`contact_whatsapp_phone` (INT-007)؛ (6) مثالا العقد `contracts/fixtures/admin-list-listings.json` و`admin-listing-review.json` يحللان دون خطأ.
+- ما يمكن مواصلته مستقلًا: كل أعمال الإدارة الأخرى (الحسابات، البلاغات، الإعدادات).
+- نتيجة التسليم والتحقق: لم تنفذ واجهة الإدارة بعد.

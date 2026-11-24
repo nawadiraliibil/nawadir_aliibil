@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:uuid/uuid.dart';
 import '../../../core/errors/app_error.dart';
+import '../../../core/settings/settings_repository.dart';
 import '../../auth/application/auth_providers.dart';
 import '../data/browse_repository.dart';
 import '../data/listing_card.dart';
@@ -117,6 +119,32 @@ final searchResultsProvider = AsyncNotifierProvider.autoDispose
     .family<SearchResultsNotifier, SearchResults, SearchFilters>(
       SearchResultsNotifier.new,
     );
+
+/// معرف عشوائي لهذا الجهاز، يولد مرة ويحفظ، ليحسب الخادم الزائر غير الداخل
+/// مشاهدة واحدة. لا يحمل بيانات شخصية.
+final deviceViewIdProvider = FutureProvider<String>((ref) async {
+  const key = 'device_view_id.v1';
+  final prefs = ref.read(sharedPreferencesProvider);
+  final saved = await prefs.getString(key);
+  if (saved != null) return saved;
+  final id = const Uuid().v4();
+  await prefs.setString(key, id);
+  return id;
+});
+
+/// يسجل مشاهدة الإعلان عند فتح التفاصيل؛ الخادم يحسبها مرة لكل شخص. الفشل
+/// صامت: العدّاد لا يعطل القراءة.
+final recordListingViewProvider = FutureProvider.autoDispose
+    .family<void, String>((ref, id) async {
+      try {
+        final device = await ref.read(deviceViewIdProvider.future);
+        await ref
+            .read(browseRepositoryProvider)
+            .recordView(id, deviceId: device);
+      } on Object {
+        // لا أثر على المستخدم.
+      }
+    });
 
 /// تفاصيل إعلان منشور. حالة المفضلة تتبع الجلسة، فيعاد الجلب عند الدخول أو الخروج.
 final listingDetailProvider = FutureProvider.autoDispose

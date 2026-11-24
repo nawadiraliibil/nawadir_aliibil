@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,21 +14,38 @@ import '../../../core/widgets/app_note.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../listing/data/listing_repository.dart';
 import '../../listing/presentation/media_image.dart';
+import '../../browse/presentation/listing_stats.dart';
 import '../application/my_listings_providers.dart';
 import '../data/my_listing.dart';
 
 /// إعلاناتي: كل إعلانات صاحب الجلسة بحالاتها.
-class MyListingsScreen extends ConsumerWidget {
+class MyListingsScreen extends ConsumerStatefulWidget {
   const MyListingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyListingsScreen> createState() => _MyListingsScreenState();
+}
+
+/// شرائح التصفية بالحالة (E01): الكل ثم الحالات الأكثر استعمالًا.
+const _statusFilters = <(String, String?)>[
+  ('الكل', null),
+  ('منشور', 'PUBLISHED'),
+  ('مخفي', 'HIDDEN'),
+  ('مؤرشف', 'ARCHIVED'),
+  ('مسودة', 'DRAFT'),
+];
+
+class _MyListingsScreenState extends ConsumerState<MyListingsScreen> {
+  String? _status;
+
+  @override
+  Widget build(BuildContext context) {
     final listings = ref.watch(myListingsProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           tooltip: 'رجوع',
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () =>
               context.canPop() ? context.pop() : context.go(Routes.account),
         ),
@@ -51,16 +69,69 @@ class MyListingsScreen extends ConsumerWidget {
                   actionLabel: 'إعلان جديد',
                   onAction: () => context.push(Routes.postAd),
                 )
-              : RefreshIndicator(
-                  onRefresh: () => ref.refresh(myListingsProvider.future),
-                  child: ListView.separated(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                    itemCount: items.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 12),
-                    itemBuilder: (context, i) =>
-                        MyListingTile(listing: items[i]),
-                  ),
+              : Column(
+                  children: [
+                    SizedBox(
+                      height: 52,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                        children: [
+                          for (final (label, value) in _statusFilters)
+                            Padding(
+                              padding: const EdgeInsetsDirectional.only(end: 8),
+                              child: ChoiceChip(
+                                key: ValueKey('status-${value ?? 'all'}'),
+                                label: Text(label),
+                                selected: _status == value,
+                                onSelected: (_) =>
+                                    setState(() => _status = value),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Builder(
+                        builder: (context) {
+                          final shown = [
+                            for (final l in items)
+                              if (_status == null || l.status == _status) l,
+                          ];
+                          return RefreshIndicator(
+                            onRefresh: () =>
+                                ref.refresh(myListingsProvider.future),
+                            child: shown.isEmpty
+                                ? ListView(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    children: const [
+                                      SizedBox(height: 48),
+                                      Center(
+                                        child: Text('لا إعلانات بهذه الحالة.'),
+                                      ),
+                                    ],
+                                  )
+                                : ListView.separated(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    padding: const EdgeInsets.fromLTRB(
+                                      16,
+                                      8,
+                                      16,
+                                      24,
+                                    ),
+                                    itemCount: shown.length,
+                                    separatorBuilder: (_, _) =>
+                                        const SizedBox(height: 14),
+                                    itemBuilder: (context, i) =>
+                                        MyListingTile(listing: shown[i]),
+                                  ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
         ),
       ),
@@ -111,72 +182,92 @@ class MyListingTile extends ConsumerWidget {
     return Semantics(
       container: true,
       label: '$title، $label',
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: c.soft,
-          borderRadius: BorderRadius.circular(AppShapes.card),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(AppShapes.image),
-                    child: SizedBox.square(
-                      dimension: 72,
-                      child: ExcludeSemantics(
-                        child: MediaImage(
-                          bucket: listing.coverBucket,
-                          path: listing.coverPath,
+      child: Material(
+        color: c.soft,
+        borderRadius: BorderRadius.circular(AppShapes.card),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => context.push(Routes.myListing(listing.listingId)),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(AppShapes.image),
+                      child: SizedBox.square(
+                        dimension: 64,
+                        child: ExcludeSemantics(
+                          child: MediaImage(
+                            bucket: listing.coverBucket,
+                            path: listing.coverPath,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: theme.textTheme.titleMedium,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        if (_offerLine.isNotEmpty)
-                          Text(_offerLine, style: theme.textTheme.bodyMedium),
-                        const SizedBox(height: 6),
-                        Wrap(
-                          spacing: 6,
-                          runSpacing: 4,
-                          children: [
-                            AppBadge(label: label, kind: kind),
-                            if (listing.status == 'PUBLISHED' &&
-                                listing.hasDraft)
-                              const AppBadge(
-                                label: 'تعديل قيد التحرير',
-                                kind: AppBadgeKind.pending,
-                              ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: theme.textTheme.titleMedium,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          if (_offerLine.isNotEmpty)
+                            Text(_offerLine, style: theme.textTheme.bodyMedium),
+                          if (listing.status == 'PUBLISHED') ...[
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                StatLabel(
+                                  icon: Icons.favorite_border,
+                                  count: listing.favoriteCount,
+                                  noun: 'إعجاب',
+                                ),
+                                const SizedBox(width: 12),
+                                StatLabel(
+                                  icon: Icons.visibility_outlined,
+                                  count: listing.viewCount,
+                                  noun: 'مشاهدة',
+                                ),
+                              ],
+                            ),
                           ],
-                        ),
-                      ],
+                          const SizedBox(height: 6),
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 4,
+                            children: [
+                              AppBadge(label: label, kind: kind),
+                              if (listing.status == 'PUBLISHED' &&
+                                  listing.hasDraft)
+                                const AppBadge(
+                                  label: 'تعديل قيد التحرير',
+                                  kind: AppBadgeKind.pending,
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  _Menu(listing: listing),
-                ],
-              ),
-              if (showReason) ...[
-                const SizedBox(height: 10),
-                AppNote(
-                  [?listing.reasonLabel, ?listing.reasonText].join(' — '),
-                  kind: AppNoteKind.error,
+                    _Menu(listing: listing),
+                  ],
                 ),
+                if (showReason) ...[
+                  const SizedBox(height: 10),
+                  AppNote(
+                    [?listing.reasonLabel, ?listing.reasonText].join(' — '),
+                    kind: AppNoteKind.error,
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -216,56 +307,81 @@ class _Menu extends ConsumerWidget {
       onSelected: (a) async {
         switch (a) {
           case _Action.resume:
-            await context.push(
-              Uri(
-                path: Routes.postAd,
-                queryParameters: {'draft': listing.listingId},
-              ).toString(),
-            );
-            ref.invalidate(myListingsProvider);
+            await resumeListingDraft(context, ref, listing);
           case _Action.edit:
-            await context.push(
-              Uri(
-                path: Routes.postAd,
-                queryParameters: {'edit': listing.listingId},
-              ).toString(),
-            );
-            ref.invalidate(myListingsProvider);
+            await editListing(context, ref, listing);
           case _Action.delete:
-            await _confirmDelete(context, ref);
+            await confirmDeleteListing(context, ref, listing);
         }
       },
     );
   }
+}
 
-  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('حذف الإعلان؟'),
-        content: const Text('لن تتمكن من استرجاعه.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('إلغاء'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('حذف'),
-          ),
-        ],
-      ),
-    );
-    if (ok != true) return;
-    try {
-      await ref.read(listingRepositoryProvider).delete(listing.listingId);
-      ref.invalidate(myListingsProvider);
-    } on AppError catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(errorMessage(e))));
-      }
+/// متابعة تحرير مسودة ثم إعادة تحميل القائمة.
+Future<void> resumeListingDraft(
+  BuildContext context,
+  WidgetRef ref,
+  MyListing listing,
+) async {
+  await context.push(
+    Uri(
+      path: Routes.postAd,
+      queryParameters: {'draft': listing.listingId},
+    ).toString(),
+  );
+  ref.invalidate(myListingsProvider);
+}
+
+/// تعديل إعلان (أو تصحيح مرفوض) ثم إعادة تحميل القائمة.
+Future<void> editListing(
+  BuildContext context,
+  WidgetRef ref,
+  MyListing listing,
+) async {
+  await context.push(
+    Uri(
+      path: Routes.postAd,
+      queryParameters: {'edit': listing.listingId},
+    ).toString(),
+  );
+  ref.invalidate(myListingsProvider);
+}
+
+/// حذف بتأكيد؛ يعيد true إذا حُذف الإعلان فعلًا.
+Future<bool> confirmDeleteListing(
+  BuildContext context,
+  WidgetRef ref,
+  MyListing listing,
+) async {
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('حذف الإعلان؟'),
+      content: const Text('لن تتمكن من استرجاعه.'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: const Text('إلغاء'),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: const Text('حذف'),
+        ),
+      ],
+    ),
+  );
+  if (ok != true) return false;
+  try {
+    await ref.read(listingRepositoryProvider).delete(listing.listingId);
+    ref.invalidate(myListingsProvider);
+    return true;
+  } on AppError catch (e) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showApp(errorMessage(e), kind: AppNoteKind.error);
     }
+    return false;
   }
 }

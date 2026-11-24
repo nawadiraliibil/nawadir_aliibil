@@ -15,6 +15,8 @@ class MyListing {
     required this.reasonText,
     required this.nextBumpAt,
     required this.updatedAt,
+    this.viewCount = 0,
+    this.favoriteCount = 0,
   });
 
   factory MyListing.fromJson(Map<String, dynamic> j) => MyListing(
@@ -36,6 +38,8 @@ class MyListing {
         ? null
         : DateTime.parse(j['next_bump_at'] as String),
     updatedAt: DateTime.parse(j['updated_at'] as String),
+    viewCount: j['view_count'] as int? ?? 0,
+    favoriteCount: j['favorite_count'] as int? ?? 0,
   );
 
   final String listingId;
@@ -58,6 +62,8 @@ class MyListing {
   final String? reasonText;
   final DateTime? nextBumpAt;
   final DateTime updatedAt;
+  final int viewCount;
+  final int favoriteCount;
 
   bool get isAuction => offerType == 'IN_PERSON_AUCTION';
   bool get isDraft => status == 'DRAFT';

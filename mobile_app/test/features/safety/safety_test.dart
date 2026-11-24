@@ -21,6 +21,7 @@ Future<void> _openDetail(WidgetTester tester) async {
   tester.view.physicalSize = const Size(800, 3000);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
+  await tester.pumpAndSettle();
   await tester.tap(find.text('إعلان رقم 0 للإبل'));
   await tester.pumpAndSettle();
 }

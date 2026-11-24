@@ -2,6 +2,49 @@
 
 سجل إضافة فقط. الأحدث في الأعلى. كل قيد يذكر المهمة والترحيلات المرتبطة.
 
+## 1.4.0 — 2026-11-24
+
+فرز «الأكثر مشاهدة» (MOBILE-BE-SORT-VIEWS-20261124؛ الترحيل `20261124220000_sort_most_viewed`). إضافي: `search_listings(p_sort => 'MOST_VIEWED')` يرتب بـ`view_count` تنازليًا ثم المعرّف، والمؤشر `{views, id}`. بقية قيم الفرز كما هي (`NEWEST_PUBLISHED` باقية في الخادم دون استخدام في التطبيق).
+
+## 1.3.1 — 2026-11-24
+
+مشاهدة واحدة لكل شخص وعدّادات «إعلاناتي» (MOBILE-BE-VIEWS-UNIQUE-20261124). الترحيل `20261124210000_unique_views`.
+
+- `record_listing_view(p_listing_id uuid, p_device_id uuid default null)`: **يستبدل التوقيع ذا المعامل الواحد** (الاستدعاء بمعامل واحد ما زال يعمل لكنه لا يحسب شيئًا للزائر). المشاهد هو الحساب إن كان داخلًا وإلا `p_device_id` (يولده العميل ويحفظه)؛ التكرار من المشاهد نفسه لا يزيد العدد؛ بلا هوية لا تحسب. جدول `listing_view_log` بلا وصول مباشر.
+- `my_listings`: `view_count` و`favorite_count` في آخره.
+
+## 1.3.0 — 2026-11-24
+
+الموقع الدقيق للمزاد الحضوري وعدّادا المشاهدات والإعجابات (MOBILE-BE-AUCTION-GEO-20261124). إضافي؛ الحقول القديمة باقية. الترحيل `20261124200000_auction_location_stats`.
+
+- `listing_versions.auction_lat` و`auction_lng` (numeric(9,6)، WGS84): يحفظان معًا أو يمسحان معًا، ويمسحان تلقائيًا عند غير المزاد الحضوري (مشغل). `save_listing_draft`: مفتاحا patch جديدان `auction_lat` (‎-90..90) و`auction_lng` (‎-180..180) بنوع number؛ `null` يمسح؛ إحداثي واحد دون الآخر أو خارج النطاق أو نص → `VALIDATION_FAILED`. `submit_listing` للمزاد يلزمه الإحداثيان وإلا `VALIDATION_FAILED` بالحقلين `auction_lat` و`auction_lng`. **أثر على النسخ المنشورة قبل الترحيل:** بلا إحداثيات؛ إعادة نشر أي تعديل لمزاد قديم تلزم المعلن بإضافتها. `start_listing_edit` ينسخ الإحداثيين.
+- `listing_stats(listing_id, view_count, favorite_count)`: جدول بلا وصول مباشر. `favorite_count` يصونه مشغل على `favorites`؛ `view_count` تزيده الدالة الجديدة `record_listing_view(p_listing_id uuid) returns integer` (زائر ومستخدم؛ غير المنشور `NOT_FOUND`؛ مشاهدة المعلن لإعلانه لا تحسب). لا تمنع الخادم تكرار الاستدعاء المتعمد؛ العميل يستدعيها مرة لكل فتح للتفاصيل (قبول مؤقت، لا حد معدل).
+- `public_listing_cards` و`public_listing_details` و`my_favorites` و`search_listings` (عنصر النتيجة) و`get_listing`: أربعة حقول في الآخر — `auction_lat` و`auction_lng` (فارغان لغير المزاد) و`view_count` و`favorite_count` (فارغان في `my_favorites` للإعلان غير المتاح). المسافة عن المستخدم يحسبها العميل من موقع جهازه.
+- المخططات: `listing-draft-patch` و`listing-owner` و`public-listing-card` و`public-listing-details` و`my-favorite`؛ أمثلة الإعلان والبطاقة والتفاصيل والمفضلة والبحث؛ `rpc.yaml` بـ85 دالة؛ الأنواع المولدة.
+
+## 1.2.0 — 2026-11-24
+
+النشر المباشر دون اعتماد إداري (TEAM-DEC-013؛ MOBILE-BE-DIRECT-PUBLISH-20261124). **كاسر سلوكيًا بلا تغيير توقيع:** `submit_listing` يعيد إعلانًا منشورًا لا «قيد المراجعة». الترحيل `20261124100000_direct_publish` مطبق محليًا بانتظار الدفع.
+
+- `submit_listing(p_listing_id, p_request_id)`: بكل الفحوص السابقة (اكتمال الحقول، الوسائط الجاهزة، رقم تواصل واحد على الأقل، مزاد بموعد مستقبلي، حد 5 إعلانات جديدة/24 ساعة عند أول إرسال، موافقة السياسات، بصمة المحتوى) ينشر ذريًا: `DRAFT` -> `PUBLISHED`؛ `PUBLISHED` بمسودة تعديل -> تسري النسخة الجديدة فورًا (يبقى الإعلان ظاهرًا ولا يرتفع ترتيبه ولا يتغير `first_published_at` ولا `last_published_at`)؛ `ARCHIVED` أو `REJECTED` (قديم) بعد `start_listing_edit` -> `PUBLISHED`. الرد نفسه (`listing` و`version` و`media`) بقيم جديدة: `listing.status = PUBLISHED`، `listing.published_version_id = listing.current_version_id`، `listing.first_published_at` و`last_published_at` و`next_bump_at` غير فارغة، `version.status = APPROVED` و`version.decided_at` غير فارغ. `HIDDEN` يرفع `INVALID_STATE` (لا يتجاوز المعلن الإخفاء الإداري، ولا يعدل مخفيًا).
+- الحالتان `UNDER_REVIEW` و`REJECTED` ملغاتان للإعلانات الجديدة: تبقى قيمتاهما في `listing_status` (و`SUBMITTED` و`REJECTED` في `listing_version_status`) للتوافق دون إنتاج. قيد قاعدة يمنع `UNDER_REVIEW`؛ الموجود منه حُوِّل في الترحيل إلى `PUBLISHED` (أو `HIDDEN` لصاحب حساب معلق). `REJECTED` الموجود يبقى؛ `start_listing_edit` يعيده مسودة ثم الإرسال ينشر.
+- إشعار `follow.new_listing`: يطلق عند النشر المباشر الأول بالشروط نفسها (لا تعديل ولا تجديد ولا مزاد ماضٍ ولا محظور). الحدثان `listing.approved` و`listing.rejected` لا يُنتجان بعد اليوم (بقيا في القوائم للتوافق)؛ `listing.hidden` و`listing.unhidden` باقيان بسبب الإخفاء.
+- سجل `reviews`: النشر التلقائي صف بـ`decision = APPROVED` و`reason_text = 'AUTO_PUBLISH'` و`moderator_id` = معرف المعلن (لا قيمة جديدة في `review_decision`). لا صف في `audit_log`. `admin_stats.listings.approved` يعد هذه الصفوف (نشر مباشر)، و`under_review_now` يبقى 0.
+- دالة جديدة `admin_list_listings(p_status, p_query, p_limit, p_after_changed_at, p_after_id)` (القدرة `listings.hide` أو `listings.review`): كل الإعلانات بتصفية بالحالة (`DRAFT|PUBLISHED|HIDDEN|ARCHIVED|REJECTED`) وبحث بالعنوان أو اسم المعلن أو `public_ref` أو معرف الإعلان، والأحدث تغيّرًا أولًا؛ العنصر يضم سبب الإخفاء الأخير للمخفي. `admin_get_listing_review` يعمل لأي حالة.
+- مهملة (باقية بلا حذف): `admin_approve_listing_version` و`admin_reject_listing_version` ترفعان `INVALID_STATE` دائمًا (بعد فحص الدور؛ `NOT_FOUND` لإعلان غير موجود)، و`admin_review_queue` تعيد `[]`. رمز `VERSION_CHANGED` باق دون إنتاج.
+- الملفات: `api/rpc.yaml` (84 دالة؛ ملاحظات `submit_listing` والمهملات و`admin_list_listings`)، `api/states.md`، `api/read-surface.md`، `api/events.json`، الأمثلة `listing-owner-submitted` و`admin-listing-review` (منشوران) و`admin-review-queue` (`[]`) و`admin-list-listings` (جديد) و`admin-unhidden-listing` (حل محل `admin-approved-listing`)، والأنواع المولدة. `enums.json` والمخططات بلا تغيير لأن القيم باقية. المثال `error-version-changed` ثابت (لم يعد الخادم ينتجه). أمثلة الإعلان عُدلت يدويًا ولم يعد توليدها من الخادم (`build_fixtures.mjs` محدّث للتدفق الجديد ولم يشغل).
+
+## 1.1.0 — 2026-11-23
+
+رقم واتساب مستقل عن رقم الاتصال (TEAM-DEC-012؛ MOBILE-BE-WA-20261123). إضافي: الحقول القديمة باقية. الترحيل `20261123180000_whatsapp_phone` مطبق محليًا بانتظار الدفع.
+
+- `listing_versions.contact_whatsapp_phone` عمود جديد بالقيد نفسه (`+9665XXXXXXXX`). `contact_phone` صار رقم الاتصال فقط. العمودان `contact_call_enabled` و`contact_whatsapp_enabled` باقيان في الجدول والمخرجات بقيمة مشتقة بمشغل (اتصال = `contact_phone` غير فارغ؛ واتساب = `contact_whatsapp_phone` غير فارغ).
+- `save_listing_draft`: مفتاح patch جديد `contact_whatsapp_phone` بالتنظيف والتحقق نفسيهما لرقم الاتصال؛ `null` يمسحه. مفتاحا `contact_call_enabled` و`contact_whatsapp_enabled` يقبلان ويحوَّلان إن لم يرد `contact_whatsapp_phone` في الطلب: واتساب=true ينسخ رقم الاتصال إلى رقم واتساب، واتساب=false يمسح رقم واتساب، اتصال=false يمسح رقم الاتصال. وقت الموافقة `contact_consent_at` يحفظه الخادم عند تغير أي من الرقمين ويمسح إن فرغا.
+- `submit_listing`: يلزم أحد الرقمين على الأقل مع `contact_consent_at`؛ وإلا `VALIDATION_FAILED` بالحقلين `contact_phone` و`contact_whatsapp_phone` (حل محل `contact_channels`). قيد `listing_versions_complete_when_submitted` محدّث. نسخة التعديل (`start_listing_edit`) تنسخ الرقمين. بصمة المحتوى تتضمن رقم واتساب.
+- `public_listing_details` و`get_listing` ومخرجات المالك (`listing_owner`) و`admin_get_listing_review`: العمود/المفتاح `contact_whatsapp_phone` (في آخر `public_listing_details`). **تغيير دلالي ينتبه له العميل:** `contact_phone` قد يكون `null` الآن (إعلان بواتساب فقط).
+- ترحيل البيانات: `contact_whatsapp_enabled`=true نُسخ رقمه إلى `contact_whatsapp_phone`؛ `contact_call_enabled`=false فُرّغ `contact_phone`.
+- المخططات: `listing-draft-patch` و`listing-owner` و`public-listing-details` (`contact_phone` يقبل null)؛ أمثلة `listing-detail` و`listing-owner-draft` و`listing-owner-submitted` و`listing-draft-patch` و`public-listing-details` و`admin-listing-review` بالحقل الجديد (رقم واتساب مختلف عن رقم الاتصال)؛ `rpc.yaml` (ملاحظتا `save_listing_draft` و`submit_listing`) و`read-surface.md`؛ الأنواع المولدة.
+
 ## 1.0.0 — 2026-11-24
 
 الإصدار المستقر الأول (MOBILE-CON-401): سطح المرحلة M4 — التقييمات وإحصاءات الإدارة — فوق 0.1.0 إلى 0.3.0. التغييرات إضافية؛ رُفع الإصدار الرئيسي لأن كامل سطح الجوال صار مغطى ومختبرًا. الترحيلان `ratings` و`admin_stats` منشوران على مشروع التطوير.

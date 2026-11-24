@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
@@ -10,7 +11,9 @@ import '../../../core/errors/app_error.dart';
 import '../../../core/errors/error_messages.dart';
 import '../../../core/format/money.dart';
 import '../../../core/settings/settings_repository.dart';
+import '../../../core/widgets/app_badge.dart';
 import '../../../core/widgets/app_note.dart';
+import '../../../core/widgets/section_title.dart';
 import '../../auth/application/auth_providers.dart';
 import '../../browse/application/browse_providers.dart';
 import '../../browse/data/listing_detail.dart';
@@ -49,14 +52,11 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
 
   void _toast(Object e) {
     final err = AppError.from(e);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          err.code == AppErrorCode.notFound
-              ? 'تعذّر تنفيذ الإجراء: العنصر لم يعد متاحًا.'
-              : errorMessage(err),
-        ),
-      ),
+    ScaffoldMessenger.of(context).showApp(
+      err.code == AppErrorCode.notFound
+          ? 'تعذّر تنفيذ الإجراء: العنصر لم يعد متاحًا.'
+          : errorMessage(err),
+      kind: AppNoteKind.error,
     );
   }
 
@@ -169,24 +169,30 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                'الأسئلة والردود',
-                style: theme.textTheme.titleMedium,
-              ),
-            ),
-            if (isOwner)
-              TextButton(
-                key: const ValueKey('comments-toggle-closed'),
-                onPressed: _toggleClosed,
-                child: Text(
-                  d.commentsClosed ? 'فتح الردود' : 'إغلاق الردود الجديدة',
-                ),
-              ),
-          ],
+        SectionTitle(
+          'الأسئلة والردود',
+          trailing: isOwner
+              ? OutlinedButton.icon(
+                  key: const ValueKey('comments-toggle-closed'),
+                  onPressed: _toggleClosed,
+                  style: OutlinedButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    textStyle: theme.textTheme.labelMedium,
+                  ),
+                  icon: Icon(
+                    d.commentsClosed
+                        ? Icons.lock_open_outlined
+                        : Icons.lock_outline,
+                    size: 16,
+                  ),
+                  label: Text(
+                    d.commentsClosed ? 'فتح الردود' : 'إغلاق الردود الجديدة',
+                  ),
+                )
+              : null,
         ),
+        const SizedBox(height: 8),
         if (d.commentsClosed)
           const Padding(
             padding: EdgeInsets.only(bottom: 8),
@@ -242,30 +248,73 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
             child: const Text('سجّل الدخول لإضافة رد'),
           )
         else if (!isOwner && !d.commentsClosed)
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: TextField(
-                  key: const ValueKey('comment-input'),
-                  controller: _input,
-                  minLines: 1,
-                  maxLines: 4,
-                  maxLength: max,
-                  decoration: const InputDecoration(
-                    hintText: 'اكتب سؤالك أو ردّك',
+          DecoratedBox(
+            decoration: ShapeDecoration(
+              color: c.soft,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(28)),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(6, 6, 18, 6),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      key: const ValueKey('comment-input'),
+                      controller: _input,
+                      minLines: 1,
+                      maxLines: 4,
+                      maxLength: max,
+                      // العدّاد يظهر عند الاقتراب من الحد فقط.
+                      buildCounter:
+                          (
+                            _, {
+                            required currentLength,
+                            required isFocused,
+                            required maxLength,
+                          }) =>
+                              maxLength != null &&
+                                  currentLength >= maxLength * 0.8
+                              ? Text(
+                                  '$currentLength/$maxLength',
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: c.muted,
+                                  ),
+                                )
+                              : null,
+                      decoration: const InputDecoration(
+                        hintText: 'اكتب سؤالك أو ردّك',
+                        filled: false,
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(vertical: 10),
+                      ),
+                      onChanged: (_) => setState(() {}),
+                    ),
                   ),
-                  onChanged: (_) => setState(() {}),
-                ),
+                  const SizedBox(width: 8),
+                  IconButton.filled(
+                    key: const ValueKey('comment-send'),
+                    tooltip: 'نشر',
+                    style: IconButton.styleFrom(
+                      backgroundColor: c.button,
+                      foregroundColor: c.buttonText,
+                      disabledBackgroundColor: c.surface,
+                      disabledForegroundColor: c.muted,
+                      fixedSize: const Size.square(44),
+                    ),
+                    icon: const Icon(Icons.send_outlined, size: 20),
+                    onPressed: _input.text.trim().isEmpty || _busy
+                        ? null
+                        : _post,
+                  ),
+                ],
               ),
-              const SizedBox(width: 8),
-              IconButton.filled(
-                key: const ValueKey('comment-send'),
-                tooltip: 'نشر',
-                icon: const Icon(Icons.send),
-                onPressed: _input.text.trim().isEmpty || _busy ? null : _post,
-              ),
-            ],
+            ),
           ),
       ],
     );
@@ -294,47 +343,54 @@ class _ThreadTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: c.soft,
-          borderRadius: BorderRadius.circular(AppShapes.card),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _CommentBody(
-                comment: thread.root,
-                mine: myId == thread.root.authorId,
-                onEdit: onEdit,
-                onDelete: onDelete,
-                onReport: onReport,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: c.hair)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _CommentBody(
+              comment: thread.root,
+              mine: myId == thread.root.authorId,
+              onEdit: onEdit,
+              onDelete: onDelete,
+              onReport: onReport,
+            ),
+            for (final r in thread.replies)
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 30, top: 10),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: c.soft,
+                    borderRadius: BorderRadius.circular(AppShapes.image),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: _CommentBody(
+                      comment: r,
+                      mine: myId == r.authorId,
+                      onEdit: onEdit,
+                      onDelete: onDelete,
+                      onReport: onReport,
+                      avatar: false,
+                    ),
+                  ),
+                ),
               ),
-              for (final r in thread.replies)
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 16, top: 8),
-                  child: _CommentBody(
-                    comment: r,
-                    mine: myId == r.authorId,
-                    onEdit: onEdit,
-                    onDelete: onDelete,
-                    onReport: onReport,
-                  ),
+            if (canReply)
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: TextButton.icon(
+                  key: ValueKey('reply-${thread.root.id}'),
+                  onPressed: onReply,
+                  icon: const Icon(Icons.reply, size: 18),
+                  label: const Text('رد'),
                 ),
-              if (canReply)
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: TextButton(
-                    key: ValueKey('reply-${thread.root.id}'),
-                    onPressed: onReply,
-                    child: const Text('رد'),
-                  ),
-                ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );
@@ -348,9 +404,11 @@ class _CommentBody extends StatelessWidget {
     required this.onEdit,
     required this.onDelete,
     required this.onReport,
+    this.avatar = true,
   });
 
   final Comment comment;
+  final bool avatar;
   final bool mine;
   final void Function(Comment) onReport;
   final void Function(Comment) onEdit;
@@ -370,35 +428,54 @@ class _CommentBody extends StatelessWidget {
       children: [
         Row(
           children: [
-            Flexible(
-              child: Text(
-                comment.displayName,
-                style: theme.textTheme.titleSmall,
-                overflow: TextOverflow.ellipsis,
+            Expanded(
+              child: Row(
+                children: [
+                  if (avatar && comment.displayName.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(end: 8),
+                      child: CircleAvatar(
+                        radius: 16,
+                        backgroundColor: c.soft,
+                        child: Text(
+                          comment.displayName.characters.first,
+                          style: theme.textTheme.labelLarge,
+                        ),
+                      ),
+                    ),
+                  Flexible(
+                    child: Text(
+                      comment.displayName,
+                      style: theme.textTheme.titleSmall,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (comment.isOwner)
+                    const Padding(
+                      padding: EdgeInsetsDirectional.only(start: 6),
+                      child: AppBadge(
+                        label: 'المعلن',
+                        kind: AppBadgeKind.pending,
+                      ),
+                    ),
+                  const SizedBox(width: 8),
+                  Text(
+                    formatShortTime(comment.createdAt),
+                    style: theme.textTheme.bodySmall?.copyWith(color: c.muted),
+                  ),
+                  if (comment.editedAt != null && comment.isVisible)
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 6),
+                      child: Text(
+                        'معدّل',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: c.muted,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
-            if (comment.isOwner)
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 6),
-                child: Text(
-                  'المعلن',
-                  style: theme.textTheme.labelSmall?.copyWith(color: c.gold),
-                ),
-              ),
-            const SizedBox(width: 8),
-            Text(
-              formatShortTime(comment.createdAt),
-              style: theme.textTheme.bodySmall?.copyWith(color: c.muted),
-            ),
-            if (comment.editedAt != null && comment.isVisible)
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 6),
-                child: Text(
-                  'معدّل',
-                  style: theme.textTheme.bodySmall?.copyWith(color: c.muted),
-                ),
-              ),
-            const Spacer(),
             if (!mine && comment.isVisible)
               PopupMenuButton<String>(
                 key: ValueKey('comment-report-menu-${comment.id}'),

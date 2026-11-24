@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_shapes.dart';
+import '../../../core/location/map_widgets.dart';
 import '../../../core/settings/published_settings.dart';
 import '../../../core/settings/settings_repository.dart';
 import '../../../core/widgets/app_note.dart';
@@ -10,6 +12,7 @@ import '../../auth/domain/saudi_phone.dart';
 import '../application/post_controller.dart';
 import '../data/draft_form.dart';
 import '../domain/draft_validation.dart';
+import 'location_picker_screen.dart';
 import 'step_widgets.dart';
 
 /// أساس الخطوات: الوصول إلى المتحكم والإعدادات المنشورة.
@@ -48,17 +51,15 @@ class OfferStep extends ConsumerWidget {
     }
 
     return StepFrame(
-      onContinue: () async {
-        final t = state.form.offerType;
-        if (t != null) await choose(t);
-      },
-      continueLabel: 'متابعة',
+      // اختيار البطاقة هو المتابعة (D01).
+      onContinue: null,
       onSaveDraft: state.form.offerType == null ? null : onSaveDraft,
       children: [
         _OfferCard(
           title: 'سعر محدد',
           subtitle: 'أدخل السعر المطلوب',
           icon: Icons.sell_outlined,
+          tint: DraftForm.offerFixed,
           selected: state.form.offerType == DraftForm.offerFixed,
           onTap: state.busy ? null : () => choose(DraftForm.offerFixed),
         ),
@@ -66,7 +67,8 @@ class OfferStep extends ConsumerWidget {
         _OfferCard(
           title: 'مزاد حضوري',
           subtitle: 'حدد المكان والموعد',
-          icon: Icons.gavel_outlined,
+          icon: Icons.schedule_outlined,
+          tint: DraftForm.offerAuction,
           selected: state.form.offerType == DraftForm.offerAuction,
           onTap: state.busy ? null : () => choose(DraftForm.offerAuction),
         ),
@@ -80,6 +82,7 @@ class _OfferCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.icon,
+    required this.tint,
     required this.selected,
     required this.onTap,
   });
@@ -87,6 +90,9 @@ class _OfferCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData icon;
+
+  /// نوع العرض؛ يحدد لون مربع الأيقونة (ذهبي للسعر، أزرق للمزاد).
+  final String tint;
   final bool selected;
   final VoidCallback? onTap;
 
@@ -94,40 +100,50 @@ class _OfferCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final theme = Theme.of(context);
+    final auction = tint == DraftForm.offerAuction;
     return Semantics(
       button: true,
       selected: selected,
       label: '$title، $subtitle',
       excludeSemantics: true,
       onTap: onTap,
-      child: InkWell(
-        onTap: onTap,
+      child: Material(
+        color: c.soft,
         borderRadius: BorderRadius.circular(AppShapes.card),
-        child: Container(
-          constraints: const BoxConstraints(minHeight: 72),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: selected ? c.tintGold : c.soft,
-            borderRadius: BorderRadius.circular(AppShapes.card),
-            border: Border.all(
-              color: selected ? c.gold : c.line,
-              width: selected ? 2 : 1,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppShapes.card),
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 76),
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppShapes.card),
+              border: selected ? Border.all(color: c.gold, width: 2) : null,
             ),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, color: c.gold),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: theme.textTheme.titleMedium),
-                    Text(subtitle, style: theme.textTheme.bodyMedium),
-                  ],
+            child: Row(
+              children: [
+                Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    color: auction ? c.tintBlue : c.tintGold,
+                    borderRadius: BorderRadius.circular(AppShapes.field),
+                  ),
+                  child: Icon(icon, color: auction ? c.info : c.gold),
                 ),
-              ),
-            ],
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title, style: theme.textTheme.titleMedium),
+                      Text(subtitle, style: theme.textTheme.bodySmall),
+                    ],
+                  ),
+                ),
+                Icon(Icons.arrow_forward_ios_rounded, size: 14, color: c.muted),
+              ],
+            ),
           ),
         ),
       ),
@@ -206,21 +222,42 @@ class _DataStepState extends _StepState<DataStep> {
             error: errorOf(errors, 'breed_note'),
             onChanged: (v) => post.set('breed_note', v),
           ),
-        DraftDropdown<String>(
-          label: 'الجنس',
-          value: f.sex,
-          items: const {'MALE': 'ذكر', 'FEMALE': 'أنثى'},
-          error: errorOf(errors, 'sex'),
-          onChanged: (v) => post.set('sex', v),
-        ),
-        DraftTextField(
-          controller: _age,
-          label: 'العمر · شهر',
-          hint: '36',
-          keyboardType: TextInputType.number,
-          ltr: true,
-          error: errorOf(errors, 'age_months'),
-          onChanged: (v) => post.set('age_months', DraftValidation.parseInt(v)),
+        // الجنس والعمر جنبًا إلى جنب (D02)، وفي عمود عند تكبير النص.
+        LayoutBuilder(
+          builder: (context, box) {
+            final sex = DraftDropdown<String>(
+              label: 'الجنس',
+              value: f.sex,
+              items: const {'MALE': 'ذكر', 'FEMALE': 'أنثى'},
+              error: errorOf(errors, 'sex'),
+              onChanged: (v) => post.set('sex', v),
+            );
+            final age = DraftTextField(
+              controller: _age,
+              label: 'العمر · شهر',
+              hint: '36',
+              keyboardType: TextInputType.number,
+              ltr: true,
+              error: errorOf(errors, 'age_months'),
+              onChanged: (v) =>
+                  post.set('age_months', DraftValidation.parseInt(v)),
+            );
+            final stacked = MediaQuery.textScalerOf(context).scale(14) > 18;
+            if (stacked) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [sex, age],
+              );
+            }
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: sex),
+                const SizedBox(width: 12),
+                Expanded(child: age),
+              ],
+            );
+          },
         ),
         DraftTextField(
           controller: _color,
@@ -429,6 +466,7 @@ class _DetailsStepState extends _StepState<DetailsStep> {
           controller: _price,
           label: 'السعر المطلوب · ريال',
           hint: '48,000',
+          help: 'أدخل مبلغًا موجبًا.',
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ltr: true,
           error: errorOf(errors, 'price'),
@@ -465,11 +503,24 @@ class _DetailsStepState extends _StepState<DetailsStep> {
           error: errorOf(errors, 'auction_venue'),
           onChanged: (v) => post.set('auction_venue', v),
         ),
+        _AuctionLocationField(
+          lat: f.auctionLat,
+          lng: f.auctionLng,
+          error:
+              errorOf(errors, 'auction_location') ??
+              errorOf(errors, 'auction_lat') ??
+              errorOf(errors, 'auction_lng'),
+          onPicked: (p) => post.setAll({
+            'auction_lat': p.latitude,
+            'auction_lng': p.longitude,
+          }),
+        ),
         Row(
           children: [
             Expanded(
               child: _PickerField(
                 label: 'التاريخ',
+                icon: Icons.calendar_today_outlined,
                 value: local == null
                     ? null
                     : '${local.day}/${local.month}/${local.year}',
@@ -480,6 +531,7 @@ class _DetailsStepState extends _StepState<DetailsStep> {
             Expanded(
               child: _PickerField(
                 label: 'الوقت',
+                icon: Icons.schedule_outlined,
                 value: local == null
                     ? null
                     : '${local.hour.toString().padLeft(2, '0')}:'
@@ -535,34 +587,124 @@ class _DetailsStepState extends _StepState<DetailsStep> {
   );
 }
 
+/// الموقع الدقيق للمزاد: زر يفتح الخريطة، وبعد الاختيار معاينة مصغرة قابلة للتعديل.
+class _AuctionLocationField extends StatelessWidget {
+  const _AuctionLocationField({
+    required this.lat,
+    required this.lng,
+    required this.error,
+    required this.onPicked,
+  });
+
+  final double? lat;
+  final double? lng;
+  final String? error;
+  final ValueChanged<LatLng> onPicked;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final point = lat != null && lng != null ? LatLng(lat!, lng!) : null;
+
+    Future<void> pick() async {
+      final picked = await Navigator.of(context).push<LatLng>(
+        MaterialPageRoute(builder: (_) => LocationPickerScreen(initial: point)),
+      );
+      if (picked != null) onPicked(picked);
+    }
+
+    return LabeledField(
+      label: 'الموقع الدقيق على الخريطة',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (point == null)
+            OutlinedButton.icon(
+              key: const ValueKey('pick-location'),
+              onPressed: pick,
+              icon: const Icon(Icons.add_location_alt_outlined),
+              label: const Text('تحديد الموقع على الخريطة'),
+            )
+          else ...[
+            MiniMap(
+              key: const ValueKey('location-preview'),
+              point: point,
+              onTap: pick,
+            ),
+            TextButton.icon(
+              key: const ValueKey('edit-location'),
+              onPressed: pick,
+              icon: const Icon(Icons.edit_location_alt_outlined),
+              label: const Text('تعديل الموقع'),
+            ),
+          ],
+          if (error != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Text(
+                error!,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: c.error),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 class _PickerField extends StatelessWidget {
   const _PickerField({
     required this.label,
+    required this.icon,
     required this.value,
     required this.onTap,
   });
 
   final String label;
+  final IconData icon;
   final String? value;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppShapes.field),
-      child: InputDecorator(
-        decoration: InputDecoration(labelText: label),
-        child: Text(
-          value ?? 'اختر',
-          style: value == null ? TextStyle(color: context.colors.muted) : null,
+    final c = context.colors;
+    return LabeledField(
+      label: label,
+      child: Material(
+        color: c.soft,
+        borderRadius: BorderRadius.circular(AppShapes.field),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppShapes.field),
+          child: Container(
+            constraints: const BoxConstraints(
+              minHeight: AppShapes.minTouchTarget,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    value ?? 'اختر',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: value == null ? c.muted : null,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(icon, size: 18, color: c.text),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-/// D08 — رقم التواصل. رقم واحد بقناتين: اتصال وواتساب.
+/// D08 — رقم التواصل: رقم اتصال ورقم واتساب مستقلان، ويلزم أحدهما (TEAM-DEC-012).
 class ContactStep extends ConsumerStatefulWidget {
   const ContactStep({super.key, required this.onSaveDraft});
 
@@ -574,6 +716,7 @@ class ContactStep extends ConsumerStatefulWidget {
 
 class _ContactStepState extends _StepState<ContactStep> {
   final _phone = TextEditingController();
+  final _whatsapp = TextEditingController();
 
   static String _display(String? stored) =>
       stored == null ? '' : SaudiPhone.tryParse(stored)?.local ?? stored;
@@ -583,16 +726,13 @@ class _ContactStepState extends _StepState<ContactStep> {
     super.initState();
     final initial = ref.read(postControllerProvider).form;
     _phone.text = _display(initial.contactPhone);
-    // قناة الاتصال مفعلة افتراضيًا في إعلان جديد.
-    final f = ref.read(postControllerProvider).form;
-    if (f.contactPhone == null && !f.callEnabled && !f.whatsappEnabled) {
-      Future(() => post.set('contact_call_enabled', true));
-    }
+    _whatsapp.text = _display(initial.whatsappPhone);
   }
 
   @override
   void dispose() {
     _phone.dispose();
+    _whatsapp.dispose();
     super.dispose();
   }
 
@@ -606,8 +746,9 @@ class _ContactStepState extends _StepState<ContactStep> {
       onSaveDraft: widget.onSaveDraft,
       children: [
         DraftTextField(
+          key: const ValueKey('contact-call-field'),
           controller: _phone,
-          label: 'رقم الجوال',
+          label: 'رقم الاتصال',
           hint: '5X XXX XXXX',
           keyboardType: TextInputType.phone,
           ltr: true,
@@ -618,23 +759,30 @@ class _ContactStepState extends _StepState<ContactStep> {
             post.set('contact_phone', parsed?.local ?? (v.isEmpty ? null : v));
           },
         ),
-        SwitchListTile(
-          contentPadding: EdgeInsets.zero,
-          title: const Text('اتصال هاتفي'),
-          value: f.callEnabled,
-          onChanged: (v) => post.set('contact_call_enabled', v),
+        DraftTextField(
+          key: const ValueKey('contact-whatsapp-field'),
+          controller: _whatsapp,
+          label: 'رقم واتساب',
+          hint: '5X XXX XXXX',
+          keyboardType: TextInputType.phone,
+          ltr: true,
+          prefix: '+966 · ',
+          error: errorOf(errors, 'contact_whatsapp_phone'),
+          onChanged: (v) {
+            final parsed = SaudiPhone.tryParse(v);
+            post.set(
+              'contact_whatsapp_phone',
+              parsed?.local ?? (v.isEmpty ? null : v),
+            );
+          },
         ),
-        SwitchListTile(
-          contentPadding: EdgeInsets.zero,
-          title: const Text('واتساب'),
-          value: f.whatsappEnabled,
-          onChanged: (v) => post.set('contact_whatsapp_enabled', v),
-        ),
-        if (errorOf(errors, 'contact_channels') case final msg?)
+        if (errorOf(errors, 'contact_channels') case final msg?) ...[
+          const SizedBox(height: 8),
           AppNote(msg, kind: AppNoteKind.error),
-        const SizedBox(height: 8),
+        ],
+        const SizedBox(height: 16),
         const AppNote(
-          'الرقم الذي تدخله سيظهر في الإعلان لمن يشاهده. لا يُؤخذ رقم دخولك تلقائيًا.',
+          'الأرقام التي تدخلها ستظهر في الإعلان لمن يشاهده. الرقمان مستقلان: يمكن أن يختلف رقم واتساب عن رقم الاتصال، ويكفي أحدهما. لا يُؤخذ رقم دخولك تلقائيًا.',
         ),
       ],
     );

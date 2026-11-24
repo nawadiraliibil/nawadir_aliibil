@@ -46,7 +46,7 @@ class PostState {
   final bool busy;
   final AppError? error;
 
-  /// أُرسل الإعلان للمراجعة (D11).
+  /// نُشر الإعلان مباشرة (D11).
   final bool submitted;
 
   /// هل في الجهاز ما لم يحفظ بعد.
@@ -101,6 +101,8 @@ class PostController extends Notifier<PostState> {
         'auction_city_id': null,
         'auction_venue': null,
         'auction_starts_at': null,
+        'auction_lat': null,
+        'auction_lng': null,
       } else
         'price': null,
     });
@@ -148,7 +150,7 @@ class PostController extends Notifier<PostState> {
     }
   }
 
-  /// يحفظ الإقرار ثم يرسل للمراجعة. `true` عند النجاح؛ عند الفشل يبقى الخطأ
+  /// يحفظ الإقرار ثم ينشر الإعلان مباشرة. `true` عند النجاح؛ عند الفشل يبقى الخطأ
   /// في [PostState.error].
   Future<bool> submit() async {
     if (!await save(DraftKeys.declaration)) return false;

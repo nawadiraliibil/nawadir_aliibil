@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/theme/app_colors.dart';
 import '../../../core/format/digits.dart';
+import '../../../core/widgets/section_title.dart';
 import '../../../core/settings/published_settings.dart';
 import '../../../core/settings/settings_repository.dart';
 import '../data/listing_card.dart';
 
-/// ورقة المرشحات والفرز (B04). تعيد المرشحات الجديدة عند «تطبيق»، أو `null`
-/// عند الإغلاق دون تطبيق.
+/// صفحة التصفية (B03)؛ الترتيب في صفحة مستقلة (sort_sheet.dart). تعيد المرشحات الجديدة عند «عرض النتائج»،
+/// أو null عند الرجوع دون تطبيق.
 Future<SearchFilters?> showFilterSheet(
   BuildContext context,
   SearchFilters current,
-) => showModalBottomSheet<SearchFilters>(
-  context: context,
-  isScrollControlled: true,
-  showDragHandle: true,
-  builder: (_) => FilterSheet(initial: current),
+) => Navigator.of(context, rootNavigator: true).push<SearchFilters>(
+  MaterialPageRoute(builder: (_) => FilterSheet(initial: current)),
 );
 
 class FilterSheet extends ConsumerStatefulWidget {
@@ -106,94 +105,140 @@ class _FilterSheetState extends ConsumerState<FilterSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final settings = ref.watch(publishedSettingsProvider).value;
     final lookups = settings?.lookups;
     final cities = (lookups != null && _f.regionId != null)
         ? lookups.citiesOf(_f.regionId!)
         : const <City>[];
     final pricing = _priceMin.text.isNotEmpty || _priceMax.text.isNotEmpty;
+    final theme = Theme.of(context);
+    // قيمة القائمة بوزن النص العادي لا بوزن العناوين.
+    final valueStyle = theme.textTheme.bodyLarge;
 
-    return DraggableScrollableSheet(
-      expand: false,
-      initialChildSize: 0.92,
-      maxChildSize: 0.95,
-      builder: (context, scroll) => Column(
-        children: [
-          Expanded(
-            child: ListView(
-              controller: scroll,
-              padding: EdgeInsets.fromLTRB(
-                16,
-                0,
-                16,
-                16 + MediaQuery.viewInsetsOf(context).bottom,
-              ),
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'المرشحات والفرز',
-                        style: theme.textTheme.titleLarge,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: _clear,
-                      child: const Text('مسح الكل'),
-                    ),
-                  ],
+    Widget gap([double h = 20]) => SizedBox(height: h);
+    Widget chips(List<Widget> children) =>
+        Wrap(spacing: 8, runSpacing: 8, children: children);
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          tooltip: 'رجوع',
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const Text('تصفية الإعلانات'),
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.fromLTRB(
+                  16,
+                  8,
+                  16,
+                  16 + MediaQuery.viewInsetsOf(context).bottom,
                 ),
-                const SizedBox(height: 8),
-                Text('الفرز', style: theme.textTheme.titleSmall),
-                Wrap(
-                  spacing: 8,
-                  children: [
-                    for (final s in SearchSort.values)
-                      ChoiceChip(
-                        label: Text(s.label),
-                        selected: _f.sort == s,
-                        onSelected: (_) =>
-                            setState(() => _f = _f.copyWith(sort: s)),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Text('نوع العرض', style: theme.textTheme.titleSmall),
-                Wrap(
-                  spacing: 8,
-                  children: [
-                    ChoiceChip(
-                      label: const Text('الكل'),
-                      selected: _f.offerType == null,
-                      onSelected: (_) =>
-                          setState(() => _f = _f.copyWith(offerType: null)),
-                    ),
-                    ChoiceChip(
-                      label: const Text('سعر محدد'),
-                      selected: _f.offerType == 'FIXED_PRICE',
-                      onSelected: (_) => setState(
-                        () => _f = _f.copyWith(offerType: 'FIXED_PRICE'),
-                      ),
-                    ),
-                    ChoiceChip(
-                      label: const Text('مزاد حضوري'),
-                      selected: _f.offerType == 'IN_PERSON_AUCTION',
-                      onSelected: pricing
-                          ? null
-                          : (_) => setState(
-                              () => _f = _f.copyWith(
-                                offerType: 'IN_PERSON_AUCTION',
+                children: [
+                  if (lookups == null)
+                    Text(
+                      'تعذّر تحميل قوائم المناطق والسلالات.',
+                      style: theme.textTheme.bodyMedium,
+                    )
+                  else ...[
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: _Labeled(
+                            label: 'المنطقة',
+                            child: DropdownButtonFormField<int?>(
+                              key: const ValueKey('filter-region'),
+                              initialValue: _f.regionId,
+                              isExpanded: true,
+                              style: valueStyle,
+                              items: [
+                                const DropdownMenuItem<int?>(
+                                  value: null,
+                                  child: Text('كل المناطق'),
+                                ),
+                                for (final r in lookups.regions)
+                                  DropdownMenuItem<int?>(
+                                    value: r.id,
+                                    child: Text(r.nameAr),
+                                  ),
+                              ],
+                              // تغيير المنطقة يمسح المدينة (تعرض مدن المنطقة فقط).
+                              onChanged: (v) => setState(
+                                () =>
+                                    _f = _f.copyWith(regionId: v, cityId: null),
                               ),
                             ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _Labeled(
+                            label: 'المدينة',
+                            child: DropdownButtonFormField<int?>(
+                              key: ValueKey('filter-city-${_f.regionId}'),
+                              initialValue: _f.cityId,
+                              isExpanded: true,
+                              style: valueStyle,
+                              decoration: InputDecoration(
+                                helperText: _f.regionId == null
+                                    ? 'اختر المنطقة أولًا'
+                                    : null,
+                              ),
+                              items: [
+                                const DropdownMenuItem<int?>(
+                                  value: null,
+                                  child: Text('كل المدن'),
+                                ),
+                                for (final c in cities)
+                                  DropdownMenuItem<int?>(
+                                    value: c.id,
+                                    child: Text(c.nameAr),
+                                  ),
+                              ],
+                              onChanged: _f.regionId == null
+                                  ? null
+                                  : (v) => setState(
+                                      () => _f = _f.copyWith(cityId: v),
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    gap(12),
+                    _Labeled(
+                      label: 'السلالة',
+                      child: DropdownButtonFormField<int?>(
+                        key: const ValueKey('filter-breed'),
+                        initialValue: _f.breedId,
+                        isExpanded: true,
+                        style: valueStyle,
+                        items: [
+                          const DropdownMenuItem<int?>(
+                            value: null,
+                            child: Text('كل السلالات'),
+                          ),
+                          for (final b in lookups.breeds)
+                            DropdownMenuItem<int?>(
+                              value: b.id,
+                              child: Text(b.nameAr),
+                            ),
+                        ],
+                        onChanged: (v) =>
+                            setState(() => _f = _f.copyWith(breedId: v)),
+                      ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 16),
-                Text('الجنس', style: theme.textTheme.titleSmall),
-                Wrap(
-                  spacing: 8,
-                  children: [
+                  gap(),
+                  const SectionTitle('الجنس'),
+                  gap(10),
+                  chips([
                     ChoiceChip(
                       label: const Text('الكل'),
                       selected: _f.sex == null,
@@ -212,126 +257,86 @@ class _FilterSheetState extends ConsumerState<FilterSheet> {
                       onSelected: (_) =>
                           setState(() => _f = _f.copyWith(sex: 'FEMALE')),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                if (lookups == null)
+                  ]),
+                  gap(),
+                  const SectionTitle('نوع العرض'),
+                  gap(10),
+                  chips([
+                    ChoiceChip(
+                      label: const Text('الكل'),
+                      selected: _f.offerType == null,
+                      onSelected: (_) =>
+                          setState(() => _f = _f.copyWith(offerType: null)),
+                    ),
+                    ChoiceChip(
+                      label: const Text('سعر محدد'),
+                      selected: _f.offerType == 'FIXED_PRICE',
+                      onSelected: (_) => setState(
+                        () => _f = _f.copyWith(offerType: 'FIXED_PRICE'),
+                      ),
+                    ),
+                    ChoiceChip(
+                      key: const ValueKey('sheet-type-auction'),
+                      label: const Text('مزاد حضوري'),
+                      selected: _f.offerType == 'IN_PERSON_AUCTION',
+                      onSelected: pricing
+                          ? null
+                          : (_) => setState(
+                              () => _f = _f.copyWith(
+                                offerType: 'IN_PERSON_AUCTION',
+                              ),
+                            ),
+                    ),
+                  ]),
+                  gap(),
+                  const SectionTitle('العمر · بالأشهر'),
+                  gap(10),
+                  _RangeRow(
+                    minController: _ageMin,
+                    maxController: _ageMax,
+                    minKey: const ValueKey('filter-age-min'),
+                    maxKey: const ValueKey('filter-age-max'),
+                    error: _ageError,
+                  ),
+                  gap(),
+                  const SectionTitle('السعر · ريال'),
+                  gap(10),
+                  _RangeRow(
+                    minController: _priceMin,
+                    maxController: _priceMax,
+                    minKey: const ValueKey('filter-price-min'),
+                    maxKey: const ValueKey('filter-price-max'),
+                    error: _priceError,
+                    onChanged: () => setState(() {}),
+                  ),
+                  const SizedBox(height: 6),
                   Text(
-                    'تعذّر تحميل قوائم المناطق والسلالات.',
-                    style: theme.textTheme.bodyMedium,
-                  )
-                else ...[
-                  DropdownButtonFormField<int?>(
-                    key: const ValueKey('filter-region'),
-                    initialValue: _f.regionId,
-                    isExpanded: true,
-                    decoration: const InputDecoration(labelText: 'المنطقة'),
-                    items: [
-                      const DropdownMenuItem<int?>(
-                        value: null,
-                        child: Text('كل المناطق'),
-                      ),
-                      for (final r in lookups.regions)
-                        DropdownMenuItem<int?>(
-                          value: r.id,
-                          child: Text(r.nameAr),
-                        ),
-                    ],
-                    // تغيير المنطقة يمسح المدينة (تعرض مدن المنطقة فقط).
-                    onChanged: (v) => setState(
-                      () => _f = _f.copyWith(regionId: v, cityId: null),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  DropdownButtonFormField<int?>(
-                    key: ValueKey('filter-city-${_f.regionId}'),
-                    initialValue: _f.cityId,
-                    isExpanded: true,
-                    decoration: InputDecoration(
-                      labelText: 'المدينة',
-                      helperText: _f.regionId == null
-                          ? 'اختر المنطقة أولًا'
-                          : null,
-                    ),
-                    items: [
-                      const DropdownMenuItem<int?>(
-                        value: null,
-                        child: Text('كل المدن'),
-                      ),
-                      for (final c in cities)
-                        DropdownMenuItem<int?>(
-                          value: c.id,
-                          child: Text(c.nameAr),
-                        ),
-                    ],
-                    onChanged: _f.regionId == null
-                        ? null
-                        : (v) => setState(() => _f = _f.copyWith(cityId: v)),
-                  ),
-                  const SizedBox(height: 12),
-                  DropdownButtonFormField<int?>(
-                    key: const ValueKey('filter-breed'),
-                    initialValue: _f.breedId,
-                    isExpanded: true,
-                    decoration: const InputDecoration(labelText: 'السلالة'),
-                    items: [
-                      const DropdownMenuItem<int?>(
-                        value: null,
-                        child: Text('كل السلالات'),
-                      ),
-                      for (final b in lookups.breeds)
-                        DropdownMenuItem<int?>(
-                          value: b.id,
-                          child: Text(b.nameAr),
-                        ),
-                    ],
-                    onChanged: (v) =>
-                        setState(() => _f = _f.copyWith(breedId: v)),
+                    'تحديد السعر يستبعد المزادات.',
+                    style: theme.textTheme.bodySmall,
                   ),
                 ],
-                const SizedBox(height: 16),
-                Text('العمر · شهر', style: theme.textTheme.titleSmall),
-                const SizedBox(height: 4),
-                _RangeRow(
-                  minController: _ageMin,
-                  maxController: _ageMax,
-                  minKey: const ValueKey('filter-age-min'),
-                  maxKey: const ValueKey('filter-age-max'),
-                  error: _ageError,
-                ),
-                const SizedBox(height: 16),
-                Text('السعر · ريال', style: theme.textTheme.titleSmall),
-                const SizedBox(height: 4),
-                _RangeRow(
-                  minController: _priceMin,
-                  maxController: _priceMax,
-                  minKey: const ValueKey('filter-price-min'),
-                  maxKey: const ValueKey('filter-price-max'),
-                  error: _priceError,
-                  onChanged: () => setState(() {}),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'تحديد نطاق سعر يستبعد إعلانات المزاد الحضوري لأنها بلا سعر.',
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
-            ),
-          ),
-          SafeArea(
-            top: false,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-              child: SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: _apply,
-                  child: const Text('تطبيق'),
-                ),
               ),
             ),
-          ),
-        ],
+            // خط رفيع يفصل شريط الأزرار عن المحتوى المتحرك فوقه.
+            Divider(height: 1, color: context.colors.hair),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: _apply,
+                      child: const Text('عرض النتائج'),
+                    ),
+                  ),
+                  TextButton(onPressed: _clear, child: const Text('مسح الكل')),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -361,7 +366,7 @@ class _RangeRow extends StatelessWidget {
         key: key,
         controller: c,
         keyboardType: TextInputType.number,
-        decoration: InputDecoration(labelText: label),
+        decoration: InputDecoration(hintText: label),
         onChanged: (_) => onChanged?.call(),
       ),
     );
@@ -383,6 +388,28 @@ class _RangeRow extends StatelessWidget {
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
+      ],
+    );
+  }
+}
+
+/// حقل بتسمية ثابتة فوقه، بدل التسمية العائمة التي تركب حافة الحقل.
+class _Labeled extends StatelessWidget {
+  const _Labeled({required this.label, required this.child});
+
+  final String label;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsetsDirectional.only(start: 4, bottom: 6),
+          child: Text(label, style: Theme.of(context).textTheme.bodySmall),
+        ),
+        child,
       ],
     );
   }

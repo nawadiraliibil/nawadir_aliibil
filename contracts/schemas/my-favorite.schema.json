@@ -27,7 +27,11 @@
     "city_name_ar",
     "cover_bucket",
     "cover_path",
-    "public_ref"
+    "public_ref",
+    "auction_lat",
+    "auction_lng",
+    "view_count",
+    "favorite_count"
   ],
   "properties": {
     "listing_id": {
@@ -233,6 +237,46 @@
       "anyOf": [
         {
           "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_lat": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "auction_lng": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "view_count": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "favorite_count": {
+      "anyOf": [
+        {
+          "type": "integer"
         },
         {
           "type": "null"

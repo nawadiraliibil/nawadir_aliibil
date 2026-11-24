@@ -11,7 +11,7 @@ select bag_eq(
     where p.pronamespace = 'public'::regnamespace
       and has_function_privilege('anon', p.oid, 'execute')$$,
   $$values ('get_published_settings'), ('get_current_policies'), ('storage_object_is_public'),
-           ('search_listings'), ('resolve_listing_ref'), ('get_listing')$$,
+           ('search_listings'), ('resolve_listing_ref'), ('get_listing'), ('record_listing_view')$$,
   'دوال public المتاحة لـanon');
 
 select bag_eq(
@@ -26,7 +26,7 @@ select bag_eq(
            ('remove_listing_media'), ('arrange_listing_media'), ('submit_listing'),
            ('start_listing_edit'), ('discard_listing_edit'), ('archive_listing'),
            ('delete_listing'), ('bump_listing'),
-           ('admin_review_queue'), ('admin_get_listing_review'),
+           ('admin_review_queue'), ('admin_list_listings'), ('admin_get_listing_review'),
            ('admin_approve_listing_version'), ('admin_reject_listing_version'),
            ('admin_hide_listing'), ('admin_unhide_listing'),
            ('admin_get_account'), ('admin_suspend_account'), ('admin_reactivate_account'),
@@ -35,7 +35,7 @@ select bag_eq(
            ('admin_get_settings'), ('admin_update_settings_draft'),
            ('admin_publish_settings'), ('admin_rollback_settings'),
            ('mark_notifications_read'),
-           ('search_listings'), ('resolve_listing_ref'), ('get_listing'),
+           ('search_listings'), ('resolve_listing_ref'), ('get_listing'), ('record_listing_view'),
            ('add_favorite'), ('remove_favorite'),
            ('start_conversation'), ('send_message'), ('mark_conversation_read'), ('set_conversation_muted'),
            ('block_user'), ('unblock_user'), ('post_comment'), ('edit_comment'), ('delete_comment'),

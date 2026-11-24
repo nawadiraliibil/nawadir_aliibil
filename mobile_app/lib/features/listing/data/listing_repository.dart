@@ -71,6 +71,16 @@ class ListingRepository {
     ),
   );
 
+  /// يوقف إعلانًا منشورًا ويؤرشفه: يختفي عن العامة ويبقى لصاحبه.
+  Future<void> archive(String listingId) => guardRpc(() async {
+    await _rpc('archive_listing', params: {'p_listing_id': listingId});
+  });
+
+  /// يجدد ظهور إعلان منشور بعد مرور المهلة (BUMP_TOO_EARLY قبلها).
+  Future<void> bump(String listingId) => guardRpc(() async {
+    await _rpc('bump_listing', params: {'p_listing_id': listingId});
+  });
+
   /// يحذف مسودة أو إعلانًا مرفوضًا، ثم ملفاته من التخزين.
   Future<void> delete(String listingId) => guardRpc(() async {
     final res = await _rpc(

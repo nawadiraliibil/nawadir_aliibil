@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/router/routes.dart';
+import '../../../app/theme/app_colors.dart';
 import '../../../core/errors/app_error.dart';
 import '../../../core/errors/error_messages.dart';
 import '../../../core/push/push_service.dart';
@@ -34,8 +36,9 @@ class NotificationSettingsScreen extends ConsumerWidget {
           .setPreference(category, enabled);
       ref.invalidate(notificationPreferencesProvider);
     } on Object catch (e) {
-      messenger.showSnackBar(
-        SnackBar(content: Text(errorMessage(AppError.from(e)))),
+      messenger.showApp(
+        errorMessage(AppError.from(e)),
+        kind: AppNoteKind.error,
       );
     }
   }
@@ -50,7 +53,7 @@ class NotificationSettingsScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           tooltip: 'رجوع',
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => context.canPop()
               ? context.pop()
               : context.go(Routes.notifications),
@@ -98,18 +101,16 @@ class NotificationSettingsScreen extends ConsumerWidget {
                     child: const Text('السماح بالإشعارات الفورية'),
                   ),
                 ),
-              for (final (key, label) in notificationCategories)
+              for (final (key, label) in notificationCategories) ...[
                 SwitchListTile(
                   key: ValueKey('pref-$key'),
+                  contentPadding: EdgeInsets.zero,
                   title: Text(label),
-                  subtitle: const Text('إشعار فوري على الجهاز'),
                   value: map[key] ?? true,
                   onChanged: (v) => _toggle(context, ref, key, v),
                 ),
-              const SizedBox(height: 8),
-              const Text(
-                'إيقاف فئة يوقف الإشعارات الفورية لها فقط؛ تبقى في مركز الإشعارات.',
-              ),
+                Divider(height: 1, thickness: 1, color: context.colors.hair),
+              ],
             ],
           ),
         ),

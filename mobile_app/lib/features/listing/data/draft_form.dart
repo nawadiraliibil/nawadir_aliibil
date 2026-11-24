@@ -37,9 +37,10 @@ class DraftForm {
     'auction_region_id',
     'auction_city_id',
     'auction_venue',
+    'auction_lat',
+    'auction_lng',
     'contact_phone',
-    'contact_call_enabled',
-    'contact_whatsapp_enabled',
+    'contact_whatsapp_phone',
   ];
 
   final Map<String, Object?> values;
@@ -60,10 +61,12 @@ class DraftForm {
   int? get auctionRegionId => values['auction_region_id'] as int?;
   int? get auctionCityId => values['auction_city_id'] as int?;
   String? get auctionVenue => values['auction_venue'] as String?;
+  double? get auctionLat => (values['auction_lat'] as num?)?.toDouble();
+  double? get auctionLng => (values['auction_lng'] as num?)?.toDouble();
+  bool get hasAuctionLocation => auctionLat != null && auctionLng != null;
   DateTime? get auctionStartsAt => values['auction_starts_at'] as DateTime?;
   String? get contactPhone => values['contact_phone'] as String?;
-  bool get callEnabled => values['contact_call_enabled'] == true;
-  bool get whatsappEnabled => values['contact_whatsapp_enabled'] == true;
+  String? get whatsappPhone => values['contact_whatsapp_phone'] as String?;
 
   bool get isAuction => offerType == offerAuction;
 
@@ -111,12 +114,10 @@ abstract final class DraftKeys {
     'auction_city_id',
     'auction_venue',
     'auction_starts_at',
+    'auction_lat',
+    'auction_lng',
   };
-  static const contact = {
-    'contact_phone',
-    'contact_call_enabled',
-    'contact_whatsapp_enabled',
-  };
+  static const contact = {'contact_phone', 'contact_whatsapp_phone'};
   static const declaration = {'owner_declaration'};
 
   static const all = {
@@ -140,9 +141,11 @@ class OwnerMedia {
     required this.bucket,
     required this.objectPath,
     this.failureReason,
+    this.kind = 'IMAGE',
   });
 
   factory OwnerMedia.fromJson(Map<String, dynamic> j) => OwnerMedia(
+    kind: j['kind'] as String? ?? 'IMAGE',
     id: j['id'] as String,
     status: j['status'] as String,
     isCover: j['is_cover'] as bool,
@@ -153,6 +156,9 @@ class OwnerMedia {
   );
 
   final String id;
+
+  /// `IMAGE` أو `VIDEO`.
+  final String kind;
 
   /// `PENDING` أو `READY` أو `FAILED`.
   final String status;

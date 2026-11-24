@@ -55,7 +55,7 @@ begin
   else
     v_patch := v_patch || jsonb_build_object(
       'auction_region_id', p_region, 'auction_city_id', v_city,
-      'auction_venue', 'ساحة المزاد', 'auction_starts_at', to_char((now() + interval '30 days') at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"'));
+      'auction_lat', 24.713552, 'auction_lng', 46.675297, 'auction_venue', 'ساحة المزاد', 'auction_starts_at', to_char((now() + interval '30 days') at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"'));
   end if;
   perform public.save_listing_draft(v_listing, v_patch);
   for i in 1..3 loop
@@ -66,9 +66,6 @@ begin
   perform public.arrange_listing_media(v_listing, v_media, v_media[1]);
   perform public.submit_listing(v_listing, gen_random_uuid());
   perform pg_temp.login('00000000-0000-0000-0000-0000000000a1', 'aal2');
-  v_ver := (public.admin_get_listing_review(v_listing) #>> '{version,id}')::uuid;
-  v_hash := public.admin_get_listing_review(v_listing) #>> '{version,content_hash}';
-  perform public.admin_approve_listing_version(v_listing, v_ver, v_hash);
   insert into ids values (p_key, v_listing);
 end;
 $$;
@@ -182,12 +179,24 @@ select is(pg_temp.walk('PRICE_DESC', 2), regexp_replace(pg_temp.walk('PRICE_DESC
 select is(pg_temp.walk('PRICE_ASC', 1), regexp_replace(pg_temp.walk('PRICE_ASC', 50), '[|].*', '|5'), 'دفعة بحجم واحد');
 select is(public.search_listings(p_limit => 50) -> 'next_cursor', 'null'::jsonb, 'لا مؤشر في الصفحة الأخيرة');
 
+-- الأكثر مشاهدة: l3 ثم l1 وl2 بالتعادل (الأحدث معرّفًا أولًا)، ويدفع بالمؤشر دون تكرار
+reset role;
+insert into public.listing_stats (listing_id, view_count)
+  select id, case when id = (select v from ids where k = 'l3') then 50 when id = (select v from ids where k = 'l4') then 10 else 0 end
+  from public.listings
+  on conflict (listing_id) do update set view_count = excluded.view_count;
+select is(
+  (select count(*)::integer from jsonb_array_elements(public.search_listings(p_sort => 'MOST_VIEWED', p_limit => 50) -> 'items')),
+  5, 'الأكثر مشاهدة يعيد كل الإعلانات النشطة');
+select is(left(pg_temp.walk('MOST_VIEWED', 2), 5), 'l3,l4', 'الأعلى مشاهدة أولًا');
+select is(pg_temp.walk('MOST_VIEWED', 2), regexp_replace(pg_temp.walk('MOST_VIEWED', 50), '[|].*', '|3'), 'دفعات الأكثر مشاهدة بلا تكرار');
+
 select is(
   (select array_agg(k order by k) from jsonb_object_keys((public.search_listings(p_limit => 1) -> 'items') -> 0) k),
-  array['age_months', 'auction_passed', 'auction_starts_at', 'breed_id', 'breed_name_ar', 'breed_note',
-    'city_id', 'city_name_ar', 'cover_bucket', 'cover_path', 'first_published_at', 'listing_id', 'offer_type',
+  array['age_months', 'auction_lat', 'auction_lng', 'auction_passed', 'auction_starts_at', 'breed_id', 'breed_name_ar', 'breed_note',
+    'city_id', 'city_name_ar', 'cover_bucket', 'cover_path', 'favorite_count', 'first_published_at', 'listing_id', 'offer_type',
     'owner_display_name', 'owner_id', 'price', 'public_ref', 'region_id', 'region_name_ar', 'sex', 'title',
-    'visibility_updated_at'],
+    'view_count', 'visibility_updated_at'],
   'أعمدة عنصر النتيجة');
 reset role;
 

@@ -57,6 +57,7 @@
     "auction_venue": null,
     "breed_name_ar": "المجاهيم",
     "contact_phone": "+966500000009",
+    "contact_whatsapp_phone": "+966551112222",
     "auction_passed": false,
     "region_name_ar": "الرياض",
     "auction_city_id": null,
@@ -71,7 +72,11 @@
     "published_version_at": "2026-11-23T03:25:04.947491+00:00",
     "visibility_updated_at": "2026-11-23T03:25:04.947491+00:00",
     "auction_region_name_ar": null,
-    "contact_whatsapp_enabled": true
+    "contact_whatsapp_enabled": true,
+    "auction_lat": null,
+    "auction_lng": null,
+    "view_count": 42,
+    "favorite_count": 7
   },
   "is_favorite": false
 }

@@ -53,6 +53,10 @@ abstract final class Routes {
   /// إعلاناتي؛ شاشة كاملة خارج الهيكل (MOBILE-APP-110).
   static const myListings = '/account/listings';
 
+  /// إعلان واحد من إعلاناتي (E03–E09).
+  static const myListingPattern = '/account/listings/:id';
+  static String myListing(String id) => '/account/listings/$id';
+
   /// المسارات التي تشترط جلسة. الزائر يُوجَّه إلى الدخول ثم يعود إليها.
   static const requiresSignIn = {
     postAd,
@@ -67,7 +71,9 @@ abstract final class Routes {
 
   /// مسار يشترط جلسة حسب نمطه (شاشات بمعرف).
   static bool needsSignIn(String path) =>
-      requiresSignIn.contains(path) || path.startsWith('/chat/');
+      requiresSignIn.contains(path) ||
+      path.startsWith('/chat/') ||
+      path.startsWith('/account/listings/');
 
   /// شاشة إعداد البيئة الناقص؛ تظهر في التطوير فقط.
   static const setup = '/setup';

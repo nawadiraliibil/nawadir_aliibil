@@ -8,6 +8,23 @@ class PickedImage {
   final Uint8List bytes;
 }
 
+/// فيديو اختاره المستخدم. [bytes] فارغة إذا تجاوز [sizeBytes] الحد قبل القراءة
+/// (لا يحمّل ملف ضخم في الذاكرة لمجرد رفضه). [durationSeconds] `null` إن تعذر
+/// قياسها محليًا؛ يعيد الخادم الفحص.
+class PickedVideo {
+  const PickedVideo({
+    required this.name,
+    required this.sizeBytes,
+    required this.bytes,
+    this.durationSeconds,
+  });
+
+  final String name;
+  final int sizeBytes;
+  final Uint8List bytes;
+  final int? durationSeconds;
+}
+
 /// رد `add_listing_media`: أين يُرفع الملف.
 class MediaSlot {
   const MediaSlot({

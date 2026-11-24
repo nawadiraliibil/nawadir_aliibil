@@ -4,7 +4,10 @@ import 'package:nawadir_aliibil/core/config/env.dart';
 import 'package:nawadir_aliibil/core/errors/app_error.dart';
 import 'package:nawadir_aliibil/features/browse/data/listing_card.dart';
 import 'package:nawadir_aliibil/features/browse/domain/labels.dart';
+import 'package:nawadir_aliibil/features/browse/presentation/auction_widgets.dart';
+import 'package:nawadir_aliibil/features/browse/presentation/listing_card_tile.dart';
 import 'package:nawadir_aliibil/features/browse/presentation/listing_detail_screen.dart';
+import 'package:nawadir_aliibil/features/browse/presentation/sort_sheet.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../helpers/fake_auth_backend.dart';
@@ -175,6 +178,111 @@ void main() {
       expect(server.requests, hasLength(3));
     });
 
+    testWidgets('شريط «مزادات قريبة» يعرض المزاد القادم بتذكرة تفتح التفاصيل', (
+      tester,
+    ) async {
+      Map<String, dynamic> auction(int n, {required bool passed}) => _card(n)
+        ..['offer_type'] = 'IN_PERSON_AUCTION'
+        ..['price'] = null
+        ..['auction_passed'] = passed
+        ..['auction_starts_at'] = '2099-01-05T15:30:00+00:00';
+      final rpc = FakeRpc({
+        'search_listings': (_) => {
+          'items': [auction(1, passed: false), auction(2, passed: true)],
+          'next_cursor': null,
+        },
+        'get_listing': (_) => fixture('listing-detail'),
+      });
+      await pumpApp(tester, auth: FakeAuthBackend(signedIn: false), rpc: rpc);
+
+      expect(find.text('مزادات قريبة'), findsOneWidget);
+      final strip = find.byKey(const ValueKey('upcoming-auctions'));
+      // تذكرة واحدة: المزاد الذي مضى موعده لا يدخل الشريط.
+      expect(
+        find.descendant(of: strip, matching: find.byType(AuctionTicket)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: strip, matching: find.text('6:30 م · الرياض')),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.byType(AuctionTicket));
+      await tester.pumpAndSettle();
+      expect(rpc.paramsOf('get_listing').single, {'p_listing_id': 'listing-1'});
+    });
+
+    testWidgets('شرائح النوع تضبط مرشح العرض، و«الكل» تمسحه', (tester) async {
+      final server = _SearchServer();
+      await pumpApp(tester, rpc: FakeRpc(server.handlers));
+
+      await tester.tap(
+        find.byKey(const ValueKey('home-type-IN_PERSON_AUCTION')),
+      );
+      await tester.pumpAndSettle();
+      expect(server.requests.last!['p_offer_type'], 'IN_PERSON_AUCTION');
+      // مع مرشح نشط لا يظهر شريط المزادات ويصير العنوان «نتائج البحث».
+      expect(find.text('نتائج البحث'), findsOneWidget);
+      // 8 نتائج في دفعة واحدة دون مزيد.
+      expect(find.text('8 إعلانات'), findsOneWidget);
+
+      await tester.tap(find.byKey(const ValueKey('home-type-all')));
+      await tester.pumpAndSettle();
+      expect(server.requests.last!.containsKey('p_offer_type'), isFalse);
+      expect(find.text('أحدث العروض'), findsOneWidget);
+    });
+
+    testWidgets('اختيار المنطقة والمدينة يرشح النتائج، وشريحة المرشح تُزال', (
+      tester,
+    ) async {
+      final server = _SearchServer();
+      await pumpApp(tester, rpc: FakeRpc(server.handlers));
+
+      await tester.tap(find.byKey(const ValueKey('home-region')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('الرياض').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('الدرعية'));
+      await tester.tap(find.byKey(const ValueKey('region-apply')));
+      await tester.pumpAndSettle();
+
+      expect(server.requests.last!['p_region_id'], 1);
+      expect(server.requests.last!['p_city_id'], 2);
+      // شريحتان نشطتان: المنطقة والمدينة، وإزالة المنطقة تمسح المدينة معها.
+      expect(find.byType(InputChip), findsNWidgets(2));
+      await tester.tap(
+        find.descendant(
+          of: find.widgetWithText(InputChip, 'الرياض'),
+          matching: find.byIcon(Icons.close),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(InputChip), findsNothing);
+      expect(server.requests.last!.containsKey('p_region_id'), isFalse);
+    });
+
+    testWidgets('تبديل العرض المدمج يعرض عمودين ثم يعود', (tester) async {
+      final server = _SearchServer();
+      await pumpApp(tester, rpc: FakeRpc(server.handlers));
+
+      bool compact() => tester
+          .widgetList<ListingCardTile>(find.byType(ListingCardTile))
+          .every((t) => t.compact);
+      expect(compact(), isFalse);
+
+      await tester.tap(find.byTooltip('عرض مدمج'));
+      await tester.pumpAndSettle();
+      expect(compact(), isTrue);
+      // بطاقتان في الصف الأول.
+      final a = tester.getTopLeft(find.text('إعلان رقم 0 للإبل'));
+      final b = tester.getTopLeft(find.text('إعلان رقم 1 للإبل'));
+      expect(a.dy, b.dy);
+
+      await tester.tap(find.byTooltip('عرض كبير'));
+      await tester.pumpAndSettle();
+      expect(compact(), isFalse);
+    });
+
     testWidgets('فشل الدفعة التالية يبقي ما عُرض ويتيح إعادة المحاولة', (
       tester,
     ) async {
@@ -226,14 +334,13 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('تطبيق النوع والجنس والفرز ونطاق العمر', (tester) async {
+    testWidgets('تطبيق النوع والجنس ونطاق العمر', (tester) async {
       final server = _SearchServer();
       await pumpApp(tester, rpc: FakeRpc(server.handlers));
       await openSheet(tester);
 
-      await tester.tap(find.text('مزاد حضوري'));
+      await tester.tap(find.byKey(const ValueKey('sheet-type-auction')));
       await tester.tap(find.text('ذكر'));
-      await tester.tap(find.text('السعر: من الأقل'));
       await tester.enterText(
         find.byKey(const ValueKey('filter-age-min')),
         '12',
@@ -242,7 +349,7 @@ void main() {
         find.byKey(const ValueKey('filter-age-max')),
         '٣٦',
       );
-      await tester.tap(find.text('تطبيق'));
+      await tester.tap(find.text('عرض النتائج'));
       await tester.pumpAndSettle();
 
       expect(server.requests.last, {
@@ -250,11 +357,39 @@ void main() {
         'p_sex': 'MALE',
         'p_age_min': 12,
         'p_age_max': 36,
-        'p_sort': 'PRICE_ASC',
+        'p_sort': 'NEWEST_VISIBLE',
         'p_limit': 20,
       });
       // العلامة تعد المرشحات المطبقة: النوع والجنس والعمر.
       expect(find.text('3'), findsOneWidget);
+      // ورقة التصفية لا تحوي الترتيب؛ له صفحته المستقلة.
+    });
+
+    testWidgets('الترتيب في صفحة مستقلة عن التصفية', (tester) async {
+      final server = _SearchServer();
+      await pumpApp(tester, rpc: FakeRpc(server.handlers));
+      await openSheet(tester);
+      expect(find.text('ترتيب النتائج'), findsNothing);
+      await tester.tap(find.text('ذكر'));
+      await tester.tap(find.text('عرض النتائج'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const ValueKey('results-sort')));
+      await tester.pumpAndSettle();
+      expect(find.text('ترتيب النتائج'), findsOneWidget);
+      // ورقة الترتيب نفسها بلا شرائح تصفية (الرئيسية ظاهرة خلفها).
+      expect(
+        find.descendant(
+          of: find.byType(SortSheet),
+          matching: find.text('الكل'),
+        ),
+        findsNothing,
+      );
+      await tester.tap(find.text('السعر: من الأقل'));
+      await tester.pumpAndSettle();
+
+      expect(server.requests.last?['p_sort'], 'PRICE_ASC');
+      expect(server.requests.last?['p_sex'], 'MALE');
     });
 
     testWidgets('نطاق معكوس يمنع التطبيق برسالة ولا يرسل', (tester) async {
@@ -270,7 +405,7 @@ void main() {
         find.byKey(const ValueKey('filter-price-max')),
         '100',
       );
-      await tester.tap(find.text('تطبيق'));
+      await tester.tap(find.text('عرض النتائج'));
       await tester.pumpAndSettle();
 
       expect(find.text('الحد الأدنى للسعر أكبر من الأعلى.'), findsOneWidget);
@@ -290,10 +425,10 @@ void main() {
       );
       await tester.pump();
       final chip = tester.widget<ChoiceChip>(
-        find.widgetWithText(ChoiceChip, 'مزاد حضوري'),
+        find.byKey(const ValueKey('sheet-type-auction')),
       );
       expect(chip.onSelected, isNull);
-      await tester.tap(find.text('تطبيق'));
+      await tester.tap(find.text('عرض النتائج'));
       await tester.pumpAndSettle();
       expect(server.requests.last!['p_price_min'], 1000);
     });
@@ -317,7 +452,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('الرياض').last);
       await tester.pumpAndSettle();
-      await tester.tap(find.text('تطبيق'));
+      await tester.tap(find.text('عرض النتائج'));
       await tester.pumpAndSettle();
       expect(server.requests.last!['p_region_id'], 1);
       expect(server.requests.last!['p_city_id'], isNotNull);
@@ -328,8 +463,8 @@ void main() {
     Map<String, dynamic> detail({bool call = true, bool whatsapp = true}) {
       final d = Map<String, dynamic>.from(fixture('listing-detail') as Map);
       final l = Map<String, dynamic>.from(d['listing'] as Map)
-        ..['contact_call_enabled'] = call
-        ..['contact_whatsapp_enabled'] = whatsapp;
+        ..['contact_phone'] = call ? '+966500000009' : null
+        ..['contact_whatsapp_phone'] = whatsapp ? '+966500000010' : null;
       return d..['listing'] = l;
     }
 
@@ -356,7 +491,7 @@ void main() {
       expect(find.text('25,000 ريال'), findsOneWidget);
       expect(find.text('4 سنوات'), findsOneWidget);
       expect(find.text('المجاهيم'), findsOneWidget);
-      expect(find.textContaining('إفادة من المعلن'), findsOneWidget);
+      expect(find.textContaining('إفادة من المعلن'), findsNothing);
       expect(find.byKey(const ValueKey('contact-call')), findsOneWidget);
       expect(find.byKey(const ValueKey('contact-whatsapp')), findsOneWidget);
     });
@@ -472,7 +607,10 @@ void main() {
       });
       await pumpApp(tester, rpc: rpc);
       await open(tester);
-      expect(find.textContaining('5/1/2099 18:30'), findsWidgets);
+      // 15:30 UTC = 18:30 بتوقيت السعودية = 6:30 م، وبلاطة التاريخ بيوم وشهر.
+      expect(find.text('6:30 م'), findsOneWidget);
+      expect(find.text('يناير'), findsOneWidget);
+      expect(find.text('المزايدة حضورية خارج التطبيق.'), findsOneWidget);
       expect(find.textContaining('ساحة المزاد الكبرى'), findsOneWidget);
 
       passed = true;
@@ -548,6 +686,8 @@ void main() {
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
       await tester.tap(find.text('إعلان رقم 0 للإبل'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('tab-owner')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('owner-row')));
       await tester.pumpAndSettle();

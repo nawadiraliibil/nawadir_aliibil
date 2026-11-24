@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/router/routes.dart';
+import '../../../app/theme/app_colors.dart';
 import '../../../core/widgets/app_note.dart';
+import '../../account/presentation/menu_group.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../application/auth_providers.dart';
 import '../data/auth_backend.dart';
@@ -125,38 +127,53 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       appBar: AppBar(
         leading: IconButton(
           tooltip: 'رجوع',
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_back),
           onPressed: _changeNumber,
         ),
+        title: Text(_rejected ? 'تعذر التحقق' : 'رمز التحقق'),
       ),
       body: SafeArea(child: _rejected ? _rejectedView() : _entryView(phone)),
     );
   }
 
   /// A05.
-  Widget _rejectedView() => EmptyState(
-    icon: Icons.lock_outline,
-    title: 'تعذر التحقق',
-    message: 'تعذر تأكيد الرمز. تحقق من الرمز أو اطلب رمزًا جديدًا.',
-    actionLabel: 'حاول مجددًا',
-    onAction: _retry,
+  Widget _rejectedView() => Column(
+    children: [
+      Expanded(
+        child: EmptyState(
+          icon: Icons.lock_outline,
+          title: 'تعذر تأكيد الرمز',
+          message: 'تحقق من الرمز أو اطلب رمزًا جديدًا.',
+          actionLabel: 'حاول مجددًا',
+          onAction: _retry,
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+        child: MenuRow(
+          icon: Icons.phone_outlined,
+          title: 'تغيير رقم الجوال',
+          circleColor: context.colors.tintGold,
+          onTap: _changeNumber,
+        ),
+      ),
+    ],
   );
 
   Widget _entryView(SaudiPhone? phone) {
     final theme = Theme.of(context);
     final canResend = _secondsLeft == 0 && !_busy;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
-        Text('رمز التحقق', style: theme.textTheme.headlineSmall),
         const SizedBox(height: 8),
         Text(
           phone == null
               ? 'أدخل الرمز المكوّن من 6 أرقام.'
               : 'أدخل الرمز المكوّن من 6 أرقام المرسل إلى ${phone.masked}',
-          style: theme.textTheme.bodyLarge,
+          style: theme.textTheme.bodySmall,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
         OtpField(
           controller: _code,
           enabled: !_busy,
@@ -178,18 +195,24 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                 )
               : const Text('تأكيد'),
         ),
-        const SizedBox(height: 12),
-        TextButton(
-          onPressed: _busy ? null : _changeNumber,
-          child: const Text('تغيير الرقم'),
-        ),
-        TextButton(
-          onPressed: canResend ? _resend : null,
-          child: Text(
-            _secondsLeft > 0
-                ? 'إعادة الإرسال بعد $_secondsLeft ثانية'
-                : 'إعادة الإرسال',
-          ),
+        const SizedBox(height: 8),
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            TextButton(
+              onPressed: _busy ? null : _changeNumber,
+              child: const Text('تغيير الرقم'),
+            ),
+            TextButton(
+              onPressed: canResend ? _resend : null,
+              child: Text(
+                _secondsLeft > 0
+                    ? 'إعادة الإرسال بعد $_secondsLeft ثانية'
+                    : 'إعادة الإرسال',
+              ),
+            ),
+          ],
         ),
       ],
     );

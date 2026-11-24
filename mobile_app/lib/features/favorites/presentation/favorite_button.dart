@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_note.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,12 +17,16 @@ class FavoriteButton extends ConsumerStatefulWidget {
     super.key,
     required this.listingId,
     this.initial = false,
+    this.dense = false,
   });
 
   final String listingId;
 
   /// الحالة المعروفة قبل تحميل القائمة (مثل `is_favorite` في التفاصيل).
   final bool initial;
+
+  /// زر أصغر للبطاقات الضيقة (عرض العمودين) كي لا يزاحم شارة النوع.
+  final bool dense;
 
   @override
   ConsumerState<FavoriteButton> createState() => _FavoriteButtonState();
@@ -49,14 +55,11 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
       }
     } on Object catch (e) {
       final err = AppError.from(e);
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            err.code == AppErrorCode.notFound
-                ? 'الإعلان لم يعد متاحًا.'
-                : errorMessage(err),
-          ),
-        ),
+      messenger.showApp(
+        err.code == AppErrorCode.notFound
+            ? 'الإعلان لم يعد متاحًا.'
+            : errorMessage(err),
+        kind: AppNoteKind.error,
       );
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -71,6 +74,12 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
     return IconButton(
       tooltip: saved ? 'إزالة من المفضلة' : 'حفظ في المفضلة',
       onPressed: _busy ? null : () => _toggle(saved),
+      visualDensity: widget.dense ? VisualDensity.compact : null,
+      constraints: widget.dense
+          ? const BoxConstraints(minWidth: 36, minHeight: 36)
+          : null,
+      padding: widget.dense ? const EdgeInsets.all(6) : null,
+      iconSize: widget.dense ? 20 : null,
       icon: Icon(
         saved ? Icons.favorite : Icons.favorite_border,
         color: saved ? c.error : c.muted,

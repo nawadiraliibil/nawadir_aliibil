@@ -56,26 +56,27 @@ select lives_ok(
 select lives_ok(
   $$select public.submit_listing((select v from ids where k = 'l1'), 'bbbbbbbb-0000-0000-0000-000000000001')$$,
   'إرسال الإعلان');
-select is((select count(*)::integer from public.notifications), 0, 'الإرسال لا ينشئ إشعارًا للمعلن');
+select is((select count(*)::integer from public.notifications), 0, 'النشر المباشر لا ينشئ إشعارًا للمعلن');
 reset role;
 
--- الرفض ينشئ إشعارًا بسببه
+-- الإخفاء ينشئ إشعارًا بسببه؛ الرفض لم يعد ممكنًا ولا ينتج إشعارًا
 select pg_temp.login('00000000-0000-0000-0000-0000000000a1', 'aal2');
 set local role authenticated;
-insert into ids select 'v1', (public.admin_get_listing_review((select v from ids where k = 'l1')) #>> '{version,id}')::uuid;
-insert into vals select 'h1', public.admin_get_listing_review((select v from ids where k = 'l1')) #>> '{version,content_hash}';
-select lives_ok(
+select throws_ok(
   $$select public.admin_reject_listing_version((select v from ids where k = 'l1'),
-      (select v from ids where k = 'v1'), (select v from vals where k = 'h1'), 'MISSING_INFO', 'أضف صورًا أوضح')$$,
-  'رفض الإعلان');
+      gen_random_uuid(), 'x', 'MISSING_INFO', 'أضف صورًا أوضح')$$,
+  'P0001', 'INVALID_STATE', 'الرفض لم يعد متاحًا');
+select lives_ok(
+  $$select public.admin_hide_listing((select v from ids where k = 'l1'), 'BAD_MEDIA', 'أضف صورًا أوضح')$$,
+  'إخفاء الإعلان');
 reset role;
 
-select is((select count(*)::integer from public.notifications), 1, 'إشعار واحد بعد الرفض');
+select is((select count(*)::integer from public.notifications), 1, 'إشعار واحد بعد الإخفاء (لا إشعار للنشر المباشر)');
 select is(
   (select event || '|' || category::text || '|' || resource_type || '|' || (payload ->> 'reason_label_ar')
      || '|' || (payload ->> 'reason_text') || '|' || (payload ->> 'title')
    from public.notifications),
-  'listing.rejected|LISTING_STATUS|listing|بيانات ناقصة أو غير واضحة|أضف صورًا أوضح|ناقة مجاهيم للبيع',
+  'listing.hidden|LISTING_STATUS|listing|صور غير واضحة أو لا تخص المعروض|أضف صورًا أوضح|ناقة مجاهيم للبيع',
   'الإشعار يحمل الحدث والسبب وعنوان الإعلان');
 select is(
   (select recipient_id from public.notifications), '00000000-0000-0000-0000-00000000000a'::uuid,
@@ -85,32 +86,28 @@ select is((select count(*)::integer from public.notification_outbox where status
 
 -- منع التكرار بالمفتاح
 select lives_ok(
-  $$select private.notify('00000000-0000-0000-0000-00000000000a', 'LISTING_STATUS', 'listing.rejected',
+  $$select private.notify('00000000-0000-0000-0000-00000000000a', 'LISTING_STATUS', 'listing.hidden',
       'listing', 'x', '{}', (select dedupe_key from public.notifications limit 1))$$,
   'إعادة الحدث بالمفتاح نفسه لا تفشل');
 select is((select count(*)::integer from public.notifications), 1, 'الحدث المكرر لا ينشئ إشعارًا ثانيًا');
 select is((select count(*)::integer from public.notification_outbox), 1, 'ولا صفًا ثانيًا في الطابور');
 
--- المعلن يصحح ويعيد الإرسال ثم يعتمد
+-- المعلن لا يتجاوز الإخفاء؛ الإدارة تعيد الإظهار فيصله إشعار
 select pg_temp.login('00000000-0000-0000-0000-00000000000a', 'aal1');
 set local role authenticated;
-select lives_ok($$select public.start_listing_edit((select v from ids where k = 'l1'))$$, 'بدء التصحيح');
-select lives_ok(
+select throws_ok($$select public.start_listing_edit((select v from ids where k = 'l1'))$$,
+  'P0001', 'INVALID_STATE', 'لا تعديل لمخفي');
+select throws_ok(
   $$select public.submit_listing((select v from ids where k = 'l1'), 'bbbbbbbb-0000-0000-0000-000000000002')$$,
-  'إعادة الإرسال');
+  'P0001', 'INVALID_STATE', 'لا نشر لمخفي');
 reset role;
 select pg_temp.login('00000000-0000-0000-0000-0000000000a1', 'aal2');
 set local role authenticated;
-insert into ids select 'v2', (public.admin_get_listing_review((select v from ids where k = 'l1')) #>> '{version,id}')::uuid;
-insert into vals select 'h2', public.admin_get_listing_review((select v from ids where k = 'l1')) #>> '{version,content_hash}';
-select lives_ok(
-  $$select public.admin_approve_listing_version((select v from ids where k = 'l1'),
-      (select v from ids where k = 'v2'), (select v from vals where k = 'h2'))$$,
-  'اعتماد الإعلان');
+select lives_ok($$select public.admin_unhide_listing((select v from ids where k = 'l1'))$$, 'إعادة إظهار الإعلان');
 reset role;
 select is(
   (select array_agg(event order by event) from public.notifications),
-  array['listing.approved', 'listing.rejected'], 'إشعار للاعتماد إضافة إلى إشعار الرفض');
+  array['listing.hidden', 'listing.unhidden'], 'إشعار لإعادة الإظهار إضافة إلى إشعار الإخفاء');
 
 -- صلاحيات القراءة والكتابة
 select pg_temp.login('00000000-0000-0000-0000-00000000000a', 'aal1');
@@ -135,7 +132,7 @@ reset role;
 select pg_temp.login('00000000-0000-0000-0000-00000000000a', 'aal1');
 set local role authenticated;
 select is(
-  public.mark_notifications_read(array[(select id from public.notifications where event = 'listing.rejected')]),
+  public.mark_notifications_read(array[(select id from public.notifications where event = 'listing.hidden')]),
   1, 'تعليم إشعار محدد كمقروء');
 select is(public.mark_notifications_read(), 1, 'تعليم الباقي كمقروء');
 select is((select count(*)::integer from public.notifications where read_at is null), 0, 'لا إشعارات غير مقروءة');
@@ -155,8 +152,8 @@ select is(
   (select count(*)::integer from public.notifications where event = 'account.suspended'
      and category = 'ACCOUNT' and payload ->> 'reason_text' = 'سبب التعليق'),
   1, 'إشعار تعليق الحساب بسببه');
-select is((select count(*)::integer from public.notifications where event = 'listing.hidden'), 0,
-  'لا إشعار إخفاء للإعلانات المخفاة بسبب التعليق');
+select is((select count(*)::integer from public.notifications where event = 'listing.hidden'), 1,
+  'لا إشعار إخفاء إضافي للإعلانات المخفاة بسبب التعليق');
 
 select pg_temp.login('00000000-0000-0000-0000-0000000000a1', 'aal2');
 set local role authenticated;
@@ -168,8 +165,9 @@ reset role;
 select is((select count(*)::integer from public.notifications where event = 'account.reactivated'), 1,
   'إشعار تفعيل الحساب');
 select is(
-  (select payload ->> 'reason_text' from public.notifications where event = 'listing.unhidden'),
-  null, 'ملاحظة إعادة الإظهار الداخلية لا تصل المعلن');
+  (select count(*)::integer from public.notifications
+    where event = 'listing.unhidden' and payload ->> 'reason_text' is not null),
+  0, 'ملاحظة إعادة الإظهار الداخلية لا تصل المعلن');
 select is(
   (select count(*)::integer from public.notifications) ,
   (select count(*)::integer from public.notification_outbox), 'صف طابور لكل إشعار');

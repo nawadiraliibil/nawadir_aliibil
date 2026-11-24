@@ -26,7 +26,7 @@ const META = {
   // البحث والتفاصيل والمشاركة
   search_listings: {
     access: "anon", errors: ["VALIDATION_FAILED"], req: "AD-FR-011، AD-FR-012، AD-FR-024", since: "0.2.0",
-    note: "الرد {items, next_cursor} وفق schemas/search-result. المزاد الماضي خارج النتائج؛ نطاق السعر يستبعد المزاد؛ الفرز بالسعر يضع المزاد أخيرًا. next_cursor يمرر كما هو مع المرشحات والفرز نفسها.",
+    note: "الرد {items, next_cursor} وفق schemas/search-result. المزاد الماضي خارج النتائج؛ نطاق السعر يستبعد المزاد؛ الفرز بالسعر يضع المزاد أخيرًا. p_sort: NEWEST_VISIBLE (الافتراضي) | NEWEST_PUBLISHED | PRICE_ASC | PRICE_DESC | MOST_VIEWED (1.4.0؛ الأعلى مشاهدة ثم الأحدث، والمؤشر {views, id}). next_cursor يمرر كما هو مع المرشحات والفرز نفسها.",
   },
   get_listing: {
     access: "anon", errors: ["NOT_FOUND"], req: "AD-FR-011، AD-FR-013", since: "0.2.0",
@@ -35,6 +35,10 @@ const META = {
   resolve_listing_ref: {
     access: "anon", errors: ["NOT_FOUND"], req: "AD-FR-023", since: "0.2.0",
     note: "يترجم public_ref في رابط المشاركة إلى معرف إعلان منشور؛ المخفي NOT_FOUND فيتوقف الرابط.",
+  },
+  record_listing_view: {
+    access: "anon", errors: ["NOT_FOUND"], req: "AD-FR-011", since: "1.3.0",
+    note: "يسجل مشاهدة إعلان منشور مرة واحدة لكل مشاهد (الحساب إن كان داخلًا، وإلا p_device_id وهو uuid يولده التطبيق ويحفظه) ويعيد العدد (integer). بلا حساب ولا معرف جهاز لا تحسب. مشاهدة المعلن لإعلانه لا تحسب.",
   },
   add_favorite: {
     access: "user", errors: [...COMMON_USER, "ACCOUNT_SUSPENDED", "NOT_FOUND"], req: "AD-FR-022", since: "0.2.0",
@@ -204,7 +208,7 @@ const META = {
   save_listing_draft: {
     access: "user", errors: [...COMMON_OWNER, "INVALID_STATE", "VALIDATION_FAILED"],
     req: "AD-FR-005، AD-FR-006، AD-FR-014، AD-FR-025", since: "0.1.0",
-    note: "p_patch وفق contracts/schemas/listing-draft-patch.schema.json.",
+    note: "p_patch وفق contracts/schemas/listing-draft-patch.schema.json. رقمان مستقلان اختياريان (1.1.0، TEAM-DEC-012): contact_phone للاتصال وcontact_whatsapp_phone لواتساب، بصيغة 05XXXXXXXX أو +9665XXXXXXXX؛ مفتاحا contact_call_enabled وcontact_whatsapp_enabled قديمان يحوَّلان إلى الرقمين ويتجاهلان إن وجد contact_whatsapp_phone.",
   },
   add_listing_media: {
     access: "user",
@@ -225,6 +229,7 @@ const META = {
       "MEDIA_NOT_READY", "VALIDATION_FAILED", "RATE_LIMITED",
     ],
     req: "AD-FR-003، AD-FR-008، AD-FR-009، AD-NFR-005", since: "0.1.0",
+    note: "ينشر مباشرة (1.2.0، TEAM-DEC-013): لا مراجعة؛ يعيد listing.status = PUBLISHED وversion.status = APPROVED مع published_version_id = current_version_id وfirst_published_at وlast_published_at وnext_bump_at. DRAFT -> PUBLISHED (أول نشر يحتسب حد 5/24 ساعة ويطلق follow.new_listing)؛ PUBLISHED بمسودة تعديل -> تسري النسخة الجديدة فورًا دون اختفاء ودون رفع الترتيب. المخفي HIDDEN وغيره من الحالات غير DRAFT/PUBLISHED يرفع INVALID_STATE. يلزم أحد الرقمين contact_phone أو contact_whatsapp_phone على الأقل، ويبقى وقت الموافقة على نشر الرقم مطلوبًا؛ وإلا VALIDATION_FAILED بالحقلين.",
     idempotency: "p_request_id: الطلب المكرر لا ينشئ إرسالًا ثانيًا ويعيد الحالة الحالية.",
   },
   start_listing_edit: {
@@ -265,7 +270,13 @@ const META = {
     req: "AD-FR-021", since: "0.1.0",
   },
   // إشراف الإعلانات والحسابات
-  admin_review_queue: { access: "staff:listings.review", errors: COMMON_STAFF, req: "AD-FR-008", since: "0.1.0" },
+  admin_review_queue: { access: "staff:listings.review", errors: COMMON_STAFF, req: "AD-FR-008", since: "0.1.0",
+    note: "مهملة منذ 1.2.0 (TEAM-DEC-013): تعيد [] دائمًا؛ لا إعلان قيد المراجعة. استخدم admin_list_listings." },
+  admin_list_listings: {
+    access: "staff:listings.hide|listings.review", errors: [...COMMON_STAFF, "VALIDATION_FAILED"],
+    req: "AD-FR-018", since: "1.2.0",
+    note: "قائمة كل الإعلانات لإدارة الظهور: p_status (DRAFT|PUBLISHED|HIDDEN|ARCHIVED|REJECTED أو فارغ)، p_query (جزء من العنوان أو اسم المعلن، أو المعرف العام public_ref أو معرف الإعلان)، p_limit (1-100، 50)، والتصفح بمفتاح آخر عنصر (p_after_changed_at, p_after_id) بترتيب status_changed_at تنازليًا. العنصر يضم listing_id وpublic_ref وstatus وtitle وowner_display_name وowner_status وhide_reason_code وhide_reason_text وhidden_at وغيرها.",
+  },
   admin_get_listing_review: {
     access: "staff:listings.review|listings.hide", errors: [...COMMON_STAFF, "NOT_FOUND"],
     req: "AD-FR-008، AD-FR-018", since: "0.1.0",
@@ -274,11 +285,13 @@ const META = {
     access: "staff:listings.review",
     errors: [...COMMON_STAFF, "NOT_FOUND", "INVALID_STATE", "VERSION_CHANGED", "AUCTION_TIME_PASSED"],
     req: "AD-FR-008، AD-FR-009", since: "0.1.0",
+    note: "مهملة منذ 1.2.0 (TEAM-DEC-013): ترفع INVALID_STATE دائمًا (الإعلان ينشر عند الإرسال).",
   },
   admin_reject_listing_version: {
     access: "staff:listings.review",
     errors: [...COMMON_STAFF, "REASON_REQUIRED", "VALIDATION_FAILED", "NOT_FOUND", "INVALID_STATE", "VERSION_CHANGED"],
     req: "AD-FR-008، AD-FR-018", since: "0.1.0",
+    note: "مهملة منذ 1.2.0 (TEAM-DEC-013): ترفع INVALID_STATE دائمًا؛ الإخفاء admin_hide_listing هو أداة التحكم.",
   },
   admin_hide_listing: {
     access: "staff:listings.hide",

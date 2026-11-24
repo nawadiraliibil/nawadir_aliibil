@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,6 +12,8 @@ import '../../../app/theme/app_shapes.dart';
 import '../../../core/errors/app_error.dart';
 import '../../../core/errors/error_messages.dart';
 import '../../../core/format/money.dart';
+import '../../../core/location/map_widgets.dart';
+import '../../../core/settings/settings_repository.dart';
 import '../../../core/supabase/supabase_providers.dart';
 import '../../../core/widgets/app_badge.dart';
 import '../../../core/widgets/app_note.dart';
@@ -22,9 +26,13 @@ import '../../favorites/presentation/favorite_button.dart';
 import '../../safety/data/safety_repository.dart';
 import '../../safety/presentation/safety_actions.dart';
 import '../../listing/presentation/media_image.dart';
+import '../../listing/presentation/video_player_view.dart';
 import '../application/browse_providers.dart';
 import '../data/listing_detail.dart';
 import '../domain/labels.dart';
+import 'auction_widgets.dart';
+import 'listing_stats.dart';
+import 'listing_card_tile.dart' show PriceText;
 
 /// يفتح رابطًا خارج التطبيق (اتصال أو واتساب)؛ تُستبدل في الاختبارات.
 typedef ExternalLauncher = Future<bool> Function(Uri uri);
@@ -63,11 +71,13 @@ class ListingDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final detail = ref.watch(listingDetailProvider(listingId));
     final shareBase = ref.watch(envProvider).shareBaseUrl;
+    // مشاهدة واحدة لكل فتح، بعد وصول التفاصيل فعلًا.
+    if (detail.hasValue) ref.watch(recordListingViewProvider(listingId));
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           tooltip: 'رجوع',
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () =>
               context.canPop() ? context.pop() : context.go(Routes.home),
         ),
@@ -173,8 +183,9 @@ class _DetailBody extends ConsumerWidget {
       ok = false;
     }
     if (!ok) {
-      messenger.showSnackBar(
-        const SnackBar(content: Text('تعذّر فتح التطبيق. حاول مرة أخرى.')),
+      messenger.showApp(
+        'تعذّر فتح التطبيق. حاول مرة أخرى.',
+        kind: AppNoteKind.error,
       );
     }
   }
@@ -205,14 +216,11 @@ class _DetailBody extends ConsumerWidget {
       router.push(Routes.chat(id));
     } on Object catch (e) {
       final err = AppError.from(e);
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            err.code == AppErrorCode.notFound
-                ? 'الإعلان لم يعد متاحًا.'
-                : errorMessage(err),
-          ),
-        ),
+      messenger.showApp(
+        err.code == AppErrorCode.notFound
+            ? 'الإعلان لم يعد متاحًا.'
+            : errorMessage(err),
+        kind: AppNoteKind.error,
       );
     }
   }
@@ -222,24 +230,10 @@ class _DetailBody extends ConsumerWidget {
     final theme = Theme.of(context);
     final c = context.colors;
     final d = detail;
-    final offer = offerLine(
-      isAuction: d.isAuction,
-      price: d.price,
-      auctionStartsAt: d.auctionStartsAt,
-      auctionPassed: d.auctionPassed,
-    );
-    final digits = d.contactPhone.replaceAll(RegExp(r'\D'), '');
+    final digits = (d.whatsappPhone ?? '').replaceAll(RegExp(r'\D'), '');
     // لا مراسلة لمعلن إعلانه؛ الزائر يرى الزر ويُوجَّه للدخول.
     final myId = ref.watch(authBackendProvider).userId;
     final canMessage = myId == null || myId != d.ownerId;
-
-    final facts = <(String, String)>[
-      ('السلالة', d.breedLabel),
-      ('الجنس', sexLabel(d.sex)),
-      ('العمر', ageLabel(d.ageMonths)),
-      if (d.color != null && d.color!.isNotEmpty) ('اللون', d.color!),
-      ('الموقع', '${d.regionName} · ${d.cityName}'),
-    ];
 
     return Column(
       children: [
@@ -253,151 +247,128 @@ class _DetailBody extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
+                    AppBadge(
+                      label: d.isAuction ? 'مزاد حضوري' : 'سعر محدد',
+                      kind: d.isAuction
+                          ? AppBadgeKind.auction
+                          : AppBadgeKind.fixedPrice,
+                    ),
+                    const SizedBox(height: 10),
                     Text(d.title, style: theme.textTheme.headlineSmall),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      crossAxisAlignment: WrapCrossAlignment.center,
+                    if (!d.isAuction && d.price != null) ...[
+                      const SizedBox(height: 8),
+                      PriceText(d.price!, size: 34),
+                    ],
+                    const SizedBox(height: 6),
+                    Row(
                       children: [
-                        AppBadge(
-                          label: d.isAuction ? 'مزاد حضوري' : 'سعر محدد',
-                          kind: d.isAuction
-                              ? AppBadgeKind.auction
-                              : AppBadgeKind.fixedPrice,
+                        Icon(
+                          Icons.location_on_outlined,
+                          size: 16,
+                          color: c.muted,
                         ),
-                        Text(offer, style: theme.textTheme.titleLarge),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            '${d.regionName} · ${d.cityName}',
+                            style: theme.textTheme.bodySmall,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        StatLabel(
+                          key: const ValueKey('detail-likes'),
+                          icon: Icons.favorite_border,
+                          count: d.favoriteCount,
+                          noun: 'إعجاب',
+                        ),
+                        const SizedBox(width: 14),
+                        StatLabel(
+                          key: const ValueKey('detail-views'),
+                          icon: Icons.visibility_outlined,
+                          count: d.viewCount,
+                          noun: 'مشاهدة',
+                        ),
                       ],
                     ),
                     if (d.isAuction) ...[
-                      const SizedBox(height: 12),
-                      _AuctionBox(detail: d),
+                      const SizedBox(height: 16),
+                      _AuctionCard(detail: d),
                     ],
                     const SizedBox(height: 16),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: c.soft,
-                        borderRadius: BorderRadius.circular(AppShapes.card),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Column(
-                          children: [
-                            for (final (label, value) in facts)
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 4,
-                                ),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 90,
-                                      child: Text(
-                                        label,
-                                        style: theme.textTheme.bodyMedium
-                                            ?.copyWith(color: c.muted),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        value,
-                                        style: theme.textTheme.bodyLarge,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
+                    _SpecStrip(
+                      items: [
+                        ('السلالة', d.breedLabel),
+                        ('الجنس', sexLabel(d.sex)),
+                        ('العمر', ageLabel(d.ageMonths)),
+                      ],
                     ),
                     const SizedBox(height: 16),
-                    Text('الوصف', style: theme.textTheme.titleMedium),
-                    const SizedBox(height: 4),
-                    Text(d.description, style: theme.textTheme.bodyLarge),
-                    const SizedBox(height: 16),
-                    Text(
-                      'الحالة الصحية (حسب المعلن)',
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(d.healthNotes, style: theme.textTheme.bodyLarge),
-                    const SizedBox(height: 8),
-                    const AppNote(
-                      'المعلومات المعروضة إفادة من المعلن ولا تتحقق منها المنصة.',
-                    ),
-                    const SizedBox(height: 16),
-                    _OwnerRow(detail: d),
-                    const SizedBox(height: 4),
-                    Text(
-                      'نُشر ${formatSaudiMoment(d.publishedAt).split(' ').first}',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: c.muted,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    CommentsSection(detail: d),
+                    _DetailTabs(detail: d),
                   ],
                 ),
               ),
             ],
           ),
         ),
-        if (canMessage || d.callEnabled || d.whatsappEnabled)
-          Material(
-            elevation: 6,
-            color: c.surface,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (canMessage)
-                    SizedBox(
-                      width: double.infinity,
-                      child: FilledButton.icon(
-                        key: const ValueKey('contact-message'),
-                        icon: const Icon(Icons.chat_bubble_outline),
-                        label: const Text('راسل المعلن'),
-                        onPressed: () => _startChat(context, ref),
+        // المعلن لا يرى شريط التواصل في إعلانه إطلاقًا.
+        if (canMessage)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+            // شريط التواصل العائم: كبسولة بظل، وزر المحادثة هو الرئيسي.
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: c.surface,
+                borderRadius: BorderRadius.circular(AppShapes.nav + 4),
+                border: Border.all(color: c.line),
+                boxShadow: c.floatingShadow,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  children: [
+                    if (canMessage)
+                      Expanded(
+                        child: FilledButton.icon(
+                          key: const ValueKey('contact-message'),
+                          icon: const Icon(Icons.chat_bubble_outline),
+                          label: const Text('محادثة'),
+                          onPressed: () => _startChat(context, ref),
+                        ),
+                      )
+                    else
+                      const Spacer(),
+                    if (d.callEnabled) ...[
+                      const SizedBox(width: 8),
+                      _ChannelButton(
+                        key: const ValueKey('contact-call'),
+                        icon: Icons.call_outlined,
+                        label: 'اتصال',
+                        onTap: () => _launch(
+                          context,
+                          ref,
+                          Uri(scheme: 'tel', path: d.contactPhone!),
+                        ),
                       ),
-                    ),
-                  if (canMessage && (d.callEnabled || d.whatsappEnabled))
-                    const SizedBox(height: 8),
-                  if (d.callEnabled || d.whatsappEnabled)
-                    Row(
-                      children: [
-                        if (d.callEnabled)
-                          Expanded(
-                            child: OutlinedButton.icon(
-                              key: const ValueKey('contact-call'),
-                              icon: const Icon(Icons.call_outlined),
-                              label: const Text('اتصال'),
-                              onPressed: () => _launch(
-                                context,
-                                ref,
-                                Uri(scheme: 'tel', path: d.contactPhone),
-                              ),
-                            ),
-                          ),
-                        if (d.callEnabled && d.whatsappEnabled)
-                          const SizedBox(width: 12),
-                        if (d.whatsappEnabled)
-                          Expanded(
-                            child: OutlinedButton.icon(
-                              key: const ValueKey('contact-whatsapp'),
-                              icon: const Icon(Icons.chat_outlined),
-                              label: const Text('واتساب'),
-                              onPressed: () => _launch(
-                                context,
-                                ref,
-                                Uri.https('wa.me', '/$digits'),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                ],
+                    ],
+                    if (d.whatsappEnabled) ...[
+                      const SizedBox(width: 8),
+                      _ChannelButton(
+                        key: const ValueKey('contact-whatsapp'),
+                        icon: Icons.chat_outlined,
+                        label: 'واتساب',
+                        onTap: () => _launch(
+                          context,
+                          ref,
+                          Uri.https('wa.me', '/$digits'),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -406,27 +377,358 @@ class _DetailBody extends ConsumerWidget {
   }
 }
 
-class _AuctionBox extends StatelessWidget {
-  const _AuctionBox({required this.detail});
+/// تبويبات التفاصيل (C01): تفاصيل ووصف ومعلن، بشريط كبسولي.
+class _DetailTabs extends StatefulWidget {
+  const _DetailTabs({required this.detail});
 
   final ListingDetail detail;
 
   @override
+  State<_DetailTabs> createState() => _DetailTabsState();
+}
+
+class _DetailTabsState extends State<_DetailTabs> {
+  var _tab = 0;
+
+  static const _labels = ['التفاصيل', 'الوصف', 'المعلن'];
+  static const _keys = ['tab-details', 'tab-description', 'tab-owner'];
+
+  @override
   Widget build(BuildContext context) {
+    final c = context.colors;
+    final theme = Theme.of(context);
+    final d = widget.detail;
+
+    final content = switch (_tab) {
+      0 => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (d.color != null && d.color!.isNotEmpty)
+            _FactRow(label: 'اللون', value: d.color!),
+          _FactRow(label: 'الحالة الصحية', value: d.healthNotes),
+        ],
+      ),
+      1 => Text(d.description, style: theme.textTheme.bodyLarge),
+      _ => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _OwnerRow(detail: d),
+          const SizedBox(height: 6),
+          Text(
+            'نُشر ${formatSaudiMoment(d.publishedAt).split(' ').first}',
+            style: theme.textTheme.bodySmall?.copyWith(color: c.muted),
+          ),
+        ],
+      ),
+    };
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        DecoratedBox(
+          decoration: ShapeDecoration(
+            color: c.soft,
+            shape: const StadiumBorder(),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: Row(
+              children: [
+                for (var i = 0; i < _labels.length; i++)
+                  Expanded(
+                    child: Semantics(
+                      button: true,
+                      selected: _tab == i,
+                      child: Material(
+                        color: _tab == i ? c.tintGold : Colors.transparent,
+                        shape: const StadiumBorder(),
+                        child: InkWell(
+                          key: ValueKey(_keys[i]),
+                          customBorder: const StadiumBorder(),
+                          onTap: () => setState(() => _tab = i),
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              minHeight: AppShapes.minTouchTarget - 4,
+                            ),
+                            child: Center(
+                              child: Text(
+                                _labels[i],
+                                style: theme.textTheme.labelLarge?.copyWith(
+                                  color: _tab == i ? c.gold : c.muted,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        content,
+        // الأسئلة والردود جزء من حاوية التبويبات (تظهر تحت محتوى كل تبويب)،
+        // وحالة الكتابة تبقى عند التنقل بين التبويبات.
+        const SizedBox(height: 20),
+        CommentsSection(detail: d),
+      ],
+    );
+  }
+}
+
+/// بطاقة المزاد في التفاصيل: بلاطة تاريخ كبيرة مع الموعد والمكان، وتنبيه بأن
+/// المزايدة حضورية خارج التطبيق. المزاد الماضي ينبَّه إليه دون بلاطة.
+class _AuctionCard extends ConsumerWidget {
+  const _AuctionCard({required this.detail});
+
+  final ListingDetail detail;
+
+  /// يفتح موقع المزاد في تطبيق الخرائط الافتراضي.
+  Future<void> _openDirections(BuildContext context, WidgetRef ref) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final uri = Uri.https('www.google.com', '/maps/search/', {
+      'api': '1',
+      'query': '${detail.auctionLat},${detail.auctionLng}',
+    });
+    var ok = false;
+    try {
+      ok = await ref.read(externalLauncherProvider)(uri);
+    } on Object {
+      ok = false;
+    }
+    if (!ok) {
+      messenger.showApp(
+        'تعذّر فتح الخرائط. حاول مرة أخرى.',
+        kind: AppNoteKind.error,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final d = detail;
+    final c = context.colors;
+    final theme = Theme.of(context);
+    final startsAt = d.auctionStartsAt;
+    if (d.auctionPassed || startsAt == null) {
+      return AppNote(
+        d.auctionPassed ? 'مضى موعد هذا المزاد.' : 'موعد المزاد غير محدد.',
+        kind: d.auctionPassed ? AppNoteKind.error : AppNoteKind.info,
+      );
+    }
     final place = [
-      d.auctionRegionName,
-      d.auctionCityName,
-    ].whereType<String>().join(' · ');
-    final lines = [
-      if (d.auctionStartsAt != null)
-        'الموعد: ${formatSaudiMoment(d.auctionStartsAt!)} (توقيت السعودية)',
-      if (place.isNotEmpty) 'المكان: $place',
       if (d.auctionVenue != null && d.auctionVenue!.isNotEmpty) d.auctionVenue!,
-    ];
-    return AppNote(
-      d.auctionPassed ? 'مضى موعد هذا المزاد.' : lines.join('\n'),
-      kind: d.auctionPassed ? AppNoteKind.error : AppNoteKind.info,
+      ?d.auctionCityName,
+    ].join(' · ');
+
+    Widget field(String label, String value) => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: c.info,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        Text(value, style: theme.textTheme.titleSmall),
+      ],
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: c.tintBlue,
+            borderRadius: BorderRadius.circular(AppShapes.card),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AuctionDateTile(startsAt: startsAt, large: true),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      field(
+                        'موعد المزاد (توقيت السعودية)',
+                        saudiTime12(startsAt),
+                      ),
+                      if (place.isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        field('مكان المزاد', place),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (d.hasAuctionLocation) ...[
+          const SizedBox(height: 10),
+          DistanceLabel(lat: d.auctionLat!, lng: d.auctionLng!),
+          const SizedBox(height: 8),
+          MiniMap(
+            key: const ValueKey('auction-map'),
+            point: LatLng(d.auctionLat!, d.auctionLng!),
+            height: 170,
+            onTap: () => _openDirections(context, ref),
+          ),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton.icon(
+              key: const ValueKey('auction-directions'),
+              onPressed: () => _openDirections(context, ref),
+              icon: const Icon(Icons.directions_outlined),
+              label: const Text('فتح الموقع في الخرائط'),
+            ),
+          ),
+        ],
+        const SizedBox(height: 8),
+        Text('المزايدة حضورية خارج التطبيق.', style: theme.textTheme.bodySmall),
+      ],
+    );
+  }
+}
+
+/// شريط الخصائص: ثلاث خانات تفصلها خطوط رأسية (سلالة وجنس وعمر).
+class _SpecStrip extends StatelessWidget {
+  const _SpecStrip({required this.items});
+
+  final List<(String, String)> items;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final theme = Theme.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: c.soft,
+        borderRadius: BorderRadius.circular(AppShapes.card),
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var i = 0; i < items.length; i++) ...[
+              if (i > 0) VerticalDivider(width: 1, thickness: 1, color: c.line),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 14,
+                    horizontal: 8,
+                  ),
+                  child: Column(
+                    children: [
+                      Text(items[i].$1, style: theme.textTheme.bodySmall),
+                      const SizedBox(height: 2),
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          items[i].$2,
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.titleSmall,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// صف حقيقة: التسمية في البداية والقيمة في النهاية، وفاصل رفيع أسفله.
+class _FactRow extends StatelessWidget {
+  const _FactRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final theme = Theme.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: c.hair)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          children: [
+            Text(label, style: theme.textTheme.bodySmall),
+            const Spacer(),
+            Text(value, style: theme.textTheme.bodyLarge),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// زر قناة تواصل في الشريط العائم: خلفية خضراء هادئة بأيقونة وتسمية.
+class _ChannelButton extends StatelessWidget {
+  const _ChannelButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Semantics(
+      button: true,
+      label: label,
+      onTap: onTap,
+      excludeSemantics: true,
+      child: Material(
+        color: c.tintGreen,
+        borderRadius: BorderRadius.circular(24),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(24),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minWidth: AppShapes.minTouchTarget + 8,
+              minHeight: AppShapes.minTouchTarget + 4,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: 20, color: c.green),
+                Text(
+                  label,
+                  textScaler: TextScaler.noScaling,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: c.green,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -473,32 +775,61 @@ class _OwnerRow extends StatelessWidget {
 }
 
 /// معرض صور الإعلان: تمرير أفقي، ومؤشر الصفحة، والنقر يفتح عرضًا كاملًا
-/// قابلًا للتكبير. الفيديو لا يعمل تلقائيًا؛ لا يُعرض هنا إلى أن يُبنى مشغله.
-class ListingGallery extends StatefulWidget {
+/// قابلًا للتكبير. الفيديو (C04) يظهر فقط حين يكون `media.video_enabled`
+/// مفعلًا، ويُشغَّل يدويًا فقط.
+class ListingGallery extends ConsumerStatefulWidget {
   const ListingGallery({super.key, required this.media});
 
   final List<DetailMedia> media;
 
   @override
-  State<ListingGallery> createState() => _ListingGalleryState();
+  ConsumerState<ListingGallery> createState() => _ListingGalleryState();
 }
 
-class _ListingGalleryState extends State<ListingGallery> {
+class _ListingGalleryState extends ConsumerState<ListingGallery> {
   var _page = 0;
 
-  List<DetailMedia> get _images =>
-      widget.media.where((m) => m.isImage).toList(growable: false);
+  /// الصور، ومعها الفيديو إن كان مفعلًا في الإعدادات المنشورة.
+  List<DetailMedia> get _images {
+    final videoEnabled =
+        ref.watch(publishedSettingsProvider).value?.media.videoEnabled ?? false;
+    return widget.media
+        .where((m) => m.isImage || videoEnabled)
+        .toList(growable: false);
+  }
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final images = _images;
+    // حافة الورقة المرتفعة (زوايا 28) تغطي أسفل الصورة.
+    final sheetCap = PositionedDirectional(
+      bottom: 0,
+      start: 0,
+      end: 0,
+      child: IgnorePointer(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: c.bg,
+            borderRadius: AppShapes.sheetRadius,
+          ),
+          child: const SizedBox(height: AppShapes.sheet),
+        ),
+      ),
+    );
     if (images.isEmpty) {
       return AspectRatio(
         aspectRatio: 4 / 3,
-        child: ColoredBox(
-          color: c.soft,
-          child: Icon(Icons.image_outlined, color: c.muted, size: 48),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: ColoredBox(
+                color: c.soft,
+                child: Icon(Icons.image_outlined, color: c.muted, size: 48),
+              ),
+            ),
+            sheetCap,
+          ],
         ),
       );
     }
@@ -510,44 +841,65 @@ class _ListingGalleryState extends State<ListingGallery> {
             key: const ValueKey('gallery'),
             itemCount: images.length,
             onPageChanged: (i) => setState(() => _page = i),
-            itemBuilder: (context, i) => Semantics(
-              button: true,
-              label: 'صورة ${i + 1} من ${images.length}. اضغط للتكبير',
-              child: GestureDetector(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    fullscreenDialog: true,
-                    builder: (_) => ImageViewer(images: images, initial: i),
+            itemBuilder: (context, i) {
+              void openViewer() => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  fullscreenDialog: true,
+                  builder: (_) => ImageViewer(images: images, initial: i),
+                ),
+              );
+              if (!images[i].isImage) {
+                return VideoPlayerView(
+                  key: ValueKey('video-${images[i].mediaId}'),
+                  bucket: images[i].bucket,
+                  path: images[i].path,
+                  onFullscreen: openViewer,
+                );
+              }
+              return Semantics(
+                button: true,
+                label: 'صورة ${i + 1} من ${images.length}. اضغط للتكبير',
+                child: GestureDetector(
+                  onTap: openViewer,
+                  child: ExcludeSemantics(
+                    child: MediaImage(
+                      bucket: images[i].bucket,
+                      path: images[i].path,
+                    ),
                   ),
                 ),
-                child: ExcludeSemantics(
-                  child: MediaImage(
-                    bucket: images[i].bucket,
-                    path: images[i].path,
-                  ),
-                ),
-              ),
-            ),
+              );
+            },
           ),
+          sheetCap,
           if (images.length > 1)
             PositionedDirectional(
-              bottom: 8,
-              start: 0,
-              end: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 0; i < images.length; i++)
-                    Container(
-                      width: 8,
-                      height: 8,
-                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: i == _page ? c.gold : c.line,
-                      ),
+              bottom: AppShapes.sheet + 12,
+              start: 16,
+              child: ExcludeSemantics(
+                child: DecoratedBox(
+                  decoration: ShapeDecoration(
+                    color: c.surface,
+                    shape: const StadiumBorder(),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
                     ),
-                ],
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '${_page + 1}/${images.length}',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        const SizedBox(width: 6),
+                        Icon(Icons.image_outlined, size: 16, color: c.text),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
         ],
@@ -556,7 +908,7 @@ class _ListingGalleryState extends State<ListingGallery> {
   }
 }
 
-/// عرض كامل للصور بتكبير بالقرص.
+/// عرض كامل للصور (بتكبير بالقرص) والفيديو (تشغيل يدوي).
 class ImageViewer extends StatefulWidget {
   const ImageViewer({super.key, required this.images, required this.initial});
 
@@ -584,24 +936,43 @@ class _ImageViewerState extends State<ImageViewer> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: Text('${_page + 1} / ${widget.images.length}'),
+        // سمة التطبيق تلوّن العنوان والأيقونات بالداكن فتختفي على الأسود.
+        iconTheme: const IconThemeData(color: Colors.white),
+        titleTextStyle: Theme.of(
+          context,
+        ).textTheme.titleMedium?.copyWith(color: Colors.white),
+        // الأرقام تُرتّب «1 / 3» حتى داخل واجهة RTL.
+        title: Directionality(
+          textDirection: TextDirection.ltr,
+          child: Text('${_page + 1} / ${widget.images.length}'),
+        ),
       ),
       body: PageView.builder(
         key: const ValueKey('viewer'),
         controller: _controller,
         itemCount: widget.images.length,
         onPageChanged: (i) => setState(() => _page = i),
-        itemBuilder: (context, i) => InteractiveViewer(
-          minScale: 1,
-          maxScale: 5,
-          child: Center(
-            child: MediaImage(
-              bucket: widget.images[i].bucket,
-              path: widget.images[i].path,
-              fit: BoxFit.contain,
+        itemBuilder: (context, i) {
+          final m = widget.images[i];
+          if (!m.isImage) {
+            return VideoPlayerView(
+              key: ValueKey('viewer-video-${m.mediaId}'),
+              bucket: m.bucket,
+              path: m.path,
+            );
+          }
+          return InteractiveViewer(
+            minScale: 1,
+            maxScale: 5,
+            child: Center(
+              child: MediaImage(
+                bucket: m.bucket,
+                path: m.path,
+                fit: BoxFit.contain,
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

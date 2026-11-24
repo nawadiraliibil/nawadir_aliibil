@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -26,7 +27,7 @@ class StarsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Colors.amber.shade700;
+    final color = context.colors.gold;
     return Semantics(
       label: '$score من 5',
       child: ExcludeSemantics(
@@ -73,12 +74,9 @@ class SellerRatingsScreen extends ConsumerWidget {
     if (ok == true) {
       ref.invalidate(sellerRatingsProvider(sellerId));
       ref.invalidate(ratingEligibilityProvider(sellerId));
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            existing == null ? 'تم نشر تقييمك.' : 'تم حفظ تعديل تقييمك.',
-          ),
-        ),
+      messenger.showApp(
+        existing == null ? 'تم نشر تقييمك.' : 'تم حفظ تعديل تقييمك.',
+        kind: AppNoteKind.success,
       );
     }
   }
@@ -96,7 +94,7 @@ class SellerRatingsScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           tooltip: 'رجوع',
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () =>
               context.canPop() ? context.pop() : context.go(Routes.home),
         ),
@@ -193,8 +191,27 @@ class SellerRatingsScreen extends ConsumerWidget {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('التقييم غير متاح الآن'),
-                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 18,
+                                backgroundColor: c.tintGold,
+                                child: Icon(
+                                  Icons.star_outline,
+                                  size: 20,
+                                  color: c.gold,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  'التقييم غير متاح الآن',
+                                  style: theme.textTheme.titleSmall,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
                           AppNote(e.reasonText),
                         ],
                       );
@@ -202,94 +219,90 @@ class SellerRatingsScreen extends ConsumerWidget {
                   ),
                 const SizedBox(height: 16),
                 for (final r in list)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: c.soft,
-                        borderRadius: BorderRadius.circular(AppShapes.card),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                StarsRow(score: r.score),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    r.displayName,
-                                    style: theme.textTheme.titleSmall,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      border: Border(top: BorderSide(color: c.hair)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  r.displayName,
+                                  style: theme.textTheme.titleSmall,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                Text(
-                                  formatShortTime(r.createdAt),
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: c.muted,
-                                  ),
-                                ),
-                                if (r.raterId != myId)
-                                  PopupMenuButton<String>(
-                                    key: ValueKey('rating-menu-${r.id}'),
-                                    tooltip: 'خيارات التقييم',
-                                    onSelected: (_) => showReportSheet(
-                                      context,
-                                      ref,
-                                      target: ReportTarget.rating,
-                                      targetId: r.id,
-                                      targetLabel: 'التقييم',
-                                    ),
-                                    itemBuilder: (_) => const [
-                                      PopupMenuItem(
-                                        value: 'report',
-                                        child: Text('إبلاغ'),
-                                      ),
-                                    ],
-                                  ),
-                              ],
-                            ),
-                            if (r.body != null) ...[
-                              const SizedBox(height: 4),
-                              Text(r.body!, style: theme.textTheme.bodyLarge),
-                            ],
-                            if (r.edited)
+                              ),
                               Text(
-                                'معدّل',
+                                formatShortTime(r.createdAt),
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: c.muted,
                                 ),
                               ),
-                            if (r.replyBody != null) ...[
-                              const SizedBox(height: 8),
-                              Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: c.tintGold,
-                                  borderRadius: BorderRadius.circular(
-                                    AppShapes.image,
+                              if (r.raterId != myId)
+                                PopupMenuButton<String>(
+                                  key: ValueKey('rating-menu-${r.id}'),
+                                  tooltip: 'خيارات التقييم',
+                                  onSelected: (_) => showReportSheet(
+                                    context,
+                                    ref,
+                                    target: ReportTarget.rating,
+                                    targetId: r.id,
+                                    targetLabel: 'التقييم',
                                   ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'رد المعلن',
-                                      style: theme.textTheme.labelMedium,
-                                    ),
-                                    Text(
-                                      r.replyBody!,
-                                      style: theme.textTheme.bodyMedium,
+                                  itemBuilder: (_) => const [
+                                    PopupMenuItem(
+                                      value: 'report',
+                                      child: Text('إبلاغ'),
                                     ),
                                   ],
                                 ),
-                              ),
                             ],
+                          ),
+                          StarsRow(score: r.score, size: 16),
+                          if (r.body != null) ...[
+                            const SizedBox(height: 6),
+                            Text(r.body!, style: theme.textTheme.bodyLarge),
                           ],
-                        ),
+                          if (r.edited)
+                            Text(
+                              'معدّل',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: c.muted,
+                              ),
+                            ),
+                          if (r.replyBody != null) ...[
+                            const SizedBox(height: 10),
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: c.soft,
+                                borderRadius: BorderRadius.circular(
+                                  AppShapes.image,
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'رد المعلن',
+                                    style: theme.textTheme.labelMedium
+                                        ?.copyWith(color: c.gold),
+                                  ),
+                                  Text(
+                                    r.replyBody!,
+                                    style: theme.textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
                   ),

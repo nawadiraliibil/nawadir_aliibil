@@ -53,13 +53,16 @@ class ListingDetail {
     required this.regionName,
     required this.cityName,
     required this.contactPhone,
-    required this.callEnabled,
-    required this.whatsappEnabled,
+    required this.whatsappPhone,
     required this.publishedAt,
     required this.publicRef,
     required this.commentsClosed,
     required this.media,
     required this.isFavorite,
+    this.auctionLat,
+    this.auctionLng,
+    this.viewCount = 0,
+    this.favoriteCount = 0,
   });
 
   factory ListingDetail.fromJson(Map<String, dynamic> json) {
@@ -88,9 +91,8 @@ class ListingDetail {
       healthNotes: l['health_notes'] as String,
       regionName: l['region_name_ar'] as String,
       cityName: l['city_name_ar'] as String,
-      contactPhone: l['contact_phone'] as String,
-      callEnabled: l['contact_call_enabled'] as bool,
-      whatsappEnabled: l['contact_whatsapp_enabled'] as bool,
+      contactPhone: l['contact_phone'] as String?,
+      whatsappPhone: l['contact_whatsapp_phone'] as String?,
       publishedAt: DateTime.parse(l['first_published_at'] as String),
       publicRef: l['public_ref'] as String?,
       commentsClosed: l['comments_closed'] as bool? ?? false,
@@ -99,6 +101,10 @@ class ListingDetail {
           DetailMedia.fromJson(Map<String, dynamic>.from(m as Map)),
       ],
       isFavorite: json['is_favorite'] as bool? ?? false,
+      auctionLat: (l['auction_lat'] as num?)?.toDouble(),
+      auctionLng: (l['auction_lng'] as num?)?.toDouble(),
+      viewCount: l['view_count'] as int? ?? 0,
+      favoriteCount: l['favorite_count'] as int? ?? 0,
     );
   }
 
@@ -125,9 +131,13 @@ class ListingDetail {
   final String cityName;
 
   /// بصيغة E.164 (`+9665xxxxxxxx`).
-  final String contactPhone;
-  final bool callEnabled;
-  final bool whatsappEnabled;
+  /// رقم الاتصال ورقم واتساب مستقلان؛ أيهما قد يكون null (TEAM-DEC-012).
+  final String? contactPhone;
+  final String? whatsappPhone;
+
+  bool get callEnabled => contactPhone != null && contactPhone!.isNotEmpty;
+  bool get whatsappEnabled =>
+      whatsappPhone != null && whatsappPhone!.isNotEmpty;
   final DateTime publishedAt;
   final String? publicRef;
 
@@ -135,6 +145,14 @@ class ListingDetail {
   final bool commentsClosed;
   final List<DetailMedia> media;
   final bool isFavorite;
+
+  /// موقع المزاد الحضوري على الخريطة؛ فارغ للمزادات القديمة ولغير المزاد.
+  final double? auctionLat;
+  final double? auctionLng;
+  final int viewCount;
+  final int favoriteCount;
+
+  bool get hasAuctionLocation => auctionLat != null && auctionLng != null;
 
   bool get isAuction => offerType == 'IN_PERSON_AUCTION';
 
@@ -164,12 +182,15 @@ class ListingDetail {
     regionName: regionName,
     cityName: cityName,
     contactPhone: contactPhone,
-    callEnabled: callEnabled,
-    whatsappEnabled: whatsappEnabled,
+    whatsappPhone: whatsappPhone,
     publishedAt: publishedAt,
     publicRef: publicRef,
     commentsClosed: commentsClosed,
     media: media,
     isFavorite: value,
+    auctionLat: auctionLat,
+    auctionLng: auctionLng,
+    viewCount: viewCount,
+    favoriteCount: favoriteCount + (value == isFavorite ? 0 : (value ? 1 : -1)),
   );
 }

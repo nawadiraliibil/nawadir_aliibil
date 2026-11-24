@@ -19,6 +19,10 @@ class ListingCard {
     required this.coverBucket,
     required this.coverPath,
     required this.publicRef,
+    this.auctionLat,
+    this.auctionLng,
+    this.viewCount = 0,
+    this.favoriteCount = 0,
   });
 
   factory ListingCard.fromJson(Map<String, dynamic> j) => ListingCard(
@@ -41,6 +45,10 @@ class ListingCard {
     coverBucket: j['cover_bucket'] as String?,
     coverPath: j['cover_path'] as String?,
     publicRef: j['public_ref'] as String?,
+    auctionLat: (j['auction_lat'] as num?)?.toDouble(),
+    auctionLng: (j['auction_lng'] as num?)?.toDouble(),
+    viewCount: j['view_count'] as int? ?? 0,
+    favoriteCount: j['favorite_count'] as int? ?? 0,
   );
 
   final String listingId;
@@ -64,6 +72,14 @@ class ListingCard {
   final String? coverBucket;
   final String? coverPath;
   final String? publicRef;
+
+  /// موقع المزاد الحضوري على الخريطة؛ فارغ لغير المزاد وللمزادات القديمة.
+  final double? auctionLat;
+  final double? auctionLng;
+  final int viewCount;
+  final int favoriteCount;
+
+  bool get hasAuctionLocation => auctionLat != null && auctionLng != null;
 
   bool get isAuction => offerType == 'IN_PERSON_AUCTION';
 
@@ -94,10 +110,10 @@ class SearchPage {
 
 /// الفرز المدعوم من الخادم.
 enum SearchSort {
-  newestVisible('NEWEST_VISIBLE', 'الأحدث ظهورًا'),
-  newestPublished('NEWEST_PUBLISHED', 'الأحدث نشرًا'),
+  newestVisible('NEWEST_VISIBLE', 'الأحدث'),
   priceAsc('PRICE_ASC', 'السعر: من الأقل'),
-  priceDesc('PRICE_DESC', 'السعر: من الأعلى');
+  priceDesc('PRICE_DESC', 'السعر: من الأعلى'),
+  mostViewed('MOST_VIEWED', 'الأكثر مشاهدة');
 
   const SearchSort(this.wire, this.label);
   final String wire;

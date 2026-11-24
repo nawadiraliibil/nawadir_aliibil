@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nawadir_aliibil/core/widgets/app_badge.dart';
 import 'package:nawadir_aliibil/core/errors/app_error.dart';
 import 'package:nawadir_aliibil/core/format/money.dart';
 import 'package:nawadir_aliibil/features/my_listings/data/my_listing.dart';
@@ -91,7 +92,7 @@ void main() {
     expect(formatMoney(1234567), '1,234,567');
     expect(
       formatSaudiMoment(DateTime.utc(2099, 1, 5, 15, 30)),
-      '5/1/2099 18:30',
+      '5/1/2099 6:30 م',
     );
   });
 
@@ -139,11 +140,11 @@ void main() {
     });
     await _openMyListings(tester, tables: tables);
 
-    expect(find.text('منشور'), findsNWidgets(3));
-    expect(find.text('مسودة'), findsOneWidget);
-    expect(find.text('قيد المراجعة'), findsOneWidget);
-    expect(find.text('مرفوض'), findsOneWidget);
-    expect(find.text('مخفي'), findsOneWidget);
+    expect(find.widgetWithText(AppBadge, 'منشور'), findsNWidgets(3));
+    expect(find.widgetWithText(AppBadge, 'مسودة'), findsOneWidget);
+    expect(find.widgetWithText(AppBadge, 'قيد المراجعة'), findsOneWidget);
+    expect(find.widgetWithText(AppBadge, 'مرفوض'), findsOneWidget);
+    expect(find.widgetWithText(AppBadge, 'مخفي'), findsOneWidget);
     expect(find.text('مسودة بلا عنوان'), findsOneWidget);
     expect(find.text('25,000 ريال'), findsNWidgets(5));
     expect(find.text('مزاد حضوري · انتهى موعده'), findsOneWidget);
@@ -155,6 +156,24 @@ void main() {
         .widgetList<Text>(find.text('ناقة مجاهيم للبيع'))
         .length;
     expect(order, greaterThan(0));
+  });
+
+  testWidgets('المنشور يعرض عدد مشاهداته وإعجاباته دون المسودة', (
+    tester,
+  ) async {
+    final handle = tester.ensureSemantics();
+    final tables = FakeTables({
+      'my_listings': [
+        _row('a')
+          ..['view_count'] = 1250
+          ..['favorite_count'] = 7,
+        _row('b', status: 'DRAFT', title: 'مسودة', price: null),
+      ],
+    });
+    await _openMyListings(tester, tables: tables);
+    expect(find.bySemanticsLabel(RegExp('1250 مشاهدة')), findsOneWidget);
+    expect(find.bySemanticsLabel(RegExp('7 إعجاب')), findsOneWidget);
+    handle.dispose();
   });
 
   testWidgets('قائمة فارغة: دعوة لإضافة أول إعلان', (tester) async {
@@ -264,7 +283,7 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'حذف'));
     await tester.pumpAndSettle();
     expect(find.textContaining('غير متاح في حالة الإعلان'), findsOneWidget);
-    expect(find.text('مسودة'), findsOneWidget);
+    expect(find.widgetWithText(AppBadge, 'مسودة'), findsOneWidget);
   });
 
   testWidgets('متابعة تحرير مسودة: تُحمَّل من الجداول وتملأ المعالج وصوره', (
@@ -297,7 +316,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // المعالج يبدأ من بيانات الإبل والحقول معبأة من الخادم.
-    expect(find.text('إعلان جديد 2 / 7'), findsOneWidget);
+    expect(find.text('2 / 7'), findsOneWidget);
     expect(find.widgetWithText(TextField, 'ناقة مجاهيم للبيع'), findsOneWidget);
     expect(
       tables.requests,
@@ -309,7 +328,7 @@ void main() {
     await tester.tap(find.text('متابعة'));
     await tester.pumpAndSettle();
     expect(server.patches, isEmpty);
-    expect(find.text('إعلان جديد 3 / 7'), findsOneWidget);
+    expect(find.text('3 / 7'), findsOneWidget);
   });
 
   testWidgets('تعديل إعلان منشور: start_listing_edit ثم المعالج بالبيانات', (

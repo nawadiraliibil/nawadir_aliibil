@@ -43,7 +43,7 @@ Future<FakeListingServer> _openWizard(
 }
 
 Future<void> _pick(WidgetTester tester, String label, String option) async {
-  await tester.tap(find.widgetWithText(DropdownButtonFormField<int>, label));
+  await tester.tap(_field<DropdownButtonFormField<int>>(label));
   await tester.pumpAndSettle();
   // عناصر القائمة تُبنى كسولًا: نمرر القائمة حتى يظهر الخيار.
   for (var i = 0; i < 10 && find.text(option).evaluate().isEmpty; i++) {
@@ -61,14 +61,14 @@ Future<void> _pickString(
   String label,
   String option,
 ) async {
-  await tester.tap(find.widgetWithText(DropdownButtonFormField<String>, label));
+  await tester.tap(_field<DropdownButtonFormField<String>>(label));
   await tester.pumpAndSettle();
   await tester.tap(find.text(option).last);
   await tester.pumpAndSettle();
 }
 
 Future<void> _type(WidgetTester tester, String label, String text) async {
-  await tester.enterText(find.widgetWithText(TextField, label), text);
+  await tester.enterText(_field<TextField>(label), text);
   await tester.pump();
 }
 
@@ -198,8 +198,18 @@ void main() {
         'auction_city_id': city.id,
         'auction_venue': 'سوق الإبل',
         'auction_starts_at': DateTime.utc(2026, 12, 1),
+        'auction_lat': 24.713552,
+        'auction_lng': 46.675297,
       });
       expect(DraftValidation.auction(ok, s, now), isEmpty);
+      expect(
+        DraftValidation.auction(ok.set('auction_lat', null), s, now),
+        contains('auction_location'),
+      );
+      expect(
+        DraftValidation.auction(ok.set('auction_lng', null), s, now),
+        contains('auction_location'),
+      );
       expect(
         DraftValidation.auction(
           ok.set('auction_starts_at', DateTime.utc(2026, 11, 23, 11)),
@@ -214,18 +224,30 @@ void main() {
       );
     });
 
-    test('التواصل: رقم سعودي وقناة واحدة على الأقل', () {
-      const ok = DraftForm({
-        'contact_phone': '0500000009',
-        'contact_call_enabled': true,
-      });
+    test('التواصل: رقمان مستقلان ويلزم أحدهما بصيغة سعودية صالحة', () {
+      const ok = DraftForm({'contact_phone': '0500000009'});
       expect(DraftValidation.contact(ok), isEmpty);
+      // واتساب وحده يكفي، ويجوز أن يختلف عن رقم الاتصال.
+      expect(
+        DraftValidation.contact(
+          const DraftForm({'contact_whatsapp_phone': '0500000010'}),
+        ),
+        isEmpty,
+      );
+      expect(
+        DraftValidation.contact(ok.set('contact_whatsapp_phone', '0500000010')),
+        isEmpty,
+      );
       expect(
         DraftValidation.contact(ok.set('contact_phone', '123')),
         contains('contact_phone'),
       );
       expect(
-        DraftValidation.contact(ok.set('contact_call_enabled', false)),
+        DraftValidation.contact(ok.set('contact_whatsapp_phone', '123')),
+        contains('contact_whatsapp_phone'),
+      );
+      expect(
+        DraftValidation.contact(const DraftForm({})),
         contains('contact_channels'),
       );
     });
@@ -236,7 +258,7 @@ void main() {
   ) async {
     final server = await _openWizard(tester);
     expect(find.text('نوع العرض'), findsOneWidget);
-    expect(find.text('إعلان جديد 1 / 7'), findsOneWidget);
+    expect(find.text('1 / 7'), findsOneWidget);
 
     await _tap(tester, 'سعر محدد');
 
@@ -245,7 +267,7 @@ void main() {
       {'offer_type': 'FIXED_PRICE'},
     ]);
     expect(find.text('بيانات الإبل'), findsOneWidget);
-    expect(find.text('إعلان جديد 2 / 7'), findsOneWidget);
+    expect(find.text('2 / 7'), findsOneWidget);
   });
 
   testWidgets('مسار السعر المحدد كاملًا يحفظ كل خطوة برقعة صحيحة', (
@@ -286,21 +308,22 @@ void main() {
     expect(server.patches[4], {'price': 48000});
 
     // الصور: خطوة مؤقتة تتيح المتابعة.
-    expect(find.text('إعلان جديد 5 / 7'), findsOneWidget);
+    expect(find.text('5 / 7'), findsOneWidget);
     await tester.tap(find.text('إضافة صور'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('من المعرض'));
     await tester.pumpAndSettle();
     await _tap(tester, 'متابعة');
 
-    // التواصل: رقم وقناة الاتصال مفعلة افتراضيًا.
-    await _type(tester, 'رقم الجوال', '٠٥٠٠٠٠٠٠٠٩');
+    // التواصل: رقم اتصال ورقم واتساب مختلفان.
+    await _type(tester, 'رقم الاتصال', '٠٥٠٠٠٠٠٠٠٩');
+    await _type(tester, 'رقم واتساب', '٠٥٠٠٠٠٠٠١٠');
     await _tap(tester, 'معاينة الإعلان');
     expect(server.patches[5], {
       'contact_phone': '0500000009',
-      'contact_call_enabled': true,
+      'contact_whatsapp_phone': '0500000010',
     });
-    expect(find.text('إعلان جديد 7 / 7'), findsOneWidget);
+    expect(find.text('7 / 7'), findsOneWidget);
     expect(server.createCalls, 1);
   });
 
@@ -311,15 +334,15 @@ void main() {
     await _tap(tester, 'سعر محدد');
 
     await _pick(tester, 'السلالة', 'أخرى');
-    expect(find.widgetWithText(TextField, 'اسم السلالة'), findsOneWidget);
+    expect(_field<TextField>('اسم السلالة'), findsOneWidget);
     // القائمة مفتوحة على «أخرى» في آخرها فيصعب النقر على خيار علوي؛ نستدعي التغيير مباشرة.
     tester
         .widget<DropdownButtonFormField<int>>(
-          find.widgetWithText(DropdownButtonFormField<int>, 'السلالة'),
+          _field<DropdownButtonFormField<int>>('السلالة'),
         )
         .onChanged!(3);
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(TextField, 'اسم السلالة'), findsNothing);
+    expect(_field<TextField>('اسم السلالة'), findsNothing);
   });
 
   testWidgets('مسار المزاد: موعد مستقبلي ومكان ومدينة', (tester) async {
@@ -338,7 +361,7 @@ void main() {
     await _tap(tester, 'متابعة');
 
     // خطوة المزاد لا تعرض حقل السعر.
-    expect(find.widgetWithText(TextField, 'مكان المزاد'), findsOneWidget);
+    expect(_field<TextField>('مكان المزاد'), findsOneWidget);
     expect(find.textContaining('السعر المطلوب'), findsNothing);
 
     await _tap(tester, 'متابعة');
@@ -362,15 +385,30 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('5/1/2099'), findsOneWidget);
     expect(find.text('18:30'), findsOneWidget);
+    // بلا موقع على الخريطة لا انتقال: الزر يفتح الخريطة (لا تُختبر هنا).
+    await _tap(tester, 'متابعة');
+    expect(find.text('حدد موقع المزاد على الخريطة.'), findsOneWidget);
+    expect(find.byKey(const ValueKey('pick-location')), findsOneWidget);
+    expect(
+      server.patches.where((p) => p.containsKey('auction_venue')),
+      isEmpty,
+    );
+    ProviderScope.containerOf(tester.element(find.byType(Scaffold).last))
+        .read(postControllerProvider.notifier)
+        .setAll({'auction_lat': 24.713552, 'auction_lng': 46.675297});
+    await tester.pump();
+    expect(find.byKey(const ValueKey('location-preview')), findsOneWidget);
     await _tap(tester, 'متابعة');
     expect(server.patches.last, {
       'auction_region_id': 1,
       'auction_city_id': 2,
       'auction_venue': 'سوق الإبل',
       'auction_starts_at': '2099-01-05T15:30:00.000Z',
+      'auction_lat': 24.713552,
+      'auction_lng': 46.675297,
     });
-    expect(find.text('إعلان جديد 5 / 7'), findsOneWidget);
-    // منتقيا التاريخ والوقت (حواران من Material) لا يُختبران هنا؛ نضبط الموعد    // بما يضبطانه: لحظة UTC محسوبة من تاريخ ووقت بتوقيت السعودية.    ProviderScope.containerOf(      tester.element(find.byType(Scaffold).last),    ).read(postControllerProvider.notifier).set(      'auction_starts_at',      DraftValidation.auctionMoment(DateTime(2099, 1, 5), 18, 30),    );    await tester.pumpAndSettle();    expect(find.text('5/1/2099'), findsOneWidget);    expect(find.text('18:30'), findsOneWidget);    await _tap(tester, 'متابعة');    expect(server.patches.last, {      'auction_region_id': 1,      'auction_city_id': 2,      'auction_venue': 'سوق الإبل',      'auction_starts_at': '2099-01-05T15:30:00.000Z',    });    expect(find.text('إعلان جديد 5 / 7'), findsOneWidget);
+    expect(find.text('5 / 7'), findsOneWidget);
+    // منتقيا التاريخ والوقت (حواران من Material) لا يُختبران هنا؛ نضبط الموعد    // بما يضبطانه: لحظة UTC محسوبة من تاريخ ووقت بتوقيت السعودية.    ProviderScope.containerOf(      tester.element(find.byType(Scaffold).last),    ).read(postControllerProvider.notifier).set(      'auction_starts_at',      DraftValidation.auctionMoment(DateTime(2099, 1, 5), 18, 30),    );    await tester.pumpAndSettle();    expect(find.text('5/1/2099'), findsOneWidget);    expect(find.text('18:30'), findsOneWidget);    await _tap(tester, 'متابعة');    expect(server.patches.last, {      'auction_region_id': 1,      'auction_city_id': 2,      'auction_venue': 'سوق الإبل',      'auction_starts_at': '2099-01-05T15:30:00.000Z',    });    expect(find.text('5 / 7'), findsOneWidget);
   });
 
   testWidgets('خطأ الخادم يعرض رسالته ويبقى في الخطوة ثم ينجح إعادة الحفظ', (
@@ -490,3 +528,9 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 }
+
+/// الحقل [T] داخل خانة التسمية `field:<label>` (التسمية فوق الحقل في التصميم).
+Finder _field<T extends Widget>(String label) => find.descendant(
+  of: find.byKey(ValueKey('field:$label')),
+  matching: find.byType(T),
+);

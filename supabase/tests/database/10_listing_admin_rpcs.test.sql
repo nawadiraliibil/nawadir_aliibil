@@ -57,7 +57,7 @@ select lives_ok(
   'ترتيب الوسائط');
 select is(
   public.submit_listing((select v from ids where k = 'l1'), 'bbbbbbbb-0000-0000-0000-000000000001') #>> '{listing,status}',
-  'UNDER_REVIEW', 'إرسال الإعلان');
+  'PUBLISHED', 'إرسال الإعلان ينشره مباشرة');
 
 -- المستخدم العادي لا يستدعي دوال الإدارة
 select throws_ok(
@@ -77,85 +77,51 @@ select throws_ok(
   $$select public.admin_review_queue()$$, 'P0001', 'MFA_REQUIRED', 'المراجعة تشترط aal2');
 reset role;
 
--- المشرف: قائمة المراجعة والتفاصيل
+-- المشرف: قائمة المراجعة القديمة فارغة، وإدارة الإعلانات بالقائمة الجديدة
 select pg_temp.login('00000000-0000-0000-0000-0000000000a2', 'aal2');
 set local role authenticated;
-select is(jsonb_array_length(public.admin_review_queue()), 1, 'إعلان واحد في قائمة المراجعة');
-select is((public.admin_review_queue() #>> '{0,is_edit}')::boolean, false, 'إعلان جديد لا تعديل');
+select is(jsonb_array_length(public.admin_review_queue()), 0, 'قائمة المراجعة المهملة فارغة دائمًا');
+select is(jsonb_array_length(public.admin_list_listings()), 1, 'إعلان واحد في إدارة الإعلانات');
+select is(public.admin_list_listings() #>> '{0,status}', 'PUBLISHED', 'الإعلان منشور');
+select is(public.admin_list_listings() #>> '{0,owner_display_name}', 'معلن الاختبار', 'القائمة تعرض اسم المعلن');
+select is(jsonb_array_length(public.admin_list_listings('HIDDEN')), 0, 'التصفية بالحالة: لا مخفي');
+select is(jsonb_array_length(public.admin_list_listings('PUBLISHED', 'مجاهيم')), 1, 'البحث بجزء من العنوان');
+select is(jsonb_array_length(public.admin_list_listings(null, 'اختبار')), 1, 'البحث باسم المعلن');
+select is(jsonb_array_length(public.admin_list_listings(null, 'لا يوجد مثله')), 0, 'بحث بلا نتائج');
+select is(jsonb_array_length(public.admin_list_listings(null, (select v::text from ids where k = 'l1'))), 1, 'البحث بمعرف الإعلان');
+select throws_ok($$select public.admin_list_listings('UNDER_REVIEW')$$, 'P0001', 'VALIDATION_FAILED', 'حالة غير مدعومة');
 insert into ids select 'v1', (public.admin_get_listing_review((select v from ids where k = 'l1')) #>> '{version,id}')::uuid;
 insert into vals select 'h1', public.admin_get_listing_review((select v from ids where k = 'l1')) #>> '{version,content_hash}';
 select is(
   jsonb_array_length(public.admin_get_listing_review((select v from ids where k = 'l1')) -> 'media'),
-  3, 'تفاصيل المراجعة تضم الوسائط');
+  3, 'تفاصيل إعلان منشور تضم الوسائط');
+select is(
+  public.admin_get_listing_review((select v from ids where k = 'l1')) #>> '{reviews,0,reason_text}',
+  'AUTO_PUBLISH', 'سجل المراجعة يحوي حدث النشر التلقائي');
 
 select throws_ok(
-  $$select public.admin_approve_listing_version((select v from ids where k = 'l1'), (select v from ids where k = 'v1'), 'wrong-hash')$$,
-  'P0001', 'VERSION_CHANGED', 'بصمة مختلفة ترفض القرار');
-select throws_ok(
-  $$select public.admin_reject_listing_version((select v from ids where k = 'l1'), (select v from ids where k = 'v1'),
-      (select v from vals where k = 'h1'), null)$$,
-  'P0001', 'REASON_REQUIRED', 'الرفض يستلزم سببًا');
-select throws_ok(
-  $$select public.admin_reject_listing_version((select v from ids where k = 'l1'), (select v from ids where k = 'v1'),
-      (select v from vals where k = 'h1'), 'OTHER', '  ')$$,
-  'P0001', 'REASON_REQUIRED', '«أخرى» تستلزم نصًا');
-select throws_ok(
-  $$select public.admin_reject_listing_version((select v from ids where k = 'l1'), (select v from ids where k = 'v1'),
-      (select v from vals where k = 'h1'), 'ABUSE')$$,
-  'P0001', 'VALIDATION_FAILED', 'سبب لا ينطبق على الرفض مرفوض');
-select is(
-  public.admin_reject_listing_version((select v from ids where k = 'l1'), (select v from ids where k = 'v1'),
-    (select v from vals where k = 'h1'), 'MISSING_INFO', 'الصور غير واضحة') ->> 'status',
-  'REJECTED', 'رفض الإعلان');
+  $$select public.admin_approve_listing_version((select v from ids where k = 'l1'), (select v from ids where k = 'v1'),
+      (select v from vals where k = 'h1'))$$,
+  'P0001', 'INVALID_STATE', 'الاعتماد مهمل ويرفع INVALID_STATE');
 select throws_ok(
   $$select public.admin_reject_listing_version((select v from ids where k = 'l1'), (select v from ids where k = 'v1'),
       (select v from vals where k = 'h1'), 'MISSING_INFO')$$,
-  'P0001', 'INVALID_STATE', 'قرار ثان على إعلان غير منتظر مرفوض');
+  'P0001', 'INVALID_STATE', 'الرفض مهمل ويرفع INVALID_STATE');
 select throws_ok(
   $$select public.admin_hide_listing((select v from ids where k = 'l1'), 'FRAUD')$$,
   'P0001', 'FORBIDDEN', 'مشرف دون listings.hide لا يخفي');
 reset role;
 
-select is((select decision::text || ':' || reason_code from public.reviews), 'REJECTED:MISSING_INFO', 'سبب الرفض محفوظ في السجل');
-select is((select action from public.audit_log order by id desc limit 1), 'listing.rejected', 'الرفض في سجل الإجراءات');
-select is((select status::text from public.listing_versions), 'REJECTED', 'النسخة مرفوضة');
-
--- المعلن يصحح ويعيد الإرسال
-select pg_temp.login('00000000-0000-0000-0000-00000000000a', 'aal1');
-set local role authenticated;
-select lives_ok($$select public.start_listing_edit((select v from ids where k = 'l1'))$$, 'بدء التصحيح');
-select lives_ok(
-  $$select public.save_listing_draft((select v from ids where k = 'l1'), '{"description": "وصف مصحح كاف لاجتياز الحد الأدنى للطول"}')$$,
-  'تصحيح الوصف');
-select is(
-  public.submit_listing((select v from ids where k = 'l1'), 'bbbbbbbb-0000-0000-0000-000000000002') #>> '{listing,status}',
-  'UNDER_REVIEW', 'إعادة الإرسال');
-reset role;
-
--- الاعتماد
-select pg_temp.login('00000000-0000-0000-0000-0000000000a2', 'aal2');
-set local role authenticated;
-insert into ids select 'v2', (public.admin_get_listing_review((select v from ids where k = 'l1')) #>> '{version,id}')::uuid;
-insert into vals select 'h2', public.admin_get_listing_review((select v from ids where k = 'l1')) #>> '{version,content_hash}';
-select throws_ok(
-  $$select public.admin_approve_listing_version((select v from ids where k = 'l1'), (select v from ids where k = 'v1'),
-      (select v from vals where k = 'h1'))$$,
-  'P0001', 'VERSION_CHANGED', 'قرار على نسخة سابقة مرفوض');
-select is(
-  public.admin_approve_listing_version((select v from ids where k = 'l1'), (select v from ids where k = 'v2'),
-    (select v from vals where k = 'h2')) ->> 'status',
-  'PUBLISHED', 'اعتماد الإعلان');
-select throws_ok(
-  $$select public.admin_approve_listing_version((select v from ids where k = 'l1'), (select v from ids where k = 'v2'),
-      (select v from vals where k = 'h2'))$$,
-  'P0001', 'INVALID_STATE', 'اعتماد ثان مرفوض');
-reset role;
-
+select is((select decision::text || ':' || reason_text || ':' || (moderator_id = '00000000-0000-0000-0000-00000000000a')::text
+    from public.reviews), 'APPROVED:AUTO_PUBLISH:true', 'النشر التلقائي مسجل بمعرف المعلن');
+select is((select count(*)::integer from public.audit_log where action in ('listing.approved', 'listing.rejected')), 0,
+  'لا سجل إجراء موظف للنشر');
+select is((select status::text from public.listing_versions), 'APPROVED', 'النسخة معتمدة تلقائيًا');
 select ok(
-  (select published_version_id = (select v from ids where k = 'v2')
+  (select published_version_id = (select v from ids where k = 'v1')
      and first_published_at is not null and last_published_at is not null and visibility_updated_at is not null
    from public.listings where id = (select v from ids where k = 'l1')),
-  'أوقات النشر والنسخة المعتمدة تحفظ');
+  'أوقات النشر والنسخة المنشورة تحفظ');
 select is(
   public.storage_object_is_public('listing-images',
     (select object_path from public.media where id = (select v from ids where k = 'm1'))),
@@ -237,31 +203,11 @@ select is(
   2, 'التعليق والتفعيل في سجل الإجراءات');
 reset role;
 
--- مزاد مضى موعده عند الاعتماد
-insert into public.listings (id, owner_id, create_request_id, status, first_submitted_at) values
-  ('10000000-0000-0000-0000-000000000009', '00000000-0000-0000-0000-00000000000a', gen_random_uuid(), 'DRAFT', now());
-insert into public.listing_versions (
-    id, listing_id, version_no, status, title, description, breed_id, sex, age_months, region_id, city_id,
-    health_notes, owner_declaration_at, offer_type, auction_region_id, auction_city_id, auction_venue,
-    auction_starts_at, contact_phone, contact_whatsapp_enabled, contact_consent_at,
-    settings_version, content_hash, submitted_at)
-  values (
-    '20000000-0000-0000-0000-000000000009', '10000000-0000-0000-0000-000000000009', 1, 'SUBMITTED',
-    'مزاد حضوري للإبل', 'وصف كاف لاجتياز الحد الأدنى للطول',
-    (select id from public.breeds order by id limit 1), 'MALE', 36, 1,
-    (select id from public.cities where region_id = 1 order by id limit 1),
-    'سليم', now(), 'IN_PERSON_AUCTION', 1,
-    (select id from public.cities where region_id = 1 order by id limit 1), 'سوق الإبل',
-    now() - interval '1 minute', '+966500000009', true, now(), 1, 'hash-auction', now() - interval '2 days');
-update public.listings set status = 'UNDER_REVIEW', current_version_id = '20000000-0000-0000-0000-000000000009'
-  where id = '10000000-0000-0000-0000-000000000009';
-
-set local role authenticated;
+-- UNDER_REVIEW لم تعد حالة ممكنة
+select pg_temp.login('00000000-0000-0000-0000-0000000000a1', 'aal2');
 select throws_ok(
-  $$select public.admin_approve_listing_version('10000000-0000-0000-0000-000000000009',
-      '20000000-0000-0000-0000-000000000009', 'hash-auction')$$,
-  'P0001', 'AUCTION_TIME_PASSED', 'لا اعتماد لمزاد مضى موعده');
-reset role;
+  $$update public.listings set status = 'UNDER_REVIEW' where id = (select v from ids where k = 'l1')$$,
+  '23514', null, 'قيد يمنع إنتاج UNDER_REVIEW');
 
 -- الزائر
 select set_config('request.jwt.claims', '', true);

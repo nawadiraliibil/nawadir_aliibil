@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_note.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -26,12 +28,14 @@ class BlockedUsersScreen extends ConsumerWidget {
       await ref.read(safetyRepositoryProvider).unblock(u.userId);
       ref.invalidate(blockedUsersProvider);
       ref.invalidate(conversationsProvider);
-      messenger.showSnackBar(
-        SnackBar(content: Text('أُلغي حظر ${u.displayName}.')),
+      messenger.showApp(
+        'أُلغي حظر ${u.displayName}.',
+        kind: AppNoteKind.success,
       );
     } on Object catch (e) {
-      messenger.showSnackBar(
-        SnackBar(content: Text(errorMessage(AppError.from(e)))),
+      messenger.showApp(
+        errorMessage(AppError.from(e)),
+        kind: AppNoteKind.error,
       );
     }
   }
@@ -44,7 +48,7 @@ class BlockedUsersScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           tooltip: 'رجوع',
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () =>
               context.canPop() ? context.pop() : context.go(Routes.account),
         ),
@@ -75,14 +79,41 @@ class BlockedUsersScreen extends ConsumerWidget {
                     return DecoratedBox(
                       decoration: BoxDecoration(
                         color: c.soft,
-                        borderRadius: BorderRadius.circular(AppShapes.card),
+                        borderRadius: BorderRadius.circular(AppShapes.nav),
                       ),
-                      child: ListTile(
-                        title: Text(u.displayName),
-                        trailing: TextButton(
-                          key: ValueKey('unblock-${u.userId}'),
-                          onPressed: () => _unblock(context, ref, u),
-                          child: const Text('إلغاء الحظر'),
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          8,
+                          8,
+                          8,
+                          8,
+                        ),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundColor: c.surface,
+                              child: Icon(
+                                Icons.person_outline,
+                                size: 20,
+                                color: c.gold,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                u.displayName,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            TextButton(
+                              key: ValueKey('unblock-${u.userId}'),
+                              onPressed: () => _unblock(context, ref, u),
+                              child: const Text('إلغاء الحظر'),
+                            ),
+                          ],
                         ),
                       ),
                     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +15,7 @@ import '../../auth/application/auth_providers.dart';
 import '../../auth/domain/saudi_phone.dart';
 import '../application/account_providers.dart';
 import '../data/account_models.dart';
+import 'menu_group.dart';
 
 /// G01 — حسابي. للزائر دعوة إلى الدخول، وللمسجل ملخص الحساب والإجراءات.
 class AccountScreen extends ConsumerWidget {
@@ -39,8 +41,6 @@ class AccountScreen extends ConsumerWidget {
                     queryParameters: {'from': Routes.account},
                   ).toString(),
                 ),
-                secondaryLabel: 'الإعدادات',
-                onSecondary: () => context.push(Routes.settings),
               )
             : account.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
@@ -135,65 +135,98 @@ class _SignedIn extends ConsumerWidget {
           ),
         ],
         const SizedBox(height: 16),
-        const Divider(),
-        ListTile(
-          leading: const Icon(Icons.campaign_outlined),
-          title: const Text('إعلاناتي'),
-          onTap: () => context.push(Routes.myListings),
+        MenuGroup(
+          children: [
+            MenuRow(
+              icon: Icons.campaign_outlined,
+              title: 'إعلاناتي',
+              onTap: () => context.push(Routes.myListings),
+            ),
+            MenuRow(
+              icon: Icons.star_border,
+              title: 'تقييماتي كمعلن',
+              onTap: () => context.push(Routes.receivedRatings),
+            ),
+            MenuRow(
+              icon: Icons.notifications_none,
+              title: 'الإشعارات',
+              onTap: () => context.push(Routes.notificationSettings),
+            ),
+            MenuRow(
+              icon: Icons.bookmark_border,
+              title: 'المتابعات',
+              onTap: () => context.push(Routes.follows),
+            ),
+            MenuRow(
+              icon: Icons.block,
+              title: 'المحظورون',
+              onTap: () => context.push(Routes.blockedUsers),
+            ),
+            MenuRow(
+              icon: Icons.info_outline,
+              title: 'الشروط والمساعدة',
+              onTap: () => context.push(Routes.legal),
+            ),
+            MenuRow(
+              icon: Icons.settings_outlined,
+              title: 'الإعدادات',
+              onTap: () => context.push(Routes.settings),
+            ),
+          ],
         ),
-        ListTile(
-          leading: const Icon(Icons.star_border),
-          title: const Text('تقييماتي كمعلن'),
-          onTap: () => context.push(Routes.receivedRatings),
-        ),
-        ListTile(
-          leading: const Icon(Icons.notifications_none),
-          title: const Text('الإشعارات'),
-          onTap: () => context.push(Routes.notificationSettings),
-        ),
-        ListTile(
-          leading: const Icon(Icons.bookmark_border),
-          title: const Text('المتابعات'),
-          onTap: () => context.push(Routes.follows),
-        ),
-        ListTile(
-          leading: const Icon(Icons.block),
-          title: const Text('المحظورون'),
-          onTap: () => context.push(Routes.blockedUsers),
-        ),
-        ListTile(
-          leading: const Icon(Icons.settings_outlined),
-          title: const Text('الإعدادات والمساعدة'),
-          onTap: () => context.push(Routes.settings),
-        ),
-        ListTile(
-          leading: const Icon(Icons.logout),
-          title: const Text('تسجيل الخروج'),
-          onTap: () => _confirmSignOut(context, ref),
+        const SizedBox(height: 16),
+        Center(
+          child: TextButton.icon(
+            style: TextButton.styleFrom(foregroundColor: c.error),
+            icon: const Icon(Icons.logout),
+            label: const Text('تسجيل الخروج'),
+            onPressed: () => _confirmSignOut(context, ref),
+          ),
         ),
       ],
     );
   }
 
-  /// G10.
+  /// G10: ورقة سفلية بزر خروج رئيسي وإلغاء ثانوي.
   Future<void> _confirmSignOut(BuildContext context, WidgetRef ref) async {
-    final ok = await showDialog<bool>(
+    final ok = await showModalBottomSheet<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('تسجيل الخروج؟'),
-        content: const Text(
-          'ستنتهي جلسة هذا الجهاز، ويمكنك الدخول مجددًا برقم الجوال.',
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'تسجيل الخروج؟',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'ستنتهي جلسة هذا الجهاز، ويمكنك الدخول مجددًا برقم الجوال.',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              const SizedBox(height: 20),
+              FilledButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.logout, size: 18),
+                    SizedBox(width: 8),
+                    Text('تسجيل الخروج'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              FilledButton.tonal(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('إلغاء'),
+              ),
+            ],
+          ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('إلغاء'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('تسجيل الخروج'),
-          ),
-        ],
       ),
     );
     if (ok != true) return;
@@ -203,8 +236,9 @@ class _SignedIn extends ConsumerWidget {
       await ref.read(authBackendProvider).signOut();
     } on Object {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تعذّر تسجيل الخروج. حاول مرة أخرى.')),
+        ScaffoldMessenger.of(context).showApp(
+          'تعذّر تسجيل الخروج. حاول مرة أخرى.',
+          kind: AppNoteKind.error,
         );
       }
     }
