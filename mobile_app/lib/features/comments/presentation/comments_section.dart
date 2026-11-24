@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/initial_avatar.dart';
 import '../../../core/widgets/app_snack.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -434,13 +435,12 @@ class _CommentBody extends StatelessWidget {
                   if (avatar && comment.displayName.isNotEmpty)
                     Padding(
                       padding: const EdgeInsetsDirectional.only(end: 8),
-                      child: CircleAvatar(
+                      child: InitialAvatar(
+                        name: comment.displayName,
                         radius: 16,
-                        backgroundColor: c.soft,
-                        child: Text(
-                          comment.displayName.characters.first,
-                          style: theme.textTheme.labelLarge,
-                        ),
+                        background: c.soft,
+                        foreground: c.text,
+                        textStyle: theme.textTheme.labelLarge,
                       ),
                     ),
                   Flexible(

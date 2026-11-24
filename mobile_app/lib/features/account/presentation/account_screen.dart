@@ -11,6 +11,7 @@ import '../../../core/errors/error_messages.dart';
 import '../../../core/settings/settings_repository.dart';
 import '../../../core/widgets/app_note.dart';
 import '../../../core/widgets/empty_state.dart';
+import '../../../core/widgets/initial_avatar.dart';
 import '../../auth/application/auth_providers.dart';
 import '../../auth/domain/saudi_phone.dart';
 import '../application/account_providers.dart';
@@ -94,13 +95,12 @@ class _SignedIn extends ConsumerWidget {
         ],
         Row(
           children: [
-            CircleAvatar(
+            InitialAvatar(
+              name: name,
               radius: 28,
-              backgroundColor: c.tintGold,
-              child: Text(
-                name == null || name.isEmpty ? '؟' : name.characters.first,
-                style: theme.textTheme.titleLarge?.copyWith(color: c.gold),
-              ),
+              background: c.tintGold,
+              foreground: c.gold,
+              textStyle: theme.textTheme.titleLarge,
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -148,11 +148,6 @@ class _SignedIn extends ConsumerWidget {
               onTap: () => context.push(Routes.receivedRatings),
             ),
             MenuRow(
-              icon: Icons.notifications_none,
-              title: 'الإشعارات',
-              onTap: () => context.push(Routes.notificationSettings),
-            ),
-            MenuRow(
               icon: Icons.bookmark_border,
               title: 'المتابعات',
               onTap: () => context.push(Routes.follows),
@@ -161,11 +156,6 @@ class _SignedIn extends ConsumerWidget {
               icon: Icons.block,
               title: 'المحظورون',
               onTap: () => context.push(Routes.blockedUsers),
-            ),
-            MenuRow(
-              icon: Icons.info_outline,
-              title: 'الشروط والمساعدة',
-              onTap: () => context.push(Routes.legal),
             ),
             MenuRow(
               icon: Icons.settings_outlined,

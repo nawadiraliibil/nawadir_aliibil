@@ -188,7 +188,12 @@ void main() {
         ..['auction_starts_at'] = '2099-01-05T15:30:00+00:00';
       final rpc = FakeRpc({
         'search_listings': (_) => {
-          'items': [auction(1, passed: false), auction(2, passed: true)],
+          // المزاد القادم ليس أول القائمة، فالشريط يبرزه.
+          'items': [
+            _card(3),
+            auction(1, passed: false),
+            auction(2, passed: true),
+          ],
           'next_cursor': null,
         },
         'get_listing': (_) => fixture('listing-detail'),
@@ -210,6 +215,29 @@ void main() {
       await tester.tap(find.byType(AuctionTicket));
       await tester.pumpAndSettle();
       expect(rpc.paramsOf('get_listing').single, {'p_listing_id': 'listing-1'});
+    });
+
+    testWidgets('مزاد قادم وحيد في أول القائمة: لا شريط يكرر بطاقته', (
+      tester,
+    ) async {
+      final rpc = FakeRpc({
+        'search_listings': (_) => {
+          'items': [
+            _card(1)
+              ..['offer_type'] = 'IN_PERSON_AUCTION'
+              ..['price'] = null
+              ..['auction_passed'] = false
+              ..['auction_starts_at'] = '2099-01-05T15:30:00+00:00',
+            _card(2),
+          ],
+          'next_cursor': null,
+        },
+      });
+      await pumpApp(tester, auth: FakeAuthBackend(signedIn: false), rpc: rpc);
+
+      expect(find.text('مزادات قريبة'), findsNothing);
+      expect(find.byType(AuctionTicket), findsNothing);
+      expect(find.byType(ListingCardTile), findsNWidgets(2));
     });
 
     testWidgets('شرائح النوع تضبط مرشح العرض، و«الكل» تمسحه', (tester) async {

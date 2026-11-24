@@ -266,6 +266,10 @@ class _UpcomingAuctions extends StatelessWidget {
             .toList()
           ..sort((a, b) => a.auctionStartsAt!.compareTo(b.auctionStartsAt!));
     if (upcoming.isEmpty) return const SizedBox.shrink();
+    // مزاد واحد وهو أول القائمة: الشريط يكرر البطاقة التي تحته مباشرة.
+    if (upcoming.length == 1 && identical(upcoming.single, items.first)) {
+      return const SizedBox.shrink();
+    }
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 12),
       child: Column(

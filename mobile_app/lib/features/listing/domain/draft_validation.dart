@@ -82,13 +82,8 @@ abstract final class DraftValidation {
   }
 
   static FieldErrors auction(DraftForm f, PublishedSettings s, DateTime now) {
-    final e = _place(
-      f.auctionRegionId,
-      f.auctionCityId,
-      s,
-      'auction_region_id',
-      'auction_city_id',
-    );
+    // منطقة المزاد ومدينته تؤخذان من موقع الإعلان (خطوة «الموقع»).
+    final e = <String, String>{};
     final venue = f.auctionVenue?.trim() ?? '';
     if (venue.isEmpty) {
       e['auction_venue'] = 'اكتب اسم المكان أو العنوان.';
