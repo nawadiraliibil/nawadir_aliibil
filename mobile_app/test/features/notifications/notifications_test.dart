@@ -295,7 +295,10 @@ void main() {
       );
       await tester.tap(find.text('حسابي').last);
       await tester.pumpAndSettle();
-      await tester.tap(find.text('الإشعارات'));
+      // إعدادات الإشعارات داخل «الإعدادات» لا في قائمة «حسابي» مباشرة.
+      await tester.tap(find.text('الإعدادات'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('إعدادات الإشعارات'));
       await tester.pumpAndSettle();
       return rpc;
     }

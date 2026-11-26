@@ -640,6 +640,15 @@ functions:
     errors: [AUTH_REQUIRED, FORBIDDEN, NOT_FOUND, VALIDATION_FAILED]
     requirement: "AD-FR-027"
     since: "0.3.0"
+  set_my_avatar:
+    description: "ضبط الصورة الشخصية لصاحب الجلسة من ملف مرفوع في avatars/{uid}/، أو مسحها بـnull."
+    access: "user"
+    arguments: "p_path text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, ACCOUNT_SUSPENDED, VALIDATION_FAILED]
+    note: "p_path مسار ملف مرفوع في avatars/{uid}/ أو null للمسح؛ يعيد رد الحساب. الملف القديم يحذفه العميل."
+    requirement: "AD-FR-003"
+    since: "1.5.0"
   set_notification_preference:
     description: "يفعل الدفع لفئة إشعارات أو يوقفه. مركز الإشعارات داخل التطبيق لا يتأثر."
     access: "user"

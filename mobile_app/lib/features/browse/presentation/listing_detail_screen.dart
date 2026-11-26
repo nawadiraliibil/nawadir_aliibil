@@ -767,7 +767,7 @@ class _OwnerRow extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_left),
+          const Icon(Icons.chevron_right),
         ],
       ),
     );

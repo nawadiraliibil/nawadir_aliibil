@@ -81,7 +81,7 @@ class ListingCardTile extends ConsumerWidget {
         ConstrainedBox(
           constraints: const BoxConstraints(maxHeight: 280),
           child: AspectRatio(
-            aspectRatio: compact ? 1 : 4 / 3,
+            aspectRatio: compact ? 4 / 3 : 16 / 10,
             child: ClipRRect(
               borderRadius: AppShapes.imageRadius,
               child: SizedBox.expand(
@@ -115,6 +115,34 @@ class ListingCardTile extends ConsumerWidget {
                 shape: BoxShape.circle,
               ),
               child: FavoriteButton(listingId: card.listingId, dense: compact),
+            ),
+          ),
+        if (!compact)
+          PositionedDirectional(
+            top: showFavorite ? 58 : 4,
+            end: 4,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: c.surface,
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                color: c.muted,
+                key: ValueKey('card-share-${card.listingId}'),
+                tooltip: 'مشاركة',
+                iconSize: 20,
+                icon: const Icon(Icons.ios_share),
+                onPressed: () {
+                  final link = listingShareLink(
+                    ref.read(envProvider).shareBaseUrl,
+                    card.publicRef,
+                  );
+                  ref.read(shareTextProvider)(
+                    link == null ? card.title : '${card.title}\n$link',
+                    card.title,
+                  );
+                },
+              ),
             ),
           ),
         if (card.isAuction && startsAt != null && !card.auctionPassed)
@@ -180,7 +208,7 @@ class ListingCardTile extends ConsumerWidget {
         const SizedBox(width: 3),
         Expanded(
           child: Text(
-            '${card.regionName} · ${card.cityName}',
+            compact ? card.cityName : '${card.regionName} · ${card.cityName}',
             style: theme.textTheme.bodySmall?.copyWith(color: c.muted),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -189,53 +217,28 @@ class ListingCardTile extends ConsumerWidget {
       ],
     );
 
-    // البعد عن المتصفح للمزاد الحضوري المحدد موقعه، ثم الإعجابات والمشاهدات والمشاركة.
+    // البعد عن المتصفح للمزاد الحضوري المحدد موقعه.
     final showDistance =
         card.isAuction && card.hasAuctionLocation && !card.auctionPassed;
-    // الأرقام في البداية، والمشاركة في الطرف المقابل.
-    final statItems = <Widget>[
-      StatLabel(
-        icon: Icons.favorite_border,
-        count: card.favoriteCount,
-        noun: 'إعجاب',
-        size: compact ? 15 : 16,
-      ),
-      if (!compact) const SizedBox(width: 14),
-      StatLabel(
-        icon: Icons.visibility_outlined,
-        count: card.viewCount,
-        noun: 'مشاهدة',
-        size: compact ? 15 : 16,
-      ),
-      if (!compact) const Spacer(),
-      IconButton(
-        color: c.muted,
-        key: ValueKey('card-share-${card.listingId}'),
-        tooltip: 'مشاركة',
-        visualDensity: VisualDensity.compact,
-        constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
-        iconSize: 20,
-        icon: const Icon(Icons.ios_share),
-        onPressed: () {
-          final link = listingShareLink(
-            ref.read(envProvider).shareBaseUrl,
-            card.publicRef,
-          );
-          ref.read(shareTextProvider)(
-            link == null ? card.title : '${card.title}\n$link',
-            card.title,
-          );
-        },
-      ),
-    ];
-    // العمود الضيق يلتف؛ الكبير صف واحد تتباعد أطرافه.
-    final stats = compact
-        ? Wrap(
-            spacing: 10,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: statItems,
-          )
-        : Row(children: statItems);
+    final statSize = compact ? 14.0 : 15.0;
+    final stats = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        StatLabel(
+          icon: Icons.favorite_border,
+          count: card.favoriteCount,
+          noun: 'إعجاب',
+          size: statSize,
+        ),
+        SizedBox(width: compact ? 8 : 12),
+        StatLabel(
+          icon: Icons.visibility_outlined,
+          count: card.viewCount,
+          noun: 'مشاهدة',
+          size: statSize,
+        ),
+      ],
+    );
 
     return Semantics(
       container: true,
@@ -246,25 +249,41 @@ class ListingCardTile extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             image,
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             if (compact) ...[
               title,
               const SizedBox(height: 2),
-              offer,
+              Align(alignment: AlignmentDirectional.centerStart, child: offer),
+              const SizedBox(height: 4),
+              place,
+              if (showDistance)
+                DistanceLabel(lat: card.auctionLat!, lng: card.auctionLng!),
+              const SizedBox(height: 4),
+              stats,
             ] else ...[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(child: title),
                   const SizedBox(width: 12),
-                  Flexible(child: offer),
+                  // عرض المحتوى فقط (flex 0) كي يلتصق بالطرف لا بمنتصف نصف الصف.
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 180),
+                    child: offer,
+                  ),
                 ],
               ),
-              place,
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Expanded(child: place),
+                  const SizedBox(width: 12),
+                  stats,
+                ],
+              ),
+              if (showDistance)
+                DistanceLabel(lat: card.auctionLat!, lng: card.auctionLng!),
             ],
-            if (showDistance)
-              DistanceLabel(lat: card.auctionLat!, lng: card.auctionLng!),
-            stats,
           ],
         ),
       ),

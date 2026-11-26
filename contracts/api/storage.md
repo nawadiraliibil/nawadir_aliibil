@@ -6,8 +6,13 @@
 |---|---|---|---|
 | `listing-images` | صور الإعلانات | `image/jpeg`، `image/png` | `media.image_max_bytes` من الإعدادات المنشورة |
 | `listing-videos` | فيديو الإعلان | `video/mp4` | `media.video_max_bytes`؛ الفيديو معطل ما دام `media.video_enabled = false` |
+| `avatars` | الصور الشخصية (**عام**) | `image/jpeg`، `image/png`، `image/webp` | 2 ميغابايت |
 
 نشر الإعدادات يحدث حدود الـbuckets في المعاملة نفسها.
+
+## الصورة الشخصية
+
+المسار `{user_id}/{اسم}.{ext}` باسم جديد في كل تغيير. يرفع العميل الملف إلى `avatars` (الرفع والحذف في مجلد صاحبه فقط، بلا تعديل) ثم يستدعي `set_my_avatar(p_path)`، ثم يحذف الملف القديم. العرض برابط التخزين العام لـ`avatar_path`.
 
 ## المسار
 

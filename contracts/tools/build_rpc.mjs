@@ -191,6 +191,11 @@ const META = {
     access: "user", errors: [...COMMON_USER, "ACCOUNT_SUSPENDED", "VALIDATION_FAILED"],
     req: "AD-FR-003، AD-FR-004", since: "0.1.0",
   },
+  set_my_avatar: {
+    access: "user", errors: [...COMMON_USER, "ACCOUNT_SUSPENDED", "VALIDATION_FAILED"],
+    req: "AD-FR-003", since: "1.5.0",
+    note: "p_path مسار ملف مرفوع في avatars/{uid}/ أو null للمسح؛ يعيد رد الحساب. الملف القديم يحذفه العميل.",
+  },
   accept_policies: {
     access: "user", errors: [...COMMON_USER, "VALIDATION_FAILED"], req: "AD-FR-003", since: "0.1.0",
     idempotency: "تكرار الموافقة على النص نفسه لا يغير تاريخها.",

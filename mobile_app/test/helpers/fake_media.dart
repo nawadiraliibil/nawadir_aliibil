@@ -114,7 +114,15 @@ class FakeMediaBackend implements MediaBackend {
 
 /// مصدر صور مزيف: يعيد ما يُضبط عليه.
 class FakePhotoSource implements PhotoSource {
-  FakePhotoSource({this.gallery = const [], this.camera, this.video});
+  FakePhotoSource({
+    this.gallery = const [],
+    this.camera,
+    this.video,
+    this.avatar,
+  });
+
+  PickedImage? avatar;
+  final avatarRequests = <bool>[];
 
   List<PickedImage> gallery;
   PickedImage? camera;
@@ -130,6 +138,12 @@ class FakePhotoSource implements PhotoSource {
 
   @override
   Future<PickedImage?> pickFromCamera() async => camera;
+
+  @override
+  Future<PickedImage?> pickAvatar({required bool camera}) async {
+    avatarRequests.add(camera);
+    return avatar;
+  }
 
   @override
   Future<PickedVideo?> pickVideo({

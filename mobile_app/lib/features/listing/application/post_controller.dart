@@ -88,7 +88,17 @@ class PostController extends Notifier<PostState> {
   void set(String key, Object? value) => setAll({key: value});
 
   void setAll(Map<String, Object?> changes) {
-    state = state.copyWith(form: state.form.setAll(changes), clearError: true);
+    var next = state.form.setAll(changes);
+    // المزاد يُقام في منطقة الإعلان ومدينته: لا تُسأل عنهما مرتين، فتُنسخ
+    // قيمتاهما إلى حقلي المزاد الذين يشترطهما الخادم.
+    if (next.isAuction &&
+        (changes.containsKey('region_id') || changes.containsKey('city_id'))) {
+      next = next.setAll({
+        'auction_region_id': next.regionId,
+        'auction_city_id': next.cityId,
+      });
+    }
+    state = state.copyWith(form: next, clearError: true);
   }
 
   /// نوع العرض: حقول النوع الآخر تُمسح لأن الخادم يرفض إرسال قيمها.
@@ -103,8 +113,11 @@ class PostController extends Notifier<PostState> {
         'auction_starts_at': null,
         'auction_lat': null,
         'auction_lng': null,
-      } else
+      } else ...{
         'price': null,
+        'auction_region_id': state.form.regionId,
+        'auction_city_id': state.form.cityId,
+      },
     });
   }
 

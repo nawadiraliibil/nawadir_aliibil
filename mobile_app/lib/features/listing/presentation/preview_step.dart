@@ -38,13 +38,14 @@ PostStep stepForField(String field) {
       return PostStep.data;
     case 'description' || 'health_notes':
       return PostStep.description;
-    case 'region_id' || 'city_id':
+    case 'region_id' ||
+        'city_id' ||
+        'auction_region_id' ||
+        'auction_city_id':
       return PostStep.location;
     case 'offer_type':
       return PostStep.offer;
     case 'price' ||
-        'auction_region_id' ||
-        'auction_city_id' ||
         'auction_venue' ||
         'auction_starts_at' ||
         'auction_lat' ||

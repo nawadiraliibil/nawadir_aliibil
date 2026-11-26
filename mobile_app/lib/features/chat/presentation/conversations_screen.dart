@@ -205,13 +205,26 @@ class _ConversationTile extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        conv.displayName,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: unread ? FontWeight.w700 : null,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              conv.displayName,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: unread ? FontWeight.w700 : null,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            formatShortTime(conv.activityAt),
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: c.muted,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 2),
                       Text(
@@ -222,42 +235,40 @@ class _ConversationTile extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      Text(
-                        last,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: unread ? c.text : c.muted,
-                          fontWeight: unread ? FontWeight.w600 : null,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              last,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: unread ? c.text : c.muted,
+                                fontWeight: unread ? FontWeight.w600 : null,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (unread) ...[
+                            const SizedBox(width: 8),
+                            Badge(
+                              key: const ValueKey('unread-badge'),
+                              backgroundColor: c.tintGold,
+                              textColor: c.gold,
+                              label: Text('${conv.unreadCount}'),
+                            ),
+                          ] else if (conv.muted) ...[
+                            const SizedBox(width: 8),
+                            Icon(
+                              Icons.notifications_off_outlined,
+                              size: 16,
+                              color: c.muted,
+                            ),
+                          ],
+                        ],
                       ),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    formatShortTime(conv.activityAt),
-                    style: theme.textTheme.labelSmall?.copyWith(color: c.muted),
-                  ),
-                  const SizedBox(height: 6),
-                  if (unread)
-                    Badge(
-                      key: const ValueKey('unread-badge'),
-                      backgroundColor: c.tintGold,
-                      textColor: c.gold,
-                      label: Text('${conv.unreadCount}'),
-                    )
-                  else if (conv.muted)
-                    Icon(
-                      Icons.notifications_off_outlined,
-                      size: 16,
-                      color: c.muted,
-                    ),
-                ],
               ),
             ],
           ),

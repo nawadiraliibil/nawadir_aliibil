@@ -19,7 +19,7 @@ select bag_eq(
     where p.pronamespace = 'public'::regnamespace
       and has_function_privilege('authenticated', p.oid, 'execute')$$,
   $$values ('get_published_settings'), ('get_current_policies'),
-           ('get_my_account'), ('update_my_profile'), ('accept_policies'),
+           ('get_my_account'), ('update_my_profile'), ('set_my_avatar'), ('accept_policies'),
            ('has_staff_capability'), ('admin_whoami'), ('admin_grant_role'), ('admin_revoke_role'),
            ('storage_object_is_public'),
            ('create_listing_draft'), ('save_listing_draft'), ('add_listing_media'),

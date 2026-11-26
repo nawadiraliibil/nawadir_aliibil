@@ -252,7 +252,7 @@ class NotificationsScreen extends ConsumerWidget {
                                         ],
                                         const SizedBox(width: 4),
                                         Icon(
-                                          Icons.chevron_left,
+                                          Icons.chevron_right,
                                           size: 20,
                                           color: c.muted,
                                         ),

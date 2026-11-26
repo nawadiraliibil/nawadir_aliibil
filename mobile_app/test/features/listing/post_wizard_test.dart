@@ -372,8 +372,6 @@ void main() {
     );
 
     await _type(tester, 'مكان المزاد', 'سوق الإبل');
-    await _pick(tester, 'المنطقة', 'الرياض');
-    await _pick(tester, 'المدينة', 'الدرعية');
     // منتقيا التاريخ والوقت (حواران من Material) لا يُختبران هنا؛ نضبط الموعد
     // بما يضبطانه: لحظة UTC محسوبة من تاريخ ووقت بتوقيت السعودية.
     ProviderScope.containerOf(tester.element(find.byType(Scaffold).last))
@@ -384,7 +382,7 @@ void main() {
         );
     await tester.pumpAndSettle();
     expect(find.text('5/1/2099'), findsOneWidget);
-    expect(find.text('18:30'), findsOneWidget);
+    expect(find.text('6:30 م'), findsOneWidget);
     // بلا موقع على الخريطة لا انتقال: الزر يفتح الخريطة (لا تُختبر هنا).
     await _tap(tester, 'متابعة');
     expect(find.text('حدد موقع المزاد على الخريطة.'), findsOneWidget);
@@ -408,7 +406,7 @@ void main() {
       'auction_lng': 46.675297,
     });
     expect(find.text('5 / 7'), findsOneWidget);
-    // منتقيا التاريخ والوقت (حواران من Material) لا يُختبران هنا؛ نضبط الموعد    // بما يضبطانه: لحظة UTC محسوبة من تاريخ ووقت بتوقيت السعودية.    ProviderScope.containerOf(      tester.element(find.byType(Scaffold).last),    ).read(postControllerProvider.notifier).set(      'auction_starts_at',      DraftValidation.auctionMoment(DateTime(2099, 1, 5), 18, 30),    );    await tester.pumpAndSettle();    expect(find.text('5/1/2099'), findsOneWidget);    expect(find.text('18:30'), findsOneWidget);    await _tap(tester, 'متابعة');    expect(server.patches.last, {      'auction_region_id': 1,      'auction_city_id': 2,      'auction_venue': 'سوق الإبل',      'auction_starts_at': '2099-01-05T15:30:00.000Z',    });    expect(find.text('5 / 7'), findsOneWidget);
+    // منتقيا التاريخ والوقت (حواران من Material) لا يُختبران هنا؛ نضبط الموعد    // بما يضبطانه: لحظة UTC محسوبة من تاريخ ووقت بتوقيت السعودية.    ProviderScope.containerOf(      tester.element(find.byType(Scaffold).last),    ).read(postControllerProvider.notifier).set(      'auction_starts_at',      DraftValidation.auctionMoment(DateTime(2099, 1, 5), 18, 30),    );    await tester.pumpAndSettle();    expect(find.text('5/1/2099'), findsOneWidget);    expect(find.text('6:30 م'), findsOneWidget);    await _tap(tester, 'متابعة');    expect(server.patches.last, {      'auction_region_id': 1,      'auction_city_id': 2,      'auction_venue': 'سوق الإبل',      'auction_starts_at': '2099-01-05T15:30:00.000Z',    });    expect(find.text('5 / 7'), findsOneWidget);
   });
 
   testWidgets('خطأ الخادم يعرض رسالته ويبقى في الخطوة ثم ينجح إعادة الحفظ', (

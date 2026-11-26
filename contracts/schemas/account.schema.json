@@ -8,6 +8,7 @@
     "id",
     "display_name",
     "region_id",
+    "avatar_path",
     "status",
     "created_at",
     "profile_complete",
@@ -33,6 +34,16 @@
       "anyOf": [
         {
           "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "avatar_path": {
+      "anyOf": [
+        {
+          "type": "string"
         },
         {
           "type": "null"

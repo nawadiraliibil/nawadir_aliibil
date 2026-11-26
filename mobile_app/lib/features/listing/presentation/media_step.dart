@@ -36,7 +36,9 @@ class _MediaStepState extends ConsumerState<MediaStep> {
     } else if (state.items.any((i) => i.stage != MediaStage.ready)) {
       block = 'احذف الصور التي تعذّر قبولها أو أعد محاولة رفعها.';
     } else if (state.readyImageCount < media.imagesMin) {
-      block = 'أضف ${media.imagesMin} صور على الأقل.';
+      block = media.imagesMin == 1
+          ? 'أضف صورة الغلاف.'
+          : 'أضف ${media.imagesMin} صور على الأقل.';
     }
     setState(() => _blocker = block);
     if (block != null) return;
@@ -156,6 +158,10 @@ class _MediaStepState extends ConsumerState<MediaStep> {
     final canAddImages = controller.remainingSlots > 0;
     final canAddVideo = videoEnabled && !state.hasVideo;
     final canAdd = canAddImages || canAddVideo;
+    // صورة الغلاف وحدها تكفي عندما يكون الحد الأدنى واحدًا.
+    final range = media.imagesMin == 1
+        ? 'صورة الغلاف مطلوبة، ويمكن إضافة حتى ${media.imagesMax} صور'
+        : '${media.imagesMin}–${media.imagesMax} صور';
     final videoMb = (media.videoMaxBytes / (1024 * 1024)).round();
 
     return StepFrame(
@@ -164,10 +170,10 @@ class _MediaStepState extends ConsumerState<MediaStep> {
       children: [
         Text(
           videoEnabled
-              ? '${media.imagesMin}–${media.imagesMax} صور حتى $mb MB للصورة · '
+              ? '$range حتى $mb MB للصورة · '
                     'فيديو واحد حتى ${media.videoMaxSeconds} ثانية و$videoMb MB. '
                     'الصورة الأولى غلاف الإعلان.'
-              : '${media.imagesMin}–${media.imagesMax} صور، حتى $mb MB للصورة. '
+              : '$range، حتى $mb MB للصورة. '
                     'الصورة الأولى غلاف الإعلان.',
           style: theme.textTheme.bodyMedium,
         ),

@@ -374,7 +374,7 @@ class _ListingContext extends StatelessWidget {
                     ),
                   ),
                   if (available)
-                    Icon(Icons.chevron_left, size: 20, color: c.muted),
+                    Icon(Icons.chevron_right, size: 20, color: c.muted),
                 ],
               ),
             ),

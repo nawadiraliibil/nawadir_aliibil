@@ -12,6 +12,7 @@ import '../../auth/application/auth_providers.dart';
 import '../../auth/domain/saudi_phone.dart';
 import '../application/account_providers.dart';
 import '../data/account_repository.dart';
+import 'avatar_editor.dart';
 import 'profile_form.dart';
 
 Widget _backButton(BuildContext context, String fallback) => IconButton(
@@ -135,6 +136,7 @@ class EditProfileScreen extends ConsumerWidget {
               initialName: a.displayName,
               initialRegionId: a.regionId,
               pendingPolicies: a.pendingPolicies,
+              header: AvatarEditor(account: a),
               extra: phone == null ? null : _PhoneInfo(masked: phone.masked),
               onSubmit: (name, region, policyIds) async {
                 final repo = ref.read(accountRepositoryProvider);

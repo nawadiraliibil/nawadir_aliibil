@@ -214,7 +214,7 @@ class _Header extends ConsumerWidget {
                               style: theme.textTheme.bodyMedium,
                             ),
                           ),
-                          const Icon(Icons.chevron_left, size: 18),
+                          const Icon(Icons.chevron_right, size: 18),
                         ],
                       ),
                     ),

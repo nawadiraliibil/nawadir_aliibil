@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_shapes.dart';
+import '../../../core/format/money.dart';
 import '../../../core/location/map_widgets.dart';
 import '../../../core/settings/published_settings.dart';
 import '../../../core/settings/settings_repository.dart';
@@ -484,16 +485,6 @@ class _DetailsStepState extends _StepState<DetailsStep> {
       onContinue: () => advance(errors, DraftKeys.auction, PostStep.media),
       onSaveDraft: widget.onSaveDraft,
       children: [
-        _PlacePickers(
-          lookups: settings.lookups,
-          regionId: f.auctionRegionId,
-          cityId: f.auctionCityId,
-          regionKey: 'auction_region_id',
-          cityKey: 'auction_city_id',
-          regionError: errorOf(errors, 'auction_region_id'),
-          cityError: errorOf(errors, 'auction_city_id'),
-          onChanged: post.setAll,
-        ),
         DraftTextField(
           controller: _venue,
           label: 'مكان المزاد',
@@ -532,10 +523,7 @@ class _DetailsStepState extends _StepState<DetailsStep> {
               child: _PickerField(
                 label: 'الوقت',
                 icon: Icons.schedule_outlined,
-                value: local == null
-                    ? null
-                    : '${local.hour.toString().padLeft(2, '0')}:'
-                          '${local.minute.toString().padLeft(2, '0')}',
+                value: local == null ? null : clock12(local),
                 onTap: () => _pickTime(local),
               ),
             ),
