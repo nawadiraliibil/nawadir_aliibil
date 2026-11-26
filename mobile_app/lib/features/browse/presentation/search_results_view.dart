@@ -107,6 +107,7 @@ class _SearchResultsViewState extends ConsumerState<SearchResultsView> {
       listingCount: data.items.length,
       promotionCount: promotions.isEmpty ? 0 : promotions.items.length,
       interval: promotions.feedInterval,
+      hasMore: data.hasMore,
     );
     // المفتاح بالموضع لا بالدعاية: الدعاية نفسها تتكرر عند التدوير.
     Widget promotion(PromotionEntry e, int position) => PromotionCard(

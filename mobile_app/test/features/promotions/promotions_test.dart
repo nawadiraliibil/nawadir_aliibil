@@ -53,9 +53,26 @@ void main() {
         PromotionEntry(1),
         ListingEntry(4),
       ]);
-      expect(buildFeed(listingCount: 7, promotionCount: 1, interval: 8), [
-        for (var i = 0; i < 7; i++) ListingEntry(i),
-      ], reason: 'قائمة أقصر من N بلا دعايات');
+      expect(
+        buildFeed(listingCount: 7, promotionCount: 1, interval: 8),
+        [for (var i = 0; i < 7; i++) ListingEntry(i), const PromotionEntry(0)],
+        reason: 'قائمة أقصر من N: دعاية واحدة في آخرها',
+      );
+      expect(
+        buildFeed(listingCount: 0, promotionCount: 2, interval: 8),
+        isEmpty,
+        reason: 'لا دعاية في قائمة فارغة',
+      );
+      expect(
+        buildFeed(
+          listingCount: 7,
+          promotionCount: 1,
+          interval: 8,
+          hasMore: true,
+        ),
+        [for (var i = 0; i < 7; i++) ListingEntry(i)],
+        reason: 'لا دعاية في الآخر قبل تحميل بقية الصفحات',
+      );
       expect(buildFeed(listingCount: 9, promotionCount: 0, interval: 4), [
         for (var i = 0; i < 9; i++) ListingEntry(i),
       ]);
