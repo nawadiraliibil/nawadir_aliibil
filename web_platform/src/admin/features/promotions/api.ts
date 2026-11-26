@@ -1,131 +1,76 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { unwrap } from '@admin/lib/rpc'
+import type { Json } from '@contracts/generated/database.types'
+import { rpc, unwrap } from '@admin/lib/rpc'
+import { toApiError } from '@admin/lib/errors'
 import { getSupabase } from '@admin/lib/supabase'
 import { normalizePromotion } from './logic'
-import {
-  DEFAULT_DISPLAY_SETTINGS,
-  type Promotion,
-  type PromotionDisplaySettings,
-  type PromotionInput,
-  type PromotionStatus,
-} from './types'
+import type { Promotion, PromotionDisplaySettings, PromotionInput, PromotionStatus } from './types'
 
 /**
- * طبقة بيانات الدعايات. **وضع تجريبي (MOCK) موسوم:** لا عقد خادم بعد (INT-010)، فالبيانات
- * تحفظ في متصفح الموظف فقط ولا تصل إلى التطبيق. عند تسليم العقد تستبدل `mockPromotionsApi`
- * بتنفيذ عبر دوال admin_* المقترحة في INT-010 دون تغيير الصفحات.
+ * طبقة بيانات الدعايات عبر دوال العقد 1.6.0 (contracts/api/rpc.yaml، TEAM-DEC-017):
+ * admin_list_promotions وadmin_get_promotion وadmin_save_promotion وadmin_set_promotion_status
+ * وadmin_get_promotion_settings وadmin_update_promotion_settings، والصور في bucket ‏promotions العام.
  */
-export interface PromotionsApi {
-  readonly mode: 'mock' | 'live'
-  list(): Promise<Promotion[]>
-  get(id: string): Promise<Promotion | null>
-  save(id: string | null, input: PromotionInput): Promise<Promotion>
-  setStatus(id: string, status: PromotionStatus): Promise<Promotion>
-  getSettings(): Promise<PromotionDisplaySettings>
-  saveSettings(settings: PromotionDisplaySettings): Promise<PromotionDisplaySettings>
-}
+export const PROMOTIONS_BUCKET = 'promotions'
+const PAGE = 200
 
-const STORAGE_KEY = 'nawadir.admin.promotions.mock.v1'
+const EXT: Record<string, string> = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' }
 
-interface MockState {
-  promotions: Promotion[]
-  settings: PromotionDisplaySettings
-}
-
-function emptyState(): MockState {
-  return { promotions: [], settings: { ...DEFAULT_DISPLAY_SETTINGS } }
-}
-
-let memory: MockState | null = null
-
-function load(): MockState {
-  if (memory) return memory
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY)
-    memory = raw ? { ...emptyState(), ...(JSON.parse(raw) as MockState) } : emptyState()
-  } catch {
-    memory = emptyState()
-  }
-  return memory
-}
-
-function persist(state: MockState) {
-  memory = state
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  } catch {
-    // امتلاء التخزين المحلي بالصور: يبقى في الذاكرة لهذه الجلسة فقط.
+/** يجلب كل الدعايات بالصفحات (عددها صغير؛ المرشحات بالحالة الفعلية تجري في الواجهة). */
+export async function fetchAllPromotions(): Promise<Promotion[]> {
+  const out: Promotion[] = []
+  let cursor: { p_after_updated_at: string; p_after_id: string } | null = null
+  for (;;) {
+    const page = ((await rpc('admin_list_promotions', { p_limit: PAGE, ...(cursor ?? {}) })) ?? []) as Promotion[]
+    out.push(...page)
+    if (page.length < PAGE) return out
+    const last = page[page.length - 1]!
+    cursor = { p_after_updated_at: last.updated_at, p_after_id: last.id }
   }
 }
 
-/** للاختبارات: يفرغ المخزن التجريبي. */
-export function resetMockPromotions(state: Partial<MockState> = {}) {
-  memory = { ...emptyState(), ...state }
-  try {
-    window.localStorage.removeItem(STORAGE_KEY)
-  } catch {
-    /* لا شيء */
-  }
+export async function fetchPromotion(id: string): Promise<Promotion> {
+  return (await rpc('admin_get_promotion', { p_id: id })) as Promotion
 }
 
-const clone = <T,>(v: T): T => JSON.parse(JSON.stringify(v)) as T
-
-export const mockPromotionsApi: PromotionsApi = {
-  mode: 'mock',
-  async list() {
-    return clone(load().promotions).sort((a, b) => b.updated_at.localeCompare(a.updated_at))
-  },
-  async get(id) {
-    const p = load().promotions.find((x) => x.id === id)
-    return p ? clone(p) : null
-  },
-  async save(id, input) {
-    const state = load()
-    const now = new Date().toISOString()
-    const clean = normalizePromotion(input)
-    if (id) {
-      const i = state.promotions.findIndex((x) => x.id === id)
-      if (i < 0) throw new Error('NOT_FOUND')
-      const updated: Promotion = { ...state.promotions[i]!, ...clean, updated_at: now }
-      const promotions = [...state.promotions]
-      promotions[i] = updated
-      persist({ ...state, promotions })
-      return clone(updated)
-    }
-    const created: Promotion = {
-      ...clean,
-      id: crypto.randomUUID(),
-      status: 'ACTIVE',
-      impression_count: 0,
-      click_count: 0,
-      created_at: now,
-      updated_at: now,
-    }
-    persist({ ...state, promotions: [created, ...state.promotions] })
-    return clone(created)
-  },
-  async setStatus(id, status) {
-    const state = load()
-    const i = state.promotions.findIndex((x) => x.id === id)
-    if (i < 0) throw new Error('NOT_FOUND')
-    const updated: Promotion = { ...state.promotions[i]!, status, updated_at: new Date().toISOString() }
-    const promotions = [...state.promotions]
-    promotions[i] = updated
-    persist({ ...state, promotions })
-    return clone(updated)
-  },
-  async getSettings() {
-    return { ...load().settings }
-  },
-  async saveSettings(settings) {
-    const state = load()
-    persist({ ...state, settings: { ...settings } })
-    return { ...settings }
-  },
+/** يحفظ الحمولة كما يتوقعها الخادم (schemas/promotion-input)؛ الخادم يعيد التحقق والتوحيد. */
+export async function savePromotion(id: string | null, input: PromotionInput): Promise<Promotion> {
+  const payload = normalizePromotion(input) as unknown as Json
+  return (await rpc('admin_save_promotion', id ? { p_id: id, p_payload: payload } : { p_payload: payload })) as Promotion
 }
 
-/** نقطة الاستبدال الوحيدة عند تسليم INT-010. */
-export const promotionsApi: PromotionsApi = mockPromotionsApi
+export async function setPromotionStatus(id: string, status: PromotionStatus, note?: string): Promise<Promotion> {
+  return (await rpc('admin_set_promotion_status', { p_id: id, p_status: status, ...(note ? { p_note: note } : {}) })) as Promotion
+}
+
+export async function fetchDisplaySettings(): Promise<PromotionDisplaySettings> {
+  const s = (await rpc('admin_get_promotion_settings')) as PromotionDisplaySettings & { updated_at: string }
+  return { enabled: s.enabled, feed_interval: s.feed_interval }
+}
+
+export async function saveDisplaySettings(s: PromotionDisplaySettings): Promise<PromotionDisplaySettings> {
+  const r = (await rpc('admin_update_promotion_settings', {
+    p_enabled: s.enabled,
+    p_feed_interval: s.feed_interval,
+  })) as PromotionDisplaySettings
+  return { enabled: r.enabled, feed_interval: r.feed_interval }
+}
+
+/** يرفع الصورة باسم جديد `{uuid}/{uuid}.{ext}` ويعيد مسارها لـimage_path. */
+export async function uploadPromotionImage(file: File): Promise<string> {
+  const ext = EXT[file.type] ?? 'jpg'
+  const path = `${crypto.randomUUID()}/${crypto.randomUUID()}.${ext}`
+  const { error } = await getSupabase()
+    .storage.from(PROMOTIONS_BUCKET)
+    .upload(path, file, { contentType: file.type, upsert: false })
+  if (error) throw toApiError(error)
+  return path
+}
+
+/** رابط الصورة العام (bucket عام؛ لا روابط موقعة). */
+export function promotionImageUrl(path: string): string {
+  return getSupabase().storage.from(PROMOTIONS_BUCKET).getPublicUrl(path).data.publicUrl
+}
 
 export const promotionKeys = {
   all: ['admin', 'promotions'] as const,
@@ -136,23 +81,15 @@ export const promotionKeys = {
 }
 
 export function usePromotions() {
-  return useQuery({ queryKey: promotionKeys.list, queryFn: () => promotionsApi.list() })
+  return useQuery({ queryKey: promotionKeys.list, queryFn: fetchAllPromotions })
 }
 
 export function usePromotion(id: string | undefined) {
-  return useQuery({
-    queryKey: promotionKeys.detail(id ?? ''),
-    enabled: Boolean(id),
-    queryFn: async () => {
-      const p = await promotionsApi.get(id!)
-      if (!p) throw Object.assign(new Error('الدعاية غير موجودة.'), { code: 'NOT_FOUND' })
-      return p
-    },
-  })
+  return useQuery({ queryKey: promotionKeys.detail(id ?? ''), enabled: Boolean(id), queryFn: () => fetchPromotion(id!) })
 }
 
 export function useDisplaySettings() {
-  return useQuery({ queryKey: promotionKeys.settings, queryFn: () => promotionsApi.getSettings() })
+  return useQuery({ queryKey: promotionKeys.settings, queryFn: fetchDisplaySettings })
 }
 
 function useInvalidateAll() {
@@ -160,10 +97,14 @@ function useInvalidateAll() {
   return () => qc.invalidateQueries({ queryKey: promotionKeys.all })
 }
 
+/** يرفع الصورة الجديدة (إن وجدت) ثم يحفظ. */
 export function useSavePromotion() {
   const invalidate = useInvalidateAll()
   return useMutation({
-    mutationFn: ({ id, input }: { id: string | null; input: PromotionInput }) => promotionsApi.save(id, input),
+    mutationFn: async ({ id, input, imageFile }: { id: string | null; input: PromotionInput; imageFile: File | null }) => {
+      const image_path = imageFile ? await uploadPromotionImage(imageFile) : input.image_path
+      return savePromotion(id, { ...input, image_path })
+    },
     onSuccess: () => invalidate(),
   })
 }
@@ -171,7 +112,7 @@ export function useSavePromotion() {
 export function useSetPromotionStatus() {
   const invalidate = useInvalidateAll()
   return useMutation({
-    mutationFn: ({ id, status }: { id: string; status: PromotionStatus }) => promotionsApi.setStatus(id, status),
+    mutationFn: ({ id, status }: { id: string; status: PromotionStatus }) => setPromotionStatus(id, status),
     onSuccess: () => invalidate(),
   })
 }
@@ -179,12 +120,12 @@ export function useSetPromotionStatus() {
 export function useSaveDisplaySettings() {
   const invalidate = useInvalidateAll()
   return useMutation({
-    mutationFn: (s: PromotionDisplaySettings) => promotionsApi.saveSettings(s),
+    mutationFn: (s: PromotionDisplaySettings) => saveDisplaySettings(s),
     onSuccess: () => invalidate(),
   })
 }
 
-/** المناطق الفعالة للاستهداف: قراءة حقيقية من جدول regions القائم. */
+/** المناطق الفعالة للاستهداف من جدول regions. */
 export function useActiveRegions() {
   return useQuery({
     queryKey: promotionKeys.regions,

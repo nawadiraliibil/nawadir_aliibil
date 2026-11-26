@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router'
 import { formatDate, formatNumber } from '@admin/lib/format'
 import {
-  Alert,
   Badge,
   Button,
   Card,
@@ -18,21 +17,10 @@ import {
   useNotify,
   type Column,
 } from '@admin/ui'
-import { useDisplaySettings, usePromotions, useSaveDisplaySettings, useSetPromotionStatus, promotionsApi } from './api'
+import { promotionImageUrl, useDisplaySettings, usePromotions, useSaveDisplaySettings, useSetPromotionStatus } from './api'
 import { ACTION_LABELS, PLACEMENT_LABELS, STATE_LABELS, STATE_TONES, clickRate, effectiveState, validateFeedInterval } from './logic'
 import { FEED_INTERVAL_MAX, FEED_INTERVAL_MIN, type EffectiveState, type Promotion, type PromotionStatus } from './types'
 import './promotions.css'
-
-/** تنبيه الوضع التجريبي: يظهر ما دامت الطبقة غير متصلة بالخادم (INT-010). */
-export function MockModeAlert() {
-  if (promotionsApi.mode !== 'mock') return null
-  return (
-    <Alert tone="warning" title="وضع تجريبي: غير متصل بالتطبيق بعد">
-      الدعايات والإعدادات هنا تحفظ في هذا المتصفح فقط ولا تظهر في تطبيق الجوال. تتصل الشاشة بالخادم عند تسليم مطور الجوال
-      لطلب التكامل INT-010 (جداول الدعايات ودوالها وعرضها في التطبيق).
-    </Alert>
-  )
-}
 
 const FILTERS = ['CURRENT', 'RUNNING', 'SCHEDULED', 'PAUSED', 'EXPIRED', 'ARCHIVED', 'ALL'] as const
 type Filter = (typeof FILTERS)[number]
@@ -136,7 +124,7 @@ export default function PromotionsPage() {
     {
       key: 'image',
       header: 'الصورة',
-      render: (p) => <img className="promo-thumb" src={p.image_path} alt="" loading="lazy" />,
+      render: (p) => <img className="promo-thumb" src={promotionImageUrl(p.image_path)} alt="" loading="lazy" />,
     },
     {
       key: 'title',
@@ -219,7 +207,6 @@ export default function PromotionsPage() {
           </Button>
         }
       />
-      <MockModeAlert />
       <DisplaySettingsCard />
 
       <div className="filters">

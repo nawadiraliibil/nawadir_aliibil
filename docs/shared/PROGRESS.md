@@ -1129,3 +1129,27 @@
 - الفحوص الفعلية: `npx tsc -b` بلا أخطاء؛ `vitest` ‏22 ملفًا و280 اختبارًا ناجحًا (20 جديدًا للدعايات)؛ `npm run build` ناجح. لقطات Chrome للقائمة والمحرر عبر صفحة فحص مؤقتة ببيانات تجريبية (حُذفت بعد الفحص).
 - لم يفحص: لا تكامل مع الخادم ولا التطبيق (غير موجودين بعد)؛ الصور في الوضع التجريبي تحفظ data URL في المتصفح وقد تمتلئ سعة `localStorage` عند صور كثيرة (تبقى في الذاكرة للجلسة).
 - الخطوة التالية: MOBILE ينفذ INT-010؛ ثم ADMIN يربط `promotionsApi` بالدوال ويتحقق من معايير القبول.
+
+## MOBILE-PROMO-20261126 — الدعايات التجارية: الخلفية والعقد والتطبيق (INT-010)
+
+- التاريخ: 2026-11-26 — Asia/Riyadh؛ الجانب MOBILE بإسناد صريح من المستخدم نيابة عن مطور الجوال («طلب مني مبرمج تطبيق الجوال القيام بها بدلًا منه»)، ينفذه Claude Code في جلسة ADMIN، ثم ربط لوحة الإدارة (ADMIN). الحالة: جارٍ.
+- المسارات المحجوزة: `supabase/migrations/` (ترحيل الدعايات)، `supabase/tests/database/` (اختبار الدعايات و`99_api_surface`)، `contracts/` (إصدار إضافي)، `mobile_app/lib/features/promotions/` (جديد) وإدراج البطاقة في `mobile_app/lib/features/browse/`، واختبارات الجوال، و`web_platform/src/admin/features/promotions/`.
+- بيئة التنفيذ: لا Docker ولا Supabase CLI على هذا الجهاز؛ الترحيل يطبق على مشروع التطوير عبر MCP ويختبر بـSQL هناك. Flutter يثبت محليًا لتشغيل `flutter analyze` و`flutter test`.
+
+### MOBILE-PROMO-20261126 — تسليم: الدعايات التجارية من الخلفية إلى التطبيق واللوحة
+
+- التاريخ: 2026-11-26 — Asia/Riyadh؛ Claude Code (الجانب MOBILE بإسناد المستخدم، ثم ADMIN). الحالة: **منفذ؛ ينتظر تجربة على هاتف وبجلسة موظف**.
+- ما تغير:
+  - الخلفية: `supabase/migrations/20261126110000_promotions.sql` (جداول `promotions` و`promotion_settings` و`promotion_event_log`، القدرة `promotions.manage`، bucket عام `promotions`، 8 دوال)، `supabase/tests/database/27_promotions.test.sql` (65 فحصًا)، و`99_api_surface.test.sql`.
+  - العقد 1.6.0: `VERSION`، `CHANGELOG.md`، `api/enums.json` و`rpc.yaml` و`storage.md` و`read-surface.md`، `generated/database.types.ts`، 5 مخططات و4 أمثلة جديدة، `fixtures/admin-whoami.json`، وبيانات الدوال في `tools/build_rpc.mjs` والمخططات في `tools/build_schemas.mjs`.
+  - الجوال: `lib/features/promotions/` (جديد)، `lib/features/browse/presentation/search_results_view.dart` و`home_screen.dart`، `test/features/promotions/promotions_test.dart` (9)، و`test/helpers/fake_rpc.dart` (استجابة افتراضية بلا دعايات).
+  - اللوحة: `features/promotions/` (api وtypes والصفحتان والاختبار)، `lib/capabilities.ts`، `features/staff/labels.ts`، `routes.tsx`، `test/fakeSupabase.ts` (رفع ورابط عام).
+- الفحوص الفعلية:
+  - pgTAP على مشروع التطوير في معاملة متراجع عنها (لا Docker هنا): `27_promotions` ‏65/65، و`99_api_surface` ‏4/4؛ وتحقق بعدها أن لا أثر (لا دعايات ولا مستخدمي اختبار ولا pgTAP).
+  - الواجهة العامة بالمفتاح العام: `list_active_promotions` تعمل للزائر، و`admin_list_promotions` والجدول يرفضان (42501).
+  - `build_rpc.mjs` (نسخة تقرأ JSON بدل Docker): 94 دالة بلا تعارض صلاحيات، والفرق إضافات والإصدار فقط. `build_schemas.mjs` ناجح. الأمثلة تطابق المخططات (ajv).
+  - Flutter 3.50.1 (ثُبت في `C:\src\flutter` لهذه المهمة): `flutter analyze` بلا أخطاء ولا تحذيرات (92 ملاحظة إهمال `material.dart` في الإصدار الجديد، 91 منها قبل المهمة). `flutter test`: 340 ناجحًا و18 فاشلًا؛ قبل المهمة 331 و18، والفاشلة هي نفسها (تنبيه Flutter 3.50 عن `ListTile`، خارج هذه المهمة). اختبارات الدعايات التسعة فشلت عمدًا حين كُسر الإدراج ثم أعيد.
+  - اللوحة: `tsc` بلا أخطاء، `vitest` ‏22 ملفًا و281 اختبارًا ناجحًا، `npm run build` ناجح.
+  - مستشار الأمان: ملاحظات الجداول والدوال الجديدة من النمط القائم نفسه (لا وصول مباشر، ودوال SECURITY DEFINER تفحص داخليًا).
+- ملاحظات: `flutter pub get` بالإصدار الأحدث غيّر `pubspec.lock` و`analysis_options.yaml`، وأعيدا إلى حالهما. لم يُصوّر التطبيق على جهاز ولا محاكي.
+- الخطوة التالية: دخول المدير إلى اللوحة وإنشاء دعاية حقيقية، ثم فتح التطبيق على هاتف للتحقق من المعيار (1) في INT-010.

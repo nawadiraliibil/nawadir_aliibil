@@ -36,11 +36,8 @@ const PromotionsPage = lazy(() => import('./features/promotions/PromotionsPage')
 const PromotionEditorPage = lazy(() => import('./features/promotions/PromotionEditorPage'))
 
 const LISTINGS_CAPS = ['listings.hide', 'listings.review'] as const
-/**
- * الدعايات التجارية (INT-010): القدرة المقترحة promotions.manage غير موجودة في الخادم بعد، فلا
- * تضاف إلى CAPABILITIES (تستخدم في منح الأدوار). مؤقتًا: المدير ومن يملك settings.manage.
- */
-const PROMOTIONS_CAPS = ['settings.manage'] as const
+/** الدعايات التجارية (TEAM-DEC-017، العقد 1.6.0). */
+const PROMOTIONS_CAPS = ['promotions.manage'] as const
 
 /** المسارات نسبية إلى /admin. */
 export const ADMIN_ROUTES: AdminRoute[] = [

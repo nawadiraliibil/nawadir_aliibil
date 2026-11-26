@@ -2,6 +2,20 @@
 
 سجل إضافة فقط. الأحدث في الأعلى. كل قيد يذكر المهمة والترحيلات المرتبطة.
 
+## 1.6.0 — 2026-11-26
+
+الدعايات التجارية (TEAM-DEC-017؛ INT-010؛ MOBILE-PROMO-20261126). **إضافي غير كاسر.** الترحيل `20261126110000_promotions` منشور على مشروع التطوير (عبر MCP؛ أعيد رقم إصداره في سجل الترحيلات من 20261126090858 ليأتي بعد `profile_avatar`).
+
+- الجداول `promotions` و`promotion_settings` (صف واحد) و`promotion_event_log`، بلا وصول مباشر لأي دور عميل. نوعا enum ‏`promotion_status` (`ACTIVE|PAUSED|ARCHIVED`) و`promotion_action` (`URL|WHATSAPP|CALL|NONE`)، والمواضع `HOME_FEED|SEARCH_RESULTS` (`api/enums.json`: ‏`promotion_status` و`promotion_action` و`promotion_placement`).
+- القدرة الجديدة `promotions.manage` (تمنح للمشرف؛ ليست من قدرات المدير وحده). `admin_whoami` للمدير يعيدها؛ المثال `admin-whoami.json` محدث بها (تحقق من رد الخادم).
+- bucket عام `promotions` (‏1 ميغابايت؛ jpeg وpng وwebp)؛ الرفع والحذف للموظف بالقدرة (`api/storage.md`).
+- دوال التطبيق (زائر ومستخدم): `list_active_promotions(p_placement, p_region_id)` ← `{enabled, feed_interval, items}`؛ `record_promotion_event(p_promotion_id, p_kind, p_device_id)` ← boolean (ظهور مرة في الساعة ونقر مرة في الدقيقة لكل مشاهد).
+- دوال الإدارة (`promotions.manage`): `admin_list_promotions`، `admin_get_promotion`، `admin_save_promotion(p_id, p_payload)`، `admin_set_promotion_status`، `admin_get_promotion_settings`، `admin_update_promotion_settings(p_enabled, p_feed_interval)`. أحداث سجل الإجراءات: `promotion.created` و`promotion.updated` و`promotion.status_changed` و`promotion.settings_updated`.
+- **اختلاف عن مقترح INT-010:** إعدادات العرض في جدول مستقل `promotion_settings` بدالتين، لا مفتاحين في `platform_settings`، لأن مسار الإعدادات المنشورة بإصدارات يمس مخطط الإعدادات ونموذج اللوحة والجوال معًا، والفاصل إعداد تشغيلي. `list_active_promotions` تعيد الفاصل مع القائمة فلا يحتاج التطبيق `get_published_settings` له. ولا `p_request_id` في `admin_save_promotion` (كبقية دوال القوائم في الإدارة).
+- المخططات: `promotion-public` و`active-promotions` و`promotion-admin` و`promotion-input` و`promotion-settings`. الأمثلة من ردود الخادم الفعلية في معاملة متراجع عنها على مشروع التطوير: `active-promotions.json` و`admin-promotion.json` و`admin-list-promotions.json` و`promotion-settings.json` (تحققت بـajv مقابل المخططات).
+- `rpc.yaml` بـ94 دالة (الإصدار في الملف كان 1.4.0 فصار 1.6.0)؛ الأنواع المولدة (`public` من الخادم، 154 سطرًا مضافًا)؛ `read-surface.md` و`storage.md`.
+- اختبارات: `supabase/tests/database/27_promotions.test.sql` (65) و`99_api_surface` محدث؛ شُغلت على مشروع التطوير في معاملة متراجع عنها (لا Docker على جهاز التنفيذ): 65/65 و4/4.
+
 ## 1.5.0 — 2026-11-26
 
 الصورة الشخصية (MOBILE-AVATAR-20261126؛ الترحيل `20261126100000_profile_avatar`). إضافي؛ لا تغيير كاسر.

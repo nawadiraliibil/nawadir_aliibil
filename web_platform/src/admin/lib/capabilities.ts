@@ -13,6 +13,7 @@ export const CAPABILITIES = [
   'staff.manage',
   'audit.read',
   'stats.read',
+  'promotions.manage',
 ] as const
 
 export type Capability = (typeof CAPABILITIES)[number]
@@ -31,6 +32,7 @@ export const CAPABILITY_LABELS: Record<Capability, string> = {
   'staff.manage': 'الموظفون والأدوار',
   'audit.read': 'سجل الإجراءات',
   'stats.read': 'التقارير التجميعية',
+  'promotions.manage': 'الدعايات التجارية',
 }
 
 export const ROLE_LABELS: Record<StaffRole, string> = {

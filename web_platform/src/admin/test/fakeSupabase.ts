@@ -10,7 +10,7 @@ export interface RpcErrorSpec {
 export type RpcHandler = (args: Record<string, unknown>) => unknown | Promise<unknown>
 
 export interface FakeCall {
-  kind: 'rpc' | 'select'
+  kind: 'rpc' | 'select' | 'upload'
   name: string
   args?: Record<string, unknown>
   filters?: Array<[string, ...unknown[]]>
@@ -214,6 +214,12 @@ export function createFakeSupabase(init: { tables?: Record<string, Row[]>; rpc?:
     },
     storage: {
       from: (bucket: string) => ({
+        // الرفع يسجل في calls (kind 'upload'، name = bucket، args.path).
+        upload: async (path: string, file: unknown, options?: Record<string, unknown>) => {
+          calls.push({ kind: 'upload', name: bucket, args: { path, file, ...options } })
+          return { data: { path }, error: null }
+        },
+        getPublicUrl: (path: string) => ({ data: { publicUrl: `https://storage.test/public/${bucket}/${path}` } }),
         createSignedUrl: async (path: string) => ({ data: { signedUrl: `https://storage.test/${bucket}/${path}?token=t` }, error: null }),
         createSignedUrls: async (paths: string[]) => ({
           data: paths.map((p) => ({ path: p, signedUrl: `https://storage.test/${bucket}/${p}?token=t`, error: null })),

@@ -360,6 +360,37 @@ const META = {
     errors: [...COMMON_STAFF, "NOT_FOUND", "INVALID_STATE", "VALIDATION_FAILED", "BELOW_HARD_MINIMUM"],
     req: "AD-FR-037", since: "0.1.0",
   },
+  // الدعايات التجارية (TEAM-DEC-017، INT-010)
+  list_active_promotions: {
+    access: "anon", errors: ["VALIDATION_FAILED"], req: "TEAM-DEC-017", since: "1.6.0",
+    note: "الرد {enabled, feed_interval, items} وفق schemas/active-promotions. p_placement: HOME_FEED | SEARCH_RESULTS. p_region_id اختياري: الدعايات العامة والمحصورة بهذه المنطقة؛ دونه كل الجارية. items حتى 20 بترتيب priority تنازليًا ثم starts_at تنازليًا، وفارغة إن enabled = false. التطبيق يدرج بطاقة بعد كل feed_interval إعلانًا ويدوّر items.",
+  },
+  record_promotion_event: {
+    access: "anon", errors: ["VALIDATION_FAILED", "NOT_FOUND"], req: "TEAM-DEC-017", since: "1.6.0",
+    note: "p_kind: IMPRESSION | CLICK. المشاهد الحساب أو p_device_id (معرف الجهاز نفسه في record_listing_view)؛ دونهما لا يحسب. ظهور واحد لكل مشاهد ودعاية في الساعة، ونقر واحد في الدقيقة. يعيد true إن حُسب. NOT_FOUND لغير الجارية.",
+  },
+  admin_list_promotions: {
+    access: "staff:promotions.manage", errors: [...COMMON_STAFF, "VALIDATION_FAILED"], req: "TEAM-DEC-017", since: "1.6.0",
+    note: "مصفوفة schemas/promotion-admin، الأحدث تعديلًا أولًا. p_status: ACTIVE | PAUSED | ARCHIVED أو فارغ؛ p_limit 1..200؛ الصفحة التالية بتمرير updated_at وid لآخر عنصر معًا.",
+  },
+  admin_get_promotion: {
+    access: "staff:promotions.manage", errors: [...COMMON_STAFF, "NOT_FOUND"], req: "TEAM-DEC-017", since: "1.6.0",
+  },
+  admin_save_promotion: {
+    access: "staff:promotions.manage", errors: [...COMMON_STAFF, "NOT_FOUND", "VALIDATION_FAILED"], req: "TEAM-DEC-017", since: "1.6.0",
+    note: "p_id فارغ = إنشاء بحالة ACTIVE. p_payload وفق schemas/promotion-input. image_path ملف مرفوع مسبقًا في bucket ‏promotions. رقم الواتساب والاتصال يوحَّد إلى +9665XXXXXXXX. VALIDATION_FAILED بالحقول المرفوضة كلها.",
+  },
+  admin_set_promotion_status: {
+    access: "staff:promotions.manage", errors: [...COMMON_STAFF, "NOT_FOUND", "VALIDATION_FAILED"], req: "TEAM-DEC-017", since: "1.6.0",
+    note: "p_status: ACTIVE | PAUSED | ARCHIVED (أي انتقال). p_note داخلية في سجل الإجراءات.",
+  },
+  admin_get_promotion_settings: {
+    access: "staff:promotions.manage", errors: COMMON_STAFF, req: "TEAM-DEC-017", since: "1.6.0",
+  },
+  admin_update_promotion_settings: {
+    access: "staff:promotions.manage", errors: [...COMMON_STAFF, "VALIDATION_FAILED"], req: "TEAM-DEC-017", since: "1.6.0",
+    note: "p_feed_interval 4..30. يسري فورًا (لا إصدارات كإعدادات المنصة).",
+  },
 };
 
 const SQL = `

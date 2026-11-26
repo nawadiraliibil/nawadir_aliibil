@@ -1557,6 +1557,125 @@ export type Database = {
           },
         ]
       }
+      promotion_event_log: {
+        Row: {
+          kind: string
+          promotion_id: string
+          viewer: string
+          window_start: string
+        }
+        Insert: {
+          kind: string
+          promotion_id: string
+          viewer: string
+          window_start: string
+        }
+        Update: {
+          kind?: string
+          promotion_id?: string
+          viewer?: string
+          window_start?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promotion_event_log_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "promotions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      promotion_settings: {
+        Row: {
+          enabled: boolean
+          feed_interval: number
+          id: boolean
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          enabled?: boolean
+          feed_interval?: number
+          id?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          enabled?: boolean
+          feed_interval?: number
+          id?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      promotions: {
+        Row: {
+          action_type: Database["public"]["Enums"]["promotion_action"]
+          action_value: string | null
+          advertiser_name: string
+          body: string | null
+          click_count: number
+          created_at: string
+          created_by: string | null
+          ends_at: string | null
+          id: string
+          image_path: string
+          impression_count: number
+          placements: string[]
+          priority: number
+          region_ids: number[] | null
+          starts_at: string
+          status: Database["public"]["Enums"]["promotion_status"]
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          action_type: Database["public"]["Enums"]["promotion_action"]
+          action_value?: string | null
+          advertiser_name: string
+          body?: string | null
+          click_count?: number
+          created_at?: string
+          created_by?: string | null
+          ends_at?: string | null
+          id?: string
+          image_path: string
+          impression_count?: number
+          placements: string[]
+          priority?: number
+          region_ids?: number[] | null
+          starts_at: string
+          status?: Database["public"]["Enums"]["promotion_status"]
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          action_type?: Database["public"]["Enums"]["promotion_action"]
+          action_value?: string | null
+          advertiser_name?: string
+          body?: string | null
+          click_count?: number
+          created_at?: string
+          created_by?: string | null
+          ends_at?: string | null
+          id?: string
+          image_path?: string
+          impression_count?: number
+          placements?: string[]
+          priority?: number
+          region_ids?: number[] | null
+          starts_at?: string
+          status?: Database["public"]["Enums"]["promotion_status"]
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       rating_appeals: {
         Row: {
           created_at: string
@@ -3087,6 +3206,8 @@ export type Database = {
         Args: { p_listing_id: string }
         Returns: Json
       }
+      admin_get_promotion: { Args: { p_id: string }; Returns: Json }
+      admin_get_promotion_settings: { Args: never; Returns: Json }
       admin_get_report_evidence: {
         Args: { p_report_id: string }
         Returns: Json
@@ -3134,6 +3255,15 @@ export type Database = {
         }
         Returns: Json
       }
+      admin_list_promotions: {
+        Args: {
+          p_after_id?: string
+          p_after_updated_at?: string
+          p_limit?: number
+          p_status?: string
+        }
+        Returns: Json
+      }
       admin_publish_settings: { Args: { p_note?: string }; Returns: Json }
       admin_reactivate_account: {
         Args: { p_note?: string; p_user_id: string }
@@ -3169,8 +3299,16 @@ export type Database = {
         Args: { p_note?: string; p_version: number }
         Returns: Json
       }
+      admin_save_promotion: {
+        Args: { p_id?: string; p_payload?: Json }
+        Returns: Json
+      }
       admin_set_lookup_active: {
         Args: { p_id: string; p_is_active: boolean; p_kind: string }
+        Returns: Json
+      }
+      admin_set_promotion_status: {
+        Args: { p_id: string; p_note?: string; p_status: string }
         Returns: Json
       }
       admin_set_report_status: {
@@ -3196,6 +3334,10 @@ export type Database = {
       }
       admin_unhide_rating: {
         Args: { p_note?: string; p_rating_id: string }
+        Returns: Json
+      }
+      admin_update_promotion_settings: {
+        Args: { p_enabled: boolean; p_feed_interval: number }
         Returns: Json
       }
       admin_update_settings_draft: { Args: { p_content: Json }; Returns: Json }
@@ -3290,6 +3432,10 @@ export type Database = {
       get_rating_eligibility: { Args: { p_seller_id: string }; Returns: Json }
       get_report_status: { Args: { p_report_id: string }; Returns: Json }
       has_staff_capability: { Args: { p_capability: string }; Returns: boolean }
+      list_active_promotions: {
+        Args: { p_placement: string; p_region_id?: number }
+        Returns: Json
+      }
       mark_conversation_read: {
         Args: { p_conversation_id: string }
         Returns: Json
@@ -3307,6 +3453,10 @@ export type Database = {
       record_listing_view: {
         Args: { p_device_id?: string; p_listing_id: string }
         Returns: number
+      }
+      record_promotion_event: {
+        Args: { p_device_id?: string; p_kind: string; p_promotion_id: string }
+        Returns: boolean
       }
       register_device_token: {
         Args: { p_platform: string; p_token: string }
@@ -3425,6 +3575,8 @@ export type Database = {
         | "RATINGS"
       offer_type: "FIXED_PRICE" | "IN_PERSON_AUCTION"
       policy_kind: "TERMS" | "PRIVACY"
+      promotion_action: "URL" | "WHATSAPP" | "CALL" | "NONE"
+      promotion_status: "ACTIVE" | "PAUSED" | "ARCHIVED"
       review_decision: "APPROVED" | "REJECTED" | "HIDDEN" | "UNHIDDEN"
       staff_role: "MODERATOR" | "ADMIN"
     }
@@ -3581,6 +3733,8 @@ export const Constants = {
       ],
       offer_type: ["FIXED_PRICE", "IN_PERSON_AUCTION"],
       policy_kind: ["TERMS", "PRIVACY"],
+      promotion_action: ["URL", "WHATSAPP", "CALL", "NONE"],
+      promotion_status: ["ACTIVE", "PAUSED", "ARCHIVED"],
       review_decision: ["APPROVED", "REJECTED", "HIDDEN", "UNHIDDEN"],
       staff_role: ["MODERATOR", "ADMIN"],
     },

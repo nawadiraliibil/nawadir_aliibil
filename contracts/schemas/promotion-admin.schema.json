@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/promotion-admin.schema.json",
+  "title": "دعاية في ردود admin_list_promotions وadmin_get_promotion وadmin_save_promotion وadmin_set_promotion_status",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "body",
+    "advertiser_name",
+    "image_path",
+    "action_type",
+    "action_value",
+    "placements",
+    "region_ids",
+    "starts_at",
+    "ends_at",
+    "priority",
+    "status",
+    "impression_count",
+    "click_count",
+    "created_by",
+    "updated_by",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "advertiser_name": {
+      "type": "string"
+    },
+    "image_path": {
+      "type": "string"
+    },
+    "action_type": {
+      "enum": [
+        "URL",
+        "WHATSAPP",
+        "CALL",
+        "NONE"
+      ]
+    },
+    "action_value": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "placements": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "HOME_FEED",
+          "SEARCH_RESULTS"
+        ]
+      }
+    },
+    "region_ids": {
+      "anyOf": [
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "starts_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ends_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "status": {
+      "enum": [
+        "ACTIVE",
+        "PAUSED",
+        "ARCHIVED"
+      ]
+    },
+    "impression_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "click_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "created_by": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "updated_by": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

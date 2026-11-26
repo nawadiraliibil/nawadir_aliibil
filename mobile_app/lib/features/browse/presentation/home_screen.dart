@@ -22,6 +22,7 @@ import '../../notifications/presentation/notifications_screen.dart';
 import 'filter_sheet.dart';
 import 'sort_sheet.dart';
 import 'search_results_view.dart';
+import '../../promotions/data/promotion.dart';
 
 /// الرئيسية (B01): بحث في العناوين، ومرشحات وفرز، وقائمة الإعلانات المنشورة.
 /// متاحة للزائر.
@@ -234,6 +235,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: SearchResultsView(
           filters: filters,
           header: header,
+          // التصفح (والمنطقة وحدها تصفح) يعرض دعايات الرئيسية، والبحث أو أي مرشح آخر
+          // يعرض دعايات نتائج البحث. المنطقة تمرر للاستهداف في الحالتين.
+          promotionPlacement:
+              filters.query == null &&
+                  filters.activeCount - (filters.regionId == null ? 0 : 1) == 0
+              ? PromotionPlacement.homeFeed
+              : PromotionPlacement.searchResults,
           onClearFilters: hasCriteria
               ? ref.read(homeFiltersProvider.notifier).reset
               : null,

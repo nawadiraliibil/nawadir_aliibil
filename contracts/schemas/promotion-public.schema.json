@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/promotion-public.schema.json",
+  "title": "عنصر items في رد list_active_promotions",
+  "description": "ما يعرضه التطبيق فقط؛ بلا عدادات ولا منشئ. الصورة في bucket ‏promotions العام.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "body",
+    "advertiser_name",
+    "image_path",
+    "action_type",
+    "action_value"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "advertiser_name": {
+      "type": "string"
+    },
+    "image_path": {
+      "type": "string"
+    },
+    "action_type": {
+      "enum": [
+        "URL",
+        "WHATSAPP",
+        "CALL",
+        "NONE"
+      ]
+    },
+    "action_value": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

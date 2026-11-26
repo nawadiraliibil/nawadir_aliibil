@@ -7,6 +7,10 @@ import '../../../core/errors/app_error.dart';
 import '../../../core/errors/error_messages.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/section_title.dart';
+import '../../promotions/application/promotions_providers.dart';
+import '../../promotions/data/promotion.dart';
+import '../../promotions/domain/feed_layout.dart';
+import '../../promotions/presentation/promotion_card.dart';
 import '../application/browse_providers.dart';
 import '../data/listing_card.dart';
 import 'auction_widgets.dart';
@@ -26,6 +30,7 @@ class SearchResultsView extends ConsumerStatefulWidget {
     this.listTitle,
     this.listTitleBuilder,
     this.compact = false,
+    this.promotionPlacement,
   });
 
   final SearchFilters filters;
@@ -49,6 +54,9 @@ class SearchResultsView extends ConsumerStatefulWidget {
 
   /// عرض عمودين بدل البطاقة الكبيرة.
   final bool compact;
+
+  /// موضع الدعايات التجارية بين النتائج (TEAM-DEC-017)؛ null: بلا دعايات (ملف المعلن).
+  final PromotionPlacement? promotionPlacement;
 
   @override
   ConsumerState<SearchResultsView> createState() => _SearchResultsViewState();
@@ -82,7 +90,11 @@ class _SearchResultsViewState extends ConsumerState<SearchResultsView> {
     await ref.read(searchResultsProvider(widget.filters).future);
   }
 
-  Widget _resultsSliver(BuildContext context, SearchResults data) {
+  Widget _resultsSliver(
+    BuildContext context,
+    SearchResults data,
+    ActivePromotions promotions,
+  ) {
     final provider = searchResultsProvider(widget.filters);
     final footer = _Footer(
       results: data,
@@ -90,31 +102,59 @@ class _SearchResultsViewState extends ConsumerState<SearchResultsView> {
     );
     void open(ListingCard card) => context.push(Routes.listing(card.listingId));
 
+    // دعاية بعد كل feed_interval إعلانًا، بالتدوير؛ لا دعايات إن أطفئت أو لم تجلب.
+    final feed = buildFeed(
+      listingCount: data.items.length,
+      promotionCount: promotions.isEmpty ? 0 : promotions.items.length,
+      interval: promotions.feedInterval,
+    );
+    // المفتاح بالموضع لا بالدعاية: الدعاية نفسها تتكرر عند التدوير.
+    Widget promotion(PromotionEntry e, int position) => PromotionCard(
+      key: ValueKey('promotion-slot-$position'),
+      promotion: promotions.items[e.index],
+      compact: widget.compact,
+    );
+
     if (widget.compact) {
-      final rows = (data.items.length + 1) ~/ 2;
+      // صفوف من بطاقتين، والدعاية صف كامل بعرض الشاشة.
+      final rows = <List<FeedEntry>>[];
+      for (final e in feed) {
+        if (e is PromotionEntry) {
+          rows.add([e]);
+        } else if (rows.isNotEmpty &&
+            rows.last.length == 1 &&
+            rows.last.single is ListingEntry) {
+          rows.last.add(e);
+        } else {
+          rows.add([e]);
+        }
+      }
       return SliverPadding(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
         sliver: SliverList.separated(
-          itemCount: rows + 1,
+          itemCount: rows.length + 1,
           separatorBuilder: (_, _) => const SizedBox(height: 16),
           itemBuilder: (context, r) {
-            if (r == rows) return footer;
-            Widget cell(int i) => Expanded(
-              child: i < data.items.length
-                  ? ListingCardTile(
-                      compact: true,
-                      card: data.items[i],
-                      onTap: () => open(data.items[i]),
-                    )
-                  : const SizedBox.shrink(),
-            );
+            if (r == rows.length) return footer;
+            final row = rows[r];
+            final first = row.first;
+            if (first is PromotionEntry) return promotion(first, r);
+            Widget cell(int k) {
+              final e = k < row.length ? row[k] : null;
+              return Expanded(
+                child: e is ListingEntry
+                    ? ListingCardTile(
+                        compact: true,
+                        card: data.items[e.index],
+                        onTap: () => open(data.items[e.index]),
+                      )
+                    : const SizedBox.shrink(),
+              );
+            }
+
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                cell(r * 2),
-                const SizedBox(width: 12),
-                cell(r * 2 + 1),
-              ],
+              children: [cell(0), const SizedBox(width: 12), cell(1)],
             );
           },
         ),
@@ -124,11 +164,13 @@ class _SearchResultsViewState extends ConsumerState<SearchResultsView> {
     return SliverPadding(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
       sliver: SliverList.separated(
-        itemCount: data.items.length + 1,
+        itemCount: feed.length + 1,
         separatorBuilder: (_, _) => const SizedBox(height: 12),
         itemBuilder: (context, i) {
-          if (i == data.items.length) return footer;
-          final card = data.items[i];
+          if (i == feed.length) return footer;
+          final e = feed[i];
+          if (e is PromotionEntry) return promotion(e, i);
+          final card = data.items[(e as ListingEntry).index];
           return ListingCardTile(card: card, onTap: () => open(card));
         },
       ),
@@ -139,6 +181,18 @@ class _SearchResultsViewState extends ConsumerState<SearchResultsView> {
   Widget build(BuildContext context) {
     final provider = searchResultsProvider(widget.filters);
     final results = ref.watch(provider);
+    final placement = widget.promotionPlacement;
+    final promotions = placement == null
+        ? ActivePromotions.none
+        : ref
+                  .watch(
+                    activePromotionsProvider((
+                      placement: placement,
+                      regionId: widget.filters.regionId,
+                    )),
+                  )
+                  .value ??
+              ActivePromotions.none;
 
     return results.when(
       loading: () => CustomScrollView(
@@ -212,7 +266,7 @@ class _SearchResultsViewState extends ConsumerState<SearchResultsView> {
                           widget.listTitle,
                     ),
                   ),
-                _resultsSliver(context, data),
+                _resultsSliver(context, data, promotions),
               ],
             ],
           ),

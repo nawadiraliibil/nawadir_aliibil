@@ -18,6 +18,13 @@ class FakeRpc {
         'get_current_policies': (_) => fixture('current-policies'),
         'search_listings': (_) => fixture('search-result'),
         'record_listing_view': (_) => 1,
+        // الرئيسية تطلب الدعايات دائمًا؛ الافتراضي بلا دعايات كي لا تتغير القوائم.
+        'list_active_promotions': (_) => {
+          'enabled': true,
+          'feed_interval': 8,
+          'items': <dynamic>[],
+        },
+        'record_promotion_event': (_) => true,
         ...?handlers,
       };
 

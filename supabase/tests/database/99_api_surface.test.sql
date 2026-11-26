@@ -11,7 +11,8 @@ select bag_eq(
     where p.pronamespace = 'public'::regnamespace
       and has_function_privilege('anon', p.oid, 'execute')$$,
   $$values ('get_published_settings'), ('get_current_policies'), ('storage_object_is_public'),
-           ('search_listings'), ('resolve_listing_ref'), ('get_listing'), ('record_listing_view')$$,
+           ('search_listings'), ('resolve_listing_ref'), ('get_listing'), ('record_listing_view'),
+           ('list_active_promotions'), ('record_promotion_event')$$,
   'دوال public المتاحة لـanon');
 
 select bag_eq(
@@ -46,7 +47,10 @@ select bag_eq(
            ('set_notification_preference'), ('register_device_token'), ('unregister_device_token'),
            ('get_rating_eligibility'), ('submit_rating'), ('edit_rating'), ('reply_to_rating'), ('appeal_rating'),
            ('admin_hide_rating'), ('admin_unhide_rating'), ('admin_decide_rating_appeal'),
-           ('admin_stats')$$,
+           ('admin_stats'),
+           ('list_active_promotions'), ('record_promotion_event'),
+           ('admin_list_promotions'), ('admin_get_promotion'), ('admin_save_promotion'),
+           ('admin_set_promotion_status'), ('admin_get_promotion_settings'), ('admin_update_promotion_settings')$$,
   'دوال public المتاحة لـauthenticated');
 
 select bag_eq(

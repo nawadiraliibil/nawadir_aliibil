@@ -28,6 +28,10 @@ export const AUDIT_ACTION_LABELS: Record<string, string> = {
   'lookup.reordered': 'إعادة ترتيب قائمة',
   'settings.published': 'نشر إصدار إعدادات',
   'settings.rolled_back': 'التراجع إلى إصدار إعدادات',
+  'promotion.created': 'إنشاء دعاية تجارية',
+  'promotion.updated': 'تعديل دعاية تجارية',
+  'promotion.status_changed': 'تغيير حالة دعاية تجارية',
+  'promotion.settings_updated': 'تغيير إعدادات عرض الدعايات',
 }
 
 const LEGACY_ACTIONS = new Set(['listing.approved', 'listing.rejected'])
@@ -48,6 +52,8 @@ export const AUDIT_RESOURCE_LABELS: Record<string, string> = {
   breed: 'سلالة',
   moderation_reason: 'سبب إشراف',
   settings_version: 'إصدار إعدادات',
+  promotion: 'دعاية تجارية',
+  promotion_settings: 'إعدادات الدعايات',
 }
 
 export const AUDIT_RESOURCE_TYPES = Object.keys(AUDIT_RESOURCE_LABELS)

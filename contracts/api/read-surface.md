@@ -18,6 +18,7 @@
 - الترتيب الافتراضي للبطاقات: `visibility_updated_at` تنازليًا ثم `listing_id`. البحث والمرشحات والفرز والتصفح على دفعات عبر الدالة `search_listings` (من 0.2.0)؛ والتفاصيل مع الوسائط وحالة المفضلة عبر `get_listing`؛ وترجمة `public_ref` في رابط المشاركة عبر `resolve_listing_ref`. `public_ref` عمود في `public_listing_cards` و`public_listing_details` (من 0.2.0).
 - لا هاتف دخول في أي علاقة عامة. لكل إعلان رقمان مستقلان اختياريان أدخلهما المعلن (1.1.0، TEAM-DEC-012): `contact_phone` رقم الاتصال و`contact_whatsapp_phone` رقم واتساب، ويلزم أحدهما على الأقل؛ أيهما فارغ فقناته غير متاحة. `contact_call_enabled` و`contact_whatsapp_enabled` باقيان للتوافق بقيمة مشتقة (رقمها غير فارغ). `contact_phone` صار يقبل الفراغ في `public_listing_details` وفي `get_listing`.
 - الإعدادات والقوائم مجتمعة من `get_published_settings()`، ونصوص السياسات من `get_current_policies()`.
+- الدعايات التجارية (1.6.0) لا تقرأ من جدول: `list_active_promotions(p_placement, p_region_id)` تعيد الجارية مع `feed_interval` و`enabled`، و`record_promotion_event` تسجل الظهور والنقر.
 
 ## المستخدم المسجل (صفوفه فقط)
 
@@ -54,8 +55,10 @@
 | `reports.handle` | `reports` |
 | `ratings.moderate` | `seller_ratings`، `seller_rating_history`، `rating_replies`، `rating_appeals` |
 
+الدعايات (`promotions.manage`، 1.6.0) لا تقرأ من جدول مباشرة؛ عبر `admin_list_promotions` و`admin_get_promotion` و`admin_get_promotion_settings`.
+
 هاتف دخول المستخدم لا يقرأ من جدول؛ تعيده `admin_get_account` لمن يملك `accounts.manage`. جلسة موظف دون `aal2` لا تقرأ شيئًا من هذه القراءات الإدارية.
 
 ## مغلق أمام كل أدوار العميل
 
-`policy_documents`، `notification_outbox`، `comments` (القراءة العامة عبر `public_comments`)، `device_tokens`، ومخطط `private` كله.
+`policy_documents`، `notification_outbox`، `comments` (القراءة العامة عبر `public_comments`)، `device_tokens`، `promotions` و`promotion_settings` و`promotion_event_log` (1.6.0، عبر الدوال فقط)، ومخطط `private` كله.

@@ -366,6 +366,65 @@ const schemas = {
       created_at: time,
     }),
   },
+
+  // الدعايات التجارية (TEAM-DEC-017، 1.6.0)
+  "promotion-public": {
+    title: "عنصر items في رد list_active_promotions",
+    description: "ما يعرضه التطبيق فقط؛ بلا عدادات ولا منشئ. الصورة في bucket ‏promotions العام.",
+    ...object({
+      id: uuid, title: str, body: nullable(str), advertiser_name: str, image_path: str,
+      action_type: en("promotion_action"), action_value: nullable(str),
+    }),
+  },
+
+  "active-promotions": {
+    title: "رد list_active_promotions",
+    ...object({
+      enabled: bool,
+      feed_interval: { type: "integer", minimum: 4, maximum: 30 },
+      items: { type: "array", maxItems: 20, items: { $ref: "promotion-public.schema.json" } },
+    }),
+  },
+
+  "promotion-admin": {
+    title: "دعاية في ردود admin_list_promotions وadmin_get_promotion وadmin_save_promotion وadmin_set_promotion_status",
+    ...object({
+      id: uuid, title: str, body: nullable(str), advertiser_name: str, image_path: str,
+      action_type: en("promotion_action"), action_value: nullable(str),
+      placements: { type: "array", minItems: 1, uniqueItems: true, items: en("promotion_placement") },
+      region_ids: nullable({ type: "array", minItems: 1, items: positive }),
+      starts_at: time, ends_at: nullable(time),
+      priority: { type: "integer", minimum: 0, maximum: 100 },
+      status: en("promotion_status"),
+      impression_count: { type: "integer", minimum: 0 }, click_count: { type: "integer", minimum: 0 },
+      created_by: nullable(uuid), updated_by: nullable(uuid), created_at: time, updated_at: time,
+    }),
+  },
+
+  "promotion-input": {
+    title: "p_payload في admin_save_promotion",
+    description: "النصوص تنظف من المسافات الزائدة؛ action_value يهمل مع NONE، ويوحد رقم الجوال إلى +9665XXXXXXXX.",
+    ...object({
+      title: { type: "string", minLength: 2, maxLength: 60 },
+      body: nullable({ type: "string", maxLength: 140 }),
+      advertiser_name: { type: "string", minLength: 2, maxLength: 60 },
+      image_path: { type: "string", maxLength: 120, pattern: "^[0-9a-f-]{36}/[A-Za-z0-9._-]+$" },
+      action_type: en("promotion_action"),
+      action_value: nullable(str),
+      placements: { type: "array", minItems: 1, items: en("promotion_placement") },
+      region_ids: nullable({ type: "array", minItems: 1, items: positive }),
+      starts_at: time, ends_at: nullable(time),
+      priority: { type: "integer", minimum: 0, maximum: 100 },
+    }, ["body", "action_value", "region_ids", "ends_at", "priority"]),
+  },
+
+  "promotion-settings": {
+    title: "رد admin_get_promotion_settings وadmin_update_promotion_settings",
+    ...object({
+      enabled: bool, feed_interval: { type: "integer", minimum: 4, maximum: 30 },
+      updated_by: nullable(uuid), updated_at: time,
+    }),
+  },
 };
 
 mkdirSync("contracts/schemas", { recursive: true });

@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "id": "790f8c3d-7b27-4a1a-b0dd-f46bbe024c0f",
+      "body": "أعلاف مركزة للإبل مع توصيل داخل الرياض والقصيم.",
+      "title": "أعلاف الصحراء — خصم 15٪",
+      "image_path": "6f1c2d3e-4a5b-4c6d-8e7f-90a1b2c3d4e5/feed-offer.webp",
+      "action_type": "URL",
+      "action_value": "https://example.com/offers/camel-feed",
+      "advertiser_name": "مؤسسة الصحراء للأعلاف"
+    },
+    {
+      "id": "fa670a89-336c-42e9-af8c-34c73e13616c",
+      "body": null,
+      "title": "عيادة الإبل البيطرية",
+      "image_path": "7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d/vet-clinic.jpg",
+      "action_type": "WHATSAPP",
+      "action_value": "+966551234567",
+      "advertiser_name": "عيادة الصحة البيطرية"
+    }
+  ],
+  "enabled": true,
+  "feed_interval": 8
+}

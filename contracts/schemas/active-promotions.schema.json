@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/active-promotions.schema.json",
+  "title": "رد list_active_promotions",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "enabled",
+    "feed_interval",
+    "items"
+  ],
+  "properties": {
+    "enabled": {
+      "type": "boolean"
+    },
+    "feed_interval": {
+      "type": "integer",
+      "minimum": 4,
+      "maximum": 30
+    },
+    "items": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "$ref": "promotion-public.schema.json"
+      }
+    }
+  }
+}

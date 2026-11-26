@@ -10,7 +10,7 @@
 # الأخطاء: الرمز في message والتفاصيل JSON في details بحالة SQL ‏P0001؛
 # انظر api/errors.json. الرد jsonb ما لم يذكر غير ذلك.
 
-version: "1.4.0"
+version: "1.6.0"
 functions:
   accept_policies:
     description: "تسجيل موافقة صاحب الجلسة على نصوص سارية. تكرار الطلب لا يغير تاريخ الموافقة."
@@ -89,6 +89,22 @@ functions:
     errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND]
     requirement: "AD-FR-008، AD-FR-018"
     since: "0.1.0"
+  admin_get_promotion:
+    description: "دعاية واحدة للموظف."
+    access: "staff:promotions.manage"
+    arguments: "p_id uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND]
+    requirement: "TEAM-DEC-017"
+    since: "1.6.0"
+  admin_get_promotion_settings:
+    description: "إعدادات عرض الدعايات: التشغيل والفاصل."
+    access: "staff:promotions.manage"
+    arguments: ""
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED]
+    requirement: "TEAM-DEC-017"
+    since: "1.6.0"
   admin_get_report_evidence:
     description: "الرسالة أو الرد المبلّغ عنه وسياق محدود، بتسجيل الاطلاع. القدرة: evidence.read."
     access: "staff:evidence.read"
@@ -147,6 +163,15 @@ functions:
     note: "قائمة كل الإعلانات لإدارة الظهور: p_status (DRAFT|PUBLISHED|HIDDEN|ARCHIVED|REJECTED أو فارغ)، p_query (جزء من العنوان أو اسم المعلن، أو المعرف العام public_ref أو معرف الإعلان)، p_limit (1-100، 50)، والتصفح بمفتاح آخر عنصر (p_after_changed_at, p_after_id) بترتيب status_changed_at تنازليًا. العنصر يضم listing_id وpublic_ref وstatus وtitle وowner_display_name وowner_status وhide_reason_code وhide_reason_text وhidden_at وغيرها."
     requirement: "AD-FR-018"
     since: "1.2.0"
+  admin_list_promotions:
+    description: "قائمة الدعايات للموظف، الأحدث تعديلًا أولًا، بمؤشر (updated_at, id)."
+    access: "staff:promotions.manage"
+    arguments: "p_status text DEFAULT NULL::text, p_limit integer DEFAULT 50, p_after_updated_at timestamp with time zone DEFAULT NULL::timestamp with time zone, p_after_id uuid DEFAULT NULL::uuid"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, VALIDATION_FAILED]
+    note: "مصفوفة schemas/promotion-admin، الأحدث تعديلًا أولًا. p_status: ACTIVE | PAUSED | ARCHIVED أو فارغ؛ p_limit 1..200؛ الصفحة التالية بتمرير updated_at وid لآخر عنصر معًا."
+    requirement: "TEAM-DEC-017"
+    since: "1.6.0"
   admin_publish_settings:
     description: "نشر مسودة الإعدادات بإصدار جديد. ذري مع حدود التخزين. القدرة: settings.manage."
     access: "staff:settings.manage"
@@ -205,6 +230,15 @@ functions:
     errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED, BELOW_HARD_MINIMUM]
     requirement: "AD-FR-037"
     since: "0.1.0"
+  admin_save_promotion:
+    description: "إنشاء دعاية (p_id فارغ) أو تعديلها؛ يتحقق من كل الحقول ويعيد الصف."
+    access: "staff:promotions.manage"
+    arguments: "p_id uuid DEFAULT NULL::uuid, p_payload jsonb DEFAULT '{}'::jsonb"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, VALIDATION_FAILED]
+    note: "p_id فارغ = إنشاء بحالة ACTIVE. p_payload وفق schemas/promotion-input. image_path ملف مرفوع مسبقًا في bucket ‏promotions. رقم الواتساب والاتصال يوحَّد إلى +9665XXXXXXXX. VALIDATION_FAILED بالحقول المرفوضة كلها."
+    requirement: "TEAM-DEC-017"
+    since: "1.6.0"
   admin_set_lookup_active:
     description: "تعطيل قيمة قائمة أو تفعيلها دون حذف. القدرة: lookups.manage."
     access: "staff:lookups.manage"
@@ -213,6 +247,15 @@ functions:
     errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, VALIDATION_FAILED, NOT_FOUND]
     requirement: "AD-FR-037"
     since: "0.1.0"
+  admin_set_promotion_status:
+    description: "تغيير حالة الدعاية: ACTIVE أو PAUSED أو ARCHIVED."
+    access: "staff:promotions.manage"
+    arguments: "p_id uuid, p_status text, p_note text DEFAULT NULL::text"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, VALIDATION_FAILED]
+    note: "p_status: ACTIVE | PAUSED | ARCHIVED (أي انتقال). p_note داخلية في سجل الإجراءات."
+    requirement: "TEAM-DEC-017"
+    since: "1.6.0"
   admin_set_report_status:
     description: "يغير حالة بلاغ بين مفتوح وقيد المراجعة. القدرة: reports.handle."
     access: "staff:reports.handle"
@@ -262,6 +305,15 @@ functions:
     errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, NOT_FOUND, INVALID_STATE, VALIDATION_FAILED]
     requirement: "AD-FR-036"
     since: "1.0.0"
+  admin_update_promotion_settings:
+    description: "تحديث إعدادات عرض الدعايات (الفاصل 4 إلى 30)."
+    access: "staff:promotions.manage"
+    arguments: "p_enabled boolean, p_feed_interval integer"
+    returns: "jsonb"
+    errors: [AUTH_REQUIRED, FORBIDDEN, MFA_REQUIRED, VALIDATION_FAILED]
+    note: "p_feed_interval 4..30. يسري فورًا (لا إصدارات كإعدادات المنصة)."
+    requirement: "TEAM-DEC-017"
+    since: "1.6.0"
   admin_update_settings_draft:
     description: "حفظ مسودة الإعدادات بعد التحقق منها، أو إلغاؤها بـnull. لا يغير المنشور. القدرة: settings.manage."
     access: "staff:settings.manage"
@@ -509,6 +561,15 @@ functions:
     note: "تعيد false لغير الموظف ولجلسة دون aal2. للعرض فقط؛ الصلاحية تفحص في كل دالة."
     requirement: "AD-FR-017"
     since: "0.1.0"
+  list_active_promotions:
+    description: "الدعايات الجارية لموضع في التطبيق مع الفاصل وحالة التشغيل."
+    access: "anon"
+    arguments: "p_placement text, p_region_id integer DEFAULT NULL::integer"
+    returns: "jsonb"
+    errors: [VALIDATION_FAILED]
+    note: "الرد {enabled, feed_interval, items} وفق schemas/active-promotions. p_placement: HOME_FEED | SEARCH_RESULTS. p_region_id اختياري: الدعايات العامة والمحصورة بهذه المنطقة؛ دونه كل الجارية. items حتى 20 بترتيب priority تنازليًا ثم starts_at تنازليًا، وفارغة إن enabled = false. التطبيق يدرج بطاقة بعد كل feed_interval إعلانًا ويدوّر items."
+    requirement: "TEAM-DEC-017"
+    since: "1.6.0"
   mark_conversation_read:
     description: "يعلّم المحادثة مقروءة لصاحب الجلسة."
     access: "user"
@@ -544,6 +605,15 @@ functions:
     note: "يسجل مشاهدة إعلان منشور مرة واحدة لكل مشاهد (الحساب إن كان داخلًا، وإلا p_device_id وهو uuid يولده التطبيق ويحفظه) ويعيد العدد (integer). بلا حساب ولا معرف جهاز لا تحسب. مشاهدة المعلن لإعلانه لا تحسب."
     requirement: "AD-FR-011"
     since: "1.3.0"
+  record_promotion_event:
+    description: "تسجيل ظهور (مرة في الساعة) أو نقر (مرة في الدقيقة) لكل مشاهد."
+    access: "anon"
+    arguments: "p_promotion_id uuid, p_kind text, p_device_id uuid DEFAULT NULL::uuid"
+    returns: "boolean"
+    errors: [VALIDATION_FAILED, NOT_FOUND]
+    note: "p_kind: IMPRESSION | CLICK. المشاهد الحساب أو p_device_id (معرف الجهاز نفسه في record_listing_view)؛ دونهما لا يحسب. ظهور واحد لكل مشاهد ودعاية في الساعة، ونقر واحد في الدقيقة. يعيد true إن حُسب. NOT_FOUND لغير الجارية."
+    requirement: "TEAM-DEC-017"
+    since: "1.6.0"
   register_device_token:
     description: "يسجل رمز دفع الجهاز لصاحب الجلسة. التكرار آمن، وانتقال الجهاز لمستخدم آخر ينقل ملكيته."
     access: "user"

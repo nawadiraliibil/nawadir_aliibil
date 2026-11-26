@@ -1,5 +1,5 @@
-// الدعايات التجارية (TEAM-DEC-017). الأشكال هنا **مقترحة** في طلب التكامل INT-010 وليست عقدًا
-// معتمدًا بعد: عند تسليم MOBILE للعقد تستبدل بالأنواع المولدة من contracts/generated.
+// الدعايات التجارية (TEAM-DEC-017). الأشكال وفق العقد 1.6.0: contracts/schemas/promotion-admin
+// وpromotion-input وpromotion-settings، وأمثلة contracts/fixtures/*promotion*.json.
 
 export const PROMOTION_STATUSES = ['ACTIVE', 'PAUSED', 'ARCHIVED'] as const
 export type PromotionStatus = (typeof PROMOTION_STATUSES)[number]
@@ -18,7 +18,7 @@ export interface Promotion {
   title: string
   body: string | null
   advertiser_name: string
-  /** مسار داخل bucket ‏promotions (مقترح). في الوضع التجريبي: رابط data: للصورة. */
+  /** مسار داخل bucket ‏promotions العام. */
   image_path: string
   action_type: ActionType
   action_value: string | null
@@ -33,6 +33,8 @@ export interface Promotion {
   status: PromotionStatus
   impression_count: number
   click_count: number
+  created_by: string | null
+  updated_by: string | null
   created_at: string
   updated_at: string
 }
@@ -52,7 +54,7 @@ export interface PromotionInput {
   priority: number
 }
 
-/** إعدادات العرض في التطبيق (مقترحة كمفاتيح في platform_settings). */
+/** إعدادات العرض في التطبيق (admin_get_promotion_settings؛ جدول promotion_settings). */
 export interface PromotionDisplaySettings {
   enabled: boolean
   /** دعاية بعد كل N إعلانات من إعلانات المستخدمين. */

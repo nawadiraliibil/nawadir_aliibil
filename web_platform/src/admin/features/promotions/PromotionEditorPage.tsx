@@ -1,5 +1,6 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router'
+import { errorMessage, toApiError } from '@admin/lib/errors'
 import { riyadhDayString, riyadhDayToIso } from '@admin/lib/format'
 import {
   Alert,
@@ -14,7 +15,7 @@ import {
   TextField,
   useNotify,
 } from '@admin/ui'
-import { useActiveRegions, usePromotion, useSavePromotion } from './api'
+import { promotionImageUrl, useActiveRegions, usePromotion, useSavePromotion } from './api'
 import {
   ACTION_LABELS,
   IMAGE_RATIO,
@@ -25,7 +26,6 @@ import {
   validatePromotion,
   type PromotionErrors,
 } from './logic'
-import { MockModeAlert } from './PromotionsPage'
 import { PromotionPreview } from './PromotionPreview'
 import { ACTION_TYPES, PLACEMENTS, type ActionType, type Placement, type Promotion, type PromotionInput } from './types'
 import './promotions.css'
@@ -142,6 +142,10 @@ export default function PromotionEditorPage() {
   const [form, setForm] = useState<FormState>(emptyForm)
   const [errors, setErrors] = useState<PromotionErrors>({})
   const [imageWarning, setImageWarning] = useState<string | null>(null)
+  // صورة جديدة تُرفع عند الحفظ؛ المعاينة من الملف المحلي قبل الرفع.
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [serverError, setServerError] = useState<string | null>(null)
   const [loadedId, setLoadedId] = useState<string | null>(null)
 
   useEffect(() => {
@@ -173,7 +177,8 @@ export default function PromotionEditorPage() {
       return
     }
     const src = await readAsDataUrl(file)
-    set('image_path', src)
+    setImageFile(file)
+    setImagePreview(src)
     setErrors((x) => ({ ...x, image: undefined }))
     setImageWarning(null)
     void checkRatio(src).then(setImageWarning)
@@ -182,15 +187,33 @@ export default function PromotionEditorPage() {
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
     const input = toInput(form)
-    const found = validatePromotion(input)
+    // الصورة الجديدة لم ترفع بعد: تكفي للتحقق المحلي، ويحل مسارها الحقيقي عند الحفظ.
+    const found = validatePromotion({ ...input, image_path: input.image_path || (imageFile ? 'pending' : '') })
     setErrors(found)
+    setServerError(null)
     if (Object.keys(found).length > 0) {
       notify.error('راجع الحقول المظللة.')
       return
     }
-    const saved = await save.mutateAsync({ id: isNew ? null : promotionId!, input })
-    notify.success(isNew ? 'أضيفت الدعاية.' : 'حُفظت التعديلات.')
-    navigate(isNew ? '/admin/promotions' : `/admin/promotions/${saved.id}`, { replace: isNew })
+    try {
+      const saved = await save.mutateAsync({ id: isNew ? null : promotionId!, input, imageFile })
+      notify.success(isNew ? 'أضيفت الدعاية.' : 'حُفظت التعديلات.')
+      setImageFile(null)
+      setImagePreview(null)
+      navigate(isNew ? '/admin/promotions' : `/admin/promotions/${saved.id}`, { replace: isNew })
+    } catch (err) {
+      // رفض الخادم بالحقول (VALIDATION_FAILED) يظلل الحقول نفسها.
+      const e = toApiError(err)
+      const fields = Array.isArray(e.details.fields) ? (e.details.fields as string[]) : []
+      if (e.code === 'VALIDATION_FAILED' && fields.length > 0) {
+        setErrors(
+          Object.fromEntries(
+            fields.map((f) => [f === 'image_path' ? 'image' : f, 'رفض الخادم هذه القيمة؛ راجعها.']),
+          ) as PromotionErrors,
+        )
+      }
+      setServerError(errorMessage(err))
+    }
   }
 
   const crumbs = [{ label: 'الدعايات التجارية', to: '/admin/promotions' }, { label: isNew ? 'دعاية جديدة' : 'تعديل' }]
@@ -211,7 +234,11 @@ export default function PromotionEditorPage() {
         crumbs={crumbs}
         description="تظهر الدعاية في التطبيق بين إعلانات المستخدمين خلال فترة العرض، ما لم توقف أو تؤرشف."
       />
-      <MockModeAlert />
+      {serverError && (
+        <Alert tone="danger" title="تعذر الحفظ">
+          {serverError}
+        </Alert>
+      )}
 
       <form className="promo-editor" onSubmit={(e) => void onSubmit(e)} noValidate aria-label="بيانات الدعاية">
         <div className="stack">
@@ -257,10 +284,14 @@ export default function PromotionEditorPage() {
                   aria-invalid={errors.image ? true : undefined}
                 />
                 <span className="btn btn-secondary" aria-hidden="true">
-                  {form.image_path ? 'تغيير الصورة' : 'اختيار صورة'}
+                  {imagePreview || form.image_path ? 'تغيير الصورة' : 'اختيار صورة'}
                 </span>
                 <span className="muted small" aria-hidden="true">
-                  {form.image_path ? 'الصورة ظاهرة في المعاينة.' : 'لم تُختر صورة بعد.'}
+                  {imagePreview
+                    ? 'صورة جديدة تُرفع عند الحفظ.'
+                    : form.image_path
+                      ? 'الصورة الحالية ظاهرة في المعاينة.'
+                      : 'لم تُختر صورة بعد.'}
                 </span>
               </div>
               <p id="promo-image-hint" className="field-hint">
@@ -393,7 +424,7 @@ export default function PromotionEditorPage() {
               title: form.title,
               body: form.body || null,
               advertiser_name: form.advertiser_name,
-              image_src: form.image_path || null,
+              image_src: imagePreview ?? (form.image_path ? promotionImageUrl(form.image_path) : null),
               action_type: form.action_type,
             }}
           />

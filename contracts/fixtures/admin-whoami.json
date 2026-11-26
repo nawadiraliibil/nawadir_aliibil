@@ -13,6 +13,7 @@
     "settings.manage",
     "staff.manage",
     "audit.read",
-    "stats.read"
+    "stats.read",
+    "promotions.manage"
   ]
 }

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nawadiraliibil.example/contracts/schemas/promotion-settings.schema.json",
+  "title": "رد admin_get_promotion_settings وadmin_update_promotion_settings",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "enabled",
+    "feed_interval",
+    "updated_by",
+    "updated_at"
+  ],
+  "properties": {
+    "enabled": {
+      "type": "boolean"
+    },
+    "feed_interval": {
+      "type": "integer",
+      "minimum": 4,
+      "maximum": 30
+    },
+    "updated_by": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
