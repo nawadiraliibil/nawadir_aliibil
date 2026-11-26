@@ -234,6 +234,18 @@ void main() {
       expect(find.textContaining('تعذّر'), findsNothing);
     });
 
+    testWidgets('السحب للتحديث يعيد جلب الدعايات (تعديلات اللوحة)', (
+      tester,
+    ) async {
+      final rpc = FakeRpc(_handlers());
+      await pumpApp(tester, rpc: rpc);
+      expect(rpc.paramsOf('list_active_promotions'), hasLength(1));
+
+      await tester.fling(_list, const Offset(0, 600), 1500);
+      await tester.pumpAndSettle();
+      expect(rpc.paramsOf('list_active_promotions'), hasLength(2));
+    });
+
     testWidgets('الإطفاء من اللوحة يخفي الدعايات', (tester) async {
       await pumpApp(
         tester,

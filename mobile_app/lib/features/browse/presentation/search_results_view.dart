@@ -86,6 +86,17 @@ class _SearchResultsViewState extends ConsumerState<SearchResultsView> {
   }
 
   Future<void> _refresh() async {
+    // السحب للتحديث يعيد جلب الدعايات أيضًا، فتظهر تعديلات اللوحة دون انتظار
+    // انتهاء مدة الإبقاء.
+    final placement = widget.promotionPlacement;
+    if (placement != null) {
+      ref.invalidate(
+        activePromotionsProvider((
+          placement: placement,
+          regionId: widget.filters.regionId,
+        )),
+      );
+    }
     ref.invalidate(searchResultsProvider(widget.filters));
     await ref.read(searchResultsProvider(widget.filters).future);
   }
