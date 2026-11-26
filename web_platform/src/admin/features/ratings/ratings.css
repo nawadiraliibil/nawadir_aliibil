@@ -1,0 +1,42 @@
+/* أنماط محلية لميزة التقييمات (ADMIN-DASH-20261124). */
+
+.rating-stars {
+  white-space: nowrap;
+  letter-spacing: 1px;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.rating-stars-on {
+  color: var(--gold, #b8860b);
+}
+
+.rating-stars-off {
+  color: var(--sand-3, #c9bfa9);
+}
+
+.rating-decision {
+  border: 1px solid var(--line, #ddd);
+  border-radius: var(--radius-sm, 6px);
+  padding: 8px 12px 10px;
+  margin: 0 0 12px;
+}
+
+.rating-decision legend {
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+.rating-decision label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.rating-body {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 0;
+}

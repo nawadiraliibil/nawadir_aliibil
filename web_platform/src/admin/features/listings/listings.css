@@ -1,0 +1,42 @@
+/* أنماط محلية لإدارة الإعلانات؛ مرشحة للنقل إلى styles/admin.css المشتركة. */
+
+.listing-thumb-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+.listing-media-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.listing-media-missing {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 6px;
+}
+
+.listing-tabpanel {
+  padding-top: 14px;
+}
+
+.listing-description {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 0;
+}
+
+.listing-title-cell a {
+  font-weight: 600;
+}
