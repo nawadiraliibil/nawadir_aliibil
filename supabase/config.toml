@@ -273,6 +273,17 @@ max_frequency = "60s"
 # enabled = true
 # uri = "pg-functions://<database>/<schema>/<hook_name>"
 
+# نوادر الإبل: إرسال رمز التحقق عبر منصة تقنيات (Taqnyat) بدالة Edge ‏`send-sms`
+# (MOBILE-BE-SMS-TAQNYAT-20261126). Supabase Auth لا يدعم تقنيات كمزود مدمج، فيرسل
+# الرمز عبر Send SMS Hook. معطل محليًا افتراضيًا: الأرقام الاختبارية أعلاه لا تمر
+# بالـhook. لتجربته محليًا أزل التعليق واضبط SEND_SMS_HOOK_SECRETS في البيئة قبل
+# `supabase start`، وشغّل الدالة بأسرارها (انظر supabase/README.md). على المشروع
+# السحابي يضبط الـhook من لوحة Auth › Hooks لا من هذا الملف.
+# [auth.hook.send_sms]
+# enabled = true
+# uri = "http://host.docker.internal:54321/functions/v1/send-sms"
+# secrets = "env(SEND_SMS_HOOK_SECRETS)"
+
 # Configure one of the supported SMS providers: `twilio`, `twilio_verify`, `messagebird`, `textlocal`, `vonage`.
 # نوادر الإبل: الواجهة تعطل دخول الهاتف محليًا إن لم يفعَّل مزود، حتى مع الأرقام
 # الاختبارية. القيم التالية وهمية للتطوير المحلي فقط وليست بيانات اعتماد: الأرقام
@@ -377,6 +388,10 @@ deno_version = 2
 
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
+
+# نوادر الإبل: `send-sms` يستدعيه Supabase Auth بتوقيع Standard Webhooks لا بـJWT.
+[functions.send-sms]
+verify_jwt = false
 
 [analytics]
 enabled = true

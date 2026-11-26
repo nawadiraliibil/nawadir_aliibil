@@ -328,7 +328,7 @@ class _ActionRow extends StatelessWidget {
       ),
       title: Text(label),
       subtitle: subtitle == null ? null : Text(subtitle!),
-      trailing: onTap == null ? null : const Icon(Icons.chevron_left),
+      trailing: onTap == null ? null : const Icon(Icons.chevron_right),
     );
   }
 }

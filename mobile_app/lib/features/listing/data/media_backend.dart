@@ -150,6 +150,9 @@ abstract class PhotoSource {
   /// صورة واحدة من الكاميرا، أو `null` عند الإلغاء.
   Future<PickedImage?> pickFromCamera();
 
+  /// صورة شخصية واحدة مصغّرة (تدخل حد 2 ميغابايت)، أو `null` عند الإلغاء.
+  Future<PickedImage?> pickAvatar({required bool camera});
+
   /// فيديو من المعرض أو تسجيل بالكاميرا، أو `null` عند الإلغاء. [maxBytes]
   /// و[maxSeconds] من الإعدادات المنشورة.
   Future<PickedVideo?> pickVideo({
@@ -188,6 +191,17 @@ class PlatformPhotoSource implements PhotoSource {
       imageQuality: _quality,
       maxWidth: _maxSide,
       maxHeight: _maxSide,
+    );
+    return f == null ? null : _read(f);
+  }
+
+  @override
+  Future<PickedImage?> pickAvatar({required bool camera}) async {
+    final f = await _picker.pickImage(
+      source: camera ? ImageSource.camera : ImageSource.gallery,
+      imageQuality: 85,
+      maxWidth: 768,
+      maxHeight: 768,
     );
     return f == null ? null : _read(f);
   }

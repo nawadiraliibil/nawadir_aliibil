@@ -72,6 +72,7 @@ const schemas = {
       id: uuid,
       display_name: nullable(str),
       region_id: nullable(int),
+      avatar_path: nullable(str),
       status: en("account_status"),
       created_at: time,
       profile_complete: bool,

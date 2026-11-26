@@ -10,6 +10,7 @@ class InitialAvatar extends StatelessWidget {
     required this.background,
     required this.foreground,
     this.textStyle,
+    this.imageUrl,
   });
 
   final String? name;
@@ -17,6 +18,9 @@ class InitialAvatar extends StatelessWidget {
   final Color background;
   final Color foreground;
   final TextStyle? textStyle;
+
+  /// رابط الصورة الشخصية. إن غاب أو تعذر تحميله يظهر الحرف الأول.
+  final String? imageUrl;
 
   static const _thin = {'ا', 'أ', 'إ', 'آ', 'ٱ'};
 
@@ -27,6 +31,8 @@ class InitialAvatar extends StatelessWidget {
     return CircleAvatar(
       radius: radius,
       backgroundColor: background,
+      foregroundImage: imageUrl == null ? null : NetworkImage(imageUrl!),
+      onForegroundImageError: imageUrl == null ? null : (_, _) {},
       child: initial == null || _thin.contains(initial)
           ? Icon(Icons.person, size: radius, color: foreground)
           : Text(initial, style: textStyle?.copyWith(color: foreground)),

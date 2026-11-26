@@ -26,6 +26,12 @@ class AccountRepository {
     ),
   );
 
+  /// يضبط الصورة من ملف مرفوع في `avatars/{uid}/`، أو يمسحها بـ`null`.
+  Future<MyAccount> setAvatar(String? path) => guardRpc(() async {
+    final res = await _rpc('set_my_avatar', params: {'p_path': path});
+    return _parse(res, MyAccount.fromJson);
+  });
+
   /// يسجل الموافقة على النصوص بمعرفاتها. التكرار آمن.
   Future<void> acceptPolicies(List<int> documentIds) => guardRpc(
     () => _rpc('accept_policies', params: {'p_document_ids': documentIds}),

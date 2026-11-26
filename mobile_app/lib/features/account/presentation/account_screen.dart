@@ -12,6 +12,7 @@ import '../../../core/settings/settings_repository.dart';
 import '../../../core/widgets/app_note.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/initial_avatar.dart';
+import '../data/avatar_storage.dart';
 import '../../auth/application/auth_providers.dart';
 import '../../auth/domain/saudi_phone.dart';
 import '../application/account_providers.dart';
@@ -97,6 +98,11 @@ class _SignedIn extends ConsumerWidget {
           children: [
             InitialAvatar(
               name: name,
+              imageUrl: account.avatarPath == null
+                  ? null
+                  : ref
+                        .watch(avatarStorageProvider)
+                        .urlFor(account.avatarPath!),
               radius: 28,
               background: c.tintGold,
               foreground: c.gold,

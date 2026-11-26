@@ -15,7 +15,7 @@
 supabase/
   config.toml      إعداد التشغيل المحلي: دخول الهاتف، أرقام اختبارية، TOTP
   migrations/      ترحيلات قاعدة البيانات بالترتيب؛ المصدر الوحيد للمخطط
-  functions/       دوال Edge (TypeScript)
+  functions/       دوال Edge (TypeScript): media-finalize، push-dispatch، send-sms
   tests/database/  اختبارات pgTAP للصلاحيات والقيود وحالات الإعلان
   scripts/admin/   سكربتات SQL تستدعي دوال admin_* إلى أن توجد لوحة الإدارة
   seed.sql         بيانات اختبار محلية دون بيانات أشخاص حقيقيين
@@ -64,6 +64,35 @@ supabase link --project-ref <مرجع مشروع التطوير>
 ## أرقام الاختبار المحلية
 
 `config.toml` يعرّف أرقامًا وهمية برمز ثابت `123456` للتطوير المحلي فقط: `966500000001` إلى `966500000003`. لا تعد إرسالًا فعليًا للرسائل، ولا تستخدم في الإنتاج.
+
+## رسائل رمز التحقق — منصة تقنيات (Taqnyat)
+
+Supabase Auth يصدر الرمز ويتحقق منه، ويرسله عبر Send SMS Hook إلى الدالة `functions/send-sms` التي تستدعي `POST https://api.taqnyat.sa/v1/messages` (TEAM-DEC-015). الدالة تقبل طلبات Auth الموقّعة فقط (`verify_jwt = false` مع توقيع Standard Webhooks) والجوال السعودي فقط.
+
+| السر | المصدر |
+|---|---|
+| `SEND_SMS_HOOK_SECRETS` | سر الـhook من لوحة Authentication › Hooks (`v1,whsec_…`؛ عند التدوير أكثر من سر بفاصل الخط العمودي) |
+| `TAQNYAT_BEARER_TOKEN` | تطبيق بخدمة SMS في بوابة تقنيات |
+| `TAQNYAT_SENDER` | اسم مرسل معتمد ونشط (حساس لحالة الأحرف) |
+| `TAQNYAT_API_URL` | اختياري، للاختبار بخادم بديل |
+
+على المشروع السحابي يضبط الـhook من اللوحة لا من `config.toml`؛ الخطوات في INT-006 (تحديث 2026-11-26). محليًا الـhook معلّق في `config.toml` والأرقام الاختبارية لا تمر به.
+
+```bash
+# اختبارات الوحدة (Node 24 أو deno test)
+node --test supabase/functions/send-sms/handler.test.ts
+
+# اختبار السلسلة محليًا بخادم يحاكي تقنيات (لا إرسال فعلي):
+# 1) أزل التعليق عن [auth.hook.send_sms] في config.toml
+# 2) ملف بيئة خارج المستودع فيه: SEND_SMS_HOOK_SECRETS=v1,whsec_<base64 عشوائي>
+#    TAQNYAT_BEARER_TOKEN=mock-token  TAQNYAT_SENDER=MockSender
+#    TAQNYAT_API_URL=http://host.docker.internal:54399
+# 3) صدّر SEND_SMS_HOOK_SECRETS نفسه في الطرفية (أوامر CLI تطلبه ما دام الـhook مفعّلًا)
+supabase stop && supabase start
+supabase functions serve --env-file <ملف البيئة>
+node supabase/tests/functions/send_sms.integration.mjs
+# 4) أعد التعليق في config.toml ثم supabase stop && supabase start
+```
 
 ## حالة التحقق
 

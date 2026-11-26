@@ -63,7 +63,7 @@ class MenuRow extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.onTap,
-    this.trailing = Icons.chevron_left,
+    this.trailing = Icons.chevron_right,
     this.circleColor,
   });
 

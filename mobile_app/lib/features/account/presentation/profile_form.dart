@@ -33,12 +33,16 @@ class ProfileForm extends ConsumerStatefulWidget {
     this.initialRegionId,
     this.pendingPolicies = const [],
     this.extra,
+    this.header,
   });
 
   final String submitLabel;
   final String? initialName;
   final int? initialRegionId;
   final List<PendingPolicy> pendingPolicies;
+
+  /// يظهر أعلى الحقول (مثل الصورة الشخصية في G02).
+  final Widget? header;
 
   /// محتوى إضافي بين الحقول وزر الحفظ (مثل صفوف الجوال في G02).
   final Widget? extra;
@@ -107,6 +111,10 @@ class _ProfileFormState extends ConsumerState<ProfileForm> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
+        if (widget.header != null) ...[
+          widget.header!,
+          const SizedBox(height: 16),
+        ],
         const FieldLabel('الاسم المعروض'),
         TextField(
           controller: _name,

@@ -57,6 +57,7 @@ class MyAccount {
     required this.displayName,
     required this.regionId,
     required this.createdAt,
+    this.avatarPath,
     required this.profileComplete,
     required this.canPublish,
     required this.pendingPolicies,
@@ -67,6 +68,7 @@ class MyAccount {
     status: j['status'] as String,
     displayName: j['display_name'] as String?,
     regionId: j['region_id'] as int?,
+    avatarPath: j['avatar_path'] as String?,
     createdAt: DateTime.parse(j['created_at'] as String),
     profileComplete: j['profile_complete'] as bool,
     canPublish: j['can_publish'] as bool,
@@ -83,6 +85,9 @@ class MyAccount {
   final String status;
   final String? displayName;
   final int? regionId;
+
+  /// مسار الصورة الشخصية في bucket `avatars`، أو `null` إن لم تُضبط.
+  final String? avatarPath;
   final DateTime createdAt;
   final bool profileComplete;
   final bool canPublish;

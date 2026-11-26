@@ -1505,6 +1505,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_path: string | null
           created_at: string
           display_name: string | null
           id: string
@@ -1516,6 +1517,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          avatar_path?: string | null
           created_at?: string
           display_name?: string | null
           id: string
@@ -1527,6 +1529,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          avatar_path?: string | null
           created_at?: string
           display_name?: string | null
           id?: string
@@ -3356,6 +3359,7 @@ export type Database = {
         Args: { p_conversation_id: string; p_muted: boolean }
         Returns: Json
       }
+      set_my_avatar: { Args: { p_path: string }; Returns: Json }
       set_notification_preference: {
         Args: { p_category: string; p_push_enabled: boolean }
         Returns: Json
