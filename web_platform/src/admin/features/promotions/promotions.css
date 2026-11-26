@@ -1,0 +1,183 @@
+/* الدعايات التجارية: الجدول والمحرر ومعاينة البطاقة. */
+
+.promo-thumb {
+  display: block;
+  width: 72px;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--sand-2);
+}
+
+.promo-editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  align-items: start;
+}
+
+.promo-editor-side {
+  position: sticky;
+  top: 16px;
+}
+
+@media (max-width: 1000px) {
+  .promo-editor {
+    grid-template-columns: 1fr;
+  }
+
+  .promo-editor-side {
+    position: static;
+    order: -1;
+  }
+}
+
+/* حقل الملف: الحقل الأصلي شفاف فوق الزر، فيبقى قابلًا للنقر والتركيز. */
+.promo-file {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+}
+
+.promo-file-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.promo-file:focus-within .btn {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.promo-editor fieldset.field {
+  padding: 8px 14px 10px;
+}
+
+.promo-editor fieldset .field-check {
+  margin-bottom: 2px;
+}
+
+.promo-regions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 2px 12px;
+}
+
+.promo-regions .field {
+  margin-bottom: 4px;
+}
+
+/* معاينة تقريبية لبطاقة التطبيق */
+.promo-preview {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.promo-preview-phone {
+  background: #f8f3ea;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 14px 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.promo-preview-ghost {
+  height: 54px;
+  border-radius: 12px;
+  background: repeating-linear-gradient(135deg, #efe6d6 0 10px, #f4ecdf 10px 20px);
+  opacity: 0.8;
+}
+
+.promo-card {
+  background: #fff;
+  border: 1px solid #e6d8c2;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgb(62 46 32 / 0.06);
+}
+
+.promo-card-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #efe6d6;
+  display: grid;
+  place-items: center;
+}
+
+.promo-card-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.promo-card-placeholder {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.promo-card-badge {
+  position: absolute;
+  top: 8px;
+  inset-inline-start: 8px;
+  background: rgb(45 36 27 / 0.82);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.promo-card-body {
+  padding: 10px 12px 12px;
+  display: grid;
+  gap: 4px;
+}
+
+.promo-card-title {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.promo-card-text {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.promo-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.promo-card-advertiser {
+  font-size: 0.8rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.promo-card-cta {
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--gold-2);
+  padding: 4px 10px;
+  border-radius: 8px;
+}

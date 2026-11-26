@@ -205,3 +205,60 @@
 ### INT-009 — الصورة الشخصية: أثر على ADMIN والويب (2026-11-26، MOBILE-AVATAR)
 - الحالة: منفَّذ في الخلفية ومدفوع للتطوير. مخطط رد الحساب (`account.schema.json`) يوجب الآن `avatar_path` (nullable)؛ أي تحقق صارم في الإدارة أو الويب من ردود `get_my_account` يجب أن يقبله.
 - لا يلزم ADMIN شيء ما لم يعرض صور المستخدمين. إن أرادها: bucket `avatars` عام برابط `getPublicUrl(avatar_path)`، ويلزم أولًا إضافة `avatar_path` إلى دوال القراءة المعنية (مثل `get_seller_profile`) بإسناد لمهمة خلفية. التفاصيل في `contracts/CHANGELOG.md` 1.5.0.
+
+## INT-010 — الدعايات التجارية: الخلفية والعقد والعرض في التطبيق (TEAM-DEC-017)
+
+- المعرف: INT-010.
+- التاريخ والجانب الطالب: 2026-11-26 — Asia/Riyadh؛ ADMIN / Claude Code؛ المهمة ADMIN-PROMO-20261126.
+- المتطلب: TEAM-DEC-017 (يعدل استبعاد «الإعلانات المدفوعة» في SRS).
+- الحالة: **مفتوح، عند MOBILE.** واجهة الإدارة جاهزة على مخزن تجريبي معزول (`web_platform/src/admin/features/promotions/`، `promotionsApi.mode = 'mock'`) وتنتظر العقد.
+- المنفذ المسند ومصدر الإسناد: MOBILE للخلفية (`supabase/`) والعقد (`contracts/`) والتطبيق (`mobile_app/`) وفق TEAM-DEC-007 وطلب المستخدم «حدد لمطور الجوال ما عليه أن يفعله». ADMIN يربط الواجهة بعد التسليم.
+- **كل الأسماء والأشكال أدناه مقترحة من ADMIN**، لا عقد معتمد. لـMOBILE تعديلها بشرط توثيق النهائي في `contracts/` وCHANGELOG وإبلاغ ADMIN هنا. الواجهة الحالية مبنية على هذه الأشكال (`types.ts` و`logic.ts`)، فأي اختلاف يستلزم تعديلًا مقابلًا عند ADMIN.
+
+### 1. الخلفية (MOBILE — `supabase/`)
+
+- **الجدول `promotions`:** `id uuid pk`، `title text` (2 إلى 60)، `body text null` (حتى 140)، `advertiser_name text` (2 إلى 60)، `image_path text` (داخل bucket ‏`promotions`)، `action_type` ‏(`URL|WHATSAPP|CALL|NONE`)، `action_value text null` (‏URL: ‏`https://` فقط حتى 500 حرف ومضيف فيه نقطة؛ WHATSAPP/CALL: ‏`+9665XXXXXXXX`؛ NONE: ‏null)، `placements text[]` غير فارغة من (`HOME_FEED`، `SEARCH_RESULTS`)، `region_ids int[] null` (null = كل المناطق؛ غير فارغة إن وجدت؛ مناطق موجودة)، `starts_at timestamptz`، `ends_at timestamptz null` (حد غير شامل، أكبر من البداية)، `priority int` (0 إلى 100، افتراضي 50)، `status` ‏(`ACTIVE|PAUSED|ARCHIVED`، الإنشاء `ACTIVE`)، `impression_count int` و`click_count int` (افتراضي 0)، `created_at` و`updated_at` و`created_by` و`updated_by`. RLS مفعّل بلا وصول مباشر للعامة؛ القراءة للموظف بالقدرة.
+- **القدرة `promotions.manage`:** تضاف إلى قائمة القدرات (المدير يملكها ضمنًا) وإلى `admin_grant_role`.
+- **bucket ‏`promotions`:** قراءة عامة؛ رفع وحذف للموظف بالقدرة فقط؛ jpeg وpng وwebp حتى 1 ميغابايت؛ المسار المقترح `{promotion_id أو 'pending'}/{uuid}.{ext}`.
+- **دوال الإدارة** (موظف فعال + جلسة aal2 + القدرة؛ الأخطاء `FORBIDDEN` و`MFA_REQUIRED` و`NOT_FOUND` و`VALIDATION_FAILED` بالحقول):
+  - `admin_list_promotions(p_status text = null, p_limit int = 50, p_after_updated_at timestamptz = null, p_after_id uuid = null)` ← مصفوفة صفوف كاملة، الأحدث تعديلًا أولًا.
+  - `admin_get_promotion(p_id uuid)` ← صف كامل.
+  - `admin_save_promotion(p_id uuid = null, p_payload jsonb, p_request_id uuid)` ← الصف بعد الحفظ؛ `p_id` فارغ = إنشاء. يعيد التحقق كاملًا ويوحد رقم الجوال، ويرفض `image_path` غير موجود في bucket.
+  - `admin_set_promotion_status(p_id uuid, p_status text, p_note text = null)` ← الصف؛ أي انتقال بين الحالات الثلاث مسموح.
+  - سجل الإجراءات: `promotion.created` و`promotion.updated` و`promotion.status_changed` (المورد `promotion`)، وتظهر أسماؤها في `AUDIT_FILTER_ACTIONS` عند ADMIN.
+- **الإعدادات:** مفتاحان في `platform_settings` يمر بهما `normalize_settings` ويحدَّثان عبر مسودة الإعدادات ونشرها الحاليين: `promotions_enabled boolean` (افتراضي true) و`promotions_feed_interval int` (4 إلى 30، افتراضي 8)، ويظهران في `get_published_settings`.
+- **الدوال العامة** (زائر ومستخدم):
+  - `list_active_promotions(p_placement text, p_region_id int = null)` ← مصفوفة `{id, title, body, advertiser_name, image_path, action_type, action_value}`، الشرط: `status = ACTIVE` و`starts_at <= now()` و(`ends_at` فارغ أو `> now()`) والموضع ضمن `placements` و(`region_ids` فارغ، أو يحوي `p_region_id` إن مُرر)؛ الترتيب `priority` تنازليًا ثم `starts_at` تنازليًا؛ تعيد `[]` إذا `promotions_enabled = false`. لا تكشف العدادات ولا من أنشأ.
+  - `record_promotion_event(p_promotion_id uuid, p_kind text, p_device_id uuid = null)` حيث `p_kind` ‏`IMPRESSION|CLICK`: يزيد العداد للدعاية الجارية فقط؛ ظهور واحد لكل جهاز أو حساب ودعاية في الساعة (منع التضخيم)، والنقر بلا تكرار خلال دقيقة. بلا هوية لا يحسب، على غرار `record_listing_view`.
+- اختبارات pgTAP: الصلاحيات (زائر، مستخدم، مشرف بلا قدرة، مدير، جلسة aal1)، التحقق لكل حقل، شروط الإظهار (الفترة، الحالة، الموضع، المنطقة، الإيقاف من الإعدادات)، منع تكرار الأحداث، وتحديث `99_api_surface`.
+
+### 2. العقد (MOBILE — `contracts/`)
+
+- إصدار إضافي غير كاسر (1.6.0 أو التالي): `rpc.yaml` بالدوال الست، مخططا `promotion-admin` و`promotion-public`، أمثلة `admin-list-promotions.json` و`admin-promotion.json` و`active-promotions.json`، والإعدادات الجديدة في مخطط الإعدادات، والأنواع المولدة، و`read-surface.md` و`storage.md`، وقيد في CHANGELOG.
+
+### 3. التطبيق (MOBILE — `mobile_app/`)
+
+- **المواضع:** قائمة الرئيسية (`HOME_FEED`) ونتائج البحث والتصفية (`SEARCH_RESULTS`) فقط. لا دعايات في المفضلة ولا «إعلاناتي» ولا صفحة المعلن ولا التفاصيل.
+- **الترتيب:** بطاقة دعاية بعد كل N بطاقة من إعلانات المستخدمين (N = `promotions_feed_interval`)، أي بعد الإعلان N ثم 2N...، ولا دعاية قبل أول N ولا في قائمة أقصر من N. الدعايات تُدوَّر بالترتيب المعاد: الموضع k يأخذ الدعاية `k mod عددها`. التحميل بالصفحات لا يكرر الدعاية نفسها في موضعين متتاليين ما دام عددها أكثر من واحدة.
+- **الجلب:** `list_active_promotions` مرة عند فتح القائمة أو تغيير المنطقة، بالمنطقة المختارة في المرشح إن وجدت، مع ذاكرة مؤقتة قصيرة (5 دقائق مقترحة). أي فشل يُخفي الدعايات بصمت ولا يمنع القائمة ولا يظهر خطأ.
+- **البطاقة:** بأبعاد البطاقة الكبيرة (صورة 16:10، `BoxFit.cover`) وفي العرض المدمج بأبعاده، مع شارة **«إعلان ممول»** ظاهرة دائمًا (إفصاح إلزامي)، واسم المعلن، والعنوان، والنص إن وجد، وزر حسب الإجراء: «زيارة الموقع» أو «تواصل واتساب» أو «اتصل الآن»، أو بلا زر لـ`NONE`. بلا سعر ولا مفضلة ولا مشاركة ولا إحصاءات ولا انتقال إلى صفحة تفاصيل. مرجع الشكل: معاينة اللوحة في `PromotionPreview.tsx` و`promotions.css`، بهوية التطبيق.
+- **الإجراء عند الضغط:** `URL` يفتح المتصفح الخارجي (`https` فقط)؛ `WHATSAPP` يفتح `https://wa.me/9665XXXXXXXX`؛ `CALL` يفتح `tel:+9665XXXXXXXX`. يسجل `CLICK` قبل الفتح دون انتظار الرد.
+- **الظهور:** يسجل `IMPRESSION` حين تظهر 50٪ من البطاقة ثانية واحدة على الأقل، مرة لكل دعاية في الجلسة، بمعرف الجهاز نفسه المستخدم في `record_listing_view`.
+- **الإتاحة:** وصف لقارئ الشاشة «إعلان ممول: ‹العنوان› من ‹المعلن›»، وزر الإجراء بهدف لمس 48dp على الأقل.
+- اختبارات: الإدراج كل N (وعدمه في قائمة أقصر)، التدوير، عدم الظهور عند فشل الجلب أو قائمة فارغة، الشارة دائمًا، الإجراءات الثلاثة، وتسجيل الظهور مرة واحدة.
+
+### 4. على ADMIN بعد التسليم
+
+- استبدال `mockPromotionsApi` بتنفيذ عبر الدوال أعلاه في `api.ts` (نقطة استبدال واحدة: `promotionsApi`)، ورفع الصور إلى bucket ‏`promotions`، وقراءة الإعدادات من مسودة الإعدادات، وإزالة تنبيه الوضع التجريبي، وتغيير قدرة الصفحة من `settings.manage` المؤقتة إلى `promotions.manage`، وإضافة القدرة إلى `CAPABILITIES` وتسميتها، وأسماء أحداث السجل، وتحقق المستهلك هنا.
+
+### معايير القبول (مشتركة)
+
+1. موظف بالقدرة ينشئ دعاية بصورة ورابط من اللوحة، فتظهر في الرئيسية على هاتف حقيقي بعد الإعلان الثامن بشارة «إعلان ممول».
+2. الإيقاف أو الأرشفة أو انتهاء الفترة يخفيها من التطبيق عند التحديث التالي، وإيقاف «عرض الدعايات في التطبيق» يخفي الكل.
+3. دعاية محصورة بمنطقة لا تظهر لمن اختار منطقة أخرى.
+4. الضغط يفتح الرابط أو واتساب أو الاتصال، ويزيد عداد النقر في اللوحة. الظهور يزيد عداد الظهور مرة لكل جهاز في الساعة.
+5. مشرف بلا قدرة وزائر يرفضان في كل دوال الإدارة. الحقول غير الصالحة ترفض من الخادم بـ`VALIDATION_FAILED` بالحقول.
+6. لا كسر لأي عقد قائم؛ اختبارات الخلفية والجوال والإدارة ناجحة.
+
+- ما يمكن مواصلته مستقلًا: ADMIN جاهز على المخزن التجريبي. التطبيق يمكنه بناء البطاقة والإدراج على مثال `active-promotions.json` قبل نشر الترحيل.
+- نتيجة التسليم والتحقق: لم يسلم بعد.

@@ -34,6 +34,7 @@ describe('OverviewPage — header and quick links', () => {
     expect(links.map((l) => l.getAttribute('href'))).toEqual([
       '/admin/listings',
       '/admin/accounts',
+      '/admin/promotions',
       '/admin/reports',
       '/admin/ratings',
       '/admin/lookups',

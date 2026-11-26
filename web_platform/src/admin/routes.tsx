@@ -32,8 +32,15 @@ const LookupsPage = lazy(() => import('./features/lookups/LookupsPage'))
 const SettingsPage = lazy(() => import('./features/settings/SettingsPage'))
 const StaffPage = lazy(() => import('./features/staff/StaffPage'))
 const AuditPage = lazy(() => import('./features/staff/AuditPage'))
+const PromotionsPage = lazy(() => import('./features/promotions/PromotionsPage'))
+const PromotionEditorPage = lazy(() => import('./features/promotions/PromotionEditorPage'))
 
 const LISTINGS_CAPS = ['listings.hide', 'listings.review'] as const
+/**
+ * الدعايات التجارية (INT-010): القدرة المقترحة promotions.manage غير موجودة في الخادم بعد، فلا
+ * تضاف إلى CAPABILITIES (تستخدم في منح الأدوار). مؤقتًا: المدير ومن يملك settings.manage.
+ */
+const PROMOTIONS_CAPS = ['settings.manage'] as const
 
 /** المسارات نسبية إلى /admin. */
 export const ADMIN_ROUTES: AdminRoute[] = [
@@ -41,6 +48,9 @@ export const ADMIN_ROUTES: AdminRoute[] = [
   { path: 'listings/:listingId', Component: ListingDetailPage, caps: LISTINGS_CAPS },
   { path: 'accounts', Component: AccountsPage, caps: ['accounts.manage'] },
   { path: 'accounts/:userId', Component: AccountDetailPage, caps: ['accounts.manage'] },
+  { path: 'promotions', Component: PromotionsPage, caps: PROMOTIONS_CAPS },
+  { path: 'promotions/new', Component: PromotionEditorPage, caps: PROMOTIONS_CAPS },
+  { path: 'promotions/:promotionId', Component: PromotionEditorPage, caps: PROMOTIONS_CAPS },
   { path: 'reports', Component: ReportsPage, caps: ['reports.handle'] },
   { path: 'reports/:reportId', Component: ReportDetailPage, caps: ['reports.handle'] },
   { path: 'ratings', Component: RatingsPage, caps: ['ratings.moderate'] },
@@ -58,6 +68,7 @@ export const NAV_ITEMS: NavItem[] = [
   { to: '/admin', label: 'الرئيسية', icon: '⌂', caps: [], group: 'main' },
   { to: '/admin/listings', label: 'إدارة الإعلانات', icon: '▤', caps: LISTINGS_CAPS, group: 'main' },
   { to: '/admin/accounts', label: 'الحسابات', icon: '◉', caps: ['accounts.manage'], group: 'main' },
+  { to: '/admin/promotions', label: 'الدعايات التجارية', icon: '✦', caps: PROMOTIONS_CAPS, group: 'main' },
   { to: '/admin/reports', label: 'البلاغات والردود', icon: '⚑', caps: ['reports.handle'], group: 'moderation' },
   { to: '/admin/ratings', label: 'التقييمات والاعتراضات', icon: '★', caps: ['ratings.moderate'], group: 'moderation' },
   { to: '/admin/lookups', label: 'القوائم وأسباب الإشراف', icon: '☰', caps: ['lookups.manage'], group: 'config' },
