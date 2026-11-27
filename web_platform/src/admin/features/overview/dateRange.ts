@@ -32,6 +32,22 @@ export function defaultRange(now: Date = new Date()): DayRange {
   return { from: shiftDay(to, -(DEFAULT_RANGE_DAYS - 1)), to }
 }
 
+/** فترات جاهزة تنتهي اليوم بتوقيت الرياض. */
+export type RangePreset = 7 | 30 | 90 | 'ytd'
+
+export const RANGE_PRESETS: Array<{ preset: RangePreset; label: string }> = [
+  { preset: 7, label: '7 أيام' },
+  { preset: 30, label: '30 يومًا' },
+  { preset: 90, label: '90 يومًا' },
+  { preset: 'ytd', label: 'منذ بداية السنة' },
+]
+
+export function presetRange(preset: RangePreset, now: Date = new Date()): DayRange {
+  const to = riyadhDayString(now)
+  if (preset === 'ytd') return { from: `${to.slice(0, 4)}-01-01`, to }
+  return { from: shiftDay(to, -(preset - 1)), to }
+}
+
 /** عدد الأيام شاملًا البداية والنهاية، أو null لتاريخ غير صالح. */
 export function rangeDays(range: DayRange): number | null {
   const a = dayToUtcMs(range.from)

@@ -34,3 +34,543 @@
   text-align: right;
   font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
 }
+
+/* ===================== التقارير التجميعية =====================
+   «الوضع الآن» شريط داكن بخطوط كثبان، ثم «خلال الفترة» بطاقات بأشرطة نسبية.
+   لون البيانات تدرج واحد من الذهبي (تحقق تباينه مع السطح 3:1 فأكثر)؛ ألوان الحالة
+   للأعمال المعلقة فقط ومعها رمز ونص. */
+
+.ov-report {
+  --ov-night: #2d241b;
+  --ov-night-2: #3b2f23;
+  --ov-on-night: #fbf6ee;
+  --ov-on-night-2: #dccdb4;
+  --ov-on-night-3: #b9a68a;
+  --ov-sun: #e3b673;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- الفترة ---------- */
+
+.ov-range {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px dashed var(--line);
+}
+
+.ov-presets {
+  display: inline-flex;
+  padding: 4px;
+  gap: 2px;
+  background: var(--sand);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.ov-preset {
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 14px;
+  min-height: 32px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.ov-preset:hover {
+  background: var(--gold-soft);
+  color: var(--ink);
+}
+
+.ov-preset.is-active {
+  background: var(--ink);
+  color: var(--ov-on-night);
+  box-shadow: 0 2px 6px rgba(45, 36, 27, 0.25);
+}
+
+.ov-custom {
+  flex: 1 1 520px;
+  justify-content: flex-end;
+}
+
+/* ---------- الوضع الآن ---------- */
+
+.ov-pulse {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 16px;
+  padding: 20px 22px 22px;
+  color: var(--ov-on-night);
+  background:
+    radial-gradient(120% 140% at 12% -10%, rgba(227, 182, 115, 0.34), transparent 55%),
+    linear-gradient(160deg, var(--ov-night-2), var(--ov-night) 60%);
+  box-shadow: 0 10px 30px rgba(45, 36, 27, 0.18);
+}
+
+/* خطوط كثبان رفيعة في الأسفل؛ زخرفة لا تحمل بيانات. */
+.ov-dunes {
+  position: absolute;
+  inset: auto 0 0 0;
+  width: 100%;
+  height: 70%;
+  z-index: -1;
+  fill: none;
+  stroke: var(--ov-sun);
+  stroke-width: 1.2;
+  opacity: 0.22;
+}
+
+.ov-dunes path:nth-child(2) {
+  opacity: 0.7;
+}
+
+.ov-dunes path:nth-child(3) {
+  opacity: 0.45;
+}
+
+.ov-pulse-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-bottom: 16px;
+}
+
+.ov-pulse-head h3 {
+  font-size: 1.05rem;
+  color: var(--ov-on-night);
+}
+
+.ov-pulse-time {
+  font-size: 0.8rem;
+  color: var(--ov-on-night-3);
+  margin-inline-start: auto;
+}
+
+/* نقطة «مباشر» تنبض. */
+.ov-live {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #7fc48a;
+}
+
+.ov-live::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #7fc48a;
+  animation: ov-ping 2.2s ease-out infinite;
+}
+
+@keyframes ov-ping {
+  from {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.ov-pulse-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.9fr) 2fr;
+  gap: 14px;
+}
+
+.ov-linked {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.ov-linked:hover {
+  transform: translateY(-2px);
+}
+
+.ov-go {
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-end: 14px;
+  font-size: 0.95rem;
+  color: var(--ov-on-night-3);
+  opacity: 0;
+  transform: translateX(4px);
+  transition: opacity 0.18s, transform 0.18s;
+}
+
+.ov-linked:hover .ov-go,
+.ov-linked:focus-visible .ov-go {
+  opacity: 1;
+  transform: none;
+}
+
+.ov-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  min-height: 190px;
+  padding: 18px 20px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(251, 246, 238, 0.06), rgba(251, 246, 238, 0.02));
+  border: 1px solid rgba(227, 182, 115, 0.35);
+}
+
+.ov-hero:hover {
+  border-color: var(--ov-sun);
+}
+
+.ov-hero-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ov-sun);
+}
+
+.ov-hero-value {
+  font-size: clamp(2.8rem, 5vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--ov-on-night);
+}
+
+.ov-hero-caption {
+  font-size: 0.85rem;
+  color: var(--ov-on-night-2);
+}
+
+.ov-pulse-cells {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ov-cell {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(251, 246, 238, 0.05);
+  border: 1px solid rgba(251, 246, 238, 0.1);
+}
+
+.ov-cell-attn {
+  grid-column: span 3;
+}
+
+.ov-cell.ov-linked:hover {
+  background: rgba(251, 246, 238, 0.09);
+  border-color: rgba(227, 182, 115, 0.5);
+}
+
+.ov-cell-label {
+  font-size: 0.82rem;
+  color: var(--ov-on-night-2);
+}
+
+.ov-cell-value {
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ov-on-night);
+}
+
+.ov-attn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.ov-attn-pending {
+  background: #f6dfae;
+  color: #5c3c00;
+}
+
+.ov-attn-clear {
+  background: rgba(127, 196, 138, 0.16);
+  color: #bfe3c5;
+}
+
+/* ---------- خلال الفترة ---------- */
+
+.ov-period-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px 24px;
+}
+
+.ov-period-title {
+  font-size: 1.05rem;
+}
+
+.ov-period-range {
+  margin: 2px 0 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.ov-period-range > span[aria-hidden='true'] {
+  color: var(--gold);
+}
+
+.ov-days {
+  margin-inline-start: 6px;
+  padding: 1px 10px;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  color: var(--gold-2);
+  font-size: 0.8rem;
+}
+
+.ov-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  margin: 0;
+  font-size: 0.78rem;
+}
+
+.ov-meta div {
+  display: flex;
+  gap: 6px;
+}
+
+.ov-meta dt {
+  color: var(--muted);
+}
+
+.ov-meta dd {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+.ov-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 16px;
+}
+
+.ov-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 18px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  /* خط ذهبي رفيع في رأس البطاقة. */
+  background-image: linear-gradient(90deg, transparent, var(--gold-soft) 30%, var(--gold-soft) 70%, transparent);
+  background-size: 100% 3px;
+  background-repeat: no-repeat;
+}
+
+.ov-group-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ov-medal {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff8ec, var(--gold-soft));
+  border: 1px solid #e6cfa9;
+  color: var(--gold-2);
+  font-size: 0.95rem;
+}
+
+.ov-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ov-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+
+.ov-row-label {
+  color: var(--ink-2);
+  font-size: 0.9rem;
+}
+
+.ov-row-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.ov-row-hint {
+  grid-column: 1 / -1;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* شريط نسبي: يبدأ من الحافة اليمنى (بداية السطر)، طرفه مدور. */
+.ov-track {
+  grid-column: 1 / -1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  overflow: hidden;
+}
+
+.ov-fill {
+  display: block;
+  height: 100%;
+  width: calc(var(--ov-w, 0) * 100%);
+  min-width: 0;
+  border-radius: 999px;
+  background: var(--gold);
+  transform-origin: right center;
+  animation: ov-grow 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes ov-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.ov-share {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+
+.ov-meter {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  overflow: hidden;
+}
+
+.ov-meter-fill {
+  display: block;
+  height: 100%;
+  width: calc(var(--ov-w, 0) * 100%);
+  border-radius: 999px;
+  background: var(--gold);
+  transform-origin: right center;
+  animation: ov-grow 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.ov-share-text {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--ink-2);
+}
+
+.ov-note {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--info-soft);
+  color: var(--info);
+  font-size: 0.82rem;
+}
+
+.ov-footnote {
+  margin: 0;
+}
+
+/* ---------- الشاشات الضيقة والحركة ---------- */
+
+@media (max-width: 1100px) {
+  .ov-pulse-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ov-hero {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .ov-pulse-cells {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ov-cell,
+  .ov-cell-attn {
+    grid-column: span 1;
+  }
+
+  .ov-groups {
+    grid-template-columns: 1fr;
+  }
+
+  .ov-presets {
+    flex-wrap: wrap;
+    border-radius: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ov-live::after,
+  .ov-fill,
+  .ov-meter-fill {
+    animation: none;
+  }
+
+  .ov-linked,
+  .ov-linked:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ov-fill,
+  .ov-meter-fill {
+    background: CanvasText;
+  }
+
+  .ov-track,
+  .ov-meter {
+    border: 1px solid CanvasText;
+  }
+}

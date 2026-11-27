@@ -2,6 +2,8 @@
 // INT-008 / TEAM-DEC-013: listings.under_review_now وlistings.rejected ميتان ولا يعرضان.
 // TEAM-DEC-009: لا مؤشرات توثيق أو شارات.
 
+import type { Capability } from '@admin/lib/capabilities'
+
 /** نطاق العدد: داخل الفترة المختارة، أو لقطة حالية، أو إجمالي. */
 export type StatScope = 'period' | 'now' | 'total'
 
@@ -134,6 +136,112 @@ function buildTiles(groupKey: string, values: Record<string, unknown>, known: St
     tiles.push({ key: k, label: k, value: v, raw: true })
   }
   return tiles
+}
+
+// ---------------------------------------------------------------------------
+// عرض الصفحة: «الآن» (لقطة لا تتأثر بالفترة) منفصلة عن «خلال الفترة».
+// ---------------------------------------------------------------------------
+
+/** مؤشر لقطة في شريط «الوضع الآن»: رابط لقسمه، وحالة انتباه إن كان عملًا معلقًا. */
+export interface PulseDef {
+  group: string
+  key: string
+  /** القسم الذي يعالج هذا العدد، لمن يملك قدرته. */
+  to: string
+  caps: readonly Capability[]
+  /** عمل معلق: يعرض حالته (بانتظار المعالجة / لا شيء معلق). */
+  attention?: boolean
+  /** الرقم الرئيسي للصفحة. واحد فقط. */
+  hero?: boolean
+  /** سطر يشرح الرقم تحته. */
+  caption?: string
+}
+
+const LISTING_CAPS: readonly Capability[] = ['listings.hide', 'listings.review']
+
+export const PULSE_STATS: PulseDef[] = [
+  { group: 'listings', key: 'published_now', hero: true, to: '/admin/listings', caps: LISTING_CAPS, caption: 'إعلان ظاهر في التطبيق الآن' },
+  { group: 'reports', key: 'open_now', attention: true, to: '/admin/reports', caps: ['reports.handle'] },
+  { group: 'ratings', key: 'appeals_open_now', attention: true, to: '/admin/ratings', caps: ['ratings.moderate'] },
+  { group: 'accounts', key: 'total', to: '/admin/accounts', caps: ['accounts.manage'] },
+  { group: 'accounts', key: 'suspended_now', to: '/admin/accounts', caps: ['accounts.manage'] },
+  { group: 'ratings', key: 'hidden_now', to: '/admin/ratings', caps: ['ratings.moderate'] },
+]
+
+const PULSE_KEYS: ReadonlySet<string> = new Set(PULSE_STATS.map((p) => `${p.group}.${p.key}`))
+
+/** رمز كل مجموعة، بنفس رموز القائمة الجانبية. */
+export const GROUP_ICONS: Record<string, string> = {
+  accounts: '◉',
+  listings: '▤',
+  reports: '⚑',
+  ratings: '★',
+  follows: '⌕',
+  interaction: '✉',
+}
+
+/** حصة جزء من كل داخل الرد نفسه، تعرض مقياسًا تحت المجموعة. */
+interface ShareDef {
+  part: string
+  wholeGroup: string
+  whole: string
+  label: string
+}
+
+const GROUP_SHARES: Record<string, ShareDef> = {
+  // الحسابات الجديدة خلال الفترة جزء من إجمالي الحسابات الحالي.
+  accounts: { part: 'created', wholeGroup: 'accounts', whole: 'total', label: 'من إجمالي الحسابات انضم خلال الفترة' },
+}
+
+export interface PulseTile extends StatTile, Omit<PulseDef, 'key' | 'group'> {
+  groupKey: string
+}
+
+export interface GroupShare {
+  /** 0..1 */
+  ratio: number
+  label: string
+}
+
+export interface ReportGroupView extends StatGroupView {
+  icon?: string
+  share?: GroupShare
+  /** أكبر قيمة في المجموعة، لقياس الأشرطة النسبية. */
+  max: number
+}
+
+export interface ReportView {
+  pulse: PulseTile[]
+  groups: ReportGroupView[]
+}
+
+/** يقسم الرد إلى لقطة «الآن» بترتيب PULSE_STATS، ومجموعات «خلال الفترة» بباقي المؤشرات. */
+export function buildReportView(stats: Record<string, unknown>): ReportView {
+  const all = buildStatGroups(stats)
+  const pulse: PulseTile[] = []
+  for (const def of PULSE_STATS) {
+    const tile = all.find((g) => g.key === def.group)?.tiles.find((t) => t.key === def.key)
+    if (!tile) continue
+    const { group, key: _key, ...rest } = def
+    pulse.push({ ...tile, ...rest, groupKey: group })
+  }
+  const groups: ReportGroupView[] = []
+  for (const g of all) {
+    const tiles = g.tiles.filter((t) => !PULSE_KEYS.has(`${g.key}.${t.key}`))
+    if (tiles.length === 0) continue
+    const view: ReportGroupView = { ...g, tiles, icon: GROUP_ICONS[g.key], max: Math.max(0, ...tiles.map((t) => t.value)) }
+    const share = GROUP_SHARES[g.key]
+    if (share) {
+      const part = tiles.find((t) => t.key === share.part)?.value
+      const wholeValues = stats[share.wholeGroup]
+      const whole = isRecord(wholeValues) ? wholeValues[share.whole] : undefined
+      if (isCount(part) && isCount(whole) && whole > 0) {
+        view.share = { ratio: Math.min(1, Math.max(0, part / whole)), label: share.label }
+      }
+    }
+    groups.push(view)
+  }
+  return { pulse, groups }
 }
 
 /** يحول رد admin_stats إلى مجموعات عرض بترتيب ثابت، مع المجموعات والمفاتيح غير المعروفة في آخرها. */

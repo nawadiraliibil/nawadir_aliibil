@@ -7,7 +7,7 @@ import { ERROR_MESSAGES_AR } from '@admin/lib/errors'
 import { formatDateTime } from '@admin/lib/format'
 import type { Whoami } from '@admin/lib/capabilities'
 import OverviewPage from './OverviewPage'
-import { defaultRange, rangeToArgs } from './dateRange'
+import { defaultRange, presetRange, rangeToArgs } from './dateRange'
 
 function setup(opts: { whoami?: Whoami | null; stats?: unknown; delay?: Promise<void> } = {}) {
   const fake = installFakeSupabase({
@@ -224,6 +224,62 @@ describe('OverviewPage — aggregate report', () => {
     await userEvent.click(screen.getByRole('button', { name: 'إعادة المحاولة' }))
     await waitForStats()
     expect(fake.rpcCalls('admin_stats')).toHaveLength(2)
+  })
+
+  it('puts snapshot counts in the live band and period counts in the group cards', async () => {
+    setup()
+    await waitForStats()
+    const pulse = screen.getByRole('region', { name: 'الوضع الآن' })
+    for (const id of ['listings.published_now', 'reports.open_now', 'ratings.appeals_open_now', 'accounts.total', 'accounts.suspended_now', 'ratings.hidden_now']) {
+      expect(within(pulse).getByTestId(`stat-${id}`)).toBeInTheDocument()
+    }
+    expect(within(pulse).queryByTestId('stat-accounts.created')).not.toBeInTheDocument()
+    const accounts = screen.getByRole('region', { name: 'الحسابات' })
+    expect(within(accounts).getByTestId('stat-accounts.created')).toBeInTheDocument()
+    expect(within(accounts).queryByTestId('stat-accounts.total')).not.toBeInTheDocument()
+    // كل مؤشر يعرض مرة واحدة فقط.
+    expect(screen.getAllByTestId('stat-listings.published_now')).toHaveLength(1)
+  })
+
+  it('shows the pending state of open reports and appeals with text, not color alone', async () => {
+    setup({ stats: { ...statsFixture, reports: { ...statsFixture.reports, open_now: 3 } } })
+    await waitForStats()
+    expect(within(screen.getByTestId('stat-reports.open_now')).getByText('بانتظار المعالجة')).toBeInTheDocument()
+    expect(within(screen.getByTestId('stat-ratings.appeals_open_now')).getByText('لا شيء معلق')).toBeInTheDocument()
+  })
+
+  it('links live counts to their sections only for staff who can open them', async () => {
+    setup()
+    await waitForStats()
+    expect(screen.getByTestId('stat-reports.open_now')).toHaveAttribute('href', '/admin/reports')
+    expect(screen.getByTestId('stat-listings.published_now')).toHaveAttribute('href', '/admin/listings')
+  })
+
+  it('renders live counts as plain text without the section capability', async () => {
+    setup({ whoami: moderator(['stats.read']) })
+    await waitForStats()
+    expect(screen.getByTestId('stat-reports.open_now').tagName).not.toBe('A')
+    expect(within(screen.getByRole('region', { name: 'الوضع الآن' })).queryAllByRole('link')).toHaveLength(0)
+  })
+
+  it('shows new accounts as a share of all accounts', async () => {
+    setup({ stats: { ...statsFixture, accounts: { total: 200, created: 50, suspended_now: 0 } } })
+    await waitForStats()
+    const meter = screen.getByRole('meter')
+    expect(meter).toHaveAttribute('aria-valuenow', '25')
+    expect(screen.getByText('25٪ من إجمالي الحسابات انضم خلال الفترة')).toBeInTheDocument()
+  })
+
+  it('applies a preset range at once and marks it as pressed', async () => {
+    const { fake } = setup()
+    await waitForStats()
+    expect(screen.getByRole('button', { name: '30 يومًا' })).toHaveAttribute('aria-pressed', 'true')
+    await userEvent.click(screen.getByRole('button', { name: '7 أيام' }))
+    await waitFor(() => expect(fake.rpcCalls('admin_stats')).toHaveLength(2))
+    const week = presetRange(7)
+    expect(fake.rpcCalls('admin_stats')[1]).toEqual(rangeToArgs(week))
+    expect(screen.getByRole('button', { name: '7 أيام' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByLabelText('من يوم')).toHaveValue(week.from)
   })
 
   it('refreshes with the same range on demand', async () => {
