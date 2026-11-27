@@ -545,13 +545,37 @@ class _DetailsStepState extends _StepState<DetailsStep> {
   }
 
   Future<void> _pickDate(DateTime? local) async {
-    final today = _now().add(const Duration(hours: 3));
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: local ?? today,
-      firstDate: DateTime(today.year, today.month, today.day),
-      lastDate: DateTime(today.year + 2),
-    );
+    final nowKsa = _now().add(const Duration(hours: 3));
+    // تواريخ محلية صرفة (حقول فقط) لتفادي اختلاف المنطقة الزمنية بين الأجهزة.
+    final first = DateTime(nowKsa.year, nowKsa.month, nowKsa.day);
+    final last = DateTime(nowKsa.year + 2, 12, 31);
+    // الموعد المحفوظ قد يكون في الماضي (مسودة قديمة)؛ ضمن النطاق دائمًا
+    // وإلا يفشل فتح المنتقي بخطأ تأكيد على بعض الأجهزة.
+    var initial = local == null
+        ? first
+        : DateTime(local.year, local.month, local.day);
+    if (initial.isBefore(first)) initial = first;
+    if (initial.isAfter(last)) initial = last;
+    DateTime? picked;
+    try {
+      picked = await showDatePicker(
+        context: context,
+        initialDate: initial,
+        firstDate: first,
+        lastDate: last,
+        useRootNavigator: true,
+      );
+    } catch (_) {
+      // احتياطيًا: اعرض المنتقي بالوضع النصي إن تعذر الوضع التقويمي.
+      if (!mounted) return;
+      picked = await showDatePicker(
+        context: context,
+        initialDate: initial,
+        firstDate: first,
+        lastDate: last,
+        initialEntryMode: DatePickerEntryMode.input,
+      );
+    }
     if (picked == null) return;
     _setMoment(picked, local?.hour ?? 9, local?.minute ?? 0);
   }
